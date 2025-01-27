@@ -3,10 +3,11 @@ declare global {
     interface ProcessEnv {
       CORS_ALLOWED_ORIGIN: string;
       DATABASE_URI: string;
-      DATABASE_USER: string;
-      DATABASE_PASSWORD: string;
       PORT: string;
-      // Add other environment variables as needed
+      JWT_ACCESS_SECRET_KEY: string;
+      JWT_REFRESH_SECRET_KEY: string;
+      JWT_ACCESS_EXPIRES_IN: string;
+      JWT_REFRESH_EXPIRES_IN: string;
     }
   }
 }

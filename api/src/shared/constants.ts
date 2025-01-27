@@ -1,3 +1,11 @@
+export const ROLES = {
+  ADMIN: "admin",
+  USER: "client",
+  VENDOR: "vendor",
+} as const;
+
+export type RoleType = keyof typeof ROLES;
+
 // HTTP Status Codes
 export const HTTP_STATUS = {
   OK: 200,
