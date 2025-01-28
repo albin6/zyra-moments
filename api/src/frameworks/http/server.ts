@@ -4,8 +4,10 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import express, { Application, NextFunction, Request, Response } from "express";
+import "reflect-metadata";
 
 import { config } from "../../shared/config";
+import { AuthRoutes } from "../routes/auth/auth.route";
 
 export class Server {
   private _app: Application;
@@ -42,9 +44,10 @@ export class Server {
   }
 
   private configureRoutes(): void {
-    this._app.use("/api/v_1");
-    this._app.use("/api/v_1/vendors");
-    this._app.use("/api/v_1/_pvt/admin");
+    this._app.use("/api/v_1/auth", new AuthRoutes().router);
+    // this._app.use("/api/v_1");
+    // this._app.use("/api/v_1/vendors");
+    // this._app.use("/api/v_1/_pvt/admin");
 
     this._app.use("*", (req: Request, res: Response) => {
       res.status(404).json({

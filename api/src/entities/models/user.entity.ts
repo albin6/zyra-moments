@@ -1,7 +1,8 @@
+import { ObjectId } from "mongoose";
 import { TRole } from "../../shared/constants";
 
 export interface IUserEntity {
-  _id?: string;
+  _id?: ObjectId;
   firstName: string;
   lastName: string;
   email: string;
