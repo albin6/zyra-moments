@@ -1,4 +1,4 @@
-import { RoleType } from "../../shared/constants";
+import { TRole } from "../../shared/constants";
 
 export interface IUserEntity {
   _id?: string;
@@ -6,7 +6,7 @@ export interface IUserEntity {
   lastName: string;
   email: string;
   password: string;
-  role: RoleType;
+  role: TRole;
   profileImage?: string;
   phone?: string;
   masterOfCeremonies?: boolean;

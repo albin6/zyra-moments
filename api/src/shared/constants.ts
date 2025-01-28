@@ -4,7 +4,7 @@ export const ROLES = {
   VENDOR: "vendor",
 } as const;
 
-export type RoleType = keyof typeof ROLES;
+export type TRole = "client" | "admin" | "vendor";
 
 // HTTP Status Codes
 export const HTTP_STATUS = {
