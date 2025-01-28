@@ -3,6 +3,7 @@ import { IVendorModel } from "../models/vendor.model";
 import { ROLES } from "../../../shared/constants";
 
 export const VendorSchema = new Schema<IVendorModel>({
+  vendorId: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
