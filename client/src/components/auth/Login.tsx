@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useFormik } from "formik";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,25 +10,30 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { loginSchema } from "@/utils/login.validator";
 
 type UserType = "admin" | "client" | "vendor";
 
 interface LoginProps {
   userType: UserType;
   onSubmit: (email: string, password: string) => void;
+  setSignup: () => void;
 }
 
-export function Login({ userType, onSubmit }: LoginProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(email, password);
-  };
+export function Login({ userType, onSubmit, setSignup }: LoginProps) {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      onSubmit(values.email, values.password);
+    },
+  });
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           Login as {userType}
@@ -38,17 +43,18 @@ export function Login({ userType, onSubmit }: LoginProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...formik.getFieldProps("email")}
             />
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-sm text-red-500">{formik.errors.email}</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
@@ -56,10 +62,11 @@ export function Login({ userType, onSubmit }: LoginProps) {
               id="password"
               type="password"
               placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...formik.getFieldProps("password")}
             />
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-sm text-red-500">{formik.errors.password}</p>
+            )}
           </div>
           <Button type="submit" className="w-full">
             Login
@@ -69,9 +76,12 @@ export function Login({ userType, onSubmit }: LoginProps) {
       <CardFooter className="flex justify-center">
         <p className="text-sm text-muted-foreground">
           Don't have an account?{" "}
-          <a href="#" className="text-primary hover:underline">
+          <span
+            onClick={setSignup}
+            className="cursor-pointer text-primary hover:underline"
+          >
             Sign up
-          </a>
+          </span>
         </p>
       </CardFooter>
     </Card>
