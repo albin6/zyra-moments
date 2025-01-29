@@ -1,7 +1,14 @@
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
-const ProtectedRoute = ({ element, role, allowedRoles }) => {
-  const userRole = localStorage.getItem("role"); // Example, fetch from Redux or Context
+interface ProtectedRouteProps {
+  element: JSX.Element;
+  allowedRoles: string[];
+}
+
+const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
+  const userRole = useSelector((state: RootState) => state.user.user?.role);
 
   if (!userRole) {
     return <Navigate to="/login" />;

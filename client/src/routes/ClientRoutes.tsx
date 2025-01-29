@@ -6,7 +6,7 @@ function ClientRoutes() {
   return (
     <Routes>
       <Route path="/" element={<ClientLayout />}>
-        <Route path="login" element={<ClientAuth />} />
+        <Route index element={<ClientAuth />} />
       </Route>
     </Routes>
   );
