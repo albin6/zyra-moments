@@ -8,6 +8,4 @@ export interface IVendorEntity extends IUserEntity {
   averageRating: number;
   totalReviews: number;
   requestStatus: string;
-  createdAt: Date;
-  updatedAt: Date;
 }

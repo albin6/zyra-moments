@@ -14,8 +14,6 @@ export const ClientSchema = new Schema<IClientModel>(
     phone: { type: String },
     masterOfCeremonies: { type: Boolean, default: false },
     status: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,

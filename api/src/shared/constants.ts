@@ -17,7 +17,19 @@ export const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-// Common Error Messages
+export const SUCCESS_MESSAGES = {
+  LOGIN_SUCCESS: "Login successful.",
+  REGISTRATION_SUCCESS: "Registration completed successfully.",
+  LOGOUT_SUCCESS: "Logged out successfully.",
+  UPDATE_SUCCESS: "Updated successfully.",
+  DELETE_SUCCESS: "Deleted successfully.",
+  OPERATION_SUCCESS: "Operation completed successfully.",
+  PASSWORD_RESET_SUCCESS: "Password reset successfully.",
+  VERIFICATION_SUCCESS: "Verification completed successfully.",
+  DATA_RETRIEVED: "Data retrieved successfully.",
+  ACTION_SUCCESS: "Action performed successfully.",
+};
+
 export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   USER_NOT_FOUND: "User not found.",
@@ -27,20 +39,17 @@ export const ERROR_MESSAGES = {
   MISSING_PARAMETERS: "Missing required parameters.",
 };
 
-// Default Values
 export const DEFAULTS = {
   PAGE_SIZE: 10,
   IMAGE_PATH: "/uploads/images",
   USER_ROLE: "user",
 };
 
-// JWT Claims
 export const JWT_CLAIMS = {
   ACCESS_TOKEN: "access_token",
   REFRESH_TOKEN: "refresh_token",
 };
 
-// Regex Patterns
 export const REGEX = {
   EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   PHONE_NUMBER: /^\d{10}$/,
