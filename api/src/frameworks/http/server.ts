@@ -12,7 +12,6 @@ import { AuthRoutes } from "../routes/auth/auth.route";
 export class Server {
   private _app: Application;
   constructor() {
-    dotenv.config();
     this._app = express();
 
     this.configureMiddlewares();
