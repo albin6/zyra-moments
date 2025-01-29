@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 import { IClientEntity } from "../../../entities/models/client.entity";
-import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client.respository.interface";
+import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
 import { ClientModel } from "../../../frameworks/database/models/client.model";
 import { ClientDTO } from "../../../shared/dtos/user.dto";
 

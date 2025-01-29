@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor.repository.interface";
+import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { VendorRepository } from "../../../interfaceAdapters/repositories/vendor/vendor.repository";
 
 export class VendorRepositoryRegistry {

@@ -1,5 +1,5 @@
 import { container } from "tsyringe";
-import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client.respository.interface";
+import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
 import { ClientRepository } from "../../../interfaceAdapters/repositories/client/client.repository";
 
 export class ClientRepositoryRegistry {

@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { IRegisterUserController } from "../../../entities/controllerInterfaces/auth/register.controller.inteface";
-import { IRegisterUserUseCase } from "../../../entities/useCaseInterfaces/auth/register.usecase.inteface";
-import { UserDTO } from "../../../shared/dtos/user.dto";
-import { userSchemas } from "./validation/user.schema";
 import { inject, injectable } from "tsyringe";
+import { UserDTO } from "../../../shared/dtos/user.dto";
+import { userSchemas } from "./validation/user-validation.schema";
+import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.interface";
+import { IRegisterUserUseCase } from "../../../entities/useCaseInterfaces/auth/register-usecase.inteface";
+import { IRegisterUserController } from "../../../entities/controllerInterfaces/auth/register-controller.inteface";
 import {
   ERROR_MESSAGES,
   HTTP_STATUS,
@@ -14,10 +15,12 @@ import {
 export class RegisterUserController implements IRegisterUserController {
   constructor(
     @inject("IRegisterUserUseCase")
-    private registerUserUseCase: IRegisterUserUseCase
+    private registerUserUseCase: IRegisterUserUseCase,
+    @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
   ) {}
+
   async handle(req: Request, res: Response): Promise<void> {
-    const { role } = req.body as UserDTO;
+    const { password, role } = req.body as UserDTO;
 
     const schema = userSchemas[role];
 
@@ -28,7 +31,11 @@ export class RegisterUserController implements IRegisterUserController {
     }
 
     const validatedData = schema.parse(req.body);
+
+    validatedData.password = await this.passwordBcrypt.hash(password);
+
     await this.registerUserUseCase.execute(validatedData);
+
     res
       .status(HTTP_STATUS.CREATED)
       .json({ success: true, message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS });

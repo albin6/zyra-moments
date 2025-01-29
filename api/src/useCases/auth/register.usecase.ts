@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
-import { IClientRespository } from "../../entities/repositoryInterfaces/client/client.respository.interface";
-import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register.usecase.inteface";
+import { IClientRespository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
+import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
 import { UserDTO } from "../../shared/dtos/user.dto";
-import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor.repository.interface";
-import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin.repository.interface";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
 
 @injectable()
 export class RegisterUserUseCase implements IRegisterUserUseCase {
