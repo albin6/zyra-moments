@@ -8,10 +8,10 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
-  const userRole = useSelector((state: RootState) => state.user.user?.role);
+  const userRole = useSelector((state: RootState) => state.store.user?.role);
 
   if (!userRole) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return allowedRoles.includes(userRole) ? (

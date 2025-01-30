@@ -4,6 +4,7 @@ import { LoginUserDTO } from "../../shared/dtos/user.dto";
 import { CustomError } from "../../entities/utils/CustomError";
 import { HTTP_STATUS } from "../../shared/constants";
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
+import { IUserEntity } from "../../entities/models/user.entity";
 
 @injectable()
 export class LoginUserUseCase implements ILoginUserUseCase {
@@ -21,11 +22,11 @@ export class LoginUserUseCase implements ILoginUserUseCase {
     };
   }
 
-  async execute(user: LoginUserDTO): Promise<void> {
+  async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
     const strategy = this.strategies[user.role];
     if (!strategy) {
       throw new CustomError("Invalid user role", HTTP_STATUS.FORBIDDEN);
     }
-    await strategy.login(user);
+    return await strategy.login(user);
   }
 }

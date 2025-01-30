@@ -5,6 +5,7 @@ import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.in
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { LoginUserDTO } from "../../../shared/dtos/user.dto";
+import { IUserEntity } from "../../../entities/models/user.entity";
 
 @injectable()
 export class ClientLoginStrategy implements ILoginStrategy {
@@ -13,7 +14,7 @@ export class ClientLoginStrategy implements ILoginStrategy {
     @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
   ) {}
 
-  async login(user: LoginUserDTO): Promise<void> {
+  async login(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
     const client = await this.clientRepository.findByEmail(user.email);
     if (!client) {
       throw new CustomError(
@@ -32,5 +33,6 @@ export class ClientLoginStrategy implements ILoginStrategy {
         HTTP_STATUS.BAD_REQUEST
       );
     }
+    return client;
   }
 }

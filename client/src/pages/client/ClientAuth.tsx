@@ -11,9 +11,15 @@ import { toast } from "sonner";
 import { User } from "@/types/User";
 import { useLoginMutation } from "@/hooks/auth/useLogin";
 import { ILoginData } from "@/services/auth/authService";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { login } from "@/store/userSlice";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
+  const {} = useSelector((state: RootState) => state);
+  const dispatch = useDispatch();
 
   const { mutate: registerClient } = useRegisterMutation();
   const { mutate: loginClient } = useLoginMutation();
@@ -33,7 +39,10 @@ export function ClientAuth() {
     loginClient(
       { ...data, role: "client" },
       {
-        onSuccess: (data) => toast.success(data.message),
+        onSuccess: (data) => {
+          toast.success(data.message);
+          dispatch(login(data.user));
+        },
         onError: (error: any) => toast.error(error.response.data.message),
       }
     );

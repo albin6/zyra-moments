@@ -33,11 +33,13 @@ export class LoginUserController implements ILoginUserController {
         });
       }
 
-      await this.loginUserUseCase.execute(validatedData);
+      const user = await this.loginUserUseCase.execute(validatedData);
 
-      res
-        .status(HTTP_STATUS.OK)
-        .json({ success: true, message: SUCCESS_MESSAGES.LOGIN_SUCCESS });
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
+        user: { id: user._id, email: user.email, role: user.role },
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

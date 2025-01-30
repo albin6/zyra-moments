@@ -27,8 +27,14 @@ export function Login({ userType, onSubmit, setSignup }: LoginProps) {
       password: "",
     },
     validationSchema: loginSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, actions) => {
       onSubmit({ email: values.email, password: values.password });
+      actions.resetForm({
+        values: {
+          email: "",
+          password: "",
+        },
+      });
     },
   });
 

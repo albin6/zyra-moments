@@ -4,6 +4,11 @@ import { UserDTO } from "@/types/User";
 export interface AuthResponse {
   success: boolean;
   message: string;
+  user: {
+    id: string;
+    email: string;
+    role: "client" | "admin" | "vendor";
+  };
 }
 
 export interface ILoginData {
