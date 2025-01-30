@@ -32,6 +32,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  EMAIL_NOT_FOUND: "Email Not Found",
   EMAIL_EXISTS: "Email Already Exists",
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   USER_NOT_FOUND: "User not found.",

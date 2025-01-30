@@ -6,7 +6,6 @@ import { DependencyInjection } from ".";
 
 DependencyInjection.registerAll();
 
-// **Now resolve the dependencies**
 export const registerController = container.resolve(RegisterUserController);
 export const loginController = container.resolve(LoginUserController);
 export const registerUserUseCase = container.resolve<IRegisterUserUseCase>(

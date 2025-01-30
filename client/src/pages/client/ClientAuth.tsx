@@ -9,15 +9,17 @@ import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useRegisterMutation } from "@/hooks/auth/useRegister";
 import { toast } from "sonner";
 import { User } from "@/types/User";
+import { useLoginMutation } from "@/hooks/auth/useLogin";
+import { ILoginData } from "@/services/auth/authService";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
 
   const { mutate: registerClient } = useRegisterMutation();
+  const { mutate: loginClient } = useLoginMutation();
 
   const handleSignupSubmit = (data: Omit<User, "role">) => {
     console.log(data);
-    // Handle authentication logic here
     registerClient(
       { ...data, role: "client" },
       {
@@ -27,9 +29,14 @@ export function ClientAuth() {
     );
   };
 
-  const handleLoginSubmit = (data: any) => {
-    console.log(data);
-    // Handle authentication logic here
+  const handleLoginSubmit = (data: Omit<ILoginData, "role">) => {
+    loginClient(
+      { ...data, role: "client" },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error) => toast.error(error.message),
+      }
+    );
   };
 
   const handleSocialLogin = (provider: string) => {

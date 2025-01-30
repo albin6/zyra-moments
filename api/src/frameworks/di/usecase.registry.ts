@@ -6,10 +6,14 @@ import { PasswordBcrypt } from "../security/password.bcrypt";
 import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-usecase.interface";
 import { LoginUserUseCase } from "../../useCases/auth/login.usecase";
 
-import { IRegisterStrategy } from "../../useCases/auth/strategies/register-strategy.interface";
-import { ClientRegisterStrategy } from "../../useCases/auth/strategies/client-register.strategy";
-import { VendorRegisterStrategy } from "../../useCases/auth/strategies/vendor-register.strategy";
-import { AdminRegisterStrategy } from "../../useCases/auth/strategies/admin-register.startegy";
+import { IRegisterStrategy } from "../../useCases/auth/regiter-strategies/register-strategy.interface";
+import { ClientRegisterStrategy } from "../../useCases/auth/regiter-strategies/client-register.strategy";
+import { VendorRegisterStrategy } from "../../useCases/auth/regiter-strategies/vendor-register.strategy";
+import { AdminRegisterStrategy } from "../../useCases/auth/regiter-strategies/admin-register.startegy";
+import { ILoginStrategy } from "../../useCases/auth/login-strategies/login-strategy.interface";
+import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
+import { ClientLoginStrategy } from "../../useCases/auth/login-strategies/client-login.strategy";
+import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -36,6 +40,18 @@ export class UseCaseRegistry {
 
     container.register<IRegisterStrategy>("AdminRegisterStrategy", {
       useClass: AdminRegisterStrategy,
+    });
+
+    container.register<ILoginStrategy>("AdminLoginStrategy", {
+      useClass: AdminLoginStrategy,
+    });
+
+    container.register<ILoginStrategy>("ClientLoginStrategy", {
+      useClass: ClientLoginStrategy,
+    });
+
+    container.register<ILoginStrategy>("VendorLoginStrategy", {
+      useClass: VendorLoginStrategy,
     });
   }
 }

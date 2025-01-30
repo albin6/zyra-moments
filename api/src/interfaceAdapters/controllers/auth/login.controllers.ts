@@ -22,6 +22,8 @@ export class LoginUserController implements ILoginUserController {
     try {
       const data = req.body as LoginUserDTO;
 
+      console.log(data);
+
       const validatedData = loginSchema.parse(data);
 
       if (!validatedData) {

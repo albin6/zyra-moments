@@ -6,10 +6,21 @@ export interface AuthResponse {
   message: string;
 }
 
+export interface ILoginData {
+  email: string;
+  password: string;
+  role: "admin" | "client" | "vendor";
+}
+
 export const signup = async (user: UserDTO): Promise<AuthResponse> => {
   const response = await authAxiosInstance.post<AuthResponse>(
     "/register",
     user
   );
+  return response.data;
+};
+
+export const login = async (user: ILoginData): Promise<AuthResponse> => {
+  const response = await authAxiosInstance.post<AuthResponse>("/login", user);
   return response.data;
 };

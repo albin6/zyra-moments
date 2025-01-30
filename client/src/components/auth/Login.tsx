@@ -16,7 +16,7 @@ type UserType = "admin" | "client" | "vendor";
 
 interface LoginProps {
   userType: UserType;
-  onSubmit: (email: string, password: string) => void;
+  onSubmit: (data: { email: string; password: string }) => void;
   setSignup?: () => void;
 }
 
@@ -28,7 +28,7 @@ export function Login({ userType, onSubmit, setSignup }: LoginProps) {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      onSubmit(values.email, values.password);
+      onSubmit({ email: values.email, password: values.password });
     },
   });
 
