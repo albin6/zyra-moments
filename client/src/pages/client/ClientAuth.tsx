@@ -24,7 +24,7 @@ export function ClientAuth() {
       { ...data, role: "client" },
       {
         onSuccess: (data) => toast.success(data.message),
-        onError: (error) => toast.error(error.message),
+        onError: (error: any) => toast.error(error.response.data.message),
       }
     );
   };
@@ -34,7 +34,7 @@ export function ClientAuth() {
       { ...data, role: "client" },
       {
         onSuccess: (data) => toast.success(data.message),
-        onError: (error) => toast.error(error.message),
+        onError: (error: any) => toast.error(error.response.data.message),
       }
     );
   };
