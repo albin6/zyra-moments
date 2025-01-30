@@ -6,7 +6,11 @@ import { AdminDTO } from "../../../shared/dtos/user.dto";
 
 @injectable()
 export class AdminRepository implements IAdminRepository {
-  async save(data: AdminDTO): Promise<IAdminEntity | null> {
+  async save(data: AdminDTO): Promise<IAdminEntity> {
     return await AdminModel.create(data);
+  }
+
+  async findByEmail(email: string): Promise<IAdminEntity | null> {
+    return await AdminModel.findOne({ email });
   }
 }

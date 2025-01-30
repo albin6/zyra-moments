@@ -4,6 +4,7 @@ import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/regi
 import { UserDTO } from "../../shared/dtos/user.dto";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
+import { generateRandomUUID } from "../../frameworks/security/randomid.bcrypt";
 
 @injectable()
 export class RegisterUserUseCase implements IRegisterUserUseCase {
@@ -19,13 +20,27 @@ export class RegisterUserUseCase implements IRegisterUserUseCase {
         await this.adminRepository.save(user);
         break;
       case "client":
-        await this.clientRepository.save(user);
+        const isClientExistsWithTheEmail =
+          await this.clientRepository.findByEmail(user.email);
+        if (isClientExistsWithTheEmail) {
+          throw new Error("Email Already Exists");
+        }
+
+        const clientId = generateRandomUUID();
+        await this.clientRepository.save({ ...user, clientId });
         break;
       case "vendor":
-        await this.vendorRepository.save(user);
+        const isVendorExistsWithTheEmail =
+          await this.vendorRepository.findByEmail(user.email);
+        if (isVendorExistsWithTheEmail) {
+          throw new Error("Email Already Exists");
+        }
+
+        const vendorId = generateRandomUUID();
+        await this.vendorRepository.save({ ...user, vendorId });
         break;
       default:
-        break;
+        throw new Error("Invalid user role");
     }
   }
 }

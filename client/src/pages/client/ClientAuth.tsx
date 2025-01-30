@@ -6,14 +6,25 @@ import { Card } from "@/components/ui/card";
 import { AuthCarousel } from "@/components/carousel/AuthCarousel";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import { UserData } from "@/utils/signup.validator";
+import { useRegisterMutation } from "@/hooks/auth/useRegister";
+import { toast } from "sonner";
+import { User } from "@/types/User";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
 
-  const handleSignupSubmit = (data: UserData) => {
+  const { mutate: registerClient } = useRegisterMutation();
+
+  const handleSignupSubmit = (data: Omit<User, "role">) => {
     console.log(data);
     // Handle authentication logic here
+    registerClient(
+      { ...data, role: "client" },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error) => toast.error(error.message),
+      }
+    );
   };
 
   const handleLoginSubmit = (data: any) => {

@@ -20,28 +20,38 @@ export class RegisterUserController implements IRegisterUserController {
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
-    const { password, role } = req.body as UserDTO;
-
-    const schema = userSchemas[role];
-
-    if (!schema) {
-      res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ success: false, message: ERROR_MESSAGES.INVALID_CREDENTIALS });
-    }
-
-    const validatedData = schema.parse(req.body);
-
-    validatedData.password = await this.passwordBcrypt.hash(password);
-
-    await this.registerUserUseCase.execute(validatedData);
-
-    res
-      .status(HTTP_STATUS.CREATED)
-      .json({ success: true, message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS });
     try {
+      const { password, role } = req.body as UserDTO;
+
+      const schema = userSchemas[role];
+
+      if (!schema) {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          message: ERROR_MESSAGES.INVALID_CREDENTIALS,
+        });
+      }
+
+      const validatedData = schema.parse(req.body);
+
+      validatedData.password = await this.passwordBcrypt.hash(password);
+
+      await this.registerUserUseCase.execute(validatedData);
+
+      res.status(HTTP_STATUS.CREATED).json({
+        success: true,
+        message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
+      });
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        const statusCode =
+          error.message === "Email Already Exists"
+            ? HTTP_STATUS.CONFLICT
+            : HTTP_STATUS.INTERNAL_SERVER_ERROR;
+
+        res.status(statusCode).json({ success: false, message: error.message });
+      }
     }
   }
 }

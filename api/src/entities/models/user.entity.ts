@@ -9,7 +9,7 @@ export interface IUserEntity {
   password: string;
   role: TRole;
   profileImage?: string;
-  phone?: string;
+  phoneNumber?: string;
   masterOfCeremonies?: boolean;
   status?: string;
   createdAt: Date;

@@ -1,11 +1,3 @@
-export interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  contact: string;
-  password: string;
-}
-
 import * as Yup from "yup";
 
 export const signupSchema = Yup.object().shape({
@@ -22,7 +14,7 @@ export const signupSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  contact: Yup.string()
+  phoneNumber: Yup.string()
     .matches(/^\+?[1-9]\d{1,14}$/, "Invalid phone number")
     .required("Contact number is required"),
   password: Yup.string()

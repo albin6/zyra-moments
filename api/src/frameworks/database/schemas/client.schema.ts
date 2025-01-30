@@ -11,9 +11,9 @@ export const ClientSchema = new Schema<IClientModel>(
     password: { type: String, required: true },
     role: { type: String, enum: ROLES, required: true },
     profileImage: { type: String },
-    phone: { type: String },
+    phoneNumber: { type: String, required: true },
     masterOfCeremonies: { type: Boolean, default: false },
-    status: { type: String, required: true },
+    status: { type: String, default: "active" },
   },
   {
     timestamps: true,

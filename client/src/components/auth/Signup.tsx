@@ -10,15 +10,15 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import type { UserData } from "@/utils/signup.validator";
 import { signupSchema } from "@/utils/signup.validator";
+import { User } from "@/types/User";
 
 type UserType = "admin" | "client" | "vendor";
 
 interface SignupProps {
   userType: UserType;
-  onSubmit: (data: UserData) => void;
-  setLogin: () => void;
+  onSubmit: (data: User) => void;
+  setLogin?: () => void;
 }
 
 export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
@@ -27,7 +27,7 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
       firstName: "",
       lastName: "",
       email: "",
-      contact: "",
+      phoneNumber: "",
       password: "",
     },
     validationSchema: signupSchema,
@@ -89,15 +89,17 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="contact">Contact Number</Label>
+            <Label htmlFor="phoneNumber">Contact Number</Label>
             <Input
-              id="contact"
+              id="phoneNumber"
               type="tel"
               placeholder="Enter your contact number"
-              {...formik.getFieldProps("contact")}
+              {...formik.getFieldProps("phoneNumber")}
             />
-            {formik.touched.contact && formik.errors.contact && (
-              <p className="text-sm text-red-500">{formik.errors.contact}</p>
+            {formik.touched.phoneNumber && formik.errors.phoneNumber && (
+              <p className="text-sm text-red-500">
+                {formik.errors.phoneNumber}
+              </p>
             )}
           </div>
           <div className="space-y-2">

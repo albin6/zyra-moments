@@ -6,7 +6,11 @@ import { ClientDTO } from "../../../shared/dtos/user.dto";
 
 @injectable()
 export class ClientRepository implements IClientRespository {
-  async save(data: ClientDTO): Promise<IClientEntity | null> {
+  async save(data: ClientDTO): Promise<IClientEntity> {
     return await ClientModel.create(data);
+  }
+
+  async findByEmail(email: string): Promise<IClientEntity | null> {
+    return await ClientModel.findOne({ email });
   }
 }

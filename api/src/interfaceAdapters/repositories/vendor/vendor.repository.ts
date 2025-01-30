@@ -6,7 +6,11 @@ import { VendorDTO } from "../../../shared/dtos/user.dto";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {
-  async save(data: VendorDTO): Promise<IVendorEntity | null> {
+  async save(data: VendorDTO): Promise<IVendorEntity> {
     return await VendorModel.create(data);
+  }
+
+  async findByEmail(email: string): Promise<IVendorEntity | null> {
+    return await VendorModel.findOne({ email });
   }
 }

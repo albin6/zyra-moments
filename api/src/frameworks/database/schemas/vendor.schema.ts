@@ -11,7 +11,7 @@ export const VendorSchema = new Schema<IVendorModel>(
     password: { type: String, required: true },
     role: { type: String, enum: ROLES, required: true },
     profileImage: { type: String },
-    phone: { type: String },
+    phoneNumber: { type: String },
     category: { type: String },
     bio: { type: String },
     place: { type: String },

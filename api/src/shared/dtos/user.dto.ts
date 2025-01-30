@@ -5,6 +5,7 @@ export interface AdminDTO {
 }
 
 export interface ClientDTO {
+  clientId?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -14,6 +15,7 @@ export interface ClientDTO {
 }
 
 export interface VendorDTO {
+  vendorId?: string;
   firstName: string;
   lastName: string;
   email: string;
