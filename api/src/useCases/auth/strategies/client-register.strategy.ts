@@ -1,0 +1,52 @@
+import { inject, injectable } from "tsyringe";
+import { IRegisterStrategy } from "./register-strategy.interface";
+import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
+import { ClientDTO, UserDTO } from "../../../shared/dtos/user.dto";
+import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.interface";
+import { CustomError } from "../../../entities/utils/CustomError";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
+
+@injectable()
+export class ClientRegisterStrategy implements IRegisterStrategy {
+  constructor(
+    @inject("IClientRespository") private clientRepository: IClientRespository,
+    @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
+  ) {}
+
+  async register(user: UserDTO): Promise<void> {
+    if (user.role === "client") {
+      const existingClient = await this.clientRepository.findByEmail(
+        user.email
+      );
+      if (existingClient) {
+        throw new CustomError(
+          ERROR_MESSAGES.EMAIL_EXISTS,
+          HTTP_STATUS.CONFLICT
+        );
+      }
+
+      const { firstName, lastName, phoneNumber, password, email } =
+        user as ClientDTO;
+
+      const hashedPassword = await this.passwordBcrypt.hash(password);
+
+      const clientId = generateRandomUUID();
+
+      await this.clientRepository.save({
+        firstName,
+        lastName,
+        phoneNumber,
+        email,
+        password: hashedPassword,
+        clientId,
+        role: "client",
+      });
+    } else {
+      throw new CustomError(
+        "Invalid role for client registration",
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+  }
+}

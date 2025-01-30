@@ -1,13 +1,11 @@
-import { UseCaseRegistry } from "./auth/auth-usecase-registry";
-import { ControllerRegistry } from "./auth/auth-controller-registry";
-import { ClientRepositoryRegistry } from "./client/client-repository-registry";
-import { VendorRepositoryRegistry } from "./vendor/vendor-repository-registry";
-import { AdminRepositoryRegistry } from "./admin/admin-repository-registry";
+import { RepositoryRegistry } from "./repository.registry";
+import { ControllerRegistry } from "./controller.registry";
+import { UseCaseRegistry } from "./usecase.registry";
 
-ClientRepositoryRegistry.registerRepositories();
-VendorRepositoryRegistry.registerRepositories();
-AdminRepositoryRegistry.registerRepositories();
-
-UseCaseRegistry.registerUseCases();
-
-ControllerRegistry.registerControllers();
+export class DependencyInjection {
+  static registerAll(): void {
+    UseCaseRegistry.registerUseCases();
+    ControllerRegistry.registerControllers();
+    RepositoryRegistry.registerRepositories();
+  }
+}

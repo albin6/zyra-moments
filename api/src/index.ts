@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "./frameworks/di/index";
 import "./frameworks/di/resolver";
 import { MongoConnect } from "./frameworks/database/mongoDB/mongoConnect";
 import { Server } from "./frameworks/http/server";

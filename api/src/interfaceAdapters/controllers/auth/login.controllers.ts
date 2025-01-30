@@ -1,46 +1,41 @@
 import { Request, Response } from "express";
+import { ILoginUserController } from "../../../entities/controllerInterfaces/auth/login-controller.interface";
+import { ILoginUserUseCase } from "../../../entities/useCaseInterfaces/auth/login-usecase.interface";
 import { inject, injectable } from "tsyringe";
-import { UserDTO } from "../../../shared/dtos/user.dto";
-import { userSchemas } from "./validation/user-signup-validation.schema";
-import { IRegisterUserUseCase } from "../../../entities/useCaseInterfaces/auth/register-usecase.inteface";
-import { IRegisterUserController } from "../../../entities/controllerInterfaces/auth/register-controller.inteface";
 import {
   ERROR_MESSAGES,
   HTTP_STATUS,
   SUCCESS_MESSAGES,
 } from "../../../shared/constants";
+import { LoginUserDTO } from "../../../shared/dtos/user.dto";
+import { loginSchema } from "./validation/user-login-validation.schema";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ZodError } from "zod";
 
 @injectable()
-export class RegisterUserController implements IRegisterUserController {
+export class LoginUserController implements ILoginUserController {
   constructor(
-    @inject("IRegisterUserUseCase")
-    private registerUserUseCase: IRegisterUserUseCase
+    @inject("ILoginUserUseCase") private loginUserUseCase: ILoginUserUseCase
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { role } = req.body as UserDTO;
+      const data = req.body as LoginUserDTO;
 
-      const schema = userSchemas[role];
+      const validatedData = loginSchema.parse(data);
 
-      if (!schema) {
+      if (!validatedData) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
           message: ERROR_MESSAGES.INVALID_CREDENTIALS,
         });
-        return;
       }
 
-      const validatedData = schema.parse(req.body);
+      await this.loginUserUseCase.execute(validatedData);
 
-      await this.registerUserUseCase.execute(validatedData);
-
-      res.status(HTTP_STATUS.CREATED).json({
-        success: true,
-        message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
-      });
+      res
+        .status(HTTP_STATUS.OK)
+        .json({ success: true, message: SUCCESS_MESSAGES.LOGIN_SUCCESS });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({
@@ -60,6 +55,7 @@ export class RegisterUserController implements IRegisterUserController {
           .json({ success: false, message: error.message });
         return;
       }
+      console.log(error);
       res
         .status(500)
         .json({ success: false, message: "Something went wrong!" });

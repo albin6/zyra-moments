@@ -1,3 +1,5 @@
+import { TRole } from "../constants";
+
 export interface AdminDTO {
   email: string;
   password: string;
@@ -26,3 +28,9 @@ export interface VendorDTO {
 }
 
 export type UserDTO = AdminDTO | ClientDTO | VendorDTO;
+
+export interface LoginUserDTO {
+  email: string;
+  password: string;
+  role: TRole;
+}
