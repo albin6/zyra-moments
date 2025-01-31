@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 import { IEmailService } from "../../entities/services/email-service.interface";
 import { injectable } from "tsyringe";
+import { config } from "../../shared/config";
+import { VERIFICATION_MAIL_CONTENT } from "../../shared/constants";
 
 @injectable()
 export class EmailService implements IEmailService {
@@ -10,18 +12,18 @@ export class EmailService implements IEmailService {
     this.transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: config.nodemailer.EMAIL_USER,
+        pass: config.nodemailer.EMAIL_PASS,
       },
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string): Promise<void> {
+  async sendEmail(to: string, subject: string, otp: string): Promise<void> {
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: "Zyra Moments",
       to,
       subject,
-      text,
+      html: VERIFICATION_MAIL_CONTENT(otp),
     };
 
     await this.transporter.sendMail(mailOptions);

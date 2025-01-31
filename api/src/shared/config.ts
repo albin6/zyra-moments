@@ -13,6 +13,11 @@ export const config = {
     NODE_ENV: process.env.NODE_ENV || "development",
   },
 
+  nodemailer: {
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
+  },
+
   // Database Configuration
   database: {
     URI: process.env.DATABASE_URI || "mongodb://localhost:27017/zyra-moments",

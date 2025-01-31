@@ -13,6 +13,10 @@ export class SendEmailUseCase implements ISendEmailUseCase {
   async execute(email: string): Promise<void> {
     const otp = this.otpService.generateOTP();
     await this.otpService.storeOTP(email, otp);
-    await this.emailService.sendEmail(email, "OTP Verification", "234578");
+    await this.emailService.sendEmail(
+      email,
+      "Zyra Moments - Verify Your Email",
+      otp
+    );
   }
 }

@@ -21,6 +21,7 @@ export const HTTP_STATUS = {
 export const SUCCESS_MESSAGES = {
   LOGIN_SUCCESS: "Login successful.",
   REGISTRATION_SUCCESS: "Registration completed successfully.",
+  OTP_SEND_SUCCESS: "OTP sent successfully",
   LOGOUT_SUCCESS: "Logged out successfully.",
   UPDATE_SUCCESS: "Updated successfully.",
   DELETE_SUCCESS: "Deleted successfully.",
@@ -41,6 +42,23 @@ export const ERROR_MESSAGES = {
   VALIDATION_ERROR: "Validation error occurred.",
   MISSING_PARAMETERS: "Missing required parameters.",
 };
+
+export const VERIFICATION_MAIL_CONTENT = (otp: string) => `
+  <div style="font-family: Arial, sans-serif; color: #333;">
+    <h2 style="color: #0a74da;">Welcome to Zyra Moments!</h2>
+    <p>Dear user,</p>
+    <p>Thank you for signing up with <strong>Zyra Moments</strong>. We’re excited to have you on board! To complete your registration, please verify your email address using the OTP code provided below:</p>
+    <div style="text-align: center; margin: 20px 0;">
+      <span style="font-size: 24px; font-weight: bold; background-color: #f2f2f2; padding: 10px; border-radius: 5px;">${otp}</span>
+    </div>
+    <p>With Zyra Moments, you can explore, organize, and attend amazing events seamlessly.</p>
+    <p>If you didn’t request this, please ignore this email or reach out to our support team.</p>
+    <p>We can't wait to help you create and discover unforgettable moments!</p>
+    <p>Best regards,<br/>The Zyra Moments Team</p>
+    <hr style="border: none; border-top: 1px solid #ccc;" />
+    <p style="font-size: 12px; color: #777;">This email was sent from an unmonitored account. Please do not reply to this email.</p>
+  </div>
+`;
 
 export const DEFAULTS = {
   PAGE_SIZE: 10,

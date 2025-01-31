@@ -13,7 +13,7 @@ export class OTPService implements IOTPService {
   }
 
   async storeOTP(email: string, otp: string): Promise<void> {
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 1 * 60 * 1000);
     await this.otpRepository.saveOTP(email, otp, expiresAt);
   }
 
