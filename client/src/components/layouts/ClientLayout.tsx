@@ -4,8 +4,10 @@ import { ClientHeader } from "../headers/ClientHeader";
 function ClientLayout() {
   return (
     <div>
-      <ClientHeader />
-      <Outlet />
+      <div className="min-h-screen bg-background">
+        <ClientHeader />
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ function VendorRoutes() {
   return (
     <Routes>
       <Route path="/" element={<VendorLayout />}>
-        <Route path="login" element={<VendorAuth />} />
+        <Route index element={<VendorAuth />} />
       </Route>
     </Routes>
   );

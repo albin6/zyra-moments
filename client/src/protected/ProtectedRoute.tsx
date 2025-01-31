@@ -10,6 +10,8 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userRole = useSelector((state: RootState) => state.store.user?.role);
 
+  console.log("auth route =>", userRole);
+
   if (!userRole) {
     return <Navigate to="/" />;
   }

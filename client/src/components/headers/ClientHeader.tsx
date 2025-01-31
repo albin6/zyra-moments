@@ -1,45 +1,167 @@
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "../theme/ModeToggle";
+import { ModeToggle } from "@/components/theme/ModeToggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useDispatch } from "react-redux";
+import { logout } from "@/store/userSlice";
+import useAuth from "@/hooks/custom/useAuth";
+
+const navItems = [
+  { name: "Dashboard", href: "#" },
+  { name: "Orders", href: "#" },
+  { name: "Support", href: "#" },
+  { name: "Analytics", href: "#" },
+];
 
 export function ClientHeader() {
+  const { isLoggedIn } = useAuth();
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    dispatch(logout());
+  };
+
   return (
-    <header className="bg-secondary text-secondary-foreground">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold">Client Portal</h1>
-          <nav className="hidden md:flex space-x-4">
-            <a href="#" className="hover:underline">
-              Dashboard
-            </a>
-            <a href="#" className="hover:underline">
-              Orders
-            </a>
-            <a href="#" className="hover:underline">
-              Support
-            </a>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-14 items-center">
+        <div className="mr-4 hidden md:flex">
+          <a className="mr-6 flex items-center space-x-2" href="#">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6"
+            >
+              <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+            </svg>
+            <span className="hidden font-bold sm:inline-block">
+              Client Portal
+            </span>
+          </a>
+          <nav className="flex items-center space-x-6 text-sm font-medium">
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                {item.name}
+              </a>
+            ))}
           </nav>
         </div>
-        <div className="flex items-center space-x-4">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+            >
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <MobileNav />
+          </SheetContent>
+        </Sheet>
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          <div className="w-full flex-1 md:w-auto md:flex-none">
+            {/* <Button className="inline-flex items-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full justify-start text-left font-normal md:w-40">
+              <span className="hidden lg:inline-flex">Search...</span>
+              <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button> */}
+          </div>
+          {/* <Button size="sm" className="h-8 w-8 rounded-full">
+            <Bell className="h-4 w-4" />
+            <span className="sr-only">Notifications</span>
+          </Button> */}
           <ModeToggle />
-          <Button variant="default" size="sm">
-            New Order
-          </Button>
-          <Button variant="outline" size="sm">
-            Logout
-          </Button>
+          {isLoggedIn && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-8 w-8 rounded-full"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src="/placeholder-avatar.jpg"
+                      alt="@username"
+                    />
+                    <AvatarFallback>SC</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">username</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      user@example.com
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>New Team</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logoutUser}>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
-      <nav className="md:hidden container mx-auto px-4 py-2 flex justify-center space-x-4">
-        <a href="#" className="hover:underline">
-          Dashboard
-        </a>
-        <a href="#" className="hover:underline">
-          Orders
-        </a>
-        <a href="#" className="hover:underline">
-          Support
-        </a>
-      </nav>
     </header>
+  );
+}
+
+function MobileNav() {
+  return (
+    <div className="flex flex-col space-y-3">
+      <a className="flex items-center space-x-2" href="#">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-6 w-6"
+        >
+          <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+        </svg>
+        <span className="font-bold">Client Portal</span>
+      </a>
+      <nav className="flex flex-col space-y-3">
+        {navItems.map((item) => (
+          <a
+            key={item.name}
+            href={item.href}
+            className="transition-colors hover:text-foreground/80 text-foreground/60"
+          >
+            {item.name}
+          </a>
+        ))}
+      </nav>
+    </div>
   );
 }

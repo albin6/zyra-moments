@@ -11,7 +11,7 @@ interface IUserState {
 }
 
 const initialState: IUserState = {
-  user: null,
+  user: JSON.parse(sessionStorage.getItem("userSession")!),
 };
 
 const userSlice = createSlice({

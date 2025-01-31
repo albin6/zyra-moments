@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Login } from "@/components/auth/Login";
 import { Signup } from "@/components/auth/Signup";
 import { Button } from "@/components/ui/button";
@@ -15,11 +15,14 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { login } from "@/store/userSlice";
+import { useTheme } from "@/context/ThemeProvider";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
   const {} = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
+
+  const { theme } = useTheme();
 
   const { mutate: registerClient } = useRegisterMutation();
   const { mutate: loginClient } = useLoginMutation();
@@ -79,7 +82,11 @@ export function ClientAuth() {
           <div className="md:w-1/2 p-8 bg-card text-card-foreground">
             <div className="flex justify-center mb-6">
               <img
-                src="https://res.cloudinary.com/dkgic4cru/image/upload/v1738128302/logo-no-background_rfsdcg.svg"
+                src={
+                  theme == "light"
+                    ? "https://res.cloudinary.com/dkgic4cru/image/upload/v1738128302/logo-no-background_rfsdcg.svg"
+                    : "https://res.cloudinary.com/dkgic4cru/image/upload/v1738322014/logo-no-background_nxa5qx.svg"
+                }
                 alt="Logo"
                 className="h-12 fill-current dark:text-white"
               />
