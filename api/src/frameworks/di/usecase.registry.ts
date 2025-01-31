@@ -14,6 +14,12 @@ import { ILoginStrategy } from "../../useCases/auth/login-strategies/login-strat
 import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
 import { ClientLoginStrategy } from "../../useCases/auth/login-strategies/client-login.strategy";
 import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
+import { ISendEmailUseCase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.inteface";
+import { SendEmailUseCase } from "../../useCases/auth/send-email.usecase";
+import { IEmailService } from "../../entities/services/email-service.interface";
+import { EmailService } from "../../interfaceAdapters/services/email.services";
+import { IOTPService } from "../../entities/services/otp-service.inteface";
+import { OTPService } from "../../interfaceAdapters/services/otp.services";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -27,6 +33,10 @@ export class UseCaseRegistry {
 
     container.register<ILoginUserUseCase>("ILoginUserUseCase", {
       useClass: LoginUserUseCase,
+    });
+
+    container.register<ISendEmailUseCase>("ISendEmailUseCase", {
+      useClass: SendEmailUseCase,
     });
 
     // Register Strategies
@@ -53,5 +63,12 @@ export class UseCaseRegistry {
     container.register<ILoginStrategy>("VendorLoginStrategy", {
       useClass: VendorLoginStrategy,
     });
+
+    // register email & otp services
+    container.register<IEmailService>("IEmailService", {
+      useClass: EmailService,
+    });
+
+    container.register<IOTPService>("IOTPService", { useClass: OTPService });
   }
 }
