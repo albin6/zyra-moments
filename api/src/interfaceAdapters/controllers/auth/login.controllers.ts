@@ -38,7 +38,12 @@ export class LoginUserController implements ILoginUserController {
       res.status(HTTP_STATUS.OK).json({
         success: true,
         message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        user: { id: user._id, email: user.email, role: user.role },
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+        },
       });
     } catch (error) {
       if (error instanceof ZodError) {

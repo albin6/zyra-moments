@@ -20,6 +20,10 @@ import { IEmailService } from "../../entities/services/email-service.interface";
 import { EmailService } from "../../interfaceAdapters/services/email.services";
 import { IOTPService } from "../../entities/services/otp-service.inteface";
 import { OTPService } from "../../interfaceAdapters/services/otp.services";
+import { IVerifyOTPUseCase } from "../../entities/useCaseInterfaces/auth/verify-otp-usecase.interface";
+import { VerifyOTPUseCase } from "../../useCases/auth/verify-otp.usecase";
+import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
+import { UserExistenceService } from "../../interfaceAdapters/services/use-existence.services";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -37,6 +41,10 @@ export class UseCaseRegistry {
 
     container.register<ISendEmailUseCase>("ISendEmailUseCase", {
       useClass: SendEmailUseCase,
+    });
+
+    container.register<IVerifyOTPUseCase>("IVerifyOTPUseCase", {
+      useClass: VerifyOTPUseCase,
     });
 
     // Register Strategies
@@ -70,5 +78,9 @@ export class UseCaseRegistry {
     });
 
     container.register<IOTPService>("IOTPService", { useClass: OTPService });
+
+    container.register<IUserExistenceService>("IUserExistenceService", {
+      useClass: UserExistenceService,
+    });
   }
 }

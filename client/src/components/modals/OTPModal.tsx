@@ -14,14 +14,12 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useTimer } from "@/hooks/useTimer";
-import { User } from "@/types/User";
 import { Loader2 } from "lucide-react";
 
 interface OTPModalProps {
   isOpen: boolean;
   onClose: () => void;
   onVerify: (otp: string) => void;
-  onSubmit: (userData: User) => void;
   onResend: () => void;
   isSending: boolean;
 }

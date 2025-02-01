@@ -16,7 +16,7 @@ import OTPModal from "../modals/OTPModal";
 import { useState } from "react";
 import { useSendOTPMutation } from "@/hooks/auth/useSendOTP";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { useVerifyOTPMutation } from "@/hooks/auth/useVerifyOTP";
 
 type UserType = "admin" | "client" | "vendor";
 
@@ -32,6 +32,7 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
   const [userData, setUserData] = useState<User>({} as User);
 
   const { mutate: sendVerificationOTP } = useSendOTPMutation();
+  const { mutate: verifyOTP } = useVerifyOTPMutation();
 
   const handleOpenOTPModal = () => {
     setIsOTPModalOpen(true);
@@ -48,19 +49,31 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
         toast.success(data.message);
         setIsSending(false);
       },
-      onError: (error: any) => toast.error(error.response.data.message),
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+        handleCloseOTPModal();
+      },
     });
-  };
-
-  const handleVerifyOTP = (otp: string) => {
-    console.log("Verifying OTP:", otp);
-    // Implement your OTP verification logic here
-    // If verification is successful, close the modal
-    setIsOTPModalOpen(false);
   };
 
   const submitRegister = () => {
     onSubmit(userData);
+  };
+
+  const handleVerifyOTP = (otp: string) => {
+    verifyOTP(
+      { email: userData.email, otp },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message);
+          submitRegister();
+          setIsOTPModalOpen(false);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      }
+    );
   };
 
   const formik = useFormik({
@@ -187,7 +200,6 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
         isOpen={isOTPModalOpen}
         onClose={handleCloseOTPModal}
         onVerify={handleVerifyOTP}
-        onSubmit={submitRegister}
         onResend={handleSendOTP}
         isSending={isSending}
       />

@@ -4,6 +4,7 @@ import {
   loginController,
   registerController,
   sendEmailController,
+  veryfyOTPController,
 } from "../../di/resolver";
 
 export class AuthRoutes extends BaseRoute {
@@ -22,6 +23,10 @@ export class AuthRoutes extends BaseRoute {
 
     this.router.post("/send-otp", (req: Request, res: Response) => {
       sendEmailController.handle(req, res);
+    });
+
+    this.router.post("/verify-otp", (req: Request, res: Response) => {
+      veryfyOTPController.handle(req, res);
     });
   }
 }

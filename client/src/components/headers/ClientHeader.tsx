@@ -23,7 +23,7 @@ const navItems = [
 ];
 
 export function ClientHeader() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const dispatch = useDispatch();
 
   const logoutUser = () => {
@@ -103,16 +103,21 @@ export function ClientHeader() {
                       src="/placeholder-avatar.jpg"
                       alt="@username"
                     />
-                    <AvatarFallback>SC</AvatarFallback>
+                    <AvatarFallback>
+                      {user &&
+                        user?.firstName.charAt(0) + user?.lastName.charAt(0)}
+                    </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">username</p>
+                    <p className="text-sm font-medium leading-none">
+                      {user && user.firstName + " " + user.lastName}
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      user@example.com
+                      {user && user.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>

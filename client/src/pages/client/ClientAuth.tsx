@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Login } from "@/components/auth/Login";
 import { Signup } from "@/components/auth/Signup";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,12 @@ import { User } from "@/types/User";
 import { useLoginMutation } from "@/hooks/auth/useLogin";
 import { ILoginData } from "@/services/auth/authService";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+
 import { login } from "@/store/userSlice";
 import { useTheme } from "@/context/ThemeProvider";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
-  const {} = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   const { theme } = useTheme();
@@ -28,7 +26,6 @@ export function ClientAuth() {
   const { mutate: loginClient } = useLoginMutation();
 
   const handleSignupSubmit = (data: Omit<User, "role">) => {
-    console.log(data);
     registerClient(
       { ...data, role: "client" },
       {
@@ -36,6 +33,7 @@ export function ClientAuth() {
         onError: (error: any) => toast.error(error.response.data.message),
       }
     );
+    setIsLogin(true);
   };
 
   const handleLoginSubmit = (data: Omit<ILoginData, "role">) => {

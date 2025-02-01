@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { ILoginStrategy } from "./login-strategy.interface";
-import { IClientRespository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
+import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
 import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
@@ -10,7 +10,7 @@ import { IUserEntity } from "../../../entities/models/user.entity";
 @injectable()
 export class ClientLoginStrategy implements ILoginStrategy {
   constructor(
-    @inject("IClientRespository") private clientRepository: IClientRespository,
+    @inject("IClientRepository") private clientRepository: IClientRepository,
     @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
   ) {}
 

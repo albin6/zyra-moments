@@ -17,7 +17,13 @@ export class OTPService implements IOTPService {
     await this.otpRepository.saveOTP(email, otp, expiresAt);
   }
 
-  async verifyOTP(email: string, otp: string): Promise<boolean> {
-    return await this.otpRepository.findOTP(email, otp);
+  async verifyOTP({
+    email,
+    otp,
+  }: {
+    email: string;
+    otp: string;
+  }): Promise<boolean> {
+    return await this.otpRepository.findOTP({ email, otp });
   }
 }

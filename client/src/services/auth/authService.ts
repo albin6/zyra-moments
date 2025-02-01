@@ -6,6 +6,8 @@ export interface AuthResponse {
   message: string;
   user: {
     id: string;
+    firstName: string;
+    lastName: string;
     email: string;
     role: "client" | "admin" | "vendor";
   };
@@ -39,5 +41,13 @@ export const sendOtp = async (email: string): Promise<AxiosResponse> => {
   const response = await authAxiosInstance.post<AxiosResponse>("/send-otp", {
     email,
   });
+  return response.data;
+};
+
+export const verifyOtp = async (data: { email: string; otp: string }) => {
+  const response = await authAxiosInstance.post<AxiosResponse>(
+    "/verify-otp",
+    data
+  );
   return response.data;
 };
