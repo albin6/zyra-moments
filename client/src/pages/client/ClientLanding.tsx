@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import ClientLanding from "@/components/ClientLanding";
+import ClientLanding from "@/components/client/ClientLanding";
 
 function ClientLandingPage() {
   return (

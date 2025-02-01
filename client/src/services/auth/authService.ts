@@ -11,6 +11,11 @@ export interface AuthResponse {
   };
 }
 
+export interface AxiosResponse {
+  success: boolean;
+  message: string;
+}
+
 export interface ILoginData {
   email: string;
   password: string;
@@ -27,5 +32,12 @@ export const signup = async (user: UserDTO): Promise<AuthResponse> => {
 
 export const login = async (user: ILoginData): Promise<AuthResponse> => {
   const response = await authAxiosInstance.post<AuthResponse>("/login", user);
+  return response.data;
+};
+
+export const sendOtp = async (email: string): Promise<AxiosResponse> => {
+  const response = await authAxiosInstance.post<AxiosResponse>("/send-otp", {
+    email,
+  });
   return response.data;
 };

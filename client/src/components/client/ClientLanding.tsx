@@ -16,6 +16,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ChevronRight, Star } from "lucide-react";
+import { ClientLandingCategorySection } from "./ClientLandingCategorySection";
+import { UpcomingEventsSection } from "./UpcomingEventsSection";
 
 const carouselImages = [
   "https://res.cloudinary.com/dkgic4cru/image/upload/v1738308963/concert-main_xawuyx.jpg",
@@ -67,90 +69,9 @@ const ClientLanding: React.FC = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Powerful Features for Seamless Events
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Intuitive Planning Tools",
-                description:
-                  "Effortlessly plan and organize your events with our user-friendly interface.",
-              },
-              {
-                title: "Real-time Collaboration",
-                description:
-                  "Work together with your team in real-time, ensuring everyone stays on the same page.",
-              },
-              {
-                title: "Comprehensive Analytics",
-                description:
-                  "Gain valuable insights into your events' performance with detailed analytics.",
-              },
-            ].map((feature, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ClientLandingCategorySection />
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Our Clients Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sarah Johnson",
-                role: "Event Planner",
-                quote:
-                  "EventPro has revolutionized the way I manage events. It's a game-changer!",
-              },
-              {
-                name: "Michael Chen",
-                role: "Corporate Events Manager",
-                quote:
-                  "The analytics feature has helped us optimize our events and increase ROI.",
-              },
-              {
-                name: "Emily Rodriguez",
-                role: "Wedding Coordinator",
-                quote:
-                  "I can't imagine planning weddings without EventPro. It's simply the best!",
-              },
-            ].map((testimonial, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{testimonial.name}</CardTitle>
-                  <CardDescription>{testimonial.role}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="italic">"{testimonial.quote}"</p>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={16} fill="currentColor" />
-                    ))}
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      <UpcomingEventsSection />
 
       {/* Pricing Section */}
       <section id="pricing" className="py-16 bg-muted/50">

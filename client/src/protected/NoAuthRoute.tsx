@@ -8,7 +8,6 @@ interface NoAuthRouteProps {
 
 const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
   const user = useSelector((state: RootState) => state.store.user);
-  console.log("no auth =>", user);
 
   if (user) {
     return <Navigate to="/landing" replace />;

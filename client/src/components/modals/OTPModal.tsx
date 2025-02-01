@@ -1,5 +1,4 @@
-import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,39 +7,52 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { useTimer } from "@/hooks/useTimer";
+import { User } from "@/types/User";
+import { Loader2 } from "lucide-react";
 
 interface OTPModalProps {
   isOpen: boolean;
   onClose: () => void;
   onVerify: (otp: string) => void;
+  onSubmit: (userData: User) => void;
+  onResend: () => void;
+  isSending: boolean;
 }
 
-const OTPModal: React.FC<OTPModalProps> = ({ isOpen, onClose, onVerify }) => {
-  const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+const OTPModal: React.FC<OTPModalProps> = ({
+  isOpen,
+  onClose,
+  onVerify,
+  onResend,
+  isSending,
+}) => {
+  const [otp, setOtp] = React.useState("");
   const { timeLeft, startTimer, resetTimer } = useTimer(60);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isSending) {
+      setOtp("");
       resetTimer();
       startTimer();
     }
-  }, [isOpen, resetTimer, startTimer]);
+  }, [isOpen, resetTimer, startTimer, isSending]);
 
-  const handleChange = (element: HTMLInputElement, index: number) => {
-    if (isNaN(Number(element.value))) return false;
-
-    setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
-
-    if (element.nextSibling && element.value !== "") {
-      (element.nextSibling as HTMLInputElement).focus();
-    }
+  const handleVerify = () => {
+    onVerify(otp);
   };
 
-  const handleSubmit = () => {
-    onVerify(otp.join(""));
+  const handleResend = () => {
+    setOtp("");
+    // resetTimer();
+    onResend();
+    // startTimer();
   };
 
   return (
@@ -53,32 +65,49 @@ const OTPModal: React.FC<OTPModalProps> = ({ isOpen, onClose, onVerify }) => {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="flex justify-center space-x-2">
-            {otp.map((data, index) => (
-              <Input
-                key={index}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                ref={(input) => (inputRefs.current[index] = input)}
-                value={data}
-                onChange={(e) => handleChange(e.target, index)}
-                onFocus={(e) => e.target.select()}
-                className="w-10 h-10 text-center"
-              />
-            ))}
-          </div>
+          {isSending ? (
+            <div className="flex justify-center items-center">
+              <Loader2 className="h-6 w-6 animate-spin" />
+              <span className="ml-2">Sending OTP...</span>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <InputOTP
+                maxLength={6}
+                value={otp}
+                onChange={(value) => setOtp(value)}
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+          )}
           <div className="text-center">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Time remaining: {timeLeft} seconds
             </p>
           </div>
-          <Button onClick={handleSubmit} className="w-full">
+          <Button
+            onClick={handleVerify}
+            className="w-full"
+            disabled={otp.length !== 6}
+          >
             Verify OTP
           </Button>
-          <Button variant="outline" onClick={resetTimer} className="w-full">
-            Resend OTP
-          </Button>
+          {!isSending && timeLeft === 0 && (
+            <Button variant="outline" onClick={handleResend} className="w-full">
+              Resend OTP
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

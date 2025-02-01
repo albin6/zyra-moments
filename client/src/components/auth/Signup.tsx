@@ -14,6 +14,9 @@ import { signupSchema } from "@/utils/signup.validator";
 import { User } from "@/types/User";
 import OTPModal from "../modals/OTPModal";
 import { useState } from "react";
+import { useSendOTPMutation } from "@/hooks/auth/useSendOTP";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 type UserType = "admin" | "client" | "vendor";
 
@@ -25,7 +28,10 @@ interface SignupProps {
 
 export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
   const [isOTPModalOpen, setIsOTPModalOpen] = useState(false);
-  const [userData, setUserData] = useState<User>();
+  const [isSending, setIsSending] = useState(false);
+  const [userData, setUserData] = useState<User>({} as User);
+
+  const { mutate: sendVerificationOTP } = useSendOTPMutation();
 
   const handleOpenOTPModal = () => {
     setIsOTPModalOpen(true);
@@ -35,11 +41,26 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
     setIsOTPModalOpen(false);
   };
 
+  const handleSendOTP = () => {
+    setIsSending(() => true);
+    sendVerificationOTP(userData.email, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        setIsSending(false);
+      },
+      onError: (error: any) => toast.error(error.response.data.message),
+    });
+  };
+
   const handleVerifyOTP = (otp: string) => {
     console.log("Verifying OTP:", otp);
     // Implement your OTP verification logic here
     // If verification is successful, close the modal
     setIsOTPModalOpen(false);
+  };
+
+  const submitRegister = () => {
+    onSubmit(userData);
   };
 
   const formik = useFormik({
@@ -51,19 +72,20 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
       password: "",
     },
     validationSchema: signupSchema,
-    onSubmit: (values, actions) => {
+    onSubmit: (values) => {
       setUserData(() => values);
+      handleSendOTP();
       handleOpenOTPModal();
-      onSubmit(values);
-      actions.resetForm({
-        values: {
-          firstName: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          password: "",
-        },
-      });
+      // onSubmit(values);
+      // actions.resetForm({
+      //   values: {
+      //     firstName: "",
+      //     lastName: "",
+      //     email: "",
+      //     phoneNumber: "",
+      //     password: "",
+      //   },
+      // });
     },
   });
 
@@ -165,6 +187,9 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
         isOpen={isOTPModalOpen}
         onClose={handleCloseOTPModal}
         onVerify={handleVerifyOTP}
+        onSubmit={submitRegister}
+        onResend={handleSendOTP}
+        isSending={isSending}
       />
     </Card>
   );
