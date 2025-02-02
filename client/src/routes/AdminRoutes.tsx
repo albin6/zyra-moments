@@ -4,6 +4,7 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import { NoAdminAuthRoute } from "@/protected/PublicRoute";
 import { AuthAdminRoute } from "@/protected/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
+import AdminUserManagement from "@/pages/admin/AdminUserManagement";
 
 function AdminRoutes() {
   return (
@@ -16,6 +17,7 @@ function AdminRoutes() {
         }
       >
         <Route index element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUserManagement />} />
       </Route>
     </Routes>
   );

@@ -1,0 +1,71 @@
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut } from "lucide-react";
+import { Card } from "../ui/card";
+import { useLogout } from "@/hooks/auth/useLogout";
+import { useDispatch } from "react-redux";
+import { logout } from "@/store/userSlice";
+import { toast } from "sonner";
+
+interface SidebarProps {
+  vendorName: string;
+  avatarUrl: string;
+}
+
+export function Sidebar({ vendorName, avatarUrl }: SidebarProps) {
+  const { mutate: logoutReq } = useLogout();
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    logoutReq(undefined, {
+      onSuccess: (data) => {
+        dispatch(logout());
+        toast.success(data.message);
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
+  };
+  return (
+    <Card>
+      <aside className="w-64 hidden md:flex flex-col p-6 space-y-6">
+        <div className="flex flex-col items-center space-y-3">
+          <Avatar className="w-20 h-20">
+            <AvatarImage src={avatarUrl} alt={vendorName} />
+            <AvatarFallback>{vendorName[0]}</AvatarFallback>
+          </Avatar>
+          <h2 className="text-lg font-semibold">{vendorName}</h2>
+        </div>
+
+        <nav className="flex-1 space-y-2">
+          <Button
+            variant="ghost"
+            className="w-full justify-center font-normal bg-accent"
+          >
+            My Profile
+          </Button>
+          <Button variant="ghost" className="w-full justify-center font-normal">
+            Services
+          </Button>
+          <Button variant="ghost" className="w-full justify-center font-normal">
+            Your Events
+          </Button>
+          <Button variant="ghost" className="w-full justify-center font-normal">
+            Payments
+          </Button>
+        </nav>
+
+        <Button
+          onClick={logoutUser}
+          variant="outline"
+          className="w-full"
+          size="sm"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          Sign out
+        </Button>
+      </aside>
+    </Card>
+  );
+}

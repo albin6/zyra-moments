@@ -5,8 +5,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   CalendarDays,
   Users,
-  DollarSign,
-  BarChart2,
   Menu,
   Home,
   Settings,
@@ -16,8 +14,27 @@ import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/userSlice";
 import { toast } from "sonner";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const adminRoutes = [
+  {
+    path: "/admin/ad_pvt",
+    label: "Dashboard",
+    icon: <Home className="mr-2 h-4 w-4" />,
+  },
+  {
+    path: "/admin/ad_pvt/users",
+    label: "User Management",
+    icon: <Users className="mr-2 h-4 w-4" />,
+  },
+  {
+    path: "/admin/ad_pvt/events",
+    label: "Events",
+    icon: <CalendarDays className="mr-2 h-4 w-4" />,
+  },
+];
 
 export function Sidebar({ className }: SidebarProps) {
   const [open, setOpen] = React.useState(false);
@@ -43,6 +60,8 @@ export function Sidebar({ className }: SidebarProps) {
 }
 
 function SidebarContent() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { mutate: logoutReq } = useLogout();
   const dispatch = useDispatch();
 
@@ -62,29 +81,20 @@ function SidebarContent() {
     <div className="space-y-4 py-4">
       <div className="px-3 py-2">
         <h2 className="mb-2 px-4 text-xl font-bold tracking-tight">
-          Event Management
+          Zyra Moments
         </h2>
         <div className="space-y-1">
-          <Button variant="secondary" className="w-full justify-start">
-            <Home className="mr-2 h-4 w-4" />
-            Dashboard
-          </Button>
-          <Button variant="ghost" className="w-full justify-start">
-            <Users className="mr-2 h-4 w-4" />
-            Attendees
-          </Button>
-          <Button variant="ghost" className="w-full justify-start">
-            <CalendarDays className="mr-2 h-4 w-4" />
-            Events
-          </Button>
-          <Button variant="ghost" className="w-full justify-start">
-            <DollarSign className="mr-2 h-4 w-4" />
-            Finance
-          </Button>
-          <Button variant="ghost" className="w-full justify-start">
-            <BarChart2 className="mr-2 h-4 w-4" />
-            Analytics
-          </Button>
+          {adminRoutes.map(({ path, label, icon }) => (
+            <Button
+              key={path}
+              onClick={() => navigate(path)}
+              variant={location.pathname === path ? "secondary" : "ghost"}
+              className="w-full justify-start"
+            >
+              {icon}
+              {label}
+            </Button>
+          ))}
         </div>
       </div>
       <div className="px-3 py-2">

@@ -33,3 +33,17 @@ export const NoAdminAuthRoute = ({ element }: NoAuthRouteProps) => {
 
   return element;
 };
+
+export const NoVendorAuthRoute = ({ element }: NoAuthRouteProps) => {
+  const user = useSelector((state: RootState) => state.store.user);
+
+  if (user && user?.role !== "vendor") {
+    return <Navigate to={"/unauthorized"} />;
+  }
+
+  if (user) {
+    return <Navigate to="/vendor/profile" replace />;
+  }
+
+  return element;
+};

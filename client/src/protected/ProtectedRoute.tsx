@@ -37,3 +37,20 @@ export const AuthAdminRoute = ({
     <Navigate to="/unauthorized" />
   );
 };
+
+export const AuthVendorRoute = ({
+  element,
+  allowedRoles,
+}: ProtectedRouteProps) => {
+  const userRole = useSelector((state: RootState) => state.store.user?.role);
+  console.log(userRole);
+  if (!userRole) {
+    return <Navigate to="/vendor" />;
+  }
+
+  return allowedRoles.includes(userRole) ? (
+    element
+  ) : (
+    <Navigate to="/unauthorized" />
+  );
+};

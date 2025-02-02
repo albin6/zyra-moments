@@ -88,16 +88,15 @@ export function VendorHeader() {
             <MobileNav />
           </SheetContent>
         </Sheet>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+        <div className="flex flex-1 items-center justify-between space-x-4 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            {/* Add Product button */}
-            <Button
+            {/* <Button
               variant="default"
               size="sm"
               className="hidden sm:inline-flex"
             >
               Add Product
-            </Button>
+            </Button> */}
           </div>
           <ModeToggle />
           {isLoggedIn && (

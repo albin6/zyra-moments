@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/theme/ModeToggle";
-import { CalendarDays, ChevronDown, Bell, LogOut } from "lucide-react";
+import { CalendarDays, ChevronDown, Bell, LogOut, Shield } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +111,7 @@ export function AdminHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary" size="icon">
                   <span className="sr-only">Open user menu</span>
-                  <CalendarDays className="h-4 w-4" />
+                  <Shield className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

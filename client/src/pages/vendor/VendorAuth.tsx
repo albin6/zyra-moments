@@ -34,7 +34,7 @@ export function VendorAuth() {
 
   const handleLoginSubmit = (data: Omit<ILoginData, "role">) => {
     loginClient(
-      { ...data, role: "client" },
+      { ...data, role: "vendor" },
       {
         onSuccess: (data) => {
           toast.success(data.message);
