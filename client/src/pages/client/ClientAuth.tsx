@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 
 import { login } from "@/store/userSlice";
 import { useTheme } from "@/context/ThemeProvider";
+import { ClientHeader } from "@/components/headers/ClientHeader";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,110 +56,113 @@ export function ClientAuth() {
   };
 
   return (
-    <motion.div
-      key={isLogin ? "login" : "signup"}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container mx-auto px-4 py-8 flex items-center justify-center">
-        <Card className="w-full max-w-7xl flex flex-col md:flex-row overflow-hidden shadow-2xl">
-          <div className="md:w-1/2 bg-primary overflow-hidden h-[300px] md:h-auto relative">
-            <AuthCarousel />
-            <div className="absolute inset-0 flex items-center justify-center bg-background/50">
-              <div className="text-center">
-                <h1 className="text-4xl font-bold text-foreground mb-4">
-                  Welcome Back
-                </h1>
-                <p className="text-xl text-muted-foreground">
-                  We're glad to see you again!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="md:w-1/2 p-8 bg-card text-card-foreground">
-            <div className="flex justify-center mb-6">
-              <img
-                src={
-                  theme == "light"
-                    ? "https://res.cloudinary.com/dkgic4cru/image/upload/v1738128302/logo-no-background_rfsdcg.svg"
-                    : "https://res.cloudinary.com/dkgic4cru/image/upload/v1738322014/logo-no-background_nxa5qx.svg"
-                }
-                alt="Logo"
-                className="h-12 fill-current dark:text-white"
-              />
-            </div>
-            <div className="flex mb-6">
-              <Button
-                variant={isLogin ? "default" : "outline"}
-                className="flex-1 rounded-r-none"
-                onClick={() => setIsLogin(true)}
-              >
-                Login
-              </Button>
-              <Button
-                variant={!isLogin ? "default" : "outline"}
-                className="flex-1 rounded-l-none"
-                onClick={() => setIsLogin(false)}
-              >
-                Sign Up
-              </Button>
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={isLogin ? "login" : "signup"}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-              >
-                {isLogin ? (
-                  <Login
-                    userType="client"
-                    onSubmit={handleLoginSubmit}
-                    setSignup={() => setIsLogin(false)}
-                  />
-                ) : (
-                  <Signup
-                    userType="client"
-                    onSubmit={handleSignupSubmit}
-                    setLogin={() => setIsLogin(true)}
-                  />
-                )}
-              </motion.div>
-            </AnimatePresence>
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-muted"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-card text-muted-foreground">
-                    Or continue with
-                  </span>
+    <div className="min-h-screen bg-background">
+      <ClientHeader />
+      <motion.div
+        key={isLogin ? "login" : "signup"}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="container mx-auto px-4 py-8 flex items-center justify-center">
+          <Card className="w-full max-w-7xl flex flex-col md:flex-row overflow-hidden shadow-2xl">
+            <div className="md:w-1/2 bg-primary overflow-hidden h-[300px] md:h-auto relative">
+              <AuthCarousel />
+              <div className="absolute inset-0 flex items-center justify-center bg-background/50">
+                <div className="text-center">
+                  <h1 className="text-4xl font-bold text-foreground mb-4">
+                    Welcome Back
+                  </h1>
+                  <p className="text-xl text-muted-foreground">
+                    We're glad to see you again!
+                  </p>
                 </div>
               </div>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+            </div>
+            <div className="md:w-1/2 p-8 bg-card text-card-foreground">
+              <div className="flex justify-center mb-6">
+                <img
+                  src={
+                    theme == "light"
+                      ? "https://res.cloudinary.com/dkgic4cru/image/upload/v1738128302/logo-no-background_rfsdcg.svg"
+                      : "https://res.cloudinary.com/dkgic4cru/image/upload/v1738322014/logo-no-background_nxa5qx.svg"
+                  }
+                  alt="Logo"
+                  className="h-12 fill-current dark:text-white"
+                />
+              </div>
+              <div className="flex mb-6">
                 <Button
-                  variant="outline"
-                  onClick={() => handleSocialLogin("google")}
+                  variant={isLogin ? "default" : "outline"}
+                  className="flex-1 rounded-r-none"
+                  onClick={() => setIsLogin(true)}
                 >
-                  <FaGoogle className="mr-2" />
-                  Google
+                  Login
                 </Button>
                 <Button
-                  variant="outline"
-                  onClick={() => handleSocialLogin("github")}
+                  variant={!isLogin ? "default" : "outline"}
+                  className="flex-1 rounded-l-none"
+                  onClick={() => setIsLogin(false)}
                 >
-                  <FaGithub className="mr-2" />
-                  GitHub
+                  Sign Up
                 </Button>
               </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isLogin ? "login" : "signup"}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {isLogin ? (
+                    <Login
+                      userType="client"
+                      onSubmit={handleLoginSubmit}
+                      setSignup={() => setIsLogin(false)}
+                    />
+                  ) : (
+                    <Signup
+                      userType="client"
+                      onSubmit={handleSignupSubmit}
+                      setLogin={() => setIsLogin(true)}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-muted"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-card text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleSocialLogin("google")}
+                  >
+                    <FaGoogle className="mr-2" />
+                    Google
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleSocialLogin("github")}
+                  >
+                    <FaGithub className="mr-2" />
+                    GitHub
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
-    </motion.div>
+          </Card>
+        </div>
+      </motion.div>
+    </div>
   );
 }

@@ -10,7 +10,7 @@ function AdminRoutes() {
     <Routes>
       <Route path="/" element={<NoAdminAuthRoute element={<AdminAuth />} />} />
       <Route
-        path="/dashboard"
+        path="/ad_pvt"
         element={
           <AuthAdminRoute allowedRoles={["admin"]} element={<AdminLayout />} />
         }

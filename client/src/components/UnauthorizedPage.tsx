@@ -34,7 +34,7 @@ export default function UnauthorizedPage() {
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button onClick={() => navigate("/")} variant="default">
+          <Button onClick={() => navigate(-1)} variant="default">
             Return to Home
           </Button>
         </CardFooter>

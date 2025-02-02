@@ -13,7 +13,7 @@ interface IUserState {
 }
 
 const initialState: IUserState = {
-  user: JSON.parse(sessionStorage.getItem("userSession")!),
+  user: JSON.parse(sessionStorage.getItem("userSession") || "null"),
 };
 
 const userSlice = createSlice({

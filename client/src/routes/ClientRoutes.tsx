@@ -9,8 +9,8 @@ import ClientLandingPage from "@/pages/client/ClientLanding";
 function ClientRoutes() {
   return (
     <Routes>
+      <Route index element={<NoAuthRoute element={<ClientAuth />} />} />
       <Route path="/" element={<ClientLayout />}>
-        <Route index element={<NoAuthRoute element={<ClientAuth />} />} />
         <Route
           path="/landing"
           element={

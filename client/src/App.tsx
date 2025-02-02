@@ -19,7 +19,7 @@ function AppLayout() {
         <Route path="/*" element={<ClientRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/vendor/*" element={<VendorRoutes />} />
-        <Route path="*" element={<UnauthorizedPage />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
       </Routes>
     </Router>
   );

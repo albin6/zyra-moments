@@ -26,7 +26,7 @@ export const AuthAdminRoute = ({
   allowedRoles,
 }: ProtectedRouteProps) => {
   const userRole = useSelector((state: RootState) => state.store.user?.role);
-
+  console.log(userRole);
   if (!userRole) {
     return <Navigate to="/admin" />;
   }

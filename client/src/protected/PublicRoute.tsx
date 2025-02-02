@@ -8,6 +8,10 @@ interface NoAuthRouteProps {
 
 export const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
   const user = useSelector((state: RootState) => state.store.user);
+  console.log(user);
+  if (user && user?.role !== "client") {
+    return <Navigate to={"/unauthorized"} />;
+  }
 
   if (user) {
     return <Navigate to="/landing" replace />;
@@ -19,8 +23,12 @@ export const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
 export const NoAdminAuthRoute = ({ element }: NoAuthRouteProps) => {
   const user = useSelector((state: RootState) => state.store.user);
 
+  if (user && user?.role !== "admin") {
+    return <Navigate to={"/unauthorized"} />;
+  }
+
   if (user) {
-    return <Navigate to="/admin/dashboard" replace />;
+    return <Navigate to="/admin/ad_pvt" replace />;
   }
 
   return element;
