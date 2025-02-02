@@ -3,6 +3,7 @@ import ClientRoutes from "./routes/ClientRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import VendorRoutes from "./routes/VendorRoutes";
 import { Toaster } from "sonner";
+import UnauthorizedPage from "./components/UnauthorizedPage";
 
 function App() {
   return <AppLayout />;
@@ -18,6 +19,7 @@ function AppLayout() {
         <Route path="/*" element={<ClientRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/vendor/*" element={<VendorRoutes />} />
+        <Route path="*" element={<UnauthorizedPage />} />
       </Routes>
     </Router>
   );

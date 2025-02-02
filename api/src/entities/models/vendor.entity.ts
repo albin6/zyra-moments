@@ -2,7 +2,7 @@ import { IUserEntity } from "./user.entity";
 
 export interface IVendorEntity extends IUserEntity {
   vendorId: string;
-  category: string;
+  category?: string;
   bio: string;
   place: string;
   averageRating: number;

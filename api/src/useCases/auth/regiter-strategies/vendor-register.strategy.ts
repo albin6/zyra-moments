@@ -26,7 +26,7 @@ export class VendorRegisterStrategy implements IRegisterStrategy {
         );
       }
 
-      const { firstName, lastName, phoneNumber, password, email, category } =
+      const { firstName, lastName, phoneNumber, password, email } =
         user as VendorDTO;
 
       const hashedPassword = await this.passwordBcrypt.hash(password);
@@ -39,7 +39,6 @@ export class VendorRegisterStrategy implements IRegisterStrategy {
         phoneNumber,
         email,
         password: hashedPassword,
-        category,
         vendorId,
         role: "vendor",
       });

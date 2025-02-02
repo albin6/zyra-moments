@@ -79,17 +79,19 @@ export function Login({ userType, onSubmit, setSignup }: LoginProps) {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-center">
-        <p className="text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <span
-            onClick={setSignup}
-            className="cursor-pointer text-primary hover:underline"
-          >
-            Sign up
-          </span>
-        </p>
-      </CardFooter>
+      {userType !== "admin" && (
+        <CardFooter className="flex justify-center">
+          <p className="text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <span
+              onClick={setSignup}
+              className="cursor-pointer text-primary hover:underline"
+            >
+              Sign up
+            </span>
+          </p>
+        </CardFooter>
+      )}
     </Card>
   );
 }

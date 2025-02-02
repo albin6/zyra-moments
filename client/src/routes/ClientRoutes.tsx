@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 
 import { ClientAuth } from "@/pages/client/ClientAuth";
-import NoAuthRoute from "@/protected/NoAuthRoute";
-import ProtectedRoute from "@/protected/ProtectedRoute";
+import { NoAuthRoute } from "@/protected/PublicRoute";
+import { AuthRoute } from "@/protected/ProtectedRoute";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientLandingPage from "@/pages/client/ClientLanding";
 
@@ -14,7 +14,7 @@ function ClientRoutes() {
         <Route
           path="/landing"
           element={
-            <ProtectedRoute
+            <AuthRoute
               allowedRoles={["client"]}
               element={<ClientLandingPage />}
             />

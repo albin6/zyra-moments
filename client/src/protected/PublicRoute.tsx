@@ -6,7 +6,7 @@ interface NoAuthRouteProps {
   element: JSX.Element;
 }
 
-const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
+export const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
   const user = useSelector((state: RootState) => state.store.user);
 
   if (user) {
@@ -16,4 +16,12 @@ const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
   return element;
 };
 
-export default NoAuthRoute;
+export const NoAdminAuthRoute = ({ element }: NoAuthRouteProps) => {
+  const user = useSelector((state: RootState) => state.store.user);
+
+  if (user) {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return element;
+};

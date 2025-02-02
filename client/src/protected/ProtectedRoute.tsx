@@ -7,7 +7,7 @@ interface ProtectedRouteProps {
   allowedRoles: string[];
 }
 
-const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
+export const AuthRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userRole = useSelector((state: RootState) => state.store.user?.role);
 
   if (!userRole) {
@@ -21,4 +21,19 @@ const ProtectedRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   );
 };
 
-export default ProtectedRoute;
+export const AuthAdminRoute = ({
+  element,
+  allowedRoles,
+}: ProtectedRouteProps) => {
+  const userRole = useSelector((state: RootState) => state.store.user?.role);
+
+  if (!userRole) {
+    return <Navigate to="/admin" />;
+  }
+
+  return allowedRoles.includes(userRole) ? (
+    element
+  ) : (
+    <Navigate to="/unauthorized" />
+  );
+};

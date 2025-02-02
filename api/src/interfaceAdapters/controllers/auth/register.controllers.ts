@@ -62,7 +62,7 @@ export class RegisterUserController implements IRegisterUserController {
       }
       res
         .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .json({ success: false, message: "Something went wrong!", error });
     }
   }
 }

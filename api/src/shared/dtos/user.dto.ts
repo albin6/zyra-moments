@@ -24,7 +24,6 @@ export interface VendorDTO {
   phoneNumber: string;
   password: string;
   role: "vendor";
-  category: string;
 }
 
 export type UserDTO = AdminDTO | ClientDTO | VendorDTO;

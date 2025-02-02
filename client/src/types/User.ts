@@ -31,7 +31,7 @@ export interface IVendor {
   phoneNumber: string;
   password: string;
   role: "vendor";
-  category: string;
+  category?: string;
 }
 
 export type UserDTO = IAdmin | IClient | IVendor;

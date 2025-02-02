@@ -33,9 +33,6 @@ const vendorSchema = z.object({
   phoneNumber: phoneNumberSchema,
   password: passwordSchema,
   role: z.literal("vendor"),
-  category: z
-    .string()
-    .min(3, { message: "Category must be at least 3 characters long" }),
 });
 
 export const userSchemas = {
