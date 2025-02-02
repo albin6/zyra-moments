@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
   loginController,
+  logoutUserController,
   refreshTokenController,
   registerController,
   sendEmailController,
@@ -34,6 +35,8 @@ export class AuthRoutes extends BaseRoute {
       refreshTokenController.handle(req, res);
     });
 
-    this.router.post("/logout", (req: Request, res: Response) => {});
+    this.router.post("/logout", (req: Request, res: Response) => {
+      logoutUserController.handle(req, res);
+    });
   }
 }

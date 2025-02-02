@@ -14,6 +14,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/userSlice";
 import useAuth from "@/hooks/custom/useAuth";
+import { useLogout } from "@/hooks/auth/useLogout";
+import { toast } from "sonner";
 
 const navItems = [
   { name: "Dashboard", href: "#" },
@@ -24,10 +26,19 @@ const navItems = [
 
 export function ClientHeader() {
   const { isLoggedIn, user } = useAuth();
+  const { mutate: logoutReq } = useLogout();
   const dispatch = useDispatch();
 
   const logoutUser = () => {
-    dispatch(logout());
+    logoutReq(undefined, {
+      onSuccess: (data) => {
+        dispatch(logout());
+        toast.success(data.message);
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
   };
 
   return (

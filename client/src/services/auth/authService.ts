@@ -51,3 +51,8 @@ export const verifyOtp = async (data: { email: string; otp: string }) => {
   );
   return response.data;
 };
+
+export const logout = async (): Promise<AxiosResponse> => {
+  const response = await authAxiosInstance.post("/logout");
+  return response.data;
+};
