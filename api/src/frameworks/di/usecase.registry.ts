@@ -24,6 +24,12 @@ import { IVerifyOTPUseCase } from "../../entities/useCaseInterfaces/auth/verify-
 import { VerifyOTPUseCase } from "../../useCases/auth/verify-otp.usecase";
 import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
 import { UserExistenceService } from "../../interfaceAdapters/services/use-existence.services";
+import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
+import { GenerateTokenUseCase } from "../../useCases/auth/generate-token.usecase";
+import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/refresh-toke-usecase.inteface";
+import { RefreshTokenUseCase } from "../../useCases/auth/refresh-token.usecase";
+import { ITokenService } from "../../useCases/auth/interfaces/token-service.interface";
+import { JwtService } from "../../interfaceAdapters/services/jwt-service";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -45,6 +51,14 @@ export class UseCaseRegistry {
 
     container.register<IVerifyOTPUseCase>("IVerifyOTPUseCase", {
       useClass: VerifyOTPUseCase,
+    });
+
+    container.register<IGenerateTokenUseCase>("IGenerateTokenUseCase", {
+      useClass: GenerateTokenUseCase,
+    });
+
+    container.register<IRefreshTokenUseCase>("IRefreshTokenUseCase", {
+      useClass: RefreshTokenUseCase,
     });
 
     // Register Strategies
@@ -81,6 +95,10 @@ export class UseCaseRegistry {
 
     container.register<IUserExistenceService>("IUserExistenceService", {
       useClass: UserExistenceService,
+    });
+
+    container.register<ITokenService>("ITokenService", {
+      useClass: JwtService,
     });
   }
 }

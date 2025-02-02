@@ -11,11 +11,15 @@ import { LoginUserDTO } from "../../../shared/dtos/user.dto";
 import { loginSchema } from "./validation/user-login-validation.schema";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ZodError } from "zod";
+import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
+import { setAuthCookies } from "../../../shared/utils/cookieHelper";
 
 @injectable()
 export class LoginUserController implements ILoginUserController {
   constructor(
-    @inject("ILoginUserUseCase") private loginUserUseCase: ILoginUserUseCase
+    @inject("ILoginUserUseCase") private loginUserUseCase: ILoginUserUseCase,
+    @inject("IGenerateTokenUseCase")
+    private generateTokenUseCase: IGenerateTokenUseCase
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
@@ -34,6 +38,20 @@ export class LoginUserController implements ILoginUserController {
       }
 
       const user = await this.loginUserUseCase.execute(validatedData);
+
+      if (!user._id || !user.email || !user.role) {
+        throw new Error("User ID, email, or role is missing");
+      }
+
+      const userId = user._id.toString();
+
+      const tokens = this.generateTokenUseCase.execute(
+        userId,
+        user.email,
+        user.role
+      );
+
+      setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 
       res.status(HTTP_STATUS.OK).json({
         success: true,

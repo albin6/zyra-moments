@@ -3,6 +3,7 @@ import { RegisterUserController } from "../../interfaceAdapters/controllers/auth
 import { LoginUserController } from "../../interfaceAdapters/controllers/auth/login.controllers";
 import { SendEmailController } from "../../interfaceAdapters/controllers/auth/send-email.controllers";
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
+import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -20,6 +21,10 @@ export class ControllerRegistry {
 
     container.register("VerifyOTPController", {
       useClass: VerifyOTPController,
+    });
+
+    container.register("RefreshTokenController", {
+      useClass: RefreshTokenController,
     });
   }
 }

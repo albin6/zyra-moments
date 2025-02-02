@@ -27,7 +27,9 @@ export const config = {
 
   // JWT Configuration (if you're using JWT tokens)
   jwt: {
-    SECRET_KEY: process.env.JWT_SECRET_KEY || "your-secret-key",
-    EXPIRES_IN: process.env.JWT_EXPIRES_IN || "1h", // Default expiration time
+    ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "your-secret-key",
+    REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "your-secret-key",
+    ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "1h", // Default expiration time
+    REFRESH_EXPIRES_IN: process.env.JWT_REFRSH_EXPIRES_IN || "1h", // Default expiration time
   },
 };

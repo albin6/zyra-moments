@@ -23,6 +23,7 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
+    "ms": "^2.1.3",
     "nodemailer": "^6.10.0",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0",

@@ -34,7 +34,10 @@ export const SUCCESS_MESSAGES = {
 
 export const ERROR_MESSAGES = {
   EMAIL_NOT_FOUND: "Email Not Found",
+  FORBIDDEN:
+    "Access denied. You do not have permission to access this resource.",
   EMAIL_EXISTS: "Email Already Exists",
+  INVALID_TOKEN: "Invalid token",
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   USER_NOT_FOUND: "User not found.",
   UNAUTHORIZED_ACCESS: "Unauthorized access.",
