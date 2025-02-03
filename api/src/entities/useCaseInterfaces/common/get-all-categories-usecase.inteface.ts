@@ -1,5 +1,5 @@
-import { ICategoryModel } from "../../../frameworks/database/models/category.model";
+import { ICategoryEntity } from "../../models/category.entity";
 
 export interface IGetAllCategoriesUseCase {
-  execute(): Promise<ICategoryModel[] | null>;
+  execute(): Promise<ICategoryEntity[] | null>;
 }

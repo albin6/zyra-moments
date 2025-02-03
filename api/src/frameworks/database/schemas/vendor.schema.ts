@@ -18,11 +18,7 @@ export const VendorSchema = new Schema<IVendorModel>(
     averageRating: { type: Number },
     totalReviews: { type: Number },
     status: { type: String, default: true },
-    categoryRequest: {
-      type: String,
-      enum: ["Not Requested", "Pending", "Approved", "Rejected"],
-      default: "Not Requested",
-    },
+    categoryRequest: { type: Boolean, default: false },
   },
   {
     timestamps: true,

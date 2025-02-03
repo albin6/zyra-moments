@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
-import { getAllCategoriesController } from "../../di/resolver";
+import {
+  createNewCategoryController,
+  getAllCategoriesController,
+} from "../../di/resolver";
 import {
   authorizeRole,
   verifyAuth,
@@ -17,6 +20,15 @@ export class PrivateRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       (req: Request, res: Response) => {
         getAllCategoriesController.handle(req, res);
+      }
+    );
+
+    this.router.post(
+      "/categories",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) => {
+        createNewCategoryController.handle(req, res);
       }
     );
   }

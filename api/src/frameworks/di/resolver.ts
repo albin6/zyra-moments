@@ -7,6 +7,7 @@ import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/ve
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 import { LogoutUserController } from "../../interfaceAdapters/controllers/auth/logout.controllers";
 import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
+import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/common/create-new-category.controllers";
 
 DependencyInjection.registerAll();
 
@@ -18,4 +19,7 @@ export const refreshTokenController = container.resolve(RefreshTokenController);
 export const logoutUserController = container.resolve(LogoutUserController);
 export const getAllCategoriesController = container.resolve(
   GetAllCategoriesController
+);
+export const createNewCategoryController = container.resolve(
+  CreateNewCategoryController
 );

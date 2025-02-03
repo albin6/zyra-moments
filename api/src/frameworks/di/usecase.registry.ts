@@ -32,6 +32,8 @@ import { ITokenService } from "../../useCases/auth/interfaces/token-service.inte
 import { JwtService } from "../../interfaceAdapters/services/jwt-service";
 import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/common/get-all-categories-usecase.inteface";
 import { GetAllCategoriesUseCase } from "../../useCases/common/get-all-categories.usecase";
+import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/common/create-new-category-usecase.interface";
+import { CreateNewCategoryUseCase } from "../../useCases/common/create-new-category.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -65,6 +67,10 @@ export class UseCaseRegistry {
 
     container.register<IGetAllCategoriesUseCase>("IGetAllCategoriesUseCase", {
       useClass: GetAllCategoriesUseCase,
+    });
+
+    container.register<ICreateNewCategoryUseCase>("ICreateNewCategoryUseCase", {
+      useClass: CreateNewCategoryUseCase,
     });
 
     // Register Strategies

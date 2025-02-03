@@ -5,6 +5,7 @@ import { SendEmailController } from "../../interfaceAdapters/controllers/auth/se
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
+import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/common/create-new-category.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -30,6 +31,10 @@ export class ControllerRegistry {
 
     container.register("GetAllCategoriesController", {
       useClass: GetAllCategoriesController,
+    });
+
+    container.register("CreateNewCategoryController", {
+      useClass: CreateNewCategoryController,
     });
   }
 }
