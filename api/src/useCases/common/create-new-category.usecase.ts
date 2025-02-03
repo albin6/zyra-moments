@@ -1,5 +1,4 @@
 import { inject, injectable } from "tsyringe";
-import { ICategoryEntity } from "../../entities/models/category.entity";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/category-repository.interface";
 import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/common/create-new-category-usecase.interface";
 import { CustomError } from "../../entities/utils/CustomError";

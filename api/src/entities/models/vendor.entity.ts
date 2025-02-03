@@ -7,5 +7,4 @@ export interface IVendorEntity extends IUserEntity {
   place: string;
   averageRating: number;
   totalReviews: number;
-  categoryRequest: boolean;
 }
