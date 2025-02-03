@@ -1,6 +1,6 @@
-import { privateAxiosInstance } from "@/api/private.axios";
+import { adminAxiosInstance } from "@/api/private.axios";
 
 export const getAllCatgories = async () => {
-  const response = await privateAxiosInstance.get("/categories");
+  const response = await adminAxiosInstance.get("/categories");
   return response.data;
 };

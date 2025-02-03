@@ -1,6 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { ITokenService } from "./interfaces/token-service.interface";
 import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/refresh-toke-usecase.inteface";
+import { CustomError } from "../../entities/utils/CustomError";
+import { HTTP_STATUS } from "../../shared/constants";
+import { JwtPayload } from "jsonwebtoken";
 
 @injectable()
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {
@@ -8,15 +11,20 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
 
   execute(refreshToken: string): { accessToken: string; refreshToken: string } {
     const payload = this.tokenService.verifyRefreshToken(refreshToken);
-    if (!payload) throw new Error("Invalid refresh token");
+    if (!payload)
+      throw new CustomError("Invalid refresh token", HTTP_STATUS.BAD_REQUEST);
 
     return {
-      accessToken: this.tokenService.generateAccessToken(
-        payload as { id: string; email: string; role: string }
-      ),
-      refreshToken: this.tokenService.generateRefreshToken(
-        payload as { id: string; email: string; role: string }
-      ),
+      accessToken: this.tokenService.generateAccessToken({
+        id: (payload as JwtPayload).id,
+        email: (payload as JwtPayload).email,
+        role: (payload as JwtPayload).role,
+      }),
+      refreshToken: this.tokenService.generateRefreshToken({
+        id: (payload as JwtPayload).id,
+        email: (payload as JwtPayload).email,
+        role: (payload as JwtPayload).role,
+      }),
     };
   }
 }
