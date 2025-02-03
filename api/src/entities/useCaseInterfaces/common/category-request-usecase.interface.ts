@@ -1,3 +1,3 @@
 export interface ICategoryRequestUseCase {
-  exectute(): Promise<void>;
+  exectute(title: string, vendorId: string): Promise<void>;
 }

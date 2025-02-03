@@ -1,23 +1,27 @@
 import { Request, Response } from "express";
-import { ILogoutUserController } from "../../../entities/controllerInterfaces/auth/logout-controller.interface";
+import { ICategoryRequestController } from "../../../entities/controllerInterfaces/common/category-request-controller.interface";
+import { ICategoryRequestUseCase } from "../../../entities/useCaseInterfaces/common/category-request-usecase.interface";
 import { ZodError } from "zod";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
-import { clearAuthCookies } from "../../../shared/utils/cookieHelper";
-import { injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class LogoutUserController implements ILogoutUserController {
+export class CategoryRequestController implements ICategoryRequestController {
+  constructor(
+    @inject("ICategoryRequestUseCase")
+    private categoryRequestUseCase: ICategoryRequestUseCase
+  ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const user = (req as CustomRequest).user;
-      const accessTokenName = `${user.role}_access_token`;
-      const refreshTokenName = `${user.role}_refresh_token`;
-      clearAuthCookies(res, accessTokenName, refreshTokenName);
+      const vendorId = (req as CustomRequest).user.id;
+      const { title } = req.body;
+      await this.categoryRequestUseCase.exectute(title, vendorId);
+
       res
-        .status(HTTP_STATUS.OK)
-        .json({ success: true, message: SUCCESS_MESSAGES.LOGOUT_SUCCESS });
+        .status(HTTP_STATUS.CREATED)
+        .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

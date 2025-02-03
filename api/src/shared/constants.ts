@@ -37,6 +37,8 @@ export const ERROR_MESSAGES = {
   FORBIDDEN:
     "Access denied. You do not have permission to access this resource.",
   EMAIL_EXISTS: "Email Already Exists",
+  CATEGORY_EXISTS: "Category Already Exists",
+  CATEGORY_NOT_FOUND: "Category Not Found",
   INVALID_TOKEN: "Invalid token",
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   USER_NOT_FOUND: "User not found.",

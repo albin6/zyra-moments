@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
-import { ILogoutUserController } from "../../../entities/controllerInterfaces/auth/logout-controller.interface";
+import { IJoinCategoryController } from "../../../entities/controllerInterfaces/common/join-category-controller.inteface";
+import { IJoinCategoryUseCase } from "../../../entities/useCaseInterfaces/common/join-category-usecase.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
-import { clearAuthCookies } from "../../../shared/utils/cookieHelper";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
-export class LogoutUserController implements ILogoutUserController {
+export class JoinCategoryController implements IJoinCategoryController {
+  constructor(
+    @inject("IJoinCategoryUseCase")
+    private joinCategoryUseCase: IJoinCategoryUseCase
+  ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const user = (req as CustomRequest).user;
-      const accessTokenName = `${user.role}_access_token`;
-      const refreshTokenName = `${user.role}_refresh_token`;
-      clearAuthCookies(res, accessTokenName, refreshTokenName);
-      res
-        .status(HTTP_STATUS.OK)
-        .json({ success: true, message: SUCCESS_MESSAGES.LOGOUT_SUCCESS });
+      const { categoryId } = req.body;
+      const vendorId = (req as CustomRequest).user.id;
+      await this.joinCategoryUseCase.execute(vendorId as any, categoryId);
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

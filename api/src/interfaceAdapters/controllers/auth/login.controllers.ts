@@ -51,7 +51,16 @@ export class LoginUserController implements ILoginUserController {
         user.role
       );
 
-      setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+      const accessTokenName = `${user.role}_access_token`;
+      const refreshTokenName = `${user.role}_refresh_token`;
+
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        accessTokenName,
+        refreshTokenName
+      );
 
       res.status(HTTP_STATUS.OK).json({
         success: true,

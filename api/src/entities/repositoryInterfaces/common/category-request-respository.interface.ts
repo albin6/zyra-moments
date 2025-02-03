@@ -1,9 +1,13 @@
+import { ObjectId } from "mongoose";
 import { ICategoryRequestEntity } from "../../models/category-request.entity";
 
 export interface ICategoryRequestRepository {
-  save(vendorId: string, categoryId: string): Promise<ICategoryRequestEntity>;
+  save(
+    vendorId: ObjectId,
+    categoryId: ObjectId
+  ): Promise<ICategoryRequestEntity | null>;
   findByVendorAndCategory(
-    vendorId: string,
-    categoryId: string
+    vendorId: ObjectId,
+    categoryId: ObjectId
   ): Promise<ICategoryRequestEntity | null>;
 }

@@ -16,7 +16,11 @@ export interface CustomRequest extends Request {
 }
 
 export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.access_token;
+  const token =
+    req.cookies.client_access_token ||
+    req.cookies.vendor_access_token ||
+    req.cookies.admin_access_token;
+
   if (!token) {
     res
       .status(HTTP_STATUS.UNAUTHORIZED)

@@ -3,18 +3,20 @@ import { Response } from "express";
 export const setAuthCookies = (
   res: Response,
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
+  accessTokenName: string,
+  refreshTokenName: string
 ) => {
   const isProduction = process.env.NODE_ENV === "production";
 
-  res.cookie("access_token", accessToken, {
+  res.cookie(accessTokenName, accessToken, {
     httpOnly: true,
     secure: isProduction,
     sameSite: "strict",
     maxAge: 15 * 60 * 1000,
   });
 
-  res.cookie("refresh_token", refreshToken, {
+  res.cookie(refreshTokenName, refreshToken, {
     httpOnly: true,
     secure: isProduction,
     sameSite: "strict",
@@ -22,7 +24,11 @@ export const setAuthCookies = (
   });
 };
 
-export const clearAuthCookies = (res: Response) => {
-  res.clearCookie("access_token");
-  res.clearCookie("refresh_token");
+export const clearAuthCookies = (
+  res: Response,
+  accessTokenName: string,
+  refreshTokenName: string
+) => {
+  res.clearCookie(accessTokenName);
+  res.clearCookie(refreshTokenName);
 };
