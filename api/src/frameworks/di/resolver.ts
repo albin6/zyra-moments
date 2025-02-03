@@ -6,6 +6,7 @@ import { SendEmailController } from "../../interfaceAdapters/controllers/auth/se
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 import { LogoutUserController } from "../../interfaceAdapters/controllers/auth/logout.controllers";
+import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
 
 DependencyInjection.registerAll();
 
@@ -15,3 +16,6 @@ export const sendEmailController = container.resolve(SendEmailController);
 export const veryfyOTPController = container.resolve(VerifyOTPController);
 export const refreshTokenController = container.resolve(RefreshTokenController);
 export const logoutUserController = container.resolve(LogoutUserController);
+export const getAllCategoriesController = container.resolve(
+  GetAllCategoriesController
+);

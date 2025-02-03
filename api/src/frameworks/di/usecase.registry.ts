@@ -30,6 +30,8 @@ import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/refr
 import { RefreshTokenUseCase } from "../../useCases/auth/refresh-token.usecase";
 import { ITokenService } from "../../useCases/auth/interfaces/token-service.interface";
 import { JwtService } from "../../interfaceAdapters/services/jwt-service";
+import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/common/get-all-categories-usecase.inteface";
+import { GetAllCategoriesUseCase } from "../../useCases/common/get-all-categories.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -59,6 +61,10 @@ export class UseCaseRegistry {
 
     container.register<IRefreshTokenUseCase>("IRefreshTokenUseCase", {
       useClass: RefreshTokenUseCase,
+    });
+
+    container.register<IGetAllCategoriesUseCase>("IGetAllCategoriesUseCase", {
+      useClass: GetAllCategoriesUseCase,
     });
 
     // Register Strategies

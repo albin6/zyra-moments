@@ -8,6 +8,7 @@ import "reflect-metadata";
 
 import { config } from "../../shared/config";
 import { AuthRoutes } from "../routes/auth/auth.route";
+import { PrivateRoutes } from "../routes/common/private.route";
 
 export class Server {
   private _app: Application;
@@ -44,9 +45,9 @@ export class Server {
 
   private configureRoutes(): void {
     this._app.use("/api/v_1/auth", new AuthRoutes().router);
+    this._app.use("/api/v_1/_pvt", new PrivateRoutes().router);
     // this._app.use("/api/v_1");
     // this._app.use("/api/v_1/vendors");
-    // this._app.use("/api/v_1/_pvt/admin");
 
     this._app.use("*", (req: Request, res: Response) => {
       res.status(404).json({

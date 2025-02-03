@@ -7,6 +7,8 @@ import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/ve
 import { VendorRepository } from "../../interfaceAdapters/repositories/vendor/vendor.repository";
 import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.inteface";
 import { OTPRepository } from "../../interfaceAdapters/repositories/auth/otp.repsitory";
+import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/category-repository.interface";
+import { CategoryRespository } from "../../interfaceAdapters/repositories/common/category.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -24,6 +26,10 @@ export class RepositoryRegistry {
 
     container.register<IOTPRepository>("IOTPRepository", {
       useClass: OTPRepository,
+    });
+
+    container.register<ICategoryRepository>("ICategoryRepository", {
+      useClass: CategoryRespository,
     });
   }
 }

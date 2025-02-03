@@ -4,6 +4,7 @@ import { LoginUserController } from "../../interfaceAdapters/controllers/auth/lo
 import { SendEmailController } from "../../interfaceAdapters/controllers/auth/send-email.controllers";
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
+import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -25,6 +26,10 @@ export class ControllerRegistry {
 
     container.register("RefreshTokenController", {
       useClass: RefreshTokenController,
+    });
+
+    container.register("GetAllCategoriesController", {
+      useClass: GetAllCategoriesController,
     });
   }
 }

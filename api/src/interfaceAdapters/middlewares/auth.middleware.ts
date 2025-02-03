@@ -17,17 +17,20 @@ export interface CustomRequest extends Request {
 
 export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.access_token;
-  if (!token)
-    return res
+  if (!token) {
+    res
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
+    return;
+  }
 
   const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
-  if (!user)
-    return res
+  if (!user) {
+    res
       .status(HTTP_STATUS.FORBIDDEN)
       .json({ message: ERROR_MESSAGES.FORBIDDEN });
-
+    return;
+  }
   (req as CustomRequest).user = user;
   next();
 };
@@ -37,9 +40,10 @@ export const authorizeRole = (allowedRoles: string[]) => {
     const user = (req as CustomRequest).user;
 
     if (!user || !allowedRoles.includes(user.role)) {
-      return res
+      res
         .status(HTTP_STATUS.FORBIDDEN)
         .json({ message: ERROR_MESSAGES.FORBIDDEN });
+      return;
     }
     next();
   };

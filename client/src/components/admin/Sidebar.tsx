@@ -9,6 +9,7 @@ import {
   Home,
   Settings,
   LogOut,
+  ChartBarStacked,
 } from "lucide-react";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
@@ -28,6 +29,11 @@ const adminRoutes = [
     path: "/admin/ad_pvt/users",
     label: "User Management",
     icon: <Users className="mr-2 h-4 w-4" />,
+  },
+  {
+    path: "/admin/ad_pvt/category",
+    label: "Category Management",
+    icon: <ChartBarStacked className="mr-2 h-4 w-4" />,
   },
   {
     path: "/admin/ad_pvt/events",

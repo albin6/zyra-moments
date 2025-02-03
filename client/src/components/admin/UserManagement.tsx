@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pagination } from "./Pagination";
+import Pagination from "../Pagination";
 
 // Mock data (replace with actual data fetching logic)
 const mockClients = [
