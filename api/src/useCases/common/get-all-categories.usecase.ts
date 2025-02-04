@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/category-repository.interface";
 import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/common/get-all-categories-usecase.inteface";
-import { ICategoryModel } from "../../frameworks/database/models/category.model";
+import { ICategoryEntity } from "../../entities/models/category.entity";
 
 @injectable()
 export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase {
@@ -10,7 +10,7 @@ export class GetAllCategoriesUseCase implements IGetAllCategoriesUseCase {
     private categoryRepository: ICategoryRepository
   ) {}
 
-  async execute(): Promise<ICategoryModel[] | null> {
-    return this.categoryRepository.find();
+  async execute(): Promise<ICategoryEntity[] | null> {
+    return await this.categoryRepository.find();
   }
 }

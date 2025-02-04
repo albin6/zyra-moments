@@ -3,15 +3,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ProfileFormProps {
-  vendorName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   avatarUrl: string;
+  contact: string;
 }
 
 export function ProfileForm({
-  vendorName,
+  firstName,
+  lastName,
   email,
   avatarUrl,
+  contact,
 }: ProfileFormProps) {
   return (
     <div className="p-6">
@@ -31,22 +35,30 @@ export function ProfileForm({
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">First Name</label>
-              <Input placeholder="Enter first name" />
+              <Input value={firstName} placeholder="Enter first name" />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Last Name</label>
-              <Input placeholder="Enter last name" />
+              <Input value={lastName} placeholder="Enter last name" />
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Email</label>
-              <Input type="email" placeholder="vendor@email.com" />
+              <Input
+                value={email}
+                type="email"
+                placeholder="vendor@email.com"
+              />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Contact Number</label>
-              <Input type="tel" placeholder="Enter contact number" />
+              <Input
+                value={contact}
+                type="tel"
+                placeholder="Enter contact number"
+              />
             </div>
           </div>
 

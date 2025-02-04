@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,13 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-
-const categories = [
-  { id: "1", name: "Electronics" },
-  { id: "2", name: "Clothing" },
-  { id: "3", name: "Food & Beverages" },
-  { id: "4", name: "Home & Garden" },
-];
+import { useAllCategoriesQuery } from "@/hooks/common/useAllCategories";
+import { Category, getAllCatgories } from "@/services/common/categoryService";
 
 interface VendorCategoryModalProps {
   isOpen: boolean;
@@ -35,9 +30,17 @@ export function VendorCategoryModal({
   onClose,
   onSave,
 }: VendorCategoryModalProps) {
+  const { data, isLoading, isError } = useAllCategoriesQuery(getAllCatgories);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [newCategory, setNewCategory] = useState<string>("");
   const [isCreatingNew, setIsCreatingNew] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(data.categories);
+    }
+  });
 
   const handleSave = () => {
     if (isCreatingNew && newCategory) {
@@ -65,8 +68,8 @@ export function VendorCategoryModal({
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.name}>
-                    {category.name}
+                  <SelectItem key={category.categoryId} value={category._id}>
+                    {category.title}
                   </SelectItem>
                 ))}
               </SelectContent>

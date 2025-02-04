@@ -131,7 +131,7 @@ export function ClientAuth() {
                   )}
                 </motion.div>
               </AnimatePresence>
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-muted"></div>
@@ -158,7 +158,7 @@ export function ClientAuth() {
                     GitHub
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>

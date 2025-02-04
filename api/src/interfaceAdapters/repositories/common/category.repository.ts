@@ -9,8 +9,8 @@ export class CategoryRespository implements ICategoryRepository {
     return await CategoryModel.find();
   }
 
-  async save(title: string, categoryId: string): Promise<void> {
-    await CategoryModel.create({ title, categoryId });
+  async save(title: string, categoryId: string): Promise<ICategoryEntity> {
+    return await CategoryModel.create({ title, categoryId });
   }
 
   async findByTitle(title: string): Promise<ICategoryEntity | null> {

@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,41 +19,70 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Pagination from "../Pagination";
+import { useAllUsersQuery } from "@/hooks/admin/useAllUsersByType";
+import { getAllUsersByType } from "@/services/admin/usersService";
+
+export interface IClient {
+  _id: string;
+  clientId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  phoneNumber: string;
+  masterOfCeremonies: boolean;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export type ClientsData = IClient[];
+
+interface Vendor {
+  _id: string;
+  vendorId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  phoneNumber: string;
+  status: string; // or boolean depending on how you want to handle it
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  category: string;
+  categoryRequest?: boolean; // Optional field
+}
+
+export type VendorList = Vendor[];
 
 // Mock data (replace with actual data fetching logic)
-const mockClients = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    email: "alice@example.com",
-    phone: 1234567,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    email: "bob@example.com",
-    phone: 1234567,
-    status: "active",
-  },
-  // ... more clients
-];
-
-const mockVendors = [
-  { id: 1, name: "Catering Co.", service: "Catering", rating: 4.5 },
-  {
-    id: 2,
-    name: "Sound Systems Inc.",
-    service: "Audio Equipment",
-    rating: 4.2,
-  },
-  // ... more vendors
-];
-
 export default function UserManagement() {
-  const [activeTab, setActiveTab] = useState("clients");
+  const [activeTab, setActiveTab] = useState("client");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
+
+  const { data, refetch } = useAllUsersQuery(getAllUsersByType, activeTab);
+
+  const [clients, setClients] = useState<ClientsData>();
+  const [vendors, setVendors] = useState<VendorList>();
+
+  useEffect(() => {
+    if (data) {
+      if (activeTab == "client") {
+        setClients(data.users);
+      } else if (activeTab == "vendor") {
+        setVendors(data.users);
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, activeTab]);
 
   // Pagination state (you'd implement actual pagination logic)
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,26 +104,27 @@ export default function UserManagement() {
           <TableHead>Email</TableHead>
           <TableHead>Phone</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {mockClients.map((client) => (
-          <TableRow key={client.id}>
-            <TableCell>{client.name}</TableCell>
-            <TableCell>{client.email}</TableCell>
-            <TableCell>{client.phone}</TableCell>
-            <TableCell>{client.status}</TableCell>
-            <TableCell>
-              <Button variant="outline" size="sm" className="mr-2">
-                Edit
-              </Button>
-              <Button variant="destructive" size="sm">
-                Delete
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {clients &&
+          clients.map((client) => (
+            <TableRow key={client.clientId}>
+              <TableCell>{client.firstName + client.lastName}</TableCell>
+              <TableCell>{client.email}</TableCell>
+              <TableCell>{client.phoneNumber}</TableCell>
+              <TableCell>{client.status}</TableCell>
+              <TableCell className="text-center">
+                {/* <Button variant="outline" size="sm" className="mr-2">
+                  Edit
+                </Button> */}
+                <Button variant="destructive" size="sm">
+                  Block
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );
@@ -105,26 +135,27 @@ export default function UserManagement() {
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Service</TableHead>
-          <TableHead>Rating</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead>Phone</TableHead>
+          <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {mockVendors.map((vendor) => (
-          <TableRow key={vendor.id}>
-            <TableCell>{vendor.name}</TableCell>
-            <TableCell>{vendor.service}</TableCell>
-            <TableCell>{vendor.rating}</TableCell>
-            <TableCell>
-              <Button variant="outline" size="sm" className="mr-2">
-                Edit
-              </Button>
-              <Button variant="destructive" size="sm">
-                Delete
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {vendors &&
+          vendors.map((vendor) => (
+            <TableRow key={vendor._id}>
+              <TableCell>{vendor.firstName + vendor.lastName}</TableCell>
+              <TableCell>{vendor.category}</TableCell>
+              <TableCell>{vendor.phoneNumber}</TableCell>
+              <TableCell className="text-center">
+                {/* <Button variant="outline" size="sm" className="mr-2">
+                  Edit
+                </Button> */}
+                <Button variant="destructive" size="sm">
+                  Block
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );
@@ -134,8 +165,8 @@ export default function UserManagement() {
       <h1 className="text-3xl font-bold mb-6">User Management</h1>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="clients">Clients</TabsTrigger>
-          <TabsTrigger value="vendors">Vendors</TabsTrigger>
+          <TabsTrigger value="client">Clients</TabsTrigger>
+          <TabsTrigger value="vendor">Vendors</TabsTrigger>
         </TabsList>
         <div className="my-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <Input
@@ -150,7 +181,7 @@ export default function UserManagement() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              {activeTab === "clients" ? (
+              {activeTab === "client" ? (
                 <>
                   <SelectItem value="highEvents">High Events</SelectItem>
                   <SelectItem value="lowEvents">Low Events</SelectItem>
@@ -164,17 +195,17 @@ export default function UserManagement() {
             </SelectContent>
           </Select>
         </div>
-        <TabsContent value="clients" className="overflow-x-auto">
+        <TabsContent value="client" className="overflow-x-auto">
           {renderClientTable()}
         </TabsContent>
-        <TabsContent value="vendors" className="overflow-x-auto">
-          {renderVendorTable()}
+        <TabsContent value="vendor" className="overflow-x-auto">
+          {clients && renderVendorTable()}
         </TabsContent>
       </Tabs>
       <div className="mt-4 flex justify-center">
         <Pagination
           currentPage={currentPage}
-          totalPages={5} // Replace with actual total pages calculation
+          totalPages={1} // Replace with actual total pages calculation
           onPageChange={setCurrentPage}
         />
       </div>

@@ -12,4 +12,8 @@ export class ClientRepository implements IClientRepository {
   async findByEmail(email: string): Promise<IClientEntity | null> {
     return await ClientModel.findOne({ email });
   }
+
+  async find(): Promise<IClientEntity[] | []> {
+    return await ClientModel.find();
+  }
 }

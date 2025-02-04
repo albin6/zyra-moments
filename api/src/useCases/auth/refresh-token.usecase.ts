@@ -9,12 +9,17 @@ import { JwtPayload } from "jsonwebtoken";
 export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   constructor(@inject("ITokenService") private tokenService: ITokenService) {}
 
-  execute(refreshToken: string): { accessToken: string; refreshToken: string } {
+  execute(refreshToken: string): {
+    role: string;
+    accessToken: string;
+    refreshToken: string;
+  } {
     const payload = this.tokenService.verifyRefreshToken(refreshToken);
     if (!payload)
       throw new CustomError("Invalid refresh token", HTTP_STATUS.BAD_REQUEST);
 
     return {
+      role: (payload as JwtPayload).role,
       accessToken: this.tokenService.generateAccessToken({
         id: (payload as JwtPayload).id,
         email: (payload as JwtPayload).email,

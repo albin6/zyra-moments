@@ -16,27 +16,35 @@ export interface CustomRequest extends Request {
 }
 
 export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
-  const token =
-    req.cookies.client_access_token ||
-    req.cookies.vendor_access_token ||
-    req.cookies.admin_access_token;
+  try {
+    const token =
+      req.cookies.vendor_access_token ||
+      req.cookies.client_access_token ||
+      req.cookies.admin_access_token;
 
-  if (!token) {
+    if (!token) {
+      res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
+      return;
+    }
+
+    const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
+    if (!user || !user.id) {
+      res
+        .status(HTTP_STATUS.FORBIDDEN)
+        .json({ message: ERROR_MESSAGES.FORBIDDEN });
+      return;
+    }
+
+    (req as CustomRequest).user = user;
+    next();
+  } catch (error) {
     res
       .status(HTTP_STATUS.UNAUTHORIZED)
-      .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
+      .json({ message: ERROR_MESSAGES.INVALID_TOKEN });
     return;
   }
-
-  const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
-  if (!user) {
-    res
-      .status(HTTP_STATUS.FORBIDDEN)
-      .json({ message: ERROR_MESSAGES.FORBIDDEN });
-    return;
-  }
-  (req as CustomRequest).user = user;
-  next();
 };
 
 export const authorizeRole = (allowedRoles: string[]) => {

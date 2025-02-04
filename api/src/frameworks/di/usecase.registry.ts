@@ -34,6 +34,16 @@ import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/commo
 import { GetAllCategoriesUseCase } from "../../useCases/common/get-all-categories.usecase";
 import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/common/create-new-category-usecase.interface";
 import { CreateNewCategoryUseCase } from "../../useCases/common/create-new-category.usecase";
+import { ICategoryRequestUseCase } from "../../entities/useCaseInterfaces/common/category-request-usecase.interface";
+import { CategoryRequestUseCase } from "../../useCases/common/category-request.usecase";
+import { IJoinCategoryUseCase } from "../../entities/useCaseInterfaces/common/join-category-usecase.interface";
+import { JoinCategoryUseCase } from "../../useCases/common/join-category.usecase";
+import { IVendorCategoryRequestStatusUseCase } from "../../entities/useCaseInterfaces/common/vendor-category-request-status-usecase.inteface";
+import { VendorCatrgoryRequestStatus } from "../../useCases/vendor/vendor-category-request-status.usecase";
+import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
+import { GetAllUsersUseCase } from "../../useCases/admin/get-all-users.usecase";
+import { IGetVendorDetailsUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
+import { GetVendorDetailsUseCase } from "../../useCases/vendor/get-vendor-details.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -71,6 +81,27 @@ export class UseCaseRegistry {
 
     container.register<ICreateNewCategoryUseCase>("ICreateNewCategoryUseCase", {
       useClass: CreateNewCategoryUseCase,
+    });
+
+    container.register<ICategoryRequestUseCase>("ICategoryRequestUseCase", {
+      useClass: CategoryRequestUseCase,
+    });
+
+    container.register<IJoinCategoryUseCase>("IJoinCategoryUseCase", {
+      useClass: JoinCategoryUseCase,
+    });
+
+    container.register<IVendorCategoryRequestStatusUseCase>(
+      "IVendorCategoryRequestStatusUseCase",
+      { useClass: VendorCatrgoryRequestStatus }
+    );
+
+    container.register<IGetAllUsersUseCase>("IGetAllUsersUseCase", {
+      useClass: GetAllUsersUseCase,
+    });
+
+    container.register<IGetVendorDetailsUseCase>("IGetVendorDetailsUseCase", {
+      useClass: GetVendorDetailsUseCase,
     });
 
     // Register Strategies

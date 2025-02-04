@@ -15,7 +15,7 @@ export class CategoryRequestUseCase implements ICategoryRequestUseCase {
     private categoryRequestRepository: ICategoryRequestRepository
   ) {}
 
-  async exectute(title: string, vendorId: string): Promise<void> {
+  async exectute(title: string, vendorId: any): Promise<void> {
     const categoryId = generateRandomUUID();
 
     let category = await this.categoryRepository.findByTitle(title);
@@ -25,6 +25,7 @@ export class CategoryRequestUseCase implements ICategoryRequestUseCase {
     }
 
     if (category._id) {
+      console.log("hereeeeeeeeeeeeeeeee");
       const isRequestCategory =
         await this.categoryRequestRepository.findByVendorAndCategory(
           vendorId,
@@ -37,6 +38,8 @@ export class CategoryRequestUseCase implements ICategoryRequestUseCase {
           HTTP_STATUS.CONFLICT
         );
       }
+
+      await this.categoryRequestRepository.save(vendorId, category._id);
     }
   }
 }

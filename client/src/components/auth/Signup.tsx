@@ -42,9 +42,9 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
     setIsOTPModalOpen(false);
   };
 
-  const handleSendOTP = () => {
+  const handleSendOTP = (email?: string) => {
     setIsSending(() => true);
-    sendVerificationOTP(userData.email, {
+    sendVerificationOTP(email ?? userData.email, {
       onSuccess: (data) => {
         toast.success(data.message);
         setIsSending(false);
@@ -83,22 +83,13 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
       email: "",
       phoneNumber: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: signupSchema,
     onSubmit: (values) => {
       setUserData(() => values);
-      handleSendOTP();
+      handleSendOTP(values.email);
       handleOpenOTPModal();
-      // onSubmit(values);
-      // actions.resetForm({
-      //   values: {
-      //     firstName: "",
-      //     lastName: "",
-      //     email: "",
-      //     phoneNumber: "",
-      //     password: "",
-      //   },
-      // });
     },
   });
 
@@ -179,6 +170,21 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
             {formik.touched.password && formik.errors.password && (
               <p className="text-sm text-red-500">{formik.errors.password}</p>
             )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              {...formik.getFieldProps("confirmPassword")}
+            />
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-sm text-red-500">
+                  {formik.errors.confirmPassword}
+                </p>
+              )}
           </div>
           <Button type="submit" className="w-full">
             Sign Up

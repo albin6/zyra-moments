@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, FolderTree, FileQuestion, Trash2 } from "lucide-react";
 import {
   Card,
@@ -21,46 +21,76 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ViewCatgoryRequestModal from "../modals/AdminViewCategoryRequestModal";
 import Pagination from "../Pagination";
-
-// Mock data for existing categories
-const mockCategories = Array.from({ length: 50 }, (_, i) => ({
-  id: i + 1,
-  name: `Category ${i + 1}`,
-  eventsCount: Math.floor(Math.random() * 100),
-}));
+import {
+  useAllCategoriesMutations,
+  useAllCategoriesQuery,
+} from "@/hooks/common/useAllCategories";
+import {
+  Category,
+  createCategory,
+  getAllCatgoriesAdmin,
+} from "@/services/common/categoryService";
+import { toast } from "sonner";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const ITEMS_PER_PAGE = 10;
 
 const CategoryManagement: React.FC = () => {
-  const [categories, setCategories] = useState(mockCategories);
+  // const [categories, setCategories] = useState(mockCategories);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const totalPages = Math.ceil(categories.length / ITEMS_PER_PAGE);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentCategories = categories.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleAddCategory = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newCategoryName.trim()) {
-      const newCategory = {
-        id: categories.length + 1,
-        name: newCategoryName.trim(),
-        eventsCount: 0,
-      };
-      setCategories([...categories, newCategory]);
-      setNewCategoryName("");
+  const { data, refetch } = useAllCategoriesQuery(getAllCatgoriesAdmin);
+
+  const { mutate: createNewCategory } =
+    useAllCategoriesMutations(createCategory);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(data.categories);
     }
+  }, [data]);
+
+  const handleAddCategory = (newCategory: string) => {
+    createNewCategory(newCategory, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        refetch();
+      },
+      onError: (error: any) => toast.error(error.response.data.message),
+    });
   };
 
-  const handleDeleteCategory = (id: number) => {
-    setCategories(categories.filter((category) => category.id !== id));
-  };
+  const updateCategoryStatus = (id: string) => {};
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      categoryName: "",
+    },
+    validationSchema: Yup.object({
+      categoryName: Yup.string()
+        .trim()
+        .matches(/^[A-Za-z\s]+$/, "Only letters and spaces are allowed.")
+        .min(3, "Category name must be at least 3 characters.")
+        .max(30, "Category name must not exceed 30 characters.")
+        .required("Category name is required."),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      handleAddCategory(values.categoryName);
+      resetForm(); // Clear the input after submission
+    },
+  });
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -87,10 +117,11 @@ const CategoryManagement: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {categories.reduce(
+              {/* {categories.reduce(
                 (sum, category) => sum + category.eventsCount,
                 0
-              )}
+              )} */}
+              0
             </div>
           </CardContent>
         </Card>
@@ -103,16 +134,29 @@ const CategoryManagement: React.FC = () => {
           </CardHeader>
           <CardContent>
             <form
-              onSubmit={handleAddCategory}
+              onSubmit={formik.handleSubmit}
               className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2"
             >
-              <Input
-                type="text"
-                placeholder="Category name"
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-                className="flex-grow"
-              />
+              <div className="flex-grow">
+                <Input
+                  type="text"
+                  name="categoryName"
+                  placeholder="Category name"
+                  value={formik.values.categoryName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full ${
+                    formik.touched.categoryName && formik.errors.categoryName
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                />
+                {formik.touched.categoryName && formik.errors.categoryName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formik.errors.categoryName}
+                  </p>
+                )}
+              </div>
               <Button type="submit" className="w-full sm:w-auto">
                 Add
               </Button>
@@ -132,20 +176,22 @@ const CategoryManagement: React.FC = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Category Name</TableHead>
-                <TableHead>Events Count</TableHead>
+                <TableHead>Category Id</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentCategories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell className="font-medium">{category.name}</TableCell>
-                  <TableCell>{category.eventsCount}</TableCell>
+                <TableRow key={category.categoryId}>
+                  <TableCell className="font-medium">
+                    {category.title}
+                  </TableCell>
+                  <TableCell>{category.categoryId}</TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDeleteCategory(category.id)}
+                      onClick={() => updateCategoryStatus(category._id)}
                     >
                       <Trash2 className="h-4 w-4" />
                       <span className="sr-only">Delete</span>

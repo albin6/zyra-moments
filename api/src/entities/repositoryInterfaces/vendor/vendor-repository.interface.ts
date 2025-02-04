@@ -8,4 +8,6 @@ export interface IVendorRepository {
     vendorId: ObjectId,
     categoryId: ObjectId
   ): Promise<IVendorEntity | null>;
+  findById(id: any): Promise<IVendorEntity | null>;
+  find(): Promise<IVendorEntity[] | []>;
 }

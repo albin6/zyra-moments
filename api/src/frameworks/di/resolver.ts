@@ -8,6 +8,11 @@ import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth
 import { LogoutUserController } from "../../interfaceAdapters/controllers/auth/logout.controllers";
 import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
 import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/common/create-new-category.controllers";
+import { CategoryRequestController } from "../../interfaceAdapters/controllers/common/category-request.controllers";
+import { JoinCategoryController } from "../../interfaceAdapters/controllers/common/join-category.controllers";
+import { VendorCategoryRequestStatusController } from "../../interfaceAdapters/controllers/vendor/vendor-category-request-status.controllers";
+import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
+import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
 
 DependencyInjection.registerAll();
 
@@ -22,4 +27,15 @@ export const getAllCategoriesController = container.resolve(
 );
 export const createNewCategoryController = container.resolve(
   CreateNewCategoryController
+);
+export const categoryRequestController = container.resolve(
+  CategoryRequestController
+);
+export const joinCategoryController = container.resolve(JoinCategoryController);
+export const vendorCategoryRequestStatusController = container.resolve(
+  VendorCategoryRequestStatusController
+);
+export const getAllUsersController = container.resolve(GetAllUsersController);
+export const getVendorDetailsController = container.resolve(
+  GetVendorDetailsController
 );

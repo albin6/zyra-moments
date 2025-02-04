@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IJoinCategoryController } from "../../../entities/controllerInterfaces/common/join-category-controller.inteface";
 import { IJoinCategoryUseCase } from "../../../entities/useCaseInterfaces/common/join-category-usecase.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
@@ -18,6 +18,9 @@ export class JoinCategoryController implements IJoinCategoryController {
       const { categoryId } = req.body;
       const vendorId = (req as CustomRequest).user.id;
       await this.joinCategoryUseCase.execute(vendorId as any, categoryId);
+      res
+        .status(HTTP_STATUS.OK)
+        .json({ success: true, message: SUCCESS_MESSAGES.ACTION_SUCCESS });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

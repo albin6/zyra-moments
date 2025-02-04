@@ -8,6 +8,7 @@ import {
   sendEmailController,
   veryfyOTPController,
 } from "../../di/resolver";
+import { verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
 
 export class AuthRoutes extends BaseRoute {
   constructor() {
@@ -35,7 +36,7 @@ export class AuthRoutes extends BaseRoute {
       refreshTokenController.handle(req, res);
     });
 
-    this.router.post("/logout", (req: Request, res: Response) => {
+    this.router.post("/logout", verifyAuth, (req: Request, res: Response) => {
       logoutUserController.handle(req, res);
     });
   }

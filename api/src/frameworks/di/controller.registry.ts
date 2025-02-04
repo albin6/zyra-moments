@@ -6,6 +6,11 @@ import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/ve
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
 import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/common/create-new-category.controllers";
+import { CategoryRequestController } from "../../interfaceAdapters/controllers/common/category-request.controllers";
+import { JoinCategoryController } from "../../interfaceAdapters/controllers/common/join-category.controllers";
+import { VendorCategoryRequestStatusController } from "../../interfaceAdapters/controllers/vendor/vendor-category-request-status.controllers";
+import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
+import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -35,6 +40,26 @@ export class ControllerRegistry {
 
     container.register("CreateNewCategoryController", {
       useClass: CreateNewCategoryController,
+    });
+
+    container.register("CategoryRequestController", {
+      useClass: CategoryRequestController,
+    });
+
+    container.register("JoinCategoryController", {
+      useClass: JoinCategoryController,
+    });
+
+    container.register("VendorCategoryRequestStatusController", {
+      useClass: VendorCategoryRequestStatusController,
+    });
+
+    container.register("GetAllUsersController", {
+      useClass: GetAllUsersController,
+    });
+
+    container.register("GetVendorDetailsController", {
+      useClass: GetVendorDetailsController,
     });
   }
 }

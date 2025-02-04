@@ -26,4 +26,11 @@ export class VendorRepository implements IVendorRepository {
       { new: true }
     );
   }
+  async findById(id: any): Promise<IVendorEntity | null> {
+    return await VendorModel.findById(id);
+  }
+
+  async find(): Promise<IVendorEntity[] | []> {
+    return await VendorModel.find();
+  }
 }

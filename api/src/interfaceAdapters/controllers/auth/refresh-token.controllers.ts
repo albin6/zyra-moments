@@ -17,9 +17,20 @@ export class RefreshTokenController implements IRefreshTokenController {
   ) {}
   handle(req: Request, res: Response) {
     try {
-      const refreshToken = req.cookies.refresh_token;
+      const refreshToken =
+        req.cookies.client_refresh_token ||
+        req.cookies.vendor_refresh_token ||
+        req.cookies.admin_refresh_token;
       const newTokens = this.refreshTokenUseCase.execute(refreshToken);
-      setAuthCookies(res, newTokens.accessToken, newTokens.refreshToken);
+      const accessTokenName = `${newTokens.role}_access_token`;
+      const refreshTokenName = `${newTokens.role}_refresh_token`;
+      setAuthCookies(
+        res,
+        newTokens.accessToken,
+        newTokens.refreshToken,
+        accessTokenName,
+        refreshTokenName
+      );
       res
         .status(HTTP_STATUS.OK)
         .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
