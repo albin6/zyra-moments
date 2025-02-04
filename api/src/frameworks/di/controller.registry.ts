@@ -5,10 +5,8 @@ import { SendEmailController } from "../../interfaceAdapters/controllers/auth/se
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
 import { GetAllCategoriesController } from "../../interfaceAdapters/controllers/common/get-all-categories.controllers";
-import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/common/create-new-category.controllers";
-import { CategoryRequestController } from "../../interfaceAdapters/controllers/common/category-request.controllers";
-import { JoinCategoryController } from "../../interfaceAdapters/controllers/common/join-category.controllers";
-import { VendorCategoryRequestStatusController } from "../../interfaceAdapters/controllers/vendor/vendor-category-request-status.controllers";
+import { CreateNewCategoryController } from "../../interfaceAdapters/controllers/admin/create-new-category.controllers";
+import { JoinCategoryController } from "../../interfaceAdapters/controllers/vendor/join-category-request.controllers";
 import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
 import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
 
@@ -42,16 +40,8 @@ export class ControllerRegistry {
       useClass: CreateNewCategoryController,
     });
 
-    container.register("CategoryRequestController", {
-      useClass: CategoryRequestController,
-    });
-
     container.register("JoinCategoryController", {
       useClass: JoinCategoryController,
-    });
-
-    container.register("VendorCategoryRequestStatusController", {
-      useClass: VendorCategoryRequestStatusController,
     });
 
     container.register("GetAllUsersController", {

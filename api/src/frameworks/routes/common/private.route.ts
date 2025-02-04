@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
-  categoryRequestController,
   createNewCategoryController,
   getAllCategoriesController,
   getAllUsersController,
   getVendorDetailsController,
   joinCategoryController,
-  vendorCategoryRequestStatusController,
 } from "../../di/resolver";
 import {
   authorizeRole,
@@ -30,17 +28,9 @@ export class PrivateRoutes extends BaseRoute {
     this.router.post(
       "/categories",
       verifyAuth,
-      authorizeRole(["admin", "vendor"]),
+      authorizeRole(["admin"]),
       (req: Request, res: Response) =>
         createNewCategoryController.handle(req, res)
-    );
-
-    this.router.post(
-      "/category-request",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      (req: Request, res: Response) =>
-        categoryRequestController.handle(req, res)
     );
 
     this.router.post(
@@ -48,14 +38,6 @@ export class PrivateRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       (req: Request, res: Response) => joinCategoryController.handle(req, res)
-    );
-
-    this.router.get(
-      "/categories/vendor-request",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      (req: Request, res: Response) =>
-        vendorCategoryRequestStatusController.handle(req, res)
     );
 
     this.router.get(

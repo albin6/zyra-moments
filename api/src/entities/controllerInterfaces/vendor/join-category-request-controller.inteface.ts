@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
 
-export interface IVendorCategoryRequestStatusController {
+export interface IJoinCategoryRequestController {
   handle(req: Request, res: Response): Promise<void>;
 }

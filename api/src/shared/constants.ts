@@ -33,6 +33,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  TOKEN_EXPIRED: "Token Expired",
   EMAIL_NOT_FOUND: "Email Not Found",
   FORBIDDEN:
     "Access denied. You do not have permission to access this resource.",

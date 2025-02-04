@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
 import { RegisterUserUseCase } from "../../useCases/auth/register-user.usecase";
-import { IPasswordBcrypt } from "../security/password.bcrypt.interface";
+import { IBcrypt } from "../security/bcrypt.interface";
 import { PasswordBcrypt } from "../security/password.bcrypt";
 import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-usecase.interface";
 import { LoginUserUseCase } from "../../useCases/auth/login.usecase";
@@ -32,18 +32,15 @@ import { ITokenService } from "../../useCases/auth/interfaces/token-service.inte
 import { JwtService } from "../../interfaceAdapters/services/jwt-service";
 import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/common/get-all-categories-usecase.inteface";
 import { GetAllCategoriesUseCase } from "../../useCases/common/get-all-categories.usecase";
-import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/common/create-new-category-usecase.interface";
-import { CreateNewCategoryUseCase } from "../../useCases/common/create-new-category.usecase";
-import { ICategoryRequestUseCase } from "../../entities/useCaseInterfaces/common/category-request-usecase.interface";
-import { CategoryRequestUseCase } from "../../useCases/common/category-request.usecase";
-import { IJoinCategoryUseCase } from "../../entities/useCaseInterfaces/common/join-category-usecase.interface";
-import { JoinCategoryUseCase } from "../../useCases/common/join-category.usecase";
-import { IVendorCategoryRequestStatusUseCase } from "../../entities/useCaseInterfaces/common/vendor-category-request-status-usecase.inteface";
-import { VendorCatrgoryRequestStatus } from "../../useCases/vendor/vendor-category-request-status.usecase";
+import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/admin/create-new-category-usecase.interface";
+import { CreateNewCategoryUseCase } from "../../useCases/admin/create-new-category.usecase";
+import { IJoinCategoryRequestUseCase } from "../../entities/useCaseInterfaces/vendor/join-category-request-usecase.interface";
+import { JoinCategoryRequestUseCase } from "../../useCases/vendor/join-category-request.usecase";
 import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
 import { GetAllUsersUseCase } from "../../useCases/admin/get-all-users.usecase";
 import { IGetVendorDetailsUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
 import { GetVendorDetailsUseCase } from "../../useCases/vendor/get-vendor-details.usecase";
+import { OTPBcrypt } from "../security/otp.bcrypt";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -51,9 +48,11 @@ export class UseCaseRegistry {
       useClass: RegisterUserUseCase,
     });
 
-    container.register<IPasswordBcrypt>("IPasswordBcrypt", {
+    container.register<IBcrypt>("IPasswordBcrypt", {
       useClass: PasswordBcrypt,
     });
+
+    container.register<IBcrypt>("IOTPBcrypt", { useClass: OTPBcrypt });
 
     container.register<ILoginUserUseCase>("ILoginUserUseCase", {
       useClass: LoginUserUseCase,
@@ -83,17 +82,11 @@ export class UseCaseRegistry {
       useClass: CreateNewCategoryUseCase,
     });
 
-    container.register<ICategoryRequestUseCase>("ICategoryRequestUseCase", {
-      useClass: CategoryRequestUseCase,
-    });
-
-    container.register<IJoinCategoryUseCase>("IJoinCategoryUseCase", {
-      useClass: JoinCategoryUseCase,
-    });
-
-    container.register<IVendorCategoryRequestStatusUseCase>(
-      "IVendorCategoryRequestStatusUseCase",
-      { useClass: VendorCatrgoryRequestStatus }
+    container.register<IJoinCategoryRequestUseCase>(
+      "IJoinCategoryRequestUseCase",
+      {
+        useClass: JoinCategoryRequestUseCase,
+      }
     );
 
     container.register<IGetAllUsersUseCase>("IGetAllUsersUseCase", {

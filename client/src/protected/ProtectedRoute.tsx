@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export const AuthRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
-  const userRole = useSelector((state: RootState) => state.store.user?.role);
+  const userRole = useSelector((state: RootState) => state.client.client?.role);
 
   if (!userRole) {
     return <Navigate to="/" />;
@@ -25,7 +25,7 @@ export const AuthAdminRoute = ({
   element,
   allowedRoles,
 }: ProtectedRouteProps) => {
-  const userRole = useSelector((state: RootState) => state.store.user?.role);
+  const userRole = useSelector((state: RootState) => state.admin.admin?.role);
   console.log(userRole);
   if (!userRole) {
     return <Navigate to="/admin" />;
@@ -42,7 +42,7 @@ export const AuthVendorRoute = ({
   element,
   allowedRoles,
 }: ProtectedRouteProps) => {
-  const userRole = useSelector((state: RootState) => state.store.user?.role);
+  const userRole = useSelector((state: RootState) => state.vendor.vendor?.role);
   console.log(userRole);
   if (!userRole) {
     return <Navigate to="/vendor" />;

@@ -50,10 +50,9 @@ export function ClientAuth() {
     );
   };
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Logging in with ${provider}`);
-    // Implement social login logic here
-  };
+  // const handleSocialLogin = (provider: string) => {
+  //   console.log(`Logging in with ${provider}`);
+  // };
 
   return (
     <div className="min-h-screen bg-background">

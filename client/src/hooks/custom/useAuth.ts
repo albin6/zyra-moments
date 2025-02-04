@@ -1,12 +1,17 @@
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 
-const useAuth = () => {
-  const user = useSelector((state: RootState) => state.store.user);
-
-  const isLoggedIn = user !== null;
-
-  return { isLoggedIn, user };
+export const useAdminAuth = () => {
+  const admin = useSelector((state: RootState) => state.admin.admin);
+  return { isLoggedIn: admin !== null, admin };
 };
 
-export default useAuth;
+export const useClientAuth = () => {
+  const client = useSelector((state: RootState) => state.client.client);
+  return { isLoggedIn: client !== null, client };
+};
+
+export const useVendorAuth = () => {
+  const vendor = useSelector((state: RootState) => state.vendor.vendor);
+  return { isLoggedIn: vendor !== null, vendor };
+};

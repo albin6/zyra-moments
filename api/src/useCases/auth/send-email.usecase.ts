@@ -5,6 +5,7 @@ import { ISendEmailUseCase } from "../../entities/useCaseInterfaces/auth/send-em
 import { CustomError } from "../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
+import { IBcrypt } from "../../frameworks/security/bcrypt.interface";
 
 @injectable()
 export class SendEmailUseCase implements ISendEmailUseCase {
@@ -12,7 +13,8 @@ export class SendEmailUseCase implements ISendEmailUseCase {
     @inject("IEmailService") private emailService: IEmailService,
     @inject("IOTPService") private otpService: IOTPService,
     @inject("IUserExistenceService")
-    private userExistenceService: IUserExistenceService
+    private userExistenceService: IUserExistenceService,
+    @inject("IOTPBcrypt") private otpBcrypt: IBcrypt
   ) {}
 
   async execute(email: string): Promise<void> {
@@ -22,7 +24,8 @@ export class SendEmailUseCase implements ISendEmailUseCase {
     }
 
     const otp = this.otpService.generateOTP();
-    await this.otpService.storeOTP(email, otp);
+    const hashedOTP = await this.otpBcrypt.hash(otp);
+    await this.otpService.storeOTP(email, hashedOTP);
     await this.emailService.sendEmail(
       email,
       "Zyra Moments - Verify Your Email",

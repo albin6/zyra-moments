@@ -1,6 +1,9 @@
 import { injectable } from "tsyringe";
 import { IOTPRepository } from "../../../entities/repositoryInterfaces/auth/otp-repository.inteface";
-import { OTPModel } from "../../../frameworks/database/models/otp.model";
+import {
+  IOTPModel,
+  OTPModel,
+} from "../../../frameworks/database/models/otp.model";
 
 @injectable()
 export class OTPRepository implements IOTPRepository {
@@ -14,15 +17,11 @@ export class OTPRepository implements IOTPRepository {
   }: {
     email: string;
     otp: string;
-  }): Promise<boolean> {
-    const otpEntry = await OTPModel.findOne({ email, otp });
-    if (!otpEntry) return false;
-    if (new Date() > otpEntry.expiresAt) {
-      await OTPModel.deleteOne({ email, otp });
-      return false;
-    }
-    await OTPModel.deleteOne({ email, otp });
-    return true;
+  }): Promise<IOTPModel | null> {
+    const otpEntry = await OTPModel.find({ email, otp })
+      .sort({ createdAt: -1 })
+      .limit(1);
+    return otpEntry.length > 0 ? otpEntry[0] : null;
   }
 
   async deleteOTP(email: string, otp: string): Promise<void> {

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { JwtService } from "../services/jwt-service";
 import { JwtPayload } from "jsonwebtoken";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import client from "../../frameworks/cache/redis.client";
 
 const tokenService = new JwtService();
 
@@ -15,7 +16,16 @@ export interface CustomRequest extends Request {
   user: CustomJwtPayload;
 }
 
-export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
+const isBlacklisted = async (token: string): Promise<boolean> => {
+  const result = await client.get(token);
+  return result !== null;
+};
+
+export const verifyAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const token =
       req.cookies.vendor_access_token ||
@@ -29,7 +39,12 @@ export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
+    if (await isBlacklisted(token)) {
+      return res.status(403).json({ message: "Token is blacklisted" });
+    }
+
     const user = tokenService.verifyAccessToken(token) as CustomJwtPayload;
+
     if (!user || !user.id) {
       res
         .status(HTTP_STATUS.FORBIDDEN)
@@ -39,7 +54,13 @@ export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
 
     (req as CustomRequest).user = user;
     next();
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === "TokenExpiredError") {
+      res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ message: ERROR_MESSAGES.TOKEN_EXPIRED });
+      return;
+    }
     res
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ message: ERROR_MESSAGES.INVALID_TOKEN });
@@ -52,9 +73,10 @@ export const authorizeRole = (allowedRoles: string[]) => {
     const user = (req as CustomRequest).user;
 
     if (!user || !allowedRoles.includes(user.role)) {
-      res
-        .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: ERROR_MESSAGES.FORBIDDEN });
+      res.status(HTTP_STATUS.FORBIDDEN).json({
+        message: ERROR_MESSAGES.FORBIDDEN,
+        userRole: user ? user.role : "None",
+      });
       return;
     }
     next();

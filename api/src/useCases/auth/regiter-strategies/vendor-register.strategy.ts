@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IRegisterStrategy } from "./register-strategy.interface";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { UserDTO, VendorDTO } from "../../../shared/dtos/user.dto";
-import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.interface";
+import { IPasswordBcrypt } from "../../../frameworks/security/bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";

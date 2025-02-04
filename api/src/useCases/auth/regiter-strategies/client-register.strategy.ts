@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IRegisterStrategy } from "./register-strategy.interface";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
 import { ClientDTO, UserDTO } from "../../../shared/dtos/user.dto";
-import { IPasswordBcrypt } from "../../../frameworks/security/password.bcrypt.interface";
+import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
@@ -11,7 +11,7 @@ import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt
 export class ClientRegisterStrategy implements IRegisterStrategy {
   constructor(
     @inject("IClientRepository") private clientRepository: IClientRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
+    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
   ) {}
 
   async register(user: UserDTO): Promise<void> {

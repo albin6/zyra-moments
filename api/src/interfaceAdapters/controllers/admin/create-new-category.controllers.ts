@@ -1,26 +1,28 @@
 import { Request, Response } from "express";
-import { IJoinCategoryController } from "../../../entities/controllerInterfaces/common/join-category-controller.inteface";
-import { IJoinCategoryUseCase } from "../../../entities/useCaseInterfaces/common/join-category-usecase.interface";
+import { ICreateNewCategoryController } from "../../../entities/controllerInterfaces/admin/create-new-category-controller.interface";
+import { ICreateNewCategoryUseCase } from "../../../entities/useCaseInterfaces/admin/create-new-category-usecase.interface";
 import { ZodError } from "zod";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
-import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
-export class JoinCategoryController implements IJoinCategoryController {
+export class CreateNewCategoryController
+  implements ICreateNewCategoryController
+{
   constructor(
-    @inject("IJoinCategoryUseCase")
-    private joinCategoryUseCase: IJoinCategoryUseCase
+    @inject("ICreateNewCategoryUseCase")
+    private createNewCategoryUseCase: ICreateNewCategoryUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { categoryId } = req.body;
-      const vendorId = (req as CustomRequest).user.id;
-      await this.joinCategoryUseCase.execute(vendorId as any, categoryId);
+      const { title } = req.body as { title: string };
+
+      await this.createNewCategoryUseCase.execute(title);
+
       res
-        .status(HTTP_STATUS.OK)
-        .json({ success: true, message: SUCCESS_MESSAGES.ACTION_SUCCESS });
+        .status(HTTP_STATUS.CREATED)
+        .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

@@ -1,11 +1,13 @@
 import { inject, injectable } from "tsyringe";
 import { IOTPRepository } from "../../entities/repositoryInterfaces/auth/otp-repository.inteface";
 import { IOTPService } from "../../entities/services/otp-service.inteface";
+import { IBcrypt } from "../../frameworks/security/bcrypt.interface";
 
 @injectable()
 export class OTPService implements IOTPService {
   constructor(
-    @inject("IOTPRepository") private otpRepository: IOTPRepository
+    @inject("IOTPRepository") private otpRepository: IOTPRepository,
+    @inject("IOTPBcrypt") private otpBcrypt: IBcrypt
   ) {}
 
   generateOTP(): string {
@@ -24,6 +26,20 @@ export class OTPService implements IOTPService {
     email: string;
     otp: string;
   }): Promise<boolean> {
-    return await this.otpRepository.findOTP({ email, otp });
+    const otpEntry = await this.otpRepository.findOTP({ email, otp });
+
+    if (!otpEntry) {
+      return false;
+    }
+
+    if (
+      new Date() > otpEntry.expiresAt ||
+      !(await this.otpBcrypt.compare(otp, otpEntry.otp))
+    ) {
+      await this.otpRepository.deleteOTP(email, otp);
+      return false;
+    }
+    await this.otpRepository.deleteOTP(email, otp);
+    return true;
   }
 }
