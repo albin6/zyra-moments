@@ -41,6 +41,10 @@ import { GetAllUsersUseCase } from "../../useCases/admin/get-all-users.usecase";
 import { IGetVendorDetailsUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
 import { GetVendorDetailsUseCase } from "../../useCases/vendor/get-vendor-details.usecase";
 import { OTPBcrypt } from "../security/otp.bcrypt";
+import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
+import { BlackListTokenUseCase } from "../../useCases/auth/blacklist-token.usecase";
+import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke-refresh-token-usecase.interface";
+import { RevokeRefreshTokenUseCase } from "../../useCases/auth/revoke-refresh-token.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -96,6 +100,15 @@ export class UseCaseRegistry {
     container.register<IGetVendorDetailsUseCase>("IGetVendorDetailsUseCase", {
       useClass: GetVendorDetailsUseCase,
     });
+
+    container.register<IBlackListTokenUseCase>("IBlackListTokenUseCase", {
+      useClass: BlackListTokenUseCase,
+    });
+
+    container.register<IRevokeRefreshTokenUseCase>(
+      "IRevokeRefreshTokenUseCase",
+      { useClass: RevokeRefreshTokenUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

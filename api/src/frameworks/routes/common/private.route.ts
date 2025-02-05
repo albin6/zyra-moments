@@ -1,58 +1,16 @@
-import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
-import {
-  createNewCategoryController,
-  getAllCategoriesController,
-  getAllUsersController,
-  getVendorDetailsController,
-  joinCategoryController,
-} from "../../di/resolver";
-import {
-  authorizeRole,
-  verifyAuth,
-} from "../../../interfaceAdapters/middlewares/auth.middleware";
+
+import { AdminRoutes } from "../admin/admin.route";
+import { ClientRoutes } from "../client/client.route";
+import { VendorRoutes } from "../vendor/vendor.route";
 
 export class PrivateRoutes extends BaseRoute {
   constructor() {
     super();
   }
   protected initializeRoutes(): void {
-    this.router.get(
-      "/categories",
-      verifyAuth,
-      authorizeRole(["admin", "vendor"]),
-      (req: Request, res: Response) =>
-        getAllCategoriesController.handle(req, res)
-    );
-
-    this.router.post(
-      "/categories",
-      verifyAuth,
-      authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        createNewCategoryController.handle(req, res)
-    );
-
-    this.router.post(
-      "/categories/join",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      (req: Request, res: Response) => joinCategoryController.handle(req, res)
-    );
-
-    this.router.get(
-      "/users",
-      verifyAuth,
-      authorizeRole(["admin"]),
-      (req: Request, res: Response) => getAllUsersController.handle(req, res)
-    );
-
-    this.router.get(
-      "/vendors/profile",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      (req: Request, res: Response) =>
-        getVendorDetailsController.handle(req, res)
-    );
+    this.router.use("/_ad", new AdminRoutes().router);
+    this.router.use("/_cl", new ClientRoutes().router);
+    this.router.use("/_ve", new VendorRoutes().router);
   }
 }

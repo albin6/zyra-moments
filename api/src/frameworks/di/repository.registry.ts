@@ -11,6 +11,10 @@ import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/
 import { CategoryRespository } from "../../interfaceAdapters/repositories/common/category.repository";
 import { ICategoryRequestRepository } from "../../entities/repositoryInterfaces/common/category-request-respository.interface";
 import { CategoryRequestRepository } from "../../interfaceAdapters/repositories/common/category-request.repository";
+import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis/redis-token-repository.interface";
+import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
+import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/auth/refresh-token-repository.interface";
+import { RefreshTokenRepository } from "../../interfaceAdapters/repositories/auth/refresh-token.respository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -38,5 +42,13 @@ export class RepositoryRegistry {
       "ICategoryRequestRepository",
       { useClass: CategoryRequestRepository }
     );
+
+    container.register<IRedisTokenRepository>("IRedisTokenRepository", {
+      useClass: RedisTokenRepository,
+    });
+
+    container.register<IRefreshTokenRepository>("IRefreshTokenRepository", {
+      useClass: RefreshTokenRepository,
+    });
   }
 }

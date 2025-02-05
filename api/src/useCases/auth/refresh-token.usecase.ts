@@ -12,7 +12,6 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
   execute(refreshToken: string): {
     role: string;
     accessToken: string;
-    refreshToken: string;
   } {
     const payload = this.tokenService.verifyRefreshToken(refreshToken);
     if (!payload)
@@ -21,11 +20,6 @@ export class RefreshTokenUseCase implements IRefreshTokenUseCase {
     return {
       role: (payload as JwtPayload).role,
       accessToken: this.tokenService.generateAccessToken({
-        id: (payload as JwtPayload).id,
-        email: (payload as JwtPayload).email,
-        role: (payload as JwtPayload).role,
-      }),
-      refreshToken: this.tokenService.generateRefreshToken({
         id: (payload as JwtPayload).id,
         email: (payload as JwtPayload).email,
         role: (payload as JwtPayload).role,

@@ -4,7 +4,6 @@ import { config } from "../../shared/config";
 import ms from "ms";
 import { injectable } from "tsyringe";
 
-// Define a type for the JWT Payload
 interface JwtPayloadData {
   id: string;
   email: string;
@@ -24,21 +23,19 @@ export class JwtService implements ITokenService {
     this.refreshSecret = config.jwt.REFRESH_SECRET_KEY;
     this.refreshExpiresIn = config.jwt.REFRESH_EXPIRES_IN;
   }
-  // Generate Access Token
+
   generateAccessToken(payload: JwtPayloadData): string {
     return jwt.sign(payload, this.accessSecret, {
       expiresIn: this.accessExpiresIn as ms.StringValue,
     });
   }
 
-  // Generate Refresh Token
   generateRefreshToken(payload: JwtPayloadData): string {
     return jwt.sign(payload, this.refreshSecret, {
       expiresIn: this.refreshExpiresIn as ms.StringValue,
     });
   }
 
-  // Verify Access Token
   verifyAccessToken(token: string): JwtPayload | null {
     try {
       return jwt.verify(token, this.accessSecret) as JwtPayload;
@@ -48,12 +45,10 @@ export class JwtService implements ITokenService {
     }
   }
 
-  // Verify Refresh Token
   verifyRefreshToken(token: string): JwtPayload | null {
     try {
       return jwt.verify(token, this.refreshSecret) as JwtPayload;
     } catch (error) {
-      // Add logging or throw a custom error
       console.error("Refresh token verification failed:", error);
       return null;
     }

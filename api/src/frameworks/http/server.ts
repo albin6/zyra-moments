@@ -46,8 +46,6 @@ export class Server {
   private configureRoutes(): void {
     this._app.use("/api/v_1/auth", new AuthRoutes().router);
     this._app.use("/api/v_1/_pvt", new PrivateRoutes().router);
-    // this._app.use("/api/v_1");
-    // this._app.use("/api/v_1/vendors");
 
     this._app.use("*", (req: Request, res: Response) => {
       res.status(404).json({

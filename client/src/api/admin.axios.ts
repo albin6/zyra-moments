@@ -34,10 +34,12 @@ adminAxiosInstance.interceptors.response.use(
     }
 
     if (
-      error.response.status === 403 &&
-      error.response.data.message ===
-        '"Access denied. You do not have permission to access this resource."' &&
-      !originalRequest._retry
+      (error.response.status === 403 &&
+        error.response.data.message ===
+          "Access denied. You do not have permission to access this resource.") ||
+      (error.response.status === 403 &&
+        error.response.data.message === "Token is blacklisted" &&
+        !originalRequest._retry)
     ) {
       localStorage.removeItem("adminSession");
       window.location.href = "/admin";
