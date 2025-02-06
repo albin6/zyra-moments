@@ -19,13 +19,17 @@ export class AdminRoutes extends BaseRoute {
     this.router.get(
       "/admin/categories",
       verifyAuth,
-      authorizeRole(["vendor"]),
+      authorizeRole(["admin"]),
       (req: Request, res: Response) =>
         getAllCategoriesController.handle(req, res)
     );
 
-    this.router.post("/admin/categories", (req: Request, res: Response) =>
-      createNewCategoryController.handle(req, res)
+    this.router.post(
+      "/admin/categories",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        createNewCategoryController.handle(req, res)
     );
 
     this.router.get("/admin/users", (req: Request, res: Response) =>

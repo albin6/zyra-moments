@@ -45,6 +45,8 @@ import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/bl
 import { BlackListTokenUseCase } from "../../useCases/auth/blacklist-token.usecase";
 import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke-refresh-token-usecase.interface";
 import { RevokeRefreshTokenUseCase } from "../../useCases/auth/revoke-refresh-token.usecase";
+import { IGetAllCategoryJoinRequestUseCase } from "../../entities/useCaseInterfaces/admin/get-all-category-join-request-usecase.interface";
+import { GetAllCategoryJoinRequestUseCase } from "../../useCases/admin/get-all-category-join-request.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -108,6 +110,11 @@ export class UseCaseRegistry {
     container.register<IRevokeRefreshTokenUseCase>(
       "IRevokeRefreshTokenUseCase",
       { useClass: RevokeRefreshTokenUseCase }
+    );
+
+    container.register<IGetAllCategoryJoinRequestUseCase>(
+      "IGetAllCategoryJoinRequestUseCase",
+      { useClass: GetAllCategoryJoinRequestUseCase }
     );
 
     // Register Strategies

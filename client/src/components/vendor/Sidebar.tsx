@@ -4,22 +4,24 @@ import { LogOut } from "lucide-react";
 import { Card } from "../ui/card";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
-import { logout } from "@/store/userSlice";
+import { vendorLogout } from "@/store/slices/vendorSlice";
 import { toast } from "sonner";
+import { logoutVendor } from "@/services/auth/authService";
 
 interface SidebarProps {
-  vendorName: string;
+  firstName: string;
+  lastName: string;
   avatarUrl: string;
 }
 
-export function Sidebar({ vendorName, avatarUrl }: SidebarProps) {
-  const { mutate: logoutReq } = useLogout();
+export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
+  const { mutate: logoutReq } = useLogout(logoutVendor);
   const dispatch = useDispatch();
 
   const logoutUser = () => {
     logoutReq(undefined, {
       onSuccess: (data) => {
-        dispatch(logout());
+        dispatch(vendorLogout());
         toast.success(data.message);
       },
       onError: (error: any) => {
@@ -32,10 +34,14 @@ export function Sidebar({ vendorName, avatarUrl }: SidebarProps) {
       <aside className="w-64 hidden md:flex flex-col p-6 space-y-6">
         <div className="flex flex-col items-center space-y-3">
           <Avatar className="w-20 h-20">
-            <AvatarImage src={avatarUrl} alt={vendorName} />
-            <AvatarFallback>{vendorName[0]}</AvatarFallback>
+            <AvatarImage src={avatarUrl} alt={firstName} />
+            <AvatarFallback>
+              {firstName.charAt(0) + lastName.charAt(0)}
+            </AvatarFallback>
           </Avatar>
-          <h2 className="text-lg font-semibold">{vendorName}</h2>
+          <h2 className="text-lg font-semibold">
+            {firstName + " " + lastName}
+          </h2>
         </div>
 
         <nav className="flex-1 space-y-2">

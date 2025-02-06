@@ -3,5 +3,5 @@ export interface IGenerateTokenUseCase {
     id: string,
     email: string,
     role: string
-  ): { accessToken: string; refreshToken: string };
+  ): Promise<{ accessToken: string; refreshToken: string }>;
 }

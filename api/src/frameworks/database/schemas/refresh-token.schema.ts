@@ -5,7 +5,7 @@ export const RefreshTokenSchema = new Schema<IRefreshTokenModel>({
   user: { type: Schema.Types.ObjectId, required: true },
   userType: {
     type: String,
-    enum: ["Admin", "Client", "Vendor"],
+    enum: ["admin", "client", "vendor"],
     required: true,
   },
   token: { type: String, required: true },

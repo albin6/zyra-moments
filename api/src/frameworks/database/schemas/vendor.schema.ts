@@ -12,7 +12,7 @@ export const VendorSchema = new Schema<IVendorModel>(
     role: { type: String, enum: ROLES, required: true },
     profileImage: { type: String },
     phoneNumber: { type: String },
-    category: { type: Schema.Types.ObjectId, ref: "Category" },
+    category: { type: Schema.Types.ObjectId, ref: "Category", default: null },
     bio: { type: String },
     place: { type: String },
     averageRating: { type: Number },

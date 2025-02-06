@@ -27,7 +27,10 @@ export class VendorRepository implements IVendorRepository {
     );
   }
   async findById(id: any): Promise<IVendorEntity | null> {
-    return await VendorModel.findById(id);
+    return await VendorModel.findById(id).select("-password").populate({
+      path: "category",
+      select: "title",
+    });
   }
 
   async find(): Promise<IVendorEntity[] | []> {

@@ -23,4 +23,8 @@ export class CategoryRequestRepository implements ICategoryRequestRepository {
   async findByVendorId(vendorId: any): Promise<ICategoryRequestEntity | null> {
     return await CategoryRequestModel.findOne({ vendorId });
   }
+
+  async find(): Promise<ICategoryRequestEntity[] | []> {
+    return await CategoryRequestModel.find();
+  }
 }

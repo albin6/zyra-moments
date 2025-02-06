@@ -9,6 +9,7 @@ import { CreateNewCategoryController } from "../../interfaceAdapters/controllers
 import { JoinCategoryController } from "../../interfaceAdapters/controllers/vendor/join-category-request.controllers";
 import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
 import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
+import { GetAllCategoryJoinRequestController } from "../../interfaceAdapters/controllers/admin/get-all-category-join-request.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -50,6 +51,10 @@ export class ControllerRegistry {
 
     container.register("GetVendorDetailsController", {
       useClass: GetVendorDetailsController,
+    });
+
+    container.register("GetAllCategoryJoinRequestController", {
+      useClass: GetAllCategoryJoinRequestController,
     });
   }
 }

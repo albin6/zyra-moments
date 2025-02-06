@@ -26,7 +26,8 @@ export class OTPService implements IOTPService {
     email: string;
     otp: string;
   }): Promise<boolean> {
-    const otpEntry = await this.otpRepository.findOTP({ email, otp });
+    console.log(email, otp);
+    const otpEntry = await this.otpRepository.findOTP({ email });
 
     if (!otpEntry) {
       return false;
@@ -36,6 +37,7 @@ export class OTPService implements IOTPService {
       new Date() > otpEntry.expiresAt ||
       !(await this.otpBcrypt.compare(otp, otpEntry.otp))
     ) {
+      console.log("in otp verify ==>");
       await this.otpRepository.deleteOTP(email, otp);
       return false;
     }

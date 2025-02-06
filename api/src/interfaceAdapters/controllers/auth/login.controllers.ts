@@ -45,7 +45,7 @@ export class LoginUserController implements ILoginUserController {
 
       const userId = user._id.toString();
 
-      const tokens = this.generateTokenUseCase.execute(
+      const tokens = await this.generateTokenUseCase.execute(
         userId,
         user.email,
         user.role

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
+  getAllCategoriesController,
   getVendorDetailsController,
   joinCategoryController,
   logoutUserController,
@@ -15,6 +16,10 @@ export class VendorRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
+    this.router.get("/vendor/categories", (req: Request, res: Response) =>
+      getAllCategoriesController.handle(req, res)
+    );
+
     this.router.post("/vendor/categories/join", (req: Request, res: Response) =>
       joinCategoryController.handle(req, res)
     );

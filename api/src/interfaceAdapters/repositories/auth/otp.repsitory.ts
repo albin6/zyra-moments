@@ -11,14 +11,8 @@ export class OTPRepository implements IOTPRepository {
     await OTPModel.create({ email, otp, expiresAt });
   }
 
-  async findOTP({
-    email,
-    otp,
-  }: {
-    email: string;
-    otp: string;
-  }): Promise<IOTPModel | null> {
-    const otpEntry = await OTPModel.find({ email, otp })
+  async findOTP({ email }: { email: string }): Promise<IOTPModel | null> {
+    const otpEntry = await OTPModel.find({ email })
       .sort({ createdAt: -1 })
       .limit(1);
     return otpEntry.length > 0 ? otpEntry[0] : null;

@@ -11,6 +11,7 @@ import { CreateNewCategoryController } from "../../interfaceAdapters/controllers
 import { JoinCategoryController } from "../../interfaceAdapters/controllers/vendor/join-category-request.controllers";
 import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
 import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
+import { GetAllCategoryJoinRequestController } from "../../interfaceAdapters/controllers/admin/get-all-category-join-request.controllers";
 
 DependencyInjection.registerAll();
 
@@ -30,4 +31,7 @@ export const joinCategoryController = container.resolve(JoinCategoryController);
 export const getAllUsersController = container.resolve(GetAllUsersController);
 export const getVendorDetailsController = container.resolve(
   GetVendorDetailsController
+);
+export const getAllCategoryJoinRequestController = container.resolve(
+  GetAllCategoryJoinRequestController
 );

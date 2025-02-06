@@ -2,16 +2,25 @@ import { Button } from "@/components/ui/button";
 import { Bell, MessageSquare, Tag } from "lucide-react";
 import { VendorCategoryModal } from "../modals/VendorCategoryModal";
 import { useState } from "react";
+import { useVendorJoinCategoryMutation } from "@/hooks/vendor/useVendorProfile";
+import { toast } from "sonner";
 
 interface ProfileHeaderProps {
   onEdit?: () => void;
+  isEdit: boolean;
 }
 
-export function ProfileHeader({ onEdit }: ProfileHeaderProps) {
+export function ProfileHeader({ onEdit, isEdit }: ProfileHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { mutate: vendorJoinCategory } = useVendorJoinCategoryMutation();
 
   const handleSave = (category: string) => {
     console.log("Selected or created category:", category);
+    vendorJoinCategory(category, {
+      onSuccess: (data) => toast.success(data.message),
+      onError: (error: any) => toast.error(error.response.data.message),
+    });
   };
   return (
     <div className="border-b p-4">
@@ -29,7 +38,12 @@ export function ProfileHeader({ onEdit }: ProfileHeaderProps) {
           <Button variant="ghost" size="icon">
             <MessageSquare className="h-5 w-5" />
           </Button>
-          <Button size="sm" onClick={onEdit}>
+          <Button
+            size="sm"
+            className={`${isEdit && "opacity-50"}`}
+            disabled={isEdit}
+            onClick={onEdit}
+          >
             Edit
           </Button>
         </div>

@@ -8,6 +8,8 @@ interface ProfileFormProps {
   email: string;
   avatarUrl: string;
   contact: string;
+  isEdit: boolean;
+  onUpdate?: (field: string, value: string) => void;
 }
 
 export function ProfileForm({
@@ -16,30 +18,46 @@ export function ProfileForm({
   email,
   avatarUrl,
   contact,
+  onUpdate,
+  isEdit,
 }: ProfileFormProps) {
   return (
     <div className="p-6">
       <div className="flex md:flex-col gap-6">
-        {/* <div className="flex  items-center space-x-3">
+        <div className="flex  items-center space-x-3">
           <Avatar className="w-20 h-20">
-            <AvatarImage src={avatarUrl} alt={vendorName} />
-            <AvatarFallback>{vendorName[0]}</AvatarFallback>
+            <AvatarImage src={avatarUrl} alt={firstName} />
+            <AvatarFallback>
+              {firstName.charAt(0) + lastName.charAt(0)}
+            </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-sm text-muted-foreground">{vendorName}</span>
-            <span className="text-xs text-muted-foreground">{email}</span>
+            <span className="text-base text-foreground">
+              {firstName + lastName}
+            </span>
+            <span className="text-sm text-muted-foreground">{email}</span>
           </div>
-        </div> */}
+        </div>
 
         <div className="flex-1 grid gap-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">First Name</label>
-              <Input value={firstName} placeholder="Enter first name" />
+              <Input
+                value={firstName}
+                onChange={(e) => onUpdate?.("firstName", e.target.value)}
+                disabled={isEdit === false}
+                placeholder="Enter first name"
+              />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Last Name</label>
-              <Input value={lastName} placeholder="Enter last name" />
+              <Input
+                value={lastName}
+                onChange={(e) => onUpdate?.("lastName", e.target.value)}
+                disabled={isEdit === false}
+                placeholder="Enter last name"
+              />
             </div>
           </div>
 
@@ -48,6 +66,8 @@ export function ProfileForm({
               <label className="text-sm font-medium">Email</label>
               <Input
                 value={email}
+                onChange={(e) => onUpdate?.("email", e.target.value)}
+                disabled={isEdit === false}
                 type="email"
                 placeholder="vendor@email.com"
               />
@@ -56,6 +76,8 @@ export function ProfileForm({
               <label className="text-sm font-medium">Contact Number</label>
               <Input
                 value={contact}
+                onChange={(e) => onUpdate?.("contact", e.target.value)}
+                disabled={isEdit === false}
                 type="tel"
                 placeholder="Enter contact number"
               />
@@ -65,6 +87,7 @@ export function ProfileForm({
           <div className="space-y-2">
             <label className="text-sm font-medium">About Me</label>
             <Textarea
+              disabled={isEdit === false}
               placeholder="Tell us about yourself and your services..."
               className="min-h-[100px]"
             />
