@@ -21,15 +21,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ViewCatgoryRequestModal from "../modals/AdminViewCategoryRequestModal";
 import Pagination from "../Pagination";
-import {
-  useAllCategoriesMutations,
-  useAllCategoriesQuery,
-} from "@/hooks/common/useAllCategories";
-import {
-  Category,
-  createCategory,
-  getAllCatgoriesAdmin,
-} from "@/services/common/categoryService";
+
 import { toast } from "sonner";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -40,33 +32,14 @@ const CategoryManagement: React.FC = () => {
   // const [categories, setCategories] = useState(mockCategories);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState([]);
 
   const totalPages = Math.ceil(categories.length / ITEMS_PER_PAGE);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentCategories = categories.slice(indexOfFirstItem, indexOfLastItem);
 
-  const { data, refetch } = useAllCategoriesQuery(getAllCatgoriesAdmin);
-
-  const { mutate: createNewCategory } =
-    useAllCategoriesMutations(createCategory);
-
-  useEffect(() => {
-    if (data) {
-      setCategories(data.categories);
-    }
-  }, [data]);
-
-  const handleAddCategory = (newCategory: string) => {
-    createNewCategory(newCategory, {
-      onSuccess: (data) => {
-        toast.success(data.message);
-        refetch();
-      },
-      onError: (error: any) => toast.error(error.response.data.message),
-    });
-  };
+  const handleAddCategory = (newCategory: string) => {};
 
   const updateCategoryStatus = (id: string) => {};
 
@@ -180,7 +153,7 @@ const CategoryManagement: React.FC = () => {
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            {/* <TableBody>
               {currentCategories.map((category) => (
                 <TableRow key={category.categoryId}>
                   <TableCell className="font-medium">
@@ -199,7 +172,7 @@ const CategoryManagement: React.FC = () => {
                   </TableCell>
                 </TableRow>
               ))}
-            </TableBody>
+            </TableBody> */}
           </Table>
           {/* </ScrollArea> */}
           <Pagination

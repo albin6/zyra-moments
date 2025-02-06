@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
   loginController,
-  logoutUserController,
   refreshTokenController,
   registerController,
   sendEmailController,
@@ -32,31 +31,27 @@ export class AuthRoutes extends BaseRoute {
       veryfyOTPController.handle(req, res);
     });
 
-    this.router.post("/refresh-token", (req: Request, res: Response) => {
-      refreshTokenController.handle(req, res);
-    });
-
     this.router.post(
-      "/vendor/logout",
+      "/vendor/refresh-token",
       verifyAuth,
       (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
+        refreshTokenController.handle(req, res);
       }
     );
 
     this.router.post(
-      "/client/logout",
-      verifyAuth,
+      "/client/refresh-token",
+
       (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
+        refreshTokenController.handle(req, res);
       }
     );
 
     this.router.post(
-      "/admin/logout",
+      "/admin/refresh-token",
       verifyAuth,
       (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
+        refreshTokenController.handle(req, res);
       }
     );
   }

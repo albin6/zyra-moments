@@ -18,6 +18,10 @@ export const config = {
     EMAIL_PASS: process.env.EMAIL_PASS,
   },
 
+  redis: {
+    URI: process.env.REDIS_URI || "redis://localhost:6379",
+  },
+
   // Database Configuration
   database: {
     URI: process.env.DATABASE_URI || "mongodb://localhost:27017/zyra-moments",
@@ -25,11 +29,10 @@ export const config = {
     PASSWORD: process.env.DATABASE_PASSWORD || "password",
   },
 
-  // JWT Configuration (if you're using JWT tokens)
   jwt: {
     ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "your-secret-key",
     REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "your-secret-key",
-    ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "1h", // Default expiration time
-    REFRESH_EXPIRES_IN: process.env.JWT_REFRSH_EXPIRES_IN || "1h", // Default expiration time
+    ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
+    REFRESH_EXPIRES_IN: process.env.JWT_REFRSH_EXPIRES_IN || "1h",
   },
 };

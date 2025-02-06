@@ -1,8 +1,8 @@
 import { Login } from "@/components/auth/Login";
 import { useLoginMutation } from "@/hooks/auth/useLogin";
 import { ILoginData } from "@/services/auth/authService";
-import { login } from "@/store/userSlice";
 import { useDispatch } from "react-redux";
+import { adminLogin } from "@/store/slices/adminSlice";
 import { toast } from "sonner";
 
 export function AdminAuth() {
@@ -16,7 +16,7 @@ export function AdminAuth() {
       {
         onSuccess: (data) => {
           toast.success(data.message);
-          dispatch(login(data.user));
+          dispatch(adminLogin(data.user));
         },
         onError: (error: any) => toast.error(error.response.data.message),
       }

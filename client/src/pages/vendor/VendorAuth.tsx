@@ -10,7 +10,7 @@ import { useLoginMutation } from "@/hooks/auth/useLogin";
 import { ILoginData } from "@/services/auth/authService";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
-import { login } from "@/store/userSlice";
+import { vendorLogin } from "@/store/slices/vendorSlice";
 import { motion } from "framer-motion";
 
 export function VendorAuth() {
@@ -38,7 +38,7 @@ export function VendorAuth() {
       {
         onSuccess: (data) => {
           toast.success(data.message);
-          dispatch(login(data.user));
+          dispatch(vendorLogin(data.user));
         },
         onError: (error: any) => toast.error(error.response.data.message),
       }

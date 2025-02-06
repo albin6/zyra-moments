@@ -8,6 +8,7 @@ import {
   HTTP_STATUS,
   SUCCESS_MESSAGES,
 } from "../../../shared/constants";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class RefreshTokenController implements IRefreshTokenController {
@@ -17,10 +18,8 @@ export class RefreshTokenController implements IRefreshTokenController {
   ) {}
   handle(req: Request, res: Response) {
     try {
-      const refreshToken =
-        req.cookies.client_refresh_token ||
-        req.cookies.vendor_refresh_token ||
-        req.cookies.admin_refresh_token;
+      const refreshToken = (req as CustomRequest).user.refresh_token;
+
       const newTokens = this.refreshTokenUseCase.execute(refreshToken);
       const accessTokenName = `${newTokens.role}_access_token`;
       updateCookieWithAccessToken(res, newTokens.accessToken, accessTokenName);

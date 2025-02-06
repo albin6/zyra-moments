@@ -3,6 +3,7 @@ import { BaseRoute } from "../base.route";
 import {
   getVendorDetailsController,
   joinCategoryController,
+  logoutUserController,
 } from "../../di/resolver";
 import {
   authorizeRole,
@@ -24,6 +25,14 @@ export class VendorRoutes extends BaseRoute {
       authorizeRole(["vendor"]),
       (req: Request, res: Response) =>
         getVendorDetailsController.handle(req, res)
+    );
+
+    this.router.post(
+      "/vendor/logout",
+      verifyAuth,
+      (req: Request, res: Response) => {
+        logoutUserController.handle(req, res);
+      }
     );
   }
 }

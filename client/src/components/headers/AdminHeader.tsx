@@ -12,8 +12,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
-import { logout } from "@/store/userSlice";
+import { adminLogout } from "@/store/slices/adminSlice";
 import { toast } from "sonner";
+import { logoutAdmin } from "@/services/auth/authService";
 
 const navItems = [
   { name: "Events", href: "#events" },
@@ -24,13 +25,13 @@ const navItems = [
 
 export function AdminHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { mutate: logoutReq } = useLogout();
+  const { mutate: logoutReq } = useLogout(logoutAdmin);
   const dispatch = useDispatch();
 
   const logoutUser = () => {
     logoutReq(undefined, {
       onSuccess: (data) => {
-        dispatch(logout());
+        dispatch(adminLogout());
         toast.success(data.message);
       },
       onError: (error: any) => {

@@ -12,8 +12,7 @@ import { User } from "@/types/User";
 import { useLoginMutation } from "@/hooks/auth/useLogin";
 import { ILoginData } from "@/services/auth/authService";
 import { useDispatch } from "react-redux";
-
-import { login } from "@/store/userSlice";
+import { clientLogin } from "@/store/slices/clientSlice";
 import { useTheme } from "@/context/ThemeProvider";
 import { ClientHeader } from "@/components/headers/ClientHeader";
 
@@ -43,7 +42,7 @@ export function ClientAuth() {
       {
         onSuccess: (data) => {
           toast.success(data.message);
-          dispatch(login(data.user));
+          dispatch(clientLogin(data.user));
         },
         onError: (error: any) => toast.error(error.response.data.message),
       }

@@ -3,6 +3,7 @@ import {
   createNewCategoryController,
   getAllCategoriesController,
   getAllUsersController,
+  logoutUserController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
 import {
@@ -29,6 +30,14 @@ export class AdminRoutes extends BaseRoute {
 
     this.router.get("/admin/users", (req: Request, res: Response) =>
       getAllUsersController.handle(req, res)
+    );
+
+    this.router.post(
+      "/admin/logout",
+      verifyAuth,
+      (req: Request, res: Response) => {
+        logoutUserController.handle(req, res);
+      }
     );
   }
 }

@@ -12,10 +12,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useDispatch } from "react-redux";
-import { logout } from "@/store/userSlice";
-import useAuth from "@/hooks/custom/useAuth";
+import { clientLogout } from "@/store/slices/clientSlice";
+import { useClientAuth } from "@/hooks/custom/useAuth";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { toast } from "sonner";
+import { logoutClient } from "@/services/auth/authService";
 
 const navItems = [
   { name: "Dashboard", href: "#" },
@@ -25,14 +26,14 @@ const navItems = [
 ];
 
 export function ClientHeader() {
-  const { isLoggedIn, user } = useAuth();
-  const { mutate: logoutReq } = useLogout();
+  const { isLoggedIn, client } = useClientAuth();
+  const { mutate: logoutReq } = useLogout(logoutClient);
   const dispatch = useDispatch();
 
   const logoutUser = () => {
     logoutReq(undefined, {
       onSuccess: (data) => {
-        dispatch(logout());
+        dispatch(clientLogout());
         toast.success(data.message);
       },
       onError: (error: any) => {
@@ -115,8 +116,9 @@ export function ClientHeader() {
                       alt="@username"
                     />
                     <AvatarFallback>
-                      {user &&
-                        user?.firstName.charAt(0) + user?.lastName.charAt(0)}
+                      {client &&
+                        client?.firstName.charAt(0) +
+                          client?.lastName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -125,10 +127,10 @@ export function ClientHeader() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {user && user.firstName + " " + user.lastName}
+                      {client && client.firstName + " " + client.lastName}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {user && user.email}
+                      {client && client.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>

@@ -1,4 +1,7 @@
+import { adminAxiosInstance } from "@/api/admin.axios";
 import { authAxiosInstance } from "@/api/auth.axios";
+import { clientAxiosInstance } from "@/api/client.axios";
+import { vendorAxiosInstance } from "@/api/vendor.axios";
 import { UserDTO } from "@/types/User";
 
 export interface AuthResponse {
@@ -52,7 +55,17 @@ export const verifyOtp = async (data: { email: string; otp: string }) => {
   return response.data;
 };
 
-export const logout = async (): Promise<AxiosResponse> => {
-  const response = await authAxiosInstance.post("/logout");
+export const logoutClient = async (): Promise<AxiosResponse> => {
+  const response = await clientAxiosInstance.post("/_cl/client/logout");
+  return response.data;
+};
+
+export const logoutVendor = async (): Promise<AxiosResponse> => {
+  const response = await vendorAxiosInstance.post("/_ve/vendor/logout");
+  return response.data;
+};
+
+export const logoutAdmin = async (): Promise<AxiosResponse> => {
+  const response = await adminAxiosInstance.post("/_ad/admin/logout");
   return response.data;
 };

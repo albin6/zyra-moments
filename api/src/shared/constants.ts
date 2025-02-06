@@ -6,7 +6,6 @@ export const ROLES = {
 
 export type TRole = "client" | "admin" | "vendor";
 
-// HTTP Status Codes
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -65,19 +64,3 @@ export const VERIFICATION_MAIL_CONTENT = (otp: string) => `
     <p style="font-size: 12px; color: #777;">This email was sent from an unmonitored account. Please do not reply to this email.</p>
   </div>
 `;
-
-export const DEFAULTS = {
-  PAGE_SIZE: 10,
-  IMAGE_PATH: "/uploads/images",
-  USER_ROLE: "user",
-};
-
-export const JWT_CLAIMS = {
-  ACCESS_TOKEN: "access_token",
-  REFRESH_TOKEN: "refresh_token",
-};
-
-export const REGEX = {
-  EMAIL: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-  PHONE_NUMBER: /^\d{10}$/,
-};

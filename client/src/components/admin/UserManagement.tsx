@@ -19,8 +19,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Pagination from "../Pagination";
-import { useAllUsersQuery } from "@/hooks/admin/useAllUsersByType";
-import { getAllUsersByType } from "@/services/admin/usersService";
 
 export interface IClient {
   _id: string;
@@ -49,40 +47,23 @@ interface Vendor {
   password: string;
   role: string;
   phoneNumber: string;
-  status: string; // or boolean depending on how you want to handle it
+  status: string;
   createdAt: string;
   updatedAt: string;
   __v: number;
   category: string;
-  categoryRequest?: boolean; // Optional field
+  categoryRequest?: boolean;
 }
 
 export type VendorList = Vendor[];
 
-// Mock data (replace with actual data fetching logic)
 export default function UserManagement() {
   const [activeTab, setActiveTab] = useState("client");
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("");
 
-  const { data, refetch } = useAllUsersQuery(getAllUsersByType, activeTab);
-
   const [clients, setClients] = useState<ClientsData>();
   const [vendors, setVendors] = useState<VendorList>();
-
-  useEffect(() => {
-    if (data) {
-      if (activeTab == "client") {
-        setClients(data.users);
-      } else if (activeTab == "vendor") {
-        setVendors(data.users);
-      }
-    }
-  }, [data]);
-
-  useEffect(() => {
-    refetch();
-  }, [refetch, activeTab]);
 
   // Pagination state (you'd implement actual pagination logic)
   const [currentPage, setCurrentPage] = useState(1);

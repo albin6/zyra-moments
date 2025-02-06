@@ -19,7 +19,7 @@ vendorAxiosInstance.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          await authAxiosInstance.post("/refresh-token");
+          await authAxiosInstance.post("/vendor/refresh-token");
           isRefreshing = false;
 
           return vendorAxiosInstance(originalRequest);
