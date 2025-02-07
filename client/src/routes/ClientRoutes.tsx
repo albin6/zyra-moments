@@ -5,6 +5,7 @@ import { NoAuthRoute } from "@/protected/PublicRoute";
 import { AuthRoute } from "@/protected/ProtectedRoute";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientLandingPage from "@/pages/client/ClientLanding";
+import { UserProfile } from "@/components/client/UserProfile";
 
 function ClientRoutes() {
   return (
@@ -18,6 +19,12 @@ function ClientRoutes() {
               allowedRoles={["client"]}
               element={<ClientLandingPage />}
             />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <AuthRoute allowedRoles={["client"]} element={<UserProfile />} />
           }
         />
       </Route>

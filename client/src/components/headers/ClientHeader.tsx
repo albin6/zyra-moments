@@ -17,6 +17,7 @@ import { useClientAuth } from "@/hooks/custom/useAuth";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { toast } from "sonner";
 import { logoutClient } from "@/services/auth/authService";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { name: "Dashboard", href: "#" },
@@ -26,6 +27,7 @@ const navItems = [
 ];
 
 export function ClientHeader() {
+  const navigate = useNavigate();
   const { isLoggedIn, client } = useClientAuth();
   const { mutate: logoutReq } = useLogout(logoutClient);
   const dispatch = useDispatch();
@@ -135,7 +137,9 @@ export function ClientHeader() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                  Profile
+                </DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>New Team</DropdownMenuItem>
                 <DropdownMenuSeparator />
