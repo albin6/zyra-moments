@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Edit2, Menu } from "lucide-react";
@@ -9,10 +9,30 @@ import { UserEvents } from "./UserEvents";
 import { UserStats } from "./UserStats";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useClientProfileQuery } from "@/hooks/client/useClientProfile";
+import { Spinner } from "../ui/spinner";
+import { Client } from "@/services/client/clientService";
 
 export function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
+  const [clientData, setClientData] = useState<Client | null>(null);
+
+  const { data, isLoading } = useClientProfileQuery();
+
+  useEffect(() => {
+    if (data) {
+      setClientData(data.client);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!clientData) {
+    return;
+  }
 
   return (
     <div className="container mx-auto p-4 lg:p-6 bg-background">
@@ -20,9 +40,9 @@ export function UserProfile() {
         {/* Sidebar for larger screens */}
         <aside className="hidden lg:block w-64 shrink-0">
           <ClientSidebar
-            firstName="John"
-            lastName="Doe"
-            avatarUrl="/placeholder.svg?height=48&width=48"
+            firstName={clientData.firstName}
+            lastName={clientData.lastName}
+            avatarUrl={""}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
@@ -37,9 +57,9 @@ export function UserProfile() {
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0">
             <ClientSidebar
-              firstName="John"
-              lastName="Doe"
-              avatarUrl="/placeholder.svg?height=48&width=48"
+              firstName={clientData.firstName}
+              lastName={clientData.lastName}
+              avatarUrl={""}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
             />
@@ -75,7 +95,10 @@ export function UserProfile() {
               )}
             >
               {activeTab === "profile" && isEditing && (
-                <EditProfileForm setIsEditing={setIsEditing} />
+                <EditProfileForm
+                  data={clientData}
+                  setIsEditing={setIsEditing}
+                />
               )}
             </div>
 
@@ -85,7 +108,9 @@ export function UserProfile() {
                 !isEditing ? "opacity-100" : "opacity-0"
               )}
             >
-              {activeTab === "profile" && !isEditing && <ProfileInfo />}
+              {activeTab === "profile" && !isEditing && (
+                <ProfileInfo data={clientData} />
+              )}
               {activeTab === "events" && <UserEvents />}
               {activeTab === "stats" && <UserStats />}
             </div>

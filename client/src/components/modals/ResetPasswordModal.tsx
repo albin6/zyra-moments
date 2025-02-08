@@ -11,8 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useClientPasswordUpdateMutation } from "@/hooks/client/useClientPassword";
+import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
+import { useVendorPasswordUpdateMutation } from "@/hooks/vendor/useVendorPassword";
 
 const PasswordChangeSchema = Yup.object().shape({
   currentPassword: Yup.string().required("Current password is required"),
@@ -27,7 +29,10 @@ const PasswordChangeSchema = Yup.object().shape({
 });
 
 export default function ResetPasswordModal() {
+  const location = useLocation();
   const [open, setOpen] = React.useState(false);
+  const { mutate: updateClientPassword } = useClientPasswordUpdateMutation();
+  const { mutate: updateVendorPassword } = useVendorPasswordUpdateMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -37,8 +42,35 @@ export default function ResetPasswordModal() {
     },
     validationSchema: PasswordChangeSchema,
     onSubmit: (values) => {
-      console.log(values);
-      setOpen(false);
+      console.log(location.pathname);
+
+      location.pathname.startsWith("/profile")
+        ? updateClientPassword(
+            {
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword,
+            },
+            {
+              onSuccess: (data) => {
+                toast.success(data.message);
+                setOpen(false);
+              },
+              onError: (error: any) => toast.error(error.response.data.message),
+            }
+          )
+        : updateVendorPassword(
+            {
+              currentPassword: values.currentPassword,
+              newPassword: values.newPassword,
+            },
+            {
+              onSuccess: (data) => {
+                toast.success(data.message);
+                setOpen(false);
+              },
+              onError: (error: any) => toast.error(error.response.data.message),
+            }
+          );
     },
   });
 

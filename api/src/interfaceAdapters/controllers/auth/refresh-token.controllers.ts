@@ -19,7 +19,6 @@ export class RefreshTokenController implements IRefreshTokenController {
   handle(req: Request, res: Response) {
     try {
       const refreshToken = (req as CustomRequest).user.refresh_token;
-
       const newTokens = this.refreshTokenUseCase.execute(refreshToken);
       const accessTokenName = `${newTokens.role}_access_token`;
       updateCookieWithAccessToken(res, newTokens.accessToken, accessTokenName);

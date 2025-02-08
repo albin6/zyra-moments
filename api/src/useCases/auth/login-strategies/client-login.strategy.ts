@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ILoginStrategy } from "./login-strategy.interface";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
-import { IPasswordBcrypt } from "../../../frameworks/security/bcrypt.interface";
+import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { LoginUserDTO } from "../../../shared/dtos/user.dto";
@@ -11,7 +11,7 @@ import { IUserEntity } from "../../../entities/models/user.entity";
 export class ClientLoginStrategy implements ILoginStrategy {
   constructor(
     @inject("IClientRepository") private clientRepository: IClientRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IPasswordBcrypt
+    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
   ) {}
 
   async login(user: LoginUserDTO): Promise<Partial<IUserEntity>> {

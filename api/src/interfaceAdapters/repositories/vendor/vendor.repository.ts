@@ -33,7 +33,15 @@ export class VendorRepository implements IVendorRepository {
     });
   }
 
+  async findByIdForPasswordUpdate(id: any): Promise<IVendorEntity | null> {
+    return await VendorModel.findById(id);
+  }
+
   async find(): Promise<IVendorEntity[] | []> {
     return await VendorModel.find();
+  }
+
+  async findByIdAndUpdatePassword(id: any, password: string): Promise<void> {
+    await VendorModel.findByIdAndUpdate(id, { password });
   }
 }

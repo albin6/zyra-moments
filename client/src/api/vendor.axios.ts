@@ -1,5 +1,6 @@
 import axios from "axios";
 import { authAxiosInstance } from "./auth.axios";
+import { toast } from "sonner";
 
 export const vendorAxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_PRIVATE_API_URI,
@@ -28,6 +29,7 @@ vendorAxiosInstance.interceptors.response.use(
           console.error("Refresh token expired. Redirecting to login.");
           localStorage.removeItem("vendorSession");
           window.location.href = "/vendor";
+          toast.info("Please login again");
           return Promise.reject(refreshError);
         }
       }
@@ -43,6 +45,7 @@ vendorAxiosInstance.interceptors.response.use(
     ) {
       localStorage.removeItem("vendorSession");
       window.location.href = "/vendor";
+      toast.info("Please login again");
       return Promise.reject(error);
     }
 

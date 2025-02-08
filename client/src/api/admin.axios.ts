@@ -1,5 +1,6 @@
 import axios from "axios";
 import { authAxiosInstance } from "./auth.axios";
+import { toast } from "sonner";
 
 export const adminAxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_PRIVATE_API_URI,
@@ -28,6 +29,7 @@ adminAxiosInstance.interceptors.response.use(
           console.error("Refresh token expired. Redirecting to login.");
           localStorage.removeItem("adminSession");
           window.location.href = "/admin";
+          toast.info("Please login again");
           return Promise.reject(refreshError);
         }
       }
@@ -43,6 +45,7 @@ adminAxiosInstance.interceptors.response.use(
     ) {
       localStorage.removeItem("adminSession");
       window.location.href = "/admin";
+      toast.info("Please login again");
       return Promise.reject(error);
     }
 

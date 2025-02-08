@@ -31,28 +31,16 @@ export class AuthRoutes extends BaseRoute {
       veryfyOTPController.handle(req, res);
     });
 
-    this.router.post(
-      "/vendor/refresh-token",
-      verifyAuth,
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
-    );
+    this.router.post("/vendor/refresh-token", (req: Request, res: Response) => {
+      refreshTokenController.handle(req, res);
+    });
 
-    this.router.post(
-      "/client/refresh-token",
+    this.router.post("/client/refresh-token", (req: Request, res: Response) => {
+      refreshTokenController.handle(req, res);
+    });
 
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
-    );
-
-    this.router.post(
-      "/admin/refresh-token",
-      verifyAuth,
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
-    );
+    this.router.post("/admin/refresh-token", (req: Request, res: Response) => {
+      refreshTokenController.handle(req, res);
+    });
   }
 }

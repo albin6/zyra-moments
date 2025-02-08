@@ -32,7 +32,7 @@ export const config = {
   jwt: {
     ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "your-secret-key",
     REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "your-secret-key",
-    ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "15m",
-    REFRESH_EXPIRES_IN: process.env.JWT_REFRSH_EXPIRES_IN || "1h",
+    ACCESS_EXPIRES_IN: process.env.JWT_ACCESS_EXPIRES_IN || "",
+    REFRESH_EXPIRES_IN: process.env.JWT_REFRSH_EXPIRES_IN || "",
   },
 };

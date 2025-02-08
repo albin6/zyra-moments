@@ -36,6 +36,7 @@ export const ERROR_MESSAGES = {
   EMAIL_NOT_FOUND: "Email Not Found",
   FORBIDDEN:
     "Access denied. You do not have permission to access this resource.",
+  NOT_ALLOWED: "You are not allowed",
   EMAIL_EXISTS: "Email Already Exists",
   CATEGORY_EXISTS: "Category Already Exists",
   CATEGORY_NOT_FOUND: "Category Not Found",
@@ -46,6 +47,8 @@ export const ERROR_MESSAGES = {
   SERVER_ERROR: "An error occurred, please try again later.",
   VALIDATION_ERROR: "Validation error occurred.",
   MISSING_PARAMETERS: "Missing required parameters.",
+  WRONG_CURRENT_PASSWORD: "Current password is wrong",
+  SAME_CURR_NEW_PASSWORD: "Please enter a different password from current",
 };
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

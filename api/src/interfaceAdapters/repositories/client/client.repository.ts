@@ -16,4 +16,12 @@ export class ClientRepository implements IClientRepository {
   async find(): Promise<IClientEntity[] | []> {
     return await ClientModel.find();
   }
+
+  async findById(id: any): Promise<IClientEntity | null> {
+    return await ClientModel.findById(id);
+  }
+
+  async findByIdAndUpdatePassword(id: any, password: string): Promise<void> {
+    await ClientModel.findByIdAndUpdate(id, { password });
+  }
 }

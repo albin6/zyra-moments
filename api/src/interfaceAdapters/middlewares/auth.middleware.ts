@@ -48,8 +48,6 @@ export const verifyAuth = async (
   try {
     const token = extractToken(req);
 
-    console.log("token", token);
-
     if (!token) {
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
@@ -68,8 +66,8 @@ export const verifyAuth = async (
 
     if (!user || !user.id) {
       res
-        .status(HTTP_STATUS.FORBIDDEN)
-        .json({ message: ERROR_MESSAGES.FORBIDDEN });
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
       return;
     }
 
@@ -99,7 +97,7 @@ export const authorizeRole = (allowedRoles: string[]) => {
 
     if (!user || !allowedRoles.includes(user.role)) {
       res.status(HTTP_STATUS.FORBIDDEN).json({
-        message: ERROR_MESSAGES.FORBIDDEN,
+        message: ERROR_MESSAGES.NOT_ALLOWED,
         userRole: user ? user.role : "None",
       });
       return;

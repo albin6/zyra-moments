@@ -1,3 +1,4 @@
+import ResetPasswordModal from "@/components/modals/ResetPasswordModal";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { ProfileForm } from "@/components/vendor/ProfileForm";
@@ -85,6 +86,7 @@ export default function VendorProfile() {
             isEdit={isEdit}
           />
         </Card>
+        <ResetPasswordModal />
       </main>
     </div>
   );

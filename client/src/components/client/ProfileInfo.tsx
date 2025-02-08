@@ -1,36 +1,63 @@
-import { CalendarDays, MapPin, Mail, Phone, Briefcase } from "lucide-react";
+import { Client } from "@/services/client/clientService";
+import {
+  CalendarDays,
+  MapPin,
+  Mail,
+  Phone,
+  Briefcase,
+  UserCheck,
+} from "lucide-react";
+import moment from "moment";
 
-export function ProfileInfo() {
+interface ProfileInfoProps {
+  data: Client;
+}
+
+export function ProfileInfo({ data }: ProfileInfoProps) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <InfoItem icon={MapPin} label="Location" value="New York, NY" />
-        <InfoItem icon={Mail} label="Email" value="john.doe@example.com" />
-        <InfoItem icon={Phone} label="Phone" value="+1 (555) 123-4567" />
         <InfoItem
-          icon={Briefcase}
-          label="Occupation"
-          value="Event Planner at XYZ Company"
+          icon={UserCheck}
+          label="Full Name"
+          value={`${data.firstName} ${data.lastName}`}
         />
-        <InfoItem icon={CalendarDays} label="Joined" value="January 2023" />
+        <InfoItem icon={Mail} label="Email" value={data.email} />
+        <InfoItem icon={Phone} label="Phone" value={data.phoneNumber} />
+        <InfoItem icon={Briefcase} label="Status" value={data.status} />
+        <InfoItem
+          icon={CalendarDays}
+          label="Joined"
+          value={moment(data.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
+        />
+        <InfoItem icon={MapPin} label="Location" value="N/A" />
       </div>
       <div className="mt-4">
-        <h3 className="font-semibold mb-2">Bio</h3>
+        <h3 className="font-semibold mb-2">Additional Info</h3>
         <p className="text-muted-foreground">
-          Passionate event planner with 5+ years of experience. Love creating
-          unforgettable experiences for clients and attendees alike.
+          {data.masterOfCeremonies
+            ? "This client is a Master of Ceremonies."
+            : "Not a Master of Ceremonies."}
         </p>
       </div>
     </div>
   );
 }
 
-function InfoItem({ icon: Icon, label, value }) {
+function InfoItem({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: any;
+  label: string;
+  value: string;
+}) {
   return (
     <div className="flex items-center gap-2">
       <Icon className="h-4 w-4 text-muted-foreground" />
       <span className="font-medium">{label}:</span>
-      <span>{value}</span>
+      <span>{value || "N/A"}</span>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   getVendorDetailsController,
   joinCategoryController,
   logoutUserController,
+  updateVendorPasswordController,
 } from "../../di/resolver";
 import {
   authorizeRole,
@@ -38,6 +39,13 @@ export class VendorRoutes extends BaseRoute {
       (req: Request, res: Response) => {
         logoutUserController.handle(req, res);
       }
+    );
+
+    this.router.put(
+      "/vendor/update-password",
+      verifyAuth,
+      (req: Request, res: Response) =>
+        updateVendorPasswordController.handle(req, res)
     );
   }
 }

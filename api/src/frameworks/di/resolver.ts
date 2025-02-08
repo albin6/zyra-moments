@@ -12,6 +12,9 @@ import { JoinCategoryController } from "../../interfaceAdapters/controllers/vend
 import { GetAllUsersController } from "../../interfaceAdapters/controllers/admin/get-all-users.controllers";
 import { GetVendorDetailsController } from "../../interfaceAdapters/controllers/vendor/get-vendor-details.controllers";
 import { GetAllCategoryJoinRequestController } from "../../interfaceAdapters/controllers/admin/get-all-category-join-request.controllers";
+import { GetClientDetailsConrtoller } from "../../interfaceAdapters/controllers/client/get-client-details.controllers";
+import { UpdateClientPasswordController } from "../../interfaceAdapters/controllers/client/update-client-password.controllers";
+import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
 
 DependencyInjection.registerAll();
 
@@ -34,4 +37,14 @@ export const getVendorDetailsController = container.resolve(
 );
 export const getAllCategoryJoinRequestController = container.resolve(
   GetAllCategoryJoinRequestController
+);
+export const getClientDetailsController = container.resolve(
+  GetClientDetailsConrtoller
+);
+export const updateClientPasswordController = container.resolve(
+  UpdateClientPasswordController
+);
+
+export const updateVendorPasswordController = container.resolve(
+  UpdateVendorPasswordController
 );

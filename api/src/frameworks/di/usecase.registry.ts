@@ -47,6 +47,12 @@ import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/aut
 import { RevokeRefreshTokenUseCase } from "../../useCases/auth/revoke-refresh-token.usecase";
 import { IGetAllCategoryJoinRequestUseCase } from "../../entities/useCaseInterfaces/admin/get-all-category-join-request-usecase.interface";
 import { GetAllCategoryJoinRequestUseCase } from "../../useCases/admin/get-all-category-join-request.usecase";
+import { IGetClientDetailsUseCase } from "../../entities/useCaseInterfaces/client/get-client-details-usecase.interface";
+import { GetClientDetailsUseCase } from "../../useCases/client/get-client-details.usecase";
+import { IUpdateClientPasswordUseCase } from "../../entities/useCaseInterfaces/client/update-client-password-usecase.interface";
+import { UpdateClientPasswordUseCase } from "../../useCases/client/update-client-password.usecase";
+import { IUpdateVendorPasswordUseCase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
+import { UpdateVendorPasswordUseCase } from "../../useCases/vendor/update-vendor-password.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -115,6 +121,20 @@ export class UseCaseRegistry {
     container.register<IGetAllCategoryJoinRequestUseCase>(
       "IGetAllCategoryJoinRequestUseCase",
       { useClass: GetAllCategoryJoinRequestUseCase }
+    );
+
+    container.register<IGetClientDetailsUseCase>("IGetClientDetailsUseCase", {
+      useClass: GetClientDetailsUseCase,
+    });
+
+    container.register<IUpdateClientPasswordUseCase>(
+      "IUpdateClientPasswordUseCase",
+      { useClass: UpdateClientPasswordUseCase }
+    );
+
+    container.register<IUpdateVendorPasswordUseCase>(
+      "IUpdateVendorPasswordUseCase",
+      { useClass: UpdateVendorPasswordUseCase }
     );
 
     // Register Strategies

@@ -9,5 +9,7 @@ export interface IVendorRepository {
     categoryId: ObjectId
   ): Promise<IVendorEntity | null>;
   findById(id: any): Promise<IVendorEntity | null>;
+  findByIdForPasswordUpdate(id: any): Promise<IVendorEntity | null>;
   find(): Promise<IVendorEntity[] | []>;
+  findByIdAndUpdatePassword(id: any, password: string): Promise<void>;
 }

@@ -1,27 +1,23 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { clientProfileSchema } from "@/utils/profile.validator";
 import { useFormik } from "formik";
 import ResetPasswordModal from "../modals/ResetPasswordModal";
+import { Client } from "@/services/client/clientService";
 
 interface EditProfileFormProps {
   setIsEditing: (isEditing: boolean) => void;
+  data: Client;
 }
 
-export function EditProfileForm({ setIsEditing }: EditProfileFormProps) {
-  const [isResettingPassword, setIsResettingPassword] = useState(false);
-
+export function EditProfileForm({ data, setIsEditing }: EditProfileFormProps) {
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      currentPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
+      firstName: data.firstName || "",
+      lastName: data.lastName || "",
+      email: data.email || "",
+      phoneNumber: data.phoneNumber || "",
     },
     validationSchema: clientProfileSchema,
     onSubmit: (values) => {
@@ -29,8 +25,6 @@ export function EditProfileForm({ setIsEditing }: EditProfileFormProps) {
       console.log(values);
     },
   });
-
-  const handlePasswordReset = () => {};
 
   return (
     <>
