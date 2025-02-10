@@ -5,10 +5,12 @@ import {
   getVendorDetailsController,
   joinCategoryController,
   logoutUserController,
+  refreshTokenController,
   updateVendorPasswordController,
 } from "../../di/resolver";
 import {
   authorizeRole,
+  decodeToken,
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 
@@ -17,8 +19,12 @@ export class VendorRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
-    this.router.get("/vendor/categories", (req: Request, res: Response) =>
-      getAllCategoriesController.handle(req, res)
+    this.router.get(
+      "/vendor/categories",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      (req: Request, res: Response) =>
+        getAllCategoriesController.handle(req, res)
     );
 
     this.router.post("/vendor/categories/join", (req: Request, res: Response) =>
@@ -36,6 +42,7 @@ export class VendorRoutes extends BaseRoute {
     this.router.post(
       "/vendor/logout",
       verifyAuth,
+      authorizeRole(["vendor"]),
       (req: Request, res: Response) => {
         logoutUserController.handle(req, res);
       }
@@ -44,8 +51,17 @@ export class VendorRoutes extends BaseRoute {
     this.router.put(
       "/vendor/update-password",
       verifyAuth,
+      authorizeRole(["vendor"]),
       (req: Request, res: Response) =>
         updateVendorPasswordController.handle(req, res)
+    );
+
+    this.router.post(
+      "/vendor/refresh-token",
+      decodeToken,
+      (req: Request, res: Response) => {
+        refreshTokenController.handle(req, res);
+      }
     );
   }
 }

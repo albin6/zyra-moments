@@ -1,6 +1,10 @@
-import { IClientEntity } from "../../models/client.entity";
-import { IVendorEntity } from "../../models/vendor.entity";
+import { PaginatedUsers } from "../../models/paginated-users.entity";
 
 export interface IGetAllUsersUseCase {
-  execute(userType: string): Promise<IClientEntity[] | IVendorEntity[] | []>;
+  execute(
+    userType: string,
+    pageNumber: number,
+    pageSize: number,
+    searchTerm: string
+  ): Promise<PaginatedUsers>;
 }

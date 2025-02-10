@@ -1,5 +1,4 @@
 import axios from "axios";
-import { authAxiosInstance } from "./auth.axios";
 import { toast } from "sonner";
 
 export const vendorAxiosInstance = axios.create({
@@ -20,7 +19,7 @@ vendorAxiosInstance.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          await authAxiosInstance.post("/vendor/refresh-token");
+          await vendorAxiosInstance.post("/_ve/vendor/refresh-token");
           isRefreshing = false;
 
           return vendorAxiosInstance(originalRequest);

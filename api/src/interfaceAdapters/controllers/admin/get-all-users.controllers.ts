@@ -15,10 +15,28 @@ export class GetAllUsersController implements IGetAllUsersController {
 
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const userType = req.query.userType as string;
-      const users = await this.getAllUsersUseCase.execute(userType);
+      const { page = 1, limit = 10, searchTerm = "", userType } = req.query;
 
-      res.status(HTTP_STATUS.OK).json({ success: true, users });
+      const pageNumber = Number(page);
+      const pageSize = Number(limit);
+      const userTypeString = typeof userType === "string" ? userType : "client";
+      const searchTermString = typeof searchTerm === "string" ? searchTerm : "";
+
+      const { user, total } = await this.getAllUsersUseCase.execute(
+        userTypeString,
+        pageNumber,
+        pageSize,
+        searchTermString
+      );
+
+      res
+        .status(HTTP_STATUS.OK)
+        .json({
+          success: true,
+          users: user,
+          totalPages: total,
+          currentPage: pageNumber,
+        });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

@@ -53,4 +53,13 @@ export class JwtService implements ITokenService {
       return null;
     }
   }
+
+  decodeAccessToken(token: string): JwtPayload | null {
+    try {
+      return jwt.decode(token) as JwtPayload;
+    } catch (error) {
+      console.error("Refresh token verification failed:", error);
+      return null;
+    }
+  }
 }

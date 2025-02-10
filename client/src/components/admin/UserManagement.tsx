@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Pagination from "../Pagination";
+import { useAllUsersQuery, UserType } from "@/hooks/admin/useAllUsers";
+import { Spinner } from "../ui/spinner";
+import { getAllUsers } from "@/services/admin/adminService";
 
 export interface IClient {
   _id: string;
@@ -58,16 +61,16 @@ interface Vendor {
 export type VendorList = Vendor[];
 
 export default function UserManagement() {
-  const [activeTab, setActiveTab] = useState("client");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("client");
   const [filter, setFilter] = useState("");
 
   const [clients, setClients] = useState<ClientsData>();
   const [vendors, setVendors] = useState<VendorList>();
 
-  // Pagination state (you'd implement actual pagination logic)
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 2;
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -77,6 +80,39 @@ export default function UserManagement() {
     setFilter(value);
   };
 
+  const { data, isLoading } = useAllUsersQuery<ClientsData | VendorList>(
+    getAllUsers,
+    page,
+    limit,
+    searchTerm,
+    activeTab as UserType
+  );
+
+  useEffect(() => {
+    if (!data) return;
+
+    if (activeTab === "client") {
+      console.log("client tab");
+      setClients(data.users as ClientsData);
+      setTotalPages(data.totalPages);
+    } else if (activeTab === "vendor") {
+      setVendors(data.users as VendorList);
+      setTotalPages(data.totalPages);
+    }
+  }, [data, activeTab]);
+
+  // function isClientsData(users: any): users is ClientsData {
+  //   return users && {} in users;
+  // }
+
+  // function isVendorList(users: any): users is VendorList {
+  //   return users && Array.isArray(users);
+  // }
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   const renderClientTable = () => (
     <Table>
       <TableHeader>
@@ -84,7 +120,8 @@ export default function UserManagement() {
           <TableHead>Name</TableHead>
           <TableHead>Email</TableHead>
           <TableHead>Phone</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead className="text-center">Master Of Cerimonies</TableHead>
+          <TableHead className="text-center">Status</TableHead>
           <TableHead className="text-center">Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -92,10 +129,13 @@ export default function UserManagement() {
         {clients &&
           clients.map((client) => (
             <TableRow key={client.clientId}>
-              <TableCell>{client.firstName + client.lastName}</TableCell>
+              <TableCell>{client.firstName + " " + client.lastName}</TableCell>
               <TableCell>{client.email}</TableCell>
               <TableCell>{client.phoneNumber}</TableCell>
-              <TableCell>{client.status}</TableCell>
+              <TableCell className="text-center">
+                {client.masterOfCeremonies ? "Yes" : "No"}
+              </TableCell>
+              <TableCell className="text-center">{client.status}</TableCell>
               <TableCell className="text-center">
                 {/* <Button variant="outline" size="sm" className="mr-2">
                   Edit
@@ -115,6 +155,7 @@ export default function UserManagement() {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
           <TableHead>Service</TableHead>
           <TableHead>Phone</TableHead>
           <TableHead className="text-center">Actions</TableHead>
@@ -124,8 +165,9 @@ export default function UserManagement() {
         {vendors &&
           vendors.map((vendor) => (
             <TableRow key={vendor._id}>
-              <TableCell>{vendor.firstName + vendor.lastName}</TableCell>
-              <TableCell>{vendor.category}</TableCell>
+              <TableCell>{vendor.firstName + " " + vendor.lastName}</TableCell>
+              <TableCell>{vendor.email}</TableCell>
+              <TableCell>{vendor.category ?? "Not in Category"}</TableCell>
               <TableCell>{vendor.phoneNumber}</TableCell>
               <TableCell className="text-center">
                 {/* <Button variant="outline" size="sm" className="mr-2">
@@ -144,7 +186,11 @@ export default function UserManagement() {
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-3xl font-bold mb-6">User Management</h1>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value)}
+        className="w-full"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="client">Clients</TabsTrigger>
           <TabsTrigger value="vendor">Vendors</TabsTrigger>
@@ -185,9 +231,9 @@ export default function UserManagement() {
       </Tabs>
       <div className="mt-4 flex justify-center">
         <Pagination
-          currentPage={currentPage}
-          totalPages={1} // Replace with actual total pages calculation
-          onPageChange={setCurrentPage}
+          currentPage={page}
+          totalPages={Math.ceil(totalPages / limit)}
+          onPageChange={setPage}
         />
       </div>
     </div>

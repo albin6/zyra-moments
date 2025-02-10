@@ -7,7 +7,6 @@ import {
   sendEmailController,
   veryfyOTPController,
 } from "../../di/resolver";
-import { verifyAuth } from "../../../interfaceAdapters/middlewares/auth.middleware";
 
 export class AuthRoutes extends BaseRoute {
   constructor() {
@@ -29,18 +28,6 @@ export class AuthRoutes extends BaseRoute {
 
     this.router.post("/verify-otp", (req: Request, res: Response) => {
       veryfyOTPController.handle(req, res);
-    });
-
-    this.router.post("/vendor/refresh-token", (req: Request, res: Response) => {
-      refreshTokenController.handle(req, res);
-    });
-
-    this.router.post("/client/refresh-token", (req: Request, res: Response) => {
-      refreshTokenController.handle(req, res);
-    });
-
-    this.router.post("/admin/refresh-token", (req: Request, res: Response) => {
-      refreshTokenController.handle(req, res);
     });
   }
 }

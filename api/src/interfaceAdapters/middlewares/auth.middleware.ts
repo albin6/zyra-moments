@@ -49,6 +49,7 @@ export const verifyAuth = async (
     const token = extractToken(req);
 
     if (!token) {
+      console.log("no token");
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
@@ -56,7 +57,10 @@ export const verifyAuth = async (
     }
 
     if (await isBlacklisted(token.access_token)) {
-      res.status(403).json({ message: "Token is blacklisted" });
+      console.log("token is black listed is worked");
+      res
+        .status(HTTP_STATUS.FORBIDDEN)
+        .json({ message: "Token is blacklisted" });
       return;
     }
 
@@ -79,11 +83,14 @@ export const verifyAuth = async (
     next();
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
+      console.log("token is expired is worked");
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGES.TOKEN_EXPIRED });
       return;
     }
+    console.log("token is invalid is worked");
+
     res
       .status(HTTP_STATUS.UNAUTHORIZED)
       .json({ message: ERROR_MESSAGES.INVALID_TOKEN });
@@ -91,11 +98,47 @@ export const verifyAuth = async (
   }
 };
 
+export const decodeToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = extractToken(req);
+    if (!token) {
+      console.log("no token");
+      res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
+      return;
+    }
+    if (await isBlacklisted(token.access_token)) {
+      console.log("token is black listed is worked");
+      res
+        .status(HTTP_STATUS.FORBIDDEN)
+        .json({ message: "Token is blacklisted" });
+      return;
+    }
+
+    const user = tokenService.decodeAccessToken(token?.access_token);
+    console.log("decoded", user);
+    (req as CustomRequest).user = {
+      id: user?.id,
+      email: user?.email,
+      role: user?.role,
+      access_token: token.access_token,
+      refresh_token: token.refresh_token,
+    };
+    next();
+  } catch (error) {}
+};
+
 export const authorizeRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as CustomRequest).user;
 
     if (!user || !allowedRoles.includes(user.role)) {
+      console.log("role not allowed");
       res.status(HTTP_STATUS.FORBIDDEN).json({
         message: ERROR_MESSAGES.NOT_ALLOWED,
         userRole: user ? user.role : "None",

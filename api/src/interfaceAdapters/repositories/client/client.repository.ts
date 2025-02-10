@@ -13,8 +13,20 @@ export class ClientRepository implements IClientRepository {
     return await ClientModel.findOne({ email });
   }
 
-  async find(): Promise<IClientEntity[] | []> {
-    return await ClientModel.find();
+  async find(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<{ user: IClientEntity[] | []; total: number }> {
+    const [user, total] = await Promise.all([
+      ClientModel.find(filter).skip(skip).limit(limit),
+      ClientModel.countDocuments(filter),
+    ]);
+
+    return {
+      user,
+      total,
+    };
   }
 
   async findById(id: any): Promise<IClientEntity | null> {

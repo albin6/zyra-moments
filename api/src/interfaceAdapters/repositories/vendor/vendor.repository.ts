@@ -37,8 +37,20 @@ export class VendorRepository implements IVendorRepository {
     return await VendorModel.findById(id);
   }
 
-  async find(): Promise<IVendorEntity[] | []> {
-    return await VendorModel.find();
+  async find(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<{ user: IVendorEntity[] | []; total: number }> {
+    const [user, total] = await Promise.all([
+      VendorModel.find(filter).skip(skip).limit(limit),
+      VendorModel.countDocuments(filter),
+    ]);
+
+    return {
+      user,
+      total,
+    };
   }
 
   async findByIdAndUpdatePassword(id: any, password: string): Promise<void> {

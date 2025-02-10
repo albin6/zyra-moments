@@ -1,5 +1,4 @@
 import axios from "axios";
-import { authAxiosInstance } from "./auth.axios";
 import { toast } from "sonner";
 
 export const adminAxiosInstance = axios.create({
@@ -20,7 +19,7 @@ adminAxiosInstance.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          await authAxiosInstance.post("/admin/refresh-token");
+          await adminAxiosInstance.post("/_ad/admin/refresh-token");
           isRefreshing = false;
 
           return adminAxiosInstance(originalRequest);
