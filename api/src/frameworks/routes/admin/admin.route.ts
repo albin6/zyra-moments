@@ -5,6 +5,7 @@ import {
   getAllUsersController,
   logoutUserController,
   refreshTokenController,
+  updateUserStatusController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
 import {
@@ -39,6 +40,14 @@ export class AdminRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) => getAllUsersController.handle(req, res)
+    );
+
+    this.router.patch(
+      "/admin/user-status",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        updateUserStatusController.handle(req, res)
     );
 
     this.router.post(

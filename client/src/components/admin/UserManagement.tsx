@@ -22,6 +22,8 @@ import Pagination from "../Pagination";
 import { useAllUsersQuery, UserType } from "@/hooks/admin/useAllUsers";
 import { Spinner } from "../ui/spinner";
 import { getAllUsers } from "@/services/admin/adminService";
+import { useUpdateUserStatusMutation } from "@/hooks/admin/useUpdateUserStatus";
+import { toast } from "sonner";
 
 export interface IClient {
   _id: string;
@@ -72,6 +74,16 @@ export default function UserManagement() {
   const [totalPages, setTotalPages] = useState(0);
   const limit = 2;
 
+  const { data, isLoading } = useAllUsersQuery<ClientsData | VendorList>(
+    getAllUsers,
+    page,
+    limit,
+    searchTerm,
+    activeTab as UserType
+  );
+
+  const { mutate: updateUserStatus } = useUpdateUserStatusMutation();
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -80,13 +92,15 @@ export default function UserManagement() {
     setFilter(value);
   };
 
-  const { data, isLoading } = useAllUsersQuery<ClientsData | VendorList>(
-    getAllUsers,
-    page,
-    limit,
-    searchTerm,
-    activeTab as UserType
-  );
+  const handleBlockUser = (userType: string, userId: any) => {
+    updateUserStatus(
+      { userType, userId },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
 
   useEffect(() => {
     if (!data) return;
@@ -140,8 +154,12 @@ export default function UserManagement() {
                 {/* <Button variant="outline" size="sm" className="mr-2">
                   Edit
                 </Button> */}
-                <Button variant="destructive" size="sm">
-                  Block
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleBlockUser("client", client._id)}
+                >
+                  {client.status === "active" ? "Block" : "UnBlock"}
                 </Button>
               </TableCell>
             </TableRow>
@@ -173,8 +191,12 @@ export default function UserManagement() {
                 {/* <Button variant="outline" size="sm" className="mr-2">
                   Edit
                 </Button> */}
-                <Button variant="destructive" size="sm">
-                  Block
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleBlockUser("vendor", vendor._id)}
+                >
+                  {vendor.status === "active" ? "Block" : "UnBlock"}
                 </Button>
               </TableCell>
             </TableRow>

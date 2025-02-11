@@ -13,6 +13,7 @@ import { GetAllCategoryJoinRequestController } from "../../interfaceAdapters/con
 import { GetClientDetailsConrtoller } from "../../interfaceAdapters/controllers/client/get-client-details.controllers";
 import { UpdateClientPasswordController } from "../../interfaceAdapters/controllers/client/update-client-password.controllers";
 import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
+import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/admin/update-user-status.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -70,6 +71,10 @@ export class ControllerRegistry {
 
     container.register("UpdateVendorPasswordController", {
       useClass: UpdateVendorPasswordController,
+    });
+
+    container.register("UpdateUserStatusController", {
+      useClass: UpdateUserStatusController,
     });
   }
 }

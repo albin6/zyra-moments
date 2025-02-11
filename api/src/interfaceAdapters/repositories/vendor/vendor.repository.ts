@@ -56,4 +56,12 @@ export class VendorRepository implements IVendorRepository {
   async findByIdAndUpdatePassword(id: any, password: string): Promise<void> {
     await VendorModel.findByIdAndUpdate(id, { password });
   }
+
+  async findByIdAndUpdateStatus(id: any, status: string): Promise<void> {
+    await VendorModel.findByIdAndUpdate(id, {
+      $set: {
+        status: status,
+      },
+    });
+  }
 }

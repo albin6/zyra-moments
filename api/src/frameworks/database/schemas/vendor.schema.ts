@@ -17,7 +17,7 @@ export const VendorSchema = new Schema<IVendorModel>(
     place: { type: String },
     averageRating: { type: Number },
     totalReviews: { type: Number },
-    status: { type: String, default: true },
+    status: { type: String, default: "active" },
   },
   {
     timestamps: true,

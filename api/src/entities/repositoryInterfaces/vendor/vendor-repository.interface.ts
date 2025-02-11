@@ -22,4 +22,6 @@ export interface IVendorRepository {
   ): Promise<{ user: IVendorEntity[] | []; total: number }>;
 
   findByIdAndUpdatePassword(id: any, password: string): Promise<void>;
+
+  findByIdAndUpdateStatus(id: any, status: string): Promise<void>;
 }

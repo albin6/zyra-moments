@@ -14,4 +14,6 @@ export interface IClientRepository {
   findById(id: any): Promise<IClientEntity | null>;
 
   findByIdAndUpdatePassword(id: any, password: string): Promise<void>;
+
+  findByIdAndUpdateStatus(id: any, status: string): Promise<void>;
 }

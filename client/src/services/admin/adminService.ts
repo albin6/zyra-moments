@@ -21,3 +21,20 @@ export const getAllUsers = async ({
   });
   return response.data;
 };
+
+export const updateUserStatus = async (data: {
+  userType: string;
+  userId: any;
+}) => {
+  const response = await adminAxiosInstance.patch(
+    "_ad/admin/user-status",
+    {},
+    {
+      params: {
+        userType: data.userType,
+        userId: data.userId,
+      },
+    }
+  );
+  return response.data;
+};

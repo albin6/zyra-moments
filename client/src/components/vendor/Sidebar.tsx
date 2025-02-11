@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { vendorLogout } from "@/store/slices/vendorSlice";
 import { toast } from "sonner";
 import { logoutVendor } from "@/services/auth/authService";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   firstName: string;
@@ -15,8 +16,11 @@ interface SidebarProps {
 }
 
 export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
+  const navigate = useNavigate();
   const { mutate: logoutReq } = useLogout(logoutVendor);
   const dispatch = useDispatch();
+
+  const location = useLocation();
 
   const logoutUser = () => {
     logoutReq(undefined, {
@@ -47,15 +51,28 @@ export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
         <nav className="flex-1 space-y-2">
           <Button
             variant="ghost"
-            className="w-full justify-center font-normal bg-accent"
+            className={`w-full justify-center font-normal ${
+              location.pathname === "/vendor/profile" && "bg-accent"
+            }`}
+            onClick={() => navigate("/vendor/profile")}
           >
             My Profile
           </Button>
-          <Button variant="ghost" className="w-full justify-center font-normal">
+          <Button
+            variant="ghost"
+            className="w-full justify-center font-normal"
+            onClick={() => navigate("/vendor/work-sample/new")}
+          >
             Services
           </Button>
-          <Button variant="ghost" className="w-full justify-center font-normal">
-            Your Events
+          <Button
+            variant="ghost"
+            className={`w-full justify-center font-normal ${
+              location.pathname === "/vendor/work-sample" && "bg-accent"
+            }`}
+            onClick={() => navigate("/vendor/work-sample")}
+          >
+            Work Samples
           </Button>
           <Button variant="ghost" className="w-full justify-center font-normal">
             Payments

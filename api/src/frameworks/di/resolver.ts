@@ -15,6 +15,7 @@ import { GetAllCategoryJoinRequestController } from "../../interfaceAdapters/con
 import { GetClientDetailsConrtoller } from "../../interfaceAdapters/controllers/client/get-client-details.controllers";
 import { UpdateClientPasswordController } from "../../interfaceAdapters/controllers/client/update-client-password.controllers";
 import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
+import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/admin/update-user-status.controllers";
 
 DependencyInjection.registerAll();
 
@@ -47,4 +48,7 @@ export const updateClientPasswordController = container.resolve(
 
 export const updateVendorPasswordController = container.resolve(
   UpdateVendorPasswordController
+);
+export const updateUserStatusController = container.resolve(
+  UpdateUserStatusController
 );

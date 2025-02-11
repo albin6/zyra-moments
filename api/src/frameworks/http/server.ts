@@ -26,7 +26,7 @@ export class Server {
     this._app.use(
       cors({
         origin: config.cors.ALLOWED_ORIGIN,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: ["Authorization", "Content-Type"],
         credentials: true,
       })
