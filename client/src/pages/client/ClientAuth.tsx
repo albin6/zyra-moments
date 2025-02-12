@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AuthCarousel } from "@/components/carousel/AuthCarousel";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaGoogle, FaGithub } from "react-icons/fa";
 import { useRegisterMutation } from "@/hooks/auth/useRegister";
 import { toast } from "sonner";
 import { User } from "@/types/User";

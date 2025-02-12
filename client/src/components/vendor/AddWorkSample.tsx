@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,10 +7,26 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
 import { AddWorkSampleHeader } from "./AddWorkSampleHeader";
+import { WorkSampleImageModal } from "../modals/WorkSampleImageModal";
+import { Spinner } from "../ui/spinner";
+
+// Replace with your actual Cloudinary cloud name and upload preset
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env
+  .VITE_CLOUDINARY_UPLOAD_PRESET_NAME;
+
+interface UploadedImage {
+  public_id: string;
+  secure_url: string;
+}
 
 export function AddWorkSample() {
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = React.useState<UploadedImage[]>(
+    []
+  );
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = React.useState(false);
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -19,17 +35,49 @@ export function AddWorkSample() {
     },
     maxFiles: 5,
     onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles);
+      setUploadingImage(true);
+      uploadToCloudinary(acceptedFiles);
     },
   });
+
+  const uploadToCloudinary = async (filesToUpload: File[]) => {
+    const uploadPromises = filesToUpload.map((file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      return fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => ({
+          public_id: data.public_id,
+          secure_url: data.secure_url,
+        }));
+    });
+
+    const newUploadedImages = await Promise.all(uploadPromises);
+    setUploadedImages((prev) => [...prev, ...newUploadedImages]);
+    setUploadingImage(false);
+  };
+
+  const removeImage = (publicId: string) => {
+    setUploadedImages((prev) =>
+      prev.filter((img) => img.public_id !== publicId)
+    );
+  };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    files.forEach((file) => {
-      formData.append("files", file);
+    uploadedImages.forEach((image) => {
+      formData.append("images", image.public_id);
     });
 
     try {
@@ -92,12 +140,27 @@ export function AddWorkSample() {
               (JPG, PNG or GIF, max 5 files)
             </p>
           </div>
-          {files.length > 0 && (
-            <ul className="text-sm text-muted-foreground mt-2">
-              {files.map((file) => (
-                <li key={file.name}>{file.name}</li>
+          {uploadingImage && <Spinner />}
+          {uploadedImages.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {uploadedImages.map((image) => (
+                <div key={image.public_id} className="relative group">
+                  <img
+                    src={image.secure_url || "/placeholder.svg"}
+                    alt="Uploaded preview"
+                    className="w-full h-24 object-cover rounded-lg"
+                    onClick={() => setSelectedImage(image.secure_url)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(image.public_id)}
+                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
 
@@ -120,6 +183,12 @@ export function AddWorkSample() {
           </Button>
         </div>
       </form>
+      {selectedImage && (
+        <WorkSampleImageModal
+          imageUrl={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </div>
   );
 }
