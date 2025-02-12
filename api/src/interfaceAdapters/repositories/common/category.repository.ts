@@ -18,4 +18,26 @@ export class CategoryRespository implements ICategoryRepository {
       title: { $regex: new RegExp(`^${title.trim()}$`, "i") },
     });
   }
+
+  async findPaginatedCategory(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<{
+    categories: Pick<ICategoryEntity, "_id" | "title" | "status">[] | [];
+    total: number;
+  }> {
+    const [categories, total] = await Promise.all([
+      CategoryModel.find(filter)
+        .select("status title _id")
+        .skip(skip)
+        .limit(limit),
+      CategoryModel.countDocuments(filter),
+    ]);
+
+    return {
+      categories,
+      total,
+    };
+  }
 }

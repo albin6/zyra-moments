@@ -224,7 +224,7 @@ export default function UserManagement() {
             onChange={handleSearch}
             className="max-w-sm"
           />
-          <Select value={filter} onValueChange={handleFilter}>
+          {/* <Select value={filter} onValueChange={handleFilter}>
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by..." />
             </SelectTrigger>
@@ -242,7 +242,7 @@ export default function UserManagement() {
                 </>
               )}
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
         <TabsContent value="client" className="overflow-x-auto">
           {renderClientTable()}
@@ -254,7 +254,7 @@ export default function UserManagement() {
       <div className="mt-4 flex justify-center">
         <Pagination
           currentPage={page}
-          totalPages={Math.ceil(totalPages / limit)}
+          totalPages={totalPages}
           onPageChange={setPage}
         />
       </div>

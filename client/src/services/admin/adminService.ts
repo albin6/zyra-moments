@@ -38,3 +38,22 @@ export const updateUserStatus = async (data: {
   );
   return response.data;
 };
+
+export const getAllCategories = async ({
+  page = 1,
+  limit = 10,
+  search = "",
+}: {
+  page: number;
+  limit: number;
+  search: string;
+}) => {
+  const response = await adminAxiosInstance.get("/_ad/admin/categories", {
+    params: {
+      page,
+      limit,
+      search,
+    },
+  });
+  return response.data;
+};

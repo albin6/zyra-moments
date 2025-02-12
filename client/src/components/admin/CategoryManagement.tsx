@@ -25,27 +25,38 @@ import Pagination from "../Pagination";
 import { toast } from "sonner";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-const ITEMS_PER_PAGE = 10;
+import {
+  CategoryType,
+  useAllCategoryAdminQuery,
+} from "@/hooks/admin/useAllCategory";
+import { getAllCategories } from "@/services/admin/adminService";
+import { Spinner } from "../ui/spinner";
 
 const CategoryManagement: React.FC = () => {
-  // const [categories, setCategories] = useState(mockCategories);
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryType[] | null>(null);
 
-  const totalPages = Math.ceil(categories.length / ITEMS_PER_PAGE);
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentCategories = categories.slice(indexOfFirstItem, indexOfLastItem);
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 2;
 
   const handleAddCategory = (newCategory: string) => {};
 
   const updateCategoryStatus = (id: string) => {};
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+  const { data, isLoading } = useAllCategoryAdminQuery(
+    getAllCategories,
+    page,
+    limit,
+    searchTerm
+  );
+
+  useEffect(() => {
+    if (!data) return;
+    setCategories(data.categories);
+    setTotalPages(data.totalPages);
+  }, [data]);
 
   const formik = useFormik({
     initialValues: {
@@ -61,9 +72,17 @@ const CategoryManagement: React.FC = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       handleAddCategory(values.categoryName);
-      resetForm(); // Clear the input after submission
+      resetForm();
     },
   });
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!categories) {
+    return null;
+  }
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
@@ -148,18 +167,22 @@ const CategoryManagement: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Category ID</TableHead>
                 <TableHead>Category Name</TableHead>
-                <TableHead>Category Id</TableHead>
+                <TableHead>Category Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            {/* <TableBody>
-              {currentCategories.map((category) => (
-                <TableRow key={category.categoryId}>
+            <TableBody>
+              {categories.map((category, index) => (
+                <TableRow key={category._id}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell className="font-medium">
                     {category.title}
                   </TableCell>
-                  <TableCell>{category.categoryId}</TableCell>
+                  <TableCell>
+                    {category.status ? "inactive" : "active"}
+                  </TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"
@@ -172,13 +195,13 @@ const CategoryManagement: React.FC = () => {
                   </TableCell>
                 </TableRow>
               ))}
-            </TableBody> */}
+            </TableBody>
           </Table>
           {/* </ScrollArea> */}
           <Pagination
-            currentPage={currentPage}
+            currentPage={page}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={setPage}
           />
         </CardContent>
       </Card>

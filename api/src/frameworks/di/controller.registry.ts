@@ -14,6 +14,7 @@ import { GetClientDetailsConrtoller } from "../../interfaceAdapters/controllers/
 import { UpdateClientPasswordController } from "../../interfaceAdapters/controllers/client/update-client-password.controllers";
 import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
 import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/admin/update-user-status.controllers";
+import { GetAllPaginatedCategoryController } from "../../interfaceAdapters/controllers/admin/get-all-paginated-category.controllers";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -75,6 +76,10 @@ export class ControllerRegistry {
 
     container.register("UpdateUserStatusController", {
       useClass: UpdateUserStatusController,
+    });
+
+    container.register("GetAllPaginatedCategoryController", {
+      useClass: GetAllPaginatedCategoryController,
     });
   }
 }

@@ -16,6 +16,7 @@ import { GetClientDetailsConrtoller } from "../../interfaceAdapters/controllers/
 import { UpdateClientPasswordController } from "../../interfaceAdapters/controllers/client/update-client-password.controllers";
 import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
 import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/admin/update-user-status.controllers";
+import { GetAllPaginatedCategoryController } from "../../interfaceAdapters/controllers/admin/get-all-paginated-category.controllers";
 
 DependencyInjection.registerAll();
 
@@ -51,4 +52,7 @@ export const updateVendorPasswordController = container.resolve(
 );
 export const updateUserStatusController = container.resolve(
   UpdateUserStatusController
+);
+export const getAllPaginatedCategoryController = container.resolve(
+  GetAllPaginatedCategoryController
 );

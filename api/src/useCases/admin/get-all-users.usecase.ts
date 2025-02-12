@@ -31,8 +31,11 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
         { email: { $regex: searchTerm, $options: "i" } },
       ];
     }
-    const skip = (pageNumber - 1) * pageSize;
-    const limit = pageSize;
+
+    const validPageNumber = Math.max(1, pageNumber || 1);
+    const validPageSize = Math.max(1, pageSize || 10);
+    const skip = (validPageNumber - 1) * validPageSize;
+    const limit = validPageSize;
 
     if (userType === "client") {
       const { user, total } = await this.clientRepository.find(
@@ -43,7 +46,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
 
       const response: PaginatedUsers = {
         user,
-        total,
+        total: Math.ceil(total / validPageSize),
       };
 
       return response;

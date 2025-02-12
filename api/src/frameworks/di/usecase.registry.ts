@@ -55,6 +55,8 @@ import { IUpdateVendorPasswordUseCase } from "../../entities/useCaseInterfaces/v
 import { UpdateVendorPasswordUseCase } from "../../useCases/vendor/update-vendor-password.usecase";
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
 import { UpdateUserStatusUseCase } from "../../useCases/admin/update-user-status.usecase";
+import { IGetAllPaginatedCategoryUseCase } from "../../entities/useCaseInterfaces/admin/get-all-paginated-category-usecase.interface";
+import { GetAllPaginatedCategoryUseCase } from "../../useCases/admin/GetAllPaginatedCategoryUseCase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -142,6 +144,11 @@ export class UseCaseRegistry {
     container.register<IUpdateUserStatusUseCase>("IUpdateUserStatusUseCase", {
       useClass: UpdateUserStatusUseCase,
     });
+
+    container.register<IGetAllPaginatedCategoryUseCase>(
+      "IGetAllPaginatedCategoryUseCase",
+      { useClass: GetAllPaginatedCategoryUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
