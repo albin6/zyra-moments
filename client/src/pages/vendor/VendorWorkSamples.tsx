@@ -1,65 +1,63 @@
-import { Card } from "@/components/ui/card";
+import { Vendor } from "@/components/layouts/VendorLayout";
 import { Spinner } from "@/components/ui/spinner";
-import { Sidebar } from "@/components/vendor/Sidebar";
 import { WorkSampleList } from "@/components/vendor/WorkSampleList";
-import { useVendorProfileQuery } from "@/hooks/vendor/useVendorProfile";
-import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
-interface Vendor {
-  _id: string;
-  vendorId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  role: string;
-  phoneNumber: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-  category: {
-    _id: string;
-    title: string;
-  };
+const items = [
+  {
+    id: "1",
+    title: "Professional DSLR Camera",
+    description:
+      "High-end digital camera with 24.2MP full-frame sensor, 4K video capabilities, and advanced autofocus system. Perfect for professional photography and videography.",
+    image:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: "2",
+    title: "Wireless Noise-Cancelling Headphones",
+    description:
+      "Premium over-ear headphones featuring active noise cancellation, 30-hour battery life, and crystal-clear sound quality for an immersive audio experience.",
+    image:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: "3",
+    title: "Smart Fitness Watch",
+    description:
+      "Advanced fitness tracker with heart rate monitoring, GPS, sleep tracking, and waterproof design. Connects seamlessly with your smartphone for notifications.",
+    image:
+      "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: "4",
+    title: "Portable Power Bank",
+    description:
+      "20,000mAh capacity power bank with fast charging capability, dual USB ports, and LED display. Compact design perfect for travel and emergency backup power.",
+    image:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: "5",
+    title: "Wireless Gaming Mouse",
+    description:
+      "High-performance gaming mouse with RGB lighting, programmable buttons, and ultra-precise optical sensor. Features low-latency wireless connection and ergonomic design.",
+    image:
+      "https://images.unsplash.com/photo-1527814050087-3793815479db?q=80&w=1000&auto=format&fit=crop",
+  },
+];
+
+interface VendorContextType {
+  vendorData: Vendor | null;
 }
 
 export default function VendorWorkSamples() {
-  const [vendorData, setVendorData] = useState<Vendor | null>(null);
+  const { vendorData } = useOutletContext<VendorContextType>();
 
-  const { data, isLoading } = useVendorProfileQuery();
-
-  useEffect(() => {
-    if (data) {
-      setVendorData(data.vendor);
-    }
-  }, [data]);
-
-  if (isLoading) {
+  if (!vendorData) {
     return <Spinner />;
   }
 
-  if (!vendorData) {
-    return null; // or some loading/error state
-  }
-
   return (
-    <div className="container mx-auto flex p-6 justify-between bg-background">
-      <Sidebar
-        firstName={vendorData?.firstName}
-        lastName={vendorData?.lastName}
-        avatarUrl={""}
-      />
-
-      <main className="container">
-        <Card className="max-w-6xl ms-auto">
-          <WorkSampleList
-            items={[]}
-            onView={(id: any) => {}}
-            isLoading={true}
-          />
-        </Card>
-      </main>
-    </div>
+    <WorkSampleList items={items} onView={(id: any) => {}} isLoading={false} />
   );
 }

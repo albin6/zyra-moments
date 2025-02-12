@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { WorkSampleHeader } from "./WorkSampleHeader";
 
 interface WorkSampleItem {
   id: string;
@@ -32,6 +33,7 @@ export function WorkSampleList({
 
   return (
     <div className="space-y-4 p-4">
+      <WorkSampleHeader />
       {items.map((item) => (
         <Card
           key={item.id}

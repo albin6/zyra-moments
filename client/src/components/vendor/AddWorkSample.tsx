@@ -1,21 +1,17 @@
 import * as React from "react";
 import { Upload } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "react-router-dom";
+import { AddWorkSampleHeader } from "./AddWorkSampleHeader";
 
-interface AddWorkSampleProps {
-  onSubmit: (data: FormData) => Promise<void>;
-  onCancel: () => void;
-}
-
-export function AddWorkSample({ onSubmit, onCancel }: AddWorkSampleProps) {
+export function AddWorkSample() {
   const [files, setFiles] = React.useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const navigate = useNavigate();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -37,6 +33,9 @@ export function AddWorkSample({ onSubmit, onCancel }: AddWorkSampleProps) {
     });
 
     try {
+      async function onSubmit(formData: FormData) {
+        console.log(formData);
+      }
       await onSubmit(formData);
     } catch (error) {
       console.error("Error:", error);
@@ -46,7 +45,8 @@ export function AddWorkSample({ onSubmit, onCancel }: AddWorkSampleProps) {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto p-6">
+    <div className="space-y-4 p-4">
+      <AddWorkSampleHeader />
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
@@ -105,7 +105,7 @@ export function AddWorkSample({ onSubmit, onCancel }: AddWorkSampleProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={onCancel}
+            onClick={() => navigate("/vendor/work-sample")}
             disabled={isSubmitting}
             className="w-full sm:w-auto"
           >
@@ -120,6 +120,6 @@ export function AddWorkSample({ onSubmit, onCancel }: AddWorkSampleProps) {
           </Button>
         </div>
       </form>
-    </Card>
+    </div>
   );
 }

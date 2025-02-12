@@ -58,11 +58,7 @@ export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
           >
             My Profile
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-center font-normal"
-            onClick={() => navigate("/vendor/work-sample/new")}
-          >
+          <Button variant="ghost" className="w-full justify-center font-normal">
             Services
           </Button>
           <Button
