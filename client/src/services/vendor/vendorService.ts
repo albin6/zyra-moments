@@ -1,6 +1,7 @@
 import { vendorAxiosInstance } from "@/api/vendor.axios";
 import { UpdatePasswordData } from "@/hooks/client/useClientPassword";
 import { AxiosResponse } from "../auth/authService";
+import { WorkSample } from "@/types/WorkSample";
 
 export const getVendorDetails = async () => {
   const response = await vendorAxiosInstance.get("/_ve/vendor/profile");
@@ -17,6 +18,14 @@ export const updateVendorPassword = async ({
       currentPassword,
       newPassword,
     }
+  );
+  return response.data;
+};
+
+export const createNewWorkSample = async (data: WorkSample) => {
+  const response = await vendorAxiosInstance.post(
+    "/_ve/vendor/work-sample",
+    data
   );
   return response.data;
 };

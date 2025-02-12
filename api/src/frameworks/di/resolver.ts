@@ -17,6 +17,7 @@ import { UpdateClientPasswordController } from "../../interfaceAdapters/controll
 import { UpdateVendorPasswordController } from "../../interfaceAdapters/controllers/vendor/update-vendor-password.controllers";
 import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/admin/update-user-status.controllers";
 import { GetAllPaginatedCategoryController } from "../../interfaceAdapters/controllers/admin/get-all-paginated-category.controllers";
+import { CreateWorkSampleController } from "../../interfaceAdapters/controllers/vendor/create-work-sample.controllers";
 
 DependencyInjection.registerAll();
 
@@ -55,4 +56,7 @@ export const updateUserStatusController = container.resolve(
 );
 export const getAllPaginatedCategoryController = container.resolve(
   GetAllPaginatedCategoryController
+);
+export const createWorkSampleController = container.resolve(
+  CreateWorkSampleController
 );

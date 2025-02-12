@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { AddWorkSampleHeader } from "./AddWorkSampleHeader";
 import { WorkSampleImageModal } from "../modals/WorkSampleImageModal";
 import { Spinner } from "../ui/spinner";
+import { useWorkSampleMutation } from "@/hooks/work-sample/useWorkSample";
+import { createNewWorkSample } from "@/services/vendor/vendorService";
+import { toast } from "sonner";
 
 // Replace with your actual Cloudinary cloud name and upload preset
 const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -27,6 +30,8 @@ export function AddWorkSample() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const navigate = useNavigate();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -39,6 +44,9 @@ export function AddWorkSample() {
       uploadToCloudinary(acceptedFiles);
     },
   });
+
+  const { mutate: addNewWorkSample } =
+    useWorkSampleMutation(createNewWorkSample);
 
   const uploadToCloudinary = async (filesToUpload: File[]) => {
     const uploadPromises = filesToUpload.map((file) => {
@@ -74,21 +82,22 @@ export function AddWorkSample() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-    uploadedImages.forEach((image) => {
-      formData.append("images", image.public_id);
-    });
-
+    const images = uploadedImages.map((image) => image.secure_url);
     try {
-      async function onSubmit(formData: FormData) {
-        console.log(formData);
-      }
-      await onSubmit(formData);
+      addNewWorkSample(
+        { title, description, images },
+        {
+          onSuccess: (data) => toast.success(data.message),
+          onError: (error: any) => toast.error(error.response.data.message),
+        }
+      );
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setIsSubmitting(false);
+      setTitle("");
+      setDescription("");
+      setUploadedImages([]);
     }
   }
 
@@ -101,6 +110,10 @@ export function AddWorkSample() {
           <Input
             id="title"
             name="title"
+            value={title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
             placeholder="Wedding Photography - Beach Theme"
             required
           />
@@ -111,6 +124,8 @@ export function AddWorkSample() {
           <Textarea
             id="description"
             name="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Description of your event sample, including special features or unique aspects."
             className="min-h-[100px]"
             required

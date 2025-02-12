@@ -57,6 +57,8 @@ import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin
 import { UpdateUserStatusUseCase } from "../../useCases/admin/update-user-status.usecase";
 import { IGetAllPaginatedCategoryUseCase } from "../../entities/useCaseInterfaces/admin/get-all-paginated-category-usecase.interface";
 import { GetAllPaginatedCategoryUseCase } from "../../useCases/admin/GetAllPaginatedCategoryUseCase";
+import { ICreateWorkSampleUseCase } from "../../entities/useCaseInterfaces/vendor/create-work-sample-usercase.interface";
+import { CreateWorkSampleUseCase } from "../../useCases/vendor/create-work-sample.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -149,6 +151,10 @@ export class UseCaseRegistry {
       "IGetAllPaginatedCategoryUseCase",
       { useClass: GetAllPaginatedCategoryUseCase }
     );
+
+    container.register<ICreateWorkSampleUseCase>("ICreateWorkSampleUseCase", {
+      useClass: CreateWorkSampleUseCase,
+    });
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

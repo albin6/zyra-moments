@@ -15,6 +15,8 @@ import { IRedisTokenRepository } from "../../entities/repositoryInterfaces/redis
 import { RedisTokenRepository } from "../../interfaceAdapters/repositories/redis/redis-token.repository";
 import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/auth/refresh-token-repository.interface";
 import { RefreshTokenRepository } from "../../interfaceAdapters/repositories/auth/refresh-token.respository";
+import { IWorkSampleRepository } from "../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
+import { WorkSampleRepository } from "../../interfaceAdapters/repositories/vendor/work-sample.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -49,6 +51,10 @@ export class RepositoryRegistry {
 
     container.register<IRefreshTokenRepository>("IRefreshTokenRepository", {
       useClass: RefreshTokenRepository,
+    });
+
+    container.register<IWorkSampleRepository>("IWorkSampleRepository", {
+      useClass: WorkSampleRepository,
     });
   }
 }

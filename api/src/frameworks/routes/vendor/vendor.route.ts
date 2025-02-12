@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
+  createWorkSampleController,
   getAllCategoriesController,
   getVendorDetailsController,
   joinCategoryController,
@@ -40,12 +41,11 @@ export class VendorRoutes extends BaseRoute {
     );
 
     this.router.post(
-      "/vendor/logout",
+      "/vendor/work-sample",
       verifyAuth,
       authorizeRole(["vendor"]),
-      (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
-      }
+      (req: Request, res: Response) =>
+        createWorkSampleController.handle(req, res)
     );
 
     this.router.put(
@@ -61,6 +61,15 @@ export class VendorRoutes extends BaseRoute {
       decodeToken,
       (req: Request, res: Response) => {
         refreshTokenController.handle(req, res);
+      }
+    );
+
+    this.router.post(
+      "/vendor/logout",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      (req: Request, res: Response) => {
+        logoutUserController.handle(req, res);
       }
     );
   }
