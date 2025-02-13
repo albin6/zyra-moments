@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { ICategoryRepository } from "../../../entities/repositoryInterfaces/common/category-repository.interface";
 import { CategoryModel } from "../../../frameworks/database/models/category.model";
 import { ICategoryEntity } from "../../../entities/models/category.entity";
+import { PaginatedCategories } from "../../../entities/models/paginated-category.entity";
 
 @injectable()
 export class CategoryRespository implements ICategoryRepository {
@@ -23,10 +24,7 @@ export class CategoryRespository implements ICategoryRepository {
     filter: any,
     skip: number,
     limit: number
-  ): Promise<{
-    categories: Pick<ICategoryEntity, "_id" | "title" | "status">[] | [];
-    total: number;
-  }> {
+  ): Promise<PaginatedCategories> {
     const [categories, total] = await Promise.all([
       CategoryModel.find(filter)
         .select("status title _id")

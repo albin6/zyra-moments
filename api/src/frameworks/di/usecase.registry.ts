@@ -56,7 +56,7 @@ import { UpdateVendorPasswordUseCase } from "../../useCases/vendor/update-vendor
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
 import { UpdateUserStatusUseCase } from "../../useCases/admin/update-user-status.usecase";
 import { IGetAllPaginatedCategoryUseCase } from "../../entities/useCaseInterfaces/admin/get-all-paginated-category-usecase.interface";
-import { GetAllPaginatedCategoryUseCase } from "../../useCases/admin/GetAllPaginatedCategoryUseCase";
+import { GetAllPaginatedCategoryUseCase } from "../../useCases/admin/get-all-paginated-category.usecase";
 import { ICreateWorkSampleUseCase } from "../../entities/useCaseInterfaces/vendor/create-work-sample-usercase.interface";
 import { CreateWorkSampleUseCase } from "../../useCases/vendor/create-work-sample.usecase";
 import { IGetAllWorkSampleByVendorIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";

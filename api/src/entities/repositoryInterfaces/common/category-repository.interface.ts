@@ -1,4 +1,5 @@
 import { ICategoryEntity } from "../../models/category.entity";
+import { PaginatedCategories } from "../../models/paginated-category.entity";
 
 export interface ICategoryRepository {
   find(): Promise<ICategoryEntity[] | []>;
@@ -11,8 +12,5 @@ export interface ICategoryRepository {
     filter: any,
     skip: number,
     limit: number
-  ): Promise<{
-    categories: Pick<ICategoryEntity, "_id" | "status" | "title">[] | [];
-    total: number;
-  }>;
+  ): Promise<PaginatedCategories>;
 }

@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IWorkSampleEntity } from "../../entities/models/work-sample.entity";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IWorkSampleRepository } from "../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
 import { IGetAllWorkSampleByVendorIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";
 import { CustomError } from "../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { PaginatedWorkSample } from "../../entities/models/paginated-work-sample.entity";
 
 @injectable()
 export class GetAllWorkSampleByVendorIdUseCase
@@ -16,10 +16,10 @@ export class GetAllWorkSampleByVendorIdUseCase
     @inject("IVendorRepository") private vendorRepository: IVendorRepository
   ) {}
   async execute(
-    vendorId: any
-  ): Promise<
-    Pick<IWorkSampleEntity, "_id" | "title" | "description" | "images">[]
-  > {
+    vendorId: any,
+    pageNumber: number,
+    pageSize: number
+  ): Promise<PaginatedWorkSample> {
     const isVendorExistsWithThisId = await this.vendorRepository.findById(
       vendorId
     );
@@ -31,6 +31,19 @@ export class GetAllWorkSampleByVendorIdUseCase
       );
     }
 
-    return this.workSampleRepository.findAllByVendorId(vendorId);
+    const validPageNumber = Math.max(1, pageNumber || 1);
+    const validPageSize = Math.max(1, pageSize || 10);
+    const skip = (validPageNumber - 1) * validPageSize;
+    const limit = validPageSize;
+
+    const { workSamples, total } =
+      await this.workSampleRepository.findAllByVendorId(vendorId, skip, limit);
+
+    const response: PaginatedWorkSample = {
+      workSamples,
+      total: Math.ceil(total / validPageSize),
+    };
+
+    return response;
   }
 }

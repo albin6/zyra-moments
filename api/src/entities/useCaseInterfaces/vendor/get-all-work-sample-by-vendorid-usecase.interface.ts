@@ -1,9 +1,9 @@
-import { IWorkSampleEntity } from "../../models/work-sample.entity";
+import { PaginatedWorkSample } from "../../models/paginated-work-sample.entity";
 
 export interface IGetAllWorkSampleByVendorIdUseCase {
   execute(
-    vendorId: any
-  ): Promise<
-    Pick<IWorkSampleEntity, "_id" | "title" | "description" | "images">[]
-  >;
+    vendorId: any,
+    pageNumber: number,
+    pageSize: number
+  ): Promise<PaginatedWorkSample>;
 }

@@ -3,13 +3,6 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Table,
   TableBody,
   TableCell,
@@ -64,7 +57,6 @@ export type VendorList = Vendor[];
 
 export default function UserManagement() {
   const [activeTab, setActiveTab] = useState<string>("client");
-  const [filter, setFilter] = useState("");
 
   const [clients, setClients] = useState<ClientsData>();
   const [vendors, setVendors] = useState<VendorList>();
@@ -86,10 +78,6 @@ export default function UserManagement() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  };
-
-  const handleFilter = (value: string) => {
-    setFilter(value);
   };
 
   const handleBlockUser = (userType: string, userId: any) => {
@@ -114,14 +102,6 @@ export default function UserManagement() {
       setTotalPages(data.totalPages);
     }
   }, [data, activeTab]);
-
-  // function isClientsData(users: any): users is ClientsData {
-  //   return users && {} in users;
-  // }
-
-  // function isVendorList(users: any): users is VendorList {
-  //   return users && Array.isArray(users);
-  // }
 
   if (isLoading) {
     return <Spinner />;
@@ -224,25 +204,6 @@ export default function UserManagement() {
             onChange={handleSearch}
             className="max-w-sm"
           />
-          {/* <Select value={filter} onValueChange={handleFilter}>
-            <SelectTrigger className="w-full sm:w-[180px]">
-              <SelectValue placeholder="Filter by..." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              {activeTab === "client" ? (
-                <>
-                  <SelectItem value="highEvents">High Events</SelectItem>
-                  <SelectItem value="lowEvents">Low Events</SelectItem>
-                </>
-              ) : (
-                <>
-                  <SelectItem value="highRating">High Rating</SelectItem>
-                  <SelectItem value="lowRating">Low Rating</SelectItem>
-                </>
-              )}
-            </SelectContent>
-          </Select> */}
         </div>
         <TabsContent value="client" className="overflow-x-auto">
           {renderClientTable()}

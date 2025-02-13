@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { IWorkSampleEntity } from "../../../entities/models/work-sample.entity";
 import { IWorkSampleRepository } from "../../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
 import { WorkSampleModel } from "../../../frameworks/database/models/work-sample.model";
+import { PaginatedWorkSample } from "../../../entities/models/paginated-work-sample.entity";
 
 @injectable()
 export class WorkSampleRepository implements IWorkSampleRepository {
@@ -10,13 +11,23 @@ export class WorkSampleRepository implements IWorkSampleRepository {
   }
 
   async findAllByVendorId(
-    vendorId: any
-  ): Promise<
-    Pick<IWorkSampleEntity, "_id" | "title" | "description" | "images">[]
-  > {
-    return await WorkSampleModel.find(
-      { vendorId },
-      { _id: 1, title: 1, description: 1, images: 1 }
-    );
+    vendorId: any,
+    skip: number,
+    limit: number
+  ): Promise<PaginatedWorkSample> {
+    const [workSamples, total] = await Promise.all([
+      WorkSampleModel.find(
+        { vendorId },
+        { _id: 1, title: 1, description: 1, images: 1 }
+      )
+        .skip(skip)
+        .limit(limit),
+      WorkSampleModel.countDocuments({ vendorId }),
+    ]);
+
+    return {
+      workSamples,
+      total,
+    };
   }
 }

@@ -17,13 +17,27 @@ export class GetAllWorkSampleByVendorIdController
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const vendorid = (req as CustomRequest).user.id;
+      const vendorId = (req as CustomRequest).user.id;
+      const { page = 1, limit = 10 } = req.query;
 
-      const workSamples = await this.getAllWorkSampleByVendorIdUseCase.execute(
-        vendorid
-      );
+      const pageNumber = Number(page);
+      const pageSize = Number(limit);
 
-      res.status(HTTP_STATUS.OK).json({ success: true, workSamples });
+      const { workSamples, total } =
+        await this.getAllWorkSampleByVendorIdUseCase.execute(
+          vendorId,
+          pageNumber,
+          pageSize
+        );
+
+      res
+        .status(HTTP_STATUS.OK)
+        .json({
+          success: true,
+          workSamples,
+          totalPages: total,
+          currentPage: pageNumber,
+        });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

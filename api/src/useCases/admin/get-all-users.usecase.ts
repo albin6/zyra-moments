@@ -60,7 +60,7 @@ export class GetAllUsersUseCase implements IGetAllUsersUseCase {
 
       const response: PaginatedUsers = {
         user,
-        total,
+        total: Math.ceil(total / validPageSize),
       };
 
       return response;
