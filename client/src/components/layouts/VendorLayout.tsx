@@ -18,6 +18,8 @@ export interface Vendor {
   status: string;
   createdAt: string;
   updatedAt: string;
+  bio?: string;
+  place?: string;
   __v: number;
   category: {
     _id: string;

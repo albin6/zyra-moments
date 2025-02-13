@@ -87,7 +87,10 @@ export function AddWorkSample() {
       addNewWorkSample(
         { title, description, images },
         {
-          onSuccess: (data) => toast.success(data.message),
+          onSuccess: (data) => {
+            toast.success(data.message);
+            navigate("/vendor/work-sample");
+          },
           onError: (error: any) => toast.error(error.response.data.message),
         }
       );

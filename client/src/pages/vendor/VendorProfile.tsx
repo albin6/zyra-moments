@@ -4,15 +4,27 @@ import { ProfileHeader } from "@/components/vendor/ProfileHeader";
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { Vendor } from "@/components/layouts/VendorLayout";
+import { Button } from "@/components/ui/button";
 
 interface VendorContextType {
   vendorData: Vendor | null;
   setVendorData: React.Dispatch<React.SetStateAction<Vendor | null>>;
 }
 
+export interface UpdateVendorData {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  profileImage: string;
+  bio: string;
+  place: string;
+}
+
 export default function VendorProfile() {
   const { vendorData, setVendorData } = useOutletContext<VendorContextType>();
   const [isEdit, setIsEdit] = useState(false);
+
+  const handleUpdateVendorProfile = () => {};
 
   const handleUpdate = (field: string, value: string) => {
     setVendorData((prev) => (prev ? { ...prev, [field]: value } : null));
@@ -34,12 +46,25 @@ export default function VendorProfile() {
         firstName={vendorData.firstName}
         lastName={vendorData.lastName}
         email={vendorData.email}
+        bio=""
+        place=""
         avatarUrl={""}
-        contact={vendorData.phoneNumber}
+        phoneNumber={vendorData.phoneNumber}
         onUpdate={handleUpdate}
         isEdit={isEdit}
       />
-      <ResetPasswordModal />
+      <div className="flex justify-end">
+        <ResetPasswordModal />
+        {isEdit && (
+          <Button
+            variant="outline"
+            onClick={handleUpdateVendorProfile}
+            className="mb-6 mr-6"
+          >
+            Update
+          </Button>
+        )}
+      </div>
     </>
   );
 }

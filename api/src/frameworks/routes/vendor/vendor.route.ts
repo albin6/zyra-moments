@@ -3,6 +3,7 @@ import { BaseRoute } from "../base.route";
 import {
   createWorkSampleController,
   getAllCategoriesController,
+  getAllWorkSampleByVendorIdController,
   getVendorDetailsController,
   joinCategoryController,
   logoutUserController,
@@ -46,6 +47,14 @@ export class VendorRoutes extends BaseRoute {
       authorizeRole(["vendor"]),
       (req: Request, res: Response) =>
         createWorkSampleController.handle(req, res)
+    );
+
+    this.router.get(
+      "/vendor/work-sample",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      (req: Request, res: Response) =>
+        getAllWorkSampleByVendorIdController.handle(req, res)
     );
 
     this.router.put(

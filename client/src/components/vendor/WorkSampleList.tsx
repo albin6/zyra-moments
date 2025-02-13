@@ -2,26 +2,33 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { WorkSampleHeader } from "./WorkSampleHeader";
+import Pagination from "../Pagination";
+import { useEffect, useState } from "react";
+import { useWorkSampleQuery } from "@/hooks/work-sample/useWorkSample";
+import { getAllWorkSampleByVendor } from "@/services/vendor/vendorService";
+import { WorkSample } from "@/types/WorkSample";
 
-interface WorkSampleItem {
-  id: string;
-  title: string;
-  description: string;
-  image?: string;
-}
+export function WorkSampleList() {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [items, setItems] = useState<WorkSample[] | null>(null);
+  const limit = 2;
 
-interface WorkSampleListProps {
-  items: WorkSampleItem[];
-  onView: (id: string) => void;
-  isLoading?: boolean;
-}
+  const { data, isLoading } = useWorkSampleQuery(
+    getAllWorkSampleByVendor,
+    page,
+    limit
+  );
 
-export function WorkSampleList({
-  items,
-  onView,
-  isLoading,
-}: WorkSampleListProps) {
-  if (isLoading) {
+  useEffect(() => {
+    if (!data) return;
+
+    setItems(data.workSamples);
+    setTotalPages(data.totalPages);
+    setPage(data.currentPage);
+  }, [data]);
+
+  if (isLoading || !items) {
     return (
       <div className="space-y-4 p-4">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -36,13 +43,13 @@ export function WorkSampleList({
       <WorkSampleHeader />
       {items.map((item) => (
         <Card
-          key={item.id}
+          key={item._id}
           className="flex items-center gap-4 p-4 transition-shadow hover:shadow-md"
         >
           <div className="shrink-0">
-            {item.image ? (
+            {item.images.length ? (
               <img
-                src={item.image || "/placeholder.svg"}
+                src={item.images[0] || "/placeholder.svg"}
                 alt=""
                 className="h-16 w-16 rounded-lg object-cover"
               />
@@ -59,12 +66,19 @@ export function WorkSampleList({
           <Button
             variant="secondary"
             className="shrink-0"
-            onClick={() => onView(item.id)}
+            onClick={() => console.log(item._id)}
           >
             View
           </Button>
         </Card>
       ))}
+      {items.length > limit && (
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 }

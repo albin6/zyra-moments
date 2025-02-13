@@ -29,3 +29,19 @@ export const createNewWorkSample = async (data: WorkSample) => {
   );
   return response.data;
 };
+
+export const getAllWorkSampleByVendor = async ({
+  page = 1,
+  limit = 10,
+}: {
+  page: number;
+  limit: number;
+}) => {
+  const response = await vendorAxiosInstance.get("/_ve/vendor/work-sample", {
+    params: {
+      page,
+      limit,
+    },
+  });
+  return response.data;
+};

@@ -59,6 +59,8 @@ import { IGetAllPaginatedCategoryUseCase } from "../../entities/useCaseInterface
 import { GetAllPaginatedCategoryUseCase } from "../../useCases/admin/GetAllPaginatedCategoryUseCase";
 import { ICreateWorkSampleUseCase } from "../../entities/useCaseInterfaces/vendor/create-work-sample-usercase.interface";
 import { CreateWorkSampleUseCase } from "../../useCases/vendor/create-work-sample.usecase";
+import { IGetAllWorkSampleByVendorIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";
+import { GetAllWorkSampleByVendorIdUseCase } from "../../useCases/vendor/get-all-work-sample-by-vendorid.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -155,6 +157,11 @@ export class UseCaseRegistry {
     container.register<ICreateWorkSampleUseCase>("ICreateWorkSampleUseCase", {
       useClass: CreateWorkSampleUseCase,
     });
+
+    container.register<IGetAllWorkSampleByVendorIdUseCase>(
+      "IGetAllWorkSampleByVendorIdUseCase",
+      { useClass: GetAllWorkSampleByVendorIdUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

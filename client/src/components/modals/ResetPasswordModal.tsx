@@ -77,7 +77,9 @@ export default function ResetPasswordModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Change Password</Button>
+        <Button variant="outline" className="mb-6 mr-6">
+          Change Password
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

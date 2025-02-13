@@ -7,7 +7,9 @@ interface ProfileFormProps {
   lastName: string;
   email: string;
   avatarUrl: string;
-  contact: string;
+  phoneNumber: string;
+  bio: string;
+  place: string;
   isEdit: boolean;
   onUpdate?: (field: string, value: string) => void;
 }
@@ -17,7 +19,9 @@ export function ProfileForm({
   lastName,
   email,
   avatarUrl,
-  contact,
+  phoneNumber,
+  bio,
+  place,
   onUpdate,
   isEdit,
 }: ProfileFormProps) {
@@ -67,7 +71,7 @@ export function ProfileForm({
               <Input
                 value={email}
                 onChange={(e) => onUpdate?.("email", e.target.value)}
-                disabled={isEdit === false}
+                disabled={true}
                 type="email"
                 placeholder="vendor@email.com"
               />
@@ -75,8 +79,8 @@ export function ProfileForm({
             <div className="space-y-2">
               <label className="text-sm font-medium">Contact Number</label>
               <Input
-                value={contact}
-                onChange={(e) => onUpdate?.("contact", e.target.value)}
+                value={phoneNumber}
+                onChange={(e) => onUpdate?.("phoneNumber", e.target.value)}
                 disabled={isEdit === false}
                 type="tel"
                 placeholder="Enter contact number"
@@ -87,6 +91,7 @@ export function ProfileForm({
           <div className="space-y-2">
             <label className="text-sm font-medium">About Me</label>
             <Textarea
+              value={bio}
               disabled={isEdit === false}
               placeholder="Tell us about yourself and your services..."
               className="min-h-[100px]"
