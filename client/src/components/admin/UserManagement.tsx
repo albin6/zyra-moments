@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +17,7 @@ import { Spinner } from "../ui/spinner";
 import { getAllUsers } from "@/services/admin/adminService";
 import { useUpdateUserStatusMutation } from "@/hooks/admin/useUpdateUserStatus";
 import { toast } from "sonner";
+import _ from "lodash";
 
 export interface IClient {
   _id: string;
@@ -63,14 +64,22 @@ export default function UserManagement() {
 
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [totalPages, setTotalPages] = useState(0);
   const limit = 2;
+
+  const debouncedSearch = useCallback(
+    _.debounce((query) => {
+      setDebouncedSearchTerm(query);
+    }, 500),
+    []
+  );
 
   const { data, isLoading } = useAllUsersQuery<ClientsData | VendorList>(
     getAllUsers,
     page,
     limit,
-    searchTerm,
+    debouncedSearchTerm,
     activeTab as UserType
   );
 
@@ -78,6 +87,7 @@ export default function UserManagement() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    debouncedSearch(e.target.value);
   };
 
   const handleBlockUser = (userType: string, userId: any) => {
