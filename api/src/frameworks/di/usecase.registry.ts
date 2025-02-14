@@ -61,6 +61,10 @@ import { ICreateWorkSampleUseCase } from "../../entities/useCaseInterfaces/vendo
 import { CreateWorkSampleUseCase } from "../../useCases/vendor/create-work-sample.usecase";
 import { IGetAllWorkSampleByVendorIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";
 import { GetAllWorkSampleByVendorIdUseCase } from "../../useCases/vendor/get-all-work-sample-by-vendorid.usecase";
+import { IUpdateVendorProfileUseCase } from "../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
+import { UpdateVendorProfileUseCase } from "../../useCases/vendor/update-vendor-profile.usecase";
+import { IUpdateClientProfileUseCase } from "../../entities/useCaseInterfaces/client/update-client-profile-usecase.interface";
+import { UpdateClientProfileUseCase } from "../../useCases/client/update-client-profile.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -161,6 +165,16 @@ export class UseCaseRegistry {
     container.register<IGetAllWorkSampleByVendorIdUseCase>(
       "IGetAllWorkSampleByVendorIdUseCase",
       { useClass: GetAllWorkSampleByVendorIdUseCase }
+    );
+
+    container.register<IUpdateVendorProfileUseCase>(
+      "IUpdateVendorProfileUseCase",
+      { useClass: UpdateVendorProfileUseCase }
+    );
+
+    container.register<IUpdateClientProfileUseCase>(
+      "IUpdateClientProfileUseCase",
+      { useClass: UpdateClientProfileUseCase }
     );
 
     // Register Strategies

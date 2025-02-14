@@ -44,4 +44,11 @@ export class ClientRepository implements IClientRepository {
       },
     });
   }
+
+  async updateClientProfileById(
+    id: string,
+    data: Partial<IClientEntity>
+  ): Promise<void> {
+    await ClientModel.findByIdAndUpdate(id, { $set: data });
+  }
 }

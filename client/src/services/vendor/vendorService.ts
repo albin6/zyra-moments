@@ -3,11 +3,27 @@ import { UpdatePasswordData } from "@/hooks/client/useClientPassword";
 import { AxiosResponse } from "../auth/authService";
 import { WorkSample } from "@/types/WorkSample";
 
+// getting vendor profile details
 export const getVendorDetails = async () => {
   const response = await vendorAxiosInstance.get("/_ve/vendor/profile");
   return response.data;
 };
 
+// updating vendor profile
+export interface IVendorProfileUpdateData {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  bio: string;
+  place: string;
+  profileImage: string;
+}
+export const updateVendorProfile = async (data: IVendorProfileUpdateData) => {
+  const response = await vendorAxiosInstance.put("/_ve/vendor/profile", data);
+  return response.data;
+};
+
+// password reset
 export const updateVendorPassword = async ({
   currentPassword,
   newPassword,
@@ -22,6 +38,7 @@ export const updateVendorPassword = async ({
   return response.data;
 };
 
+// create new work sample
 export const createNewWorkSample = async (data: WorkSample) => {
   const response = await vendorAxiosInstance.post(
     "/_ve/vendor/work-sample",
@@ -30,6 +47,7 @@ export const createNewWorkSample = async (data: WorkSample) => {
   return response.data;
 };
 
+// getting work samples of vendor
 export const getAllWorkSampleByVendor = async ({
   page = 1,
   limit = 10,

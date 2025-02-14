@@ -12,7 +12,7 @@ export function WorkSampleList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [items, setItems] = useState<WorkSample[] | null>(null);
-  const limit = 2;
+  const limit = 1;
 
   const { data, isLoading } = useWorkSampleQuery(
     getAllWorkSampleByVendor,
@@ -72,7 +72,7 @@ export function WorkSampleList() {
           </Button>
         </Card>
       ))}
-      {items.length > limit && (
+      {totalPages > limit && (
         <Pagination
           currentPage={page}
           onPageChange={setPage}

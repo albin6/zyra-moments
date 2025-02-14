@@ -19,6 +19,8 @@ import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/
 import { GetAllPaginatedCategoryController } from "../../interfaceAdapters/controllers/admin/get-all-paginated-category.controllers";
 import { CreateWorkSampleController } from "../../interfaceAdapters/controllers/vendor/create-work-sample.controllers";
 import { GetAllWorkSampleByVendorIdController } from "../../interfaceAdapters/controllers/vendor/get-all-work-sample-by-vendorid.controller";
+import { UpdateVendorProfileController } from "../../interfaceAdapters/controllers/vendor/update-vendor-profile.controller";
+import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
 
 DependencyInjection.registerAll();
 
@@ -63,4 +65,10 @@ export const createWorkSampleController = container.resolve(
 );
 export const getAllWorkSampleByVendorIdController = container.resolve(
   GetAllWorkSampleByVendorIdController
+);
+export const updateVendorProfileController = container.resolve(
+  UpdateVendorProfileController
+);
+export const updateClientProfileController = container.resolve(
+  UpdateClientProfileController
 );

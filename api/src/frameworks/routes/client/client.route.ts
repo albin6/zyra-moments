@@ -9,6 +9,7 @@ import {
   logoutUserController,
   refreshTokenController,
   updateClientPasswordController,
+  updateClientProfileController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
 
@@ -18,13 +19,20 @@ export class ClientRoutes extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
-    this.router.get(
-      "/client/details",
-      verifyAuth,
-      authorizeRole(["client"]),
-      (req: Request, res: Response) =>
-        getClientDetailsController.handle(req, res)
-    );
+    this.router
+      .route("/client/details")
+      .get(
+        verifyAuth,
+        authorizeRole(["client"]),
+        (req: Request, res: Response) =>
+          getClientDetailsController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["client"]),
+        (req: Request, res: Response) =>
+          updateClientProfileController.handle(req, res)
+      );
 
     this.router.post(
       "/client/logout",

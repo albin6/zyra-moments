@@ -9,6 +9,7 @@ import {
   logoutUserController,
   refreshTokenController,
   updateVendorPasswordController,
+  updateVendorProfileController,
 } from "../../di/resolver";
 import {
   authorizeRole,
@@ -33,13 +34,20 @@ export class VendorRoutes extends BaseRoute {
       joinCategoryController.handle(req, res)
     );
 
-    this.router.get(
-      "/vendor/profile",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      (req: Request, res: Response) =>
-        getVendorDetailsController.handle(req, res)
-    );
+    this.router
+      .route("/vendor/profile")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        (req: Request, res: Response) =>
+          getVendorDetailsController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        (req: Request, res: Response) =>
+          updateVendorProfileController.handle(req, res)
+      );
 
     this.router.post(
       "/vendor/work-sample",

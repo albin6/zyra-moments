@@ -64,4 +64,11 @@ export class VendorRepository implements IVendorRepository {
       },
     });
   }
+
+  async updateVendorProfileById(
+    id: string,
+    data: Partial<IVendorEntity>
+  ): Promise<void> {
+    await VendorModel.findByIdAndUpdate(id, { $set: data });
+  }
 }

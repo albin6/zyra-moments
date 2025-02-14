@@ -1,11 +1,25 @@
+import { AxiosResponse } from "@/services/auth/authService";
 import { vendorJoinCategory } from "@/services/category/categoryService";
-import { getVendorDetails } from "@/services/vendor/vendorService";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getVendorDetails,
+  IVendorProfileUpdateData,
+  updateVendorProfile,
+} from "@/services/vendor/vendorService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useVendorProfileQuery = () => {
   return useQuery({
-    queryKey: ["vendorProfile"],
+    queryKey: ["vendor-profile"],
     queryFn: getVendorDetails,
+  });
+};
+
+export const useVendorProfileMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<AxiosResponse, Error, IVendorProfileUpdateData>({
+    mutationFn: updateVendorProfile,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["vendor-profile"] }),
   });
 };
 

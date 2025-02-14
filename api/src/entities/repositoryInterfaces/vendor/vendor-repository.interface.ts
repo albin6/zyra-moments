@@ -24,4 +24,9 @@ export interface IVendorRepository {
   findByIdAndUpdatePassword(id: any, password: string): Promise<void>;
 
   findByIdAndUpdateStatus(id: any, status: string): Promise<void>;
+
+  updateVendorProfileById(
+    id: string,
+    data: Partial<IVendorEntity>
+  ): Promise<void>;
 }

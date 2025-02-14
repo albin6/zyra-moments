@@ -17,6 +17,8 @@ import { UpdateUserStatusController } from "../../interfaceAdapters/controllers/
 import { GetAllPaginatedCategoryController } from "../../interfaceAdapters/controllers/admin/get-all-paginated-category.controllers";
 import { CreateWorkSampleController } from "../../interfaceAdapters/controllers/vendor/create-work-sample.controllers";
 import { GetAllWorkSampleByVendorIdController } from "../../interfaceAdapters/controllers/vendor/get-all-work-sample-by-vendorid.controller";
+import { UpdateVendorProfileController } from "../../interfaceAdapters/controllers/vendor/update-vendor-profile.controller";
+import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -90,6 +92,14 @@ export class ControllerRegistry {
 
     container.register("GetAllWorkSampleByVendorIdController", {
       useClass: GetAllWorkSampleByVendorIdController,
+    });
+
+    container.register("UpdateVendorProfileController", {
+      useClass: UpdateVendorProfileController,
+    });
+
+    container.register("UpdateClientProfileController", {
+      useClass: UpdateClientProfileController,
     });
   }
 }
