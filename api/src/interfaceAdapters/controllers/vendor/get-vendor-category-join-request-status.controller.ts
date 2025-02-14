@@ -1,26 +1,29 @@
 import { Request, Response } from "express";
-import { IJoinCategoryRequestController } from "../../../entities/controllerInterfaces/vendor/join-category-request-controller.inteface";
-import { IJoinCategoryRequestUseCase } from "../../../entities/useCaseInterfaces/vendor/join-category-request-usecase.interface";
+import { IGetVendorCategoryJoinRequestStatusController } from "../../../entities/controllerInterfaces/vendor/get-vendor-category-join-request-status-controller.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import { HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
-import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IGetVendorCategoryRequestStatusUseCase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-category-join-request-status-usecase.interface";
+import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class JoinCategoryController implements IJoinCategoryRequestController {
+export class GetVendorCategoryJoinRequestStatusController
+  implements IGetVendorCategoryJoinRequestStatusController
+{
   constructor(
-    @inject("IJoinCategoryRequestUseCase")
-    private joinCategoryRequestUseCase: IJoinCategoryRequestUseCase
+    @inject("IGetVendorCategoryRequestStatusUseCase")
+    private getVendorCategoryRequestStatusUseCase: IGetVendorCategoryRequestStatusUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { category } = req.body;
       const vendorId = (req as CustomRequest).user.id;
-      await this.joinCategoryRequestUseCase.execute(vendorId as any, category);
-      res
-        .status(HTTP_STATUS.OK)
-        .json({ success: true, message: SUCCESS_MESSAGES.ACTION_SUCCESS });
+
+      const status = await this.getVendorCategoryRequestStatusUseCase.execute(
+        vendorId
+      );
+
+      res.status(HTTP_STATUS.OK).json({ success: true, status });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

@@ -19,6 +19,7 @@ import { CreateWorkSampleController } from "../../interfaceAdapters/controllers/
 import { GetAllWorkSampleByVendorIdController } from "../../interfaceAdapters/controllers/vendor/get-all-work-sample-by-vendorid.controller";
 import { UpdateVendorProfileController } from "../../interfaceAdapters/controllers/vendor/update-vendor-profile.controller";
 import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
+import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAdapters/controllers/vendor/get-vendor-category-join-request-status.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -100,6 +101,10 @@ export class ControllerRegistry {
 
     container.register("UpdateClientProfileController", {
       useClass: UpdateClientProfileController,
+    });
+
+    container.register("GetVendorCategoryJoinRequestStatusController", {
+      useClass: GetVendorCategoryJoinRequestStatusController,
     });
   }
 }

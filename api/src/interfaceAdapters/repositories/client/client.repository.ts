@@ -19,7 +19,7 @@ export class ClientRepository implements IClientRepository {
     limit: number
   ): Promise<{ user: IClientEntity[] | []; total: number }> {
     const [user, total] = await Promise.all([
-      ClientModel.find(filter).skip(skip).limit(limit),
+      ClientModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
       ClientModel.countDocuments(filter),
     ]);
 

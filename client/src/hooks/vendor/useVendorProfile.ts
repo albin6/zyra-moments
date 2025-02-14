@@ -1,5 +1,8 @@
 import { AxiosResponse } from "@/services/auth/authService";
-import { vendorJoinCategory } from "@/services/category/categoryService";
+import {
+  getVendorInCategoryStatus,
+  vendorJoinCategory,
+} from "@/services/category/categoryService";
 import {
   getVendorDetails,
   IVendorProfileUpdateData,
@@ -23,8 +26,18 @@ export const useVendorProfileMutation = () => {
   });
 };
 
+export const useVendorJoinCategoryQuery = () => {
+  return useQuery({
+    queryKey: ["in-category"],
+    queryFn: getVendorInCategoryStatus,
+  });
+};
+
 export const useVendorJoinCategoryMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: vendorJoinCategory,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["in-category"] }),
   });
 };

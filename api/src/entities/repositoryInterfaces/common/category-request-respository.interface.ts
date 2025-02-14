@@ -6,10 +6,13 @@ export interface ICategoryRequestRepository {
     vendorId: ObjectId,
     categoryId: ObjectId
   ): Promise<ICategoryRequestEntity | null>;
+
   findByVendorAndCategory(
     vendorId: ObjectId,
     categoryId: ObjectId
   ): Promise<ICategoryRequestEntity | null>;
+
   findByVendorId(vendorId: any): Promise<ICategoryRequestEntity | null>;
+
   find(): Promise<ICategoryRequestEntity[] | []>;
 }

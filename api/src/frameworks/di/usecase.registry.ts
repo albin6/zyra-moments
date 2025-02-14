@@ -1,19 +1,24 @@
 import { container } from "tsyringe";
-import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
-import { RegisterUserUseCase } from "../../useCases/auth/register-user.usecase";
 import { IBcrypt } from "../security/bcrypt.interface";
+import { OTPBcrypt } from "../security/otp.bcrypt";
 import { PasswordBcrypt } from "../security/password.bcrypt";
-import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-usecase.interface";
-import { LoginUserUseCase } from "../../useCases/auth/login.usecase";
 
 import { IRegisterStrategy } from "../../useCases/auth/regiter-strategies/register-strategy.interface";
-import { ClientRegisterStrategy } from "../../useCases/auth/regiter-strategies/client-register.strategy";
-import { VendorRegisterStrategy } from "../../useCases/auth/regiter-strategies/vendor-register.strategy";
-import { AdminRegisterStrategy } from "../../useCases/auth/regiter-strategies/admin-register.startegy";
 import { ILoginStrategy } from "../../useCases/auth/login-strategies/login-strategy.interface";
-import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
+import { ClientRegisterStrategy } from "../../useCases/auth/regiter-strategies/client-register.strategy";
 import { ClientLoginStrategy } from "../../useCases/auth/login-strategies/client-login.strategy";
+import { VendorRegisterStrategy } from "../../useCases/auth/regiter-strategies/vendor-register.strategy";
 import { VendorLoginStrategy } from "../../useCases/auth/login-strategies/vendor-login.strategy";
+import { AdminRegisterStrategy } from "../../useCases/auth/regiter-strategies/admin-register.startegy";
+import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
+
+import { ITokenService } from "../../useCases/auth/interfaces/token-service.interface";
+import { JwtService } from "../../interfaceAdapters/services/jwt-service";
+
+import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
+import { RegisterUserUseCase } from "../../useCases/auth/register-user.usecase";
+import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-usecase.interface";
+import { LoginUserUseCase } from "../../useCases/auth/login.usecase";
 import { ISendEmailUseCase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.inteface";
 import { SendEmailUseCase } from "../../useCases/auth/send-email.usecase";
 import { IEmailService } from "../../entities/services/email-service.interface";
@@ -28,8 +33,6 @@ import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/gen
 import { GenerateTokenUseCase } from "../../useCases/auth/generate-token.usecase";
 import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/refresh-toke-usecase.inteface";
 import { RefreshTokenUseCase } from "../../useCases/auth/refresh-token.usecase";
-import { ITokenService } from "../../useCases/auth/interfaces/token-service.interface";
-import { JwtService } from "../../interfaceAdapters/services/jwt-service";
 import { IGetAllCategoriesUseCase } from "../../entities/useCaseInterfaces/common/get-all-categories-usecase.inteface";
 import { GetAllCategoriesUseCase } from "../../useCases/common/get-all-categories.usecase";
 import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/admin/create-new-category-usecase.interface";
@@ -40,7 +43,6 @@ import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/get-
 import { GetAllUsersUseCase } from "../../useCases/admin/get-all-users.usecase";
 import { IGetVendorDetailsUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-details-usecase.interface";
 import { GetVendorDetailsUseCase } from "../../useCases/vendor/get-vendor-details.usecase";
-import { OTPBcrypt } from "../security/otp.bcrypt";
 import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
 import { BlackListTokenUseCase } from "../../useCases/auth/blacklist-token.usecase";
 import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke-refresh-token-usecase.interface";
@@ -65,6 +67,8 @@ import { IUpdateVendorProfileUseCase } from "../../entities/useCaseInterfaces/ve
 import { UpdateVendorProfileUseCase } from "../../useCases/vendor/update-vendor-profile.usecase";
 import { IUpdateClientProfileUseCase } from "../../entities/useCaseInterfaces/client/update-client-profile-usecase.interface";
 import { UpdateClientProfileUseCase } from "../../useCases/client/update-client-profile.usecase";
+import { IGetVendorCategoryJoinRequestStatusUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-category-join-request-status-usecase.interface";
+import { GetVendorCategoryJoinRequestStatusUseCase } from "../../useCases/vendor/get-vendor-category-join-request-status.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -175,6 +179,11 @@ export class UseCaseRegistry {
     container.register<IUpdateClientProfileUseCase>(
       "IUpdateClientProfileUseCase",
       { useClass: UpdateClientProfileUseCase }
+    );
+
+    container.register<IGetVendorCategoryJoinRequestStatusUseCase>(
+      "IGetVendorCategoryJoinRequestStatusUseCase",
+      { useClass: GetVendorCategoryJoinRequestStatusUseCase }
     );
 
     // Register Strategies

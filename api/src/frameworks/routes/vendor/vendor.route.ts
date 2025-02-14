@@ -30,9 +30,14 @@ export class VendorRoutes extends BaseRoute {
         getAllCategoriesController.handle(req, res)
     );
 
-    this.router.post("/vendor/categories/join", (req: Request, res: Response) =>
-      joinCategoryController.handle(req, res)
+    this.router.post(
+      "/vendor/categories/join",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      (req: Request, res: Response) => joinCategoryController.handle(req, res)
     );
+
+    this.router.get("/vendor/category/status", verifyAuth, authorizeRole(["vendor"]), (req: Request, res: Response) => );
 
     this.router
       .route("/vendor/profile")

@@ -43,7 +43,7 @@ export class VendorRepository implements IVendorRepository {
     limit: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }> {
     const [user, total] = await Promise.all([
-      VendorModel.find(filter).skip(skip).limit(limit),
+      VendorModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
       VendorModel.countDocuments(filter),
     ]);
 

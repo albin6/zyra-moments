@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
+import { DependencyInjection } from ".";
 import { RegisterUserController } from "../../interfaceAdapters/controllers/auth/register.controllers";
 import { LoginUserController } from "../../interfaceAdapters/controllers/auth/login.controllers";
-import { DependencyInjection } from ".";
 import { SendEmailController } from "../../interfaceAdapters/controllers/auth/send-email.controllers";
 import { VerifyOTPController } from "../../interfaceAdapters/controllers/auth/verify-otp.controllers";
 import { RefreshTokenController } from "../../interfaceAdapters/controllers/auth/refresh-token.controllers";
@@ -21,32 +21,46 @@ import { CreateWorkSampleController } from "../../interfaceAdapters/controllers/
 import { GetAllWorkSampleByVendorIdController } from "../../interfaceAdapters/controllers/vendor/get-all-work-sample-by-vendorid.controller";
 import { UpdateVendorProfileController } from "../../interfaceAdapters/controllers/vendor/update-vendor-profile.controller";
 import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
+import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAdapters/controllers/vendor/get-vendor-category-join-request-status.controller";
 
 DependencyInjection.registerAll();
 
 export const registerController = container.resolve(RegisterUserController);
+
 export const loginController = container.resolve(LoginUserController);
+
 export const sendEmailController = container.resolve(SendEmailController);
+
 export const veryfyOTPController = container.resolve(VerifyOTPController);
+
 export const refreshTokenController = container.resolve(RefreshTokenController);
+
 export const logoutUserController = container.resolve(LogoutUserController);
+
+export const joinCategoryController = container.resolve(JoinCategoryController);
+
+export const getAllUsersController = container.resolve(GetAllUsersController);
+
 export const getAllCategoriesController = container.resolve(
   GetAllCategoriesController
 );
+
 export const createNewCategoryController = container.resolve(
   CreateNewCategoryController
 );
-export const joinCategoryController = container.resolve(JoinCategoryController);
-export const getAllUsersController = container.resolve(GetAllUsersController);
+
 export const getVendorDetailsController = container.resolve(
   GetVendorDetailsController
 );
+
 export const getAllCategoryJoinRequestController = container.resolve(
   GetAllCategoryJoinRequestController
 );
+
 export const getClientDetailsController = container.resolve(
   GetClientDetailsConrtoller
 );
+
 export const updateClientPasswordController = container.resolve(
   UpdateClientPasswordController
 );
@@ -54,21 +68,31 @@ export const updateClientPasswordController = container.resolve(
 export const updateVendorPasswordController = container.resolve(
   UpdateVendorPasswordController
 );
+
 export const updateUserStatusController = container.resolve(
   UpdateUserStatusController
 );
+
 export const getAllPaginatedCategoryController = container.resolve(
   GetAllPaginatedCategoryController
 );
+
 export const createWorkSampleController = container.resolve(
   CreateWorkSampleController
 );
+
 export const getAllWorkSampleByVendorIdController = container.resolve(
   GetAllWorkSampleByVendorIdController
 );
+
 export const updateVendorProfileController = container.resolve(
   UpdateVendorProfileController
 );
+
 export const updateClientProfileController = container.resolve(
   UpdateClientProfileController
+);
+
+export const getVendorCategoryJoinRequestStatusController = container.resolve(
+  GetVendorCategoryJoinRequestStatusController
 );
