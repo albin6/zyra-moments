@@ -4,6 +4,7 @@ import {
   createWorkSampleController,
   getAllCategoriesController,
   getAllWorkSampleByVendorIdController,
+  getVendorCategoryJoinRequestStatusController,
   getVendorDetailsController,
   joinCategoryController,
   logoutUserController,
@@ -37,7 +38,13 @@ export class VendorRoutes extends BaseRoute {
       (req: Request, res: Response) => joinCategoryController.handle(req, res)
     );
 
-    this.router.get("/vendor/category/status", verifyAuth, authorizeRole(["vendor"]), (req: Request, res: Response) => );
+    this.router.get(
+      "/vendor/category/status",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      (req: Request, res: Response) =>
+        getVendorCategoryJoinRequestStatusController.handle(req, res)
+    );
 
     this.router
       .route("/vendor/profile")

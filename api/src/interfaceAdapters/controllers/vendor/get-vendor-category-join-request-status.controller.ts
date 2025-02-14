@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import { IGetVendorCategoryRequestStatusUseCase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-category-join-request-status-usecase.interface";
+import { IGetVendorCategoryJoinRequestStatusUseCase } from "../../../entities/useCaseInterfaces/vendor/get-vendor-category-join-request-status-usecase.interface";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -12,8 +12,8 @@ export class GetVendorCategoryJoinRequestStatusController
   implements IGetVendorCategoryJoinRequestStatusController
 {
   constructor(
-    @inject("IGetVendorCategoryRequestStatusUseCase")
-    private getVendorCategoryRequestStatusUseCase: IGetVendorCategoryRequestStatusUseCase
+    @inject("IGetVendorCategoryJoinRequestStatusUseCase")
+    private getVendorCategoryRequestStatusUseCase: IGetVendorCategoryJoinRequestStatusUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {

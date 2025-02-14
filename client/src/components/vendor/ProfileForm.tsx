@@ -32,7 +32,7 @@ export function ProfileForm({
           <Avatar className="w-20 h-20">
             <AvatarImage src={avatarUrl} alt={firstName} />
             <AvatarFallback>
-              {firstName.charAt(0) + lastName.charAt(0)}
+              {firstName.charAt(0) + " " + lastName.charAt(0)}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
