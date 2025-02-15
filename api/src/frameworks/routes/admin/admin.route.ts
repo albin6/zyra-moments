@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createNewCategoryController,
+  getAllCategoryJoinRequestController,
   getAllPaginatedCategoryController,
   getAllUsersController,
   logoutUserController,
@@ -19,19 +20,24 @@ export class AdminRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
-    this.router.get(
-      "/admin/categories",
-
-      (req: Request, res: Response) =>
+    this.router
+      .route('"/admin/categories"')
+      .get((req: Request, res: Response) =>
         getAllPaginatedCategoryController.handle(req, res)
-    );
+      )
+      .post(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          createNewCategoryController.handle(req, res)
+      );
 
-    this.router.post(
-      "/admin/categories",
+    this.router.get(
+      "/admin/category/request",
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) =>
-        createNewCategoryController.handle(req, res)
+        getAllCategoryJoinRequestController.handle(req, res)
     );
 
     this.router.get(

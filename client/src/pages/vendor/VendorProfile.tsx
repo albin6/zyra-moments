@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 interface VendorContextType {
   vendorData: Vendor | null;
   setVendorData: React.Dispatch<React.SetStateAction<Vendor | null>>;
+  joinCategoryRequestStatus: string | undefined;
 }
 
 export interface UpdateVendorData {
@@ -21,7 +22,8 @@ export interface UpdateVendorData {
 }
 
 export default function VendorProfile() {
-  const { vendorData, setVendorData } = useOutletContext<VendorContextType>();
+  const { vendorData, setVendorData, joinCategoryRequestStatus } =
+    useOutletContext<VendorContextType>();
   const [isEdit, setIsEdit] = useState(false);
 
   const handleUpdateVendorProfile = () => {};
@@ -41,7 +43,11 @@ export default function VendorProfile() {
 
   return (
     <>
-      <ProfileHeader onEdit={handleEdit} isEdit={isEdit} />
+      <ProfileHeader
+        onEdit={handleEdit}
+        isEdit={isEdit}
+        joinCategoryRequestStatus={joinCategoryRequestStatus}
+      />
       <ProfileForm
         firstName={vendorData.firstName}
         lastName={vendorData.lastName}

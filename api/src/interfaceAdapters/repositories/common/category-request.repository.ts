@@ -25,6 +25,15 @@ export class CategoryRequestRepository implements ICategoryRequestRepository {
   }
 
   async find(): Promise<ICategoryRequestEntity[] | []> {
-    return await CategoryRequestModel.find();
+    return await CategoryRequestModel.find()
+      .populate({
+        path: "vendorId",
+        select: "firstName lastName",
+      })
+      .populate({
+        path: "categoryId",
+        select: "title",
+      })
+      .lean();
   }
 }

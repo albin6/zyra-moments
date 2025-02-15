@@ -2,21 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Bell, MessageSquare, Tag } from "lucide-react";
 import { VendorCategoryModal } from "../modals/VendorCategoryModal";
 import { useState } from "react";
-import {
-  useVendorJoinCategoryMutation,
-  useVendorJoinCategoryQuery,
-} from "@/hooks/vendor/useVendorProfile";
+import { useVendorJoinCategoryMutation } from "@/hooks/vendor/useVendorProfile";
 import { toast } from "sonner";
 
 interface ProfileHeaderProps {
   onEdit?: () => void;
   isEdit: boolean;
+  joinCategoryRequestStatus: string | undefined;
 }
 
-export function ProfileHeader({ onEdit, isEdit }: ProfileHeaderProps) {
+export function ProfileHeader({
+  onEdit,
+  isEdit,
+  joinCategoryRequestStatus,
+}: ProfileHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading } = useVendorJoinCategoryQuery();
   const { mutate: vendorJoinCategory } = useVendorJoinCategoryMutation();
 
   const handleSave = (category: string) => {
@@ -31,7 +32,7 @@ export function ProfileHeader({ onEdit, isEdit }: ProfileHeaderProps) {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">My Profile</h1>
         <div className="flex items-center space-x-4">
-          {!isLoading && !data?.status && (
+          {joinCategoryRequestStatus === "Not Requested" && (
             <Button size="sm" onClick={() => setIsModalOpen(true)}>
               <Tag className="h-5 w-5" />
               Choose Category

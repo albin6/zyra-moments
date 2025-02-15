@@ -36,7 +36,7 @@ export const vendorJoinCategory = async (category: string) => {
 export const getVendorInCategoryStatus = async () => {
   const response = await vendorAxiosInstance.get<{
     success: boolean;
-    status: boolean;
+    status: string | undefined;
   }>("/_ve/vendor/category/status");
   return response.data;
 };

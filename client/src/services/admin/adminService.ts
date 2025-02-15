@@ -57,3 +57,8 @@ export const getAllCategories = async ({
   });
   return response.data;
 };
+
+export const getAllCategoryJoinRequestFromVendors = async () => {
+  const response = await adminAxiosInstance.get("/_ad/admin/category/request");
+  return response.data;
+};

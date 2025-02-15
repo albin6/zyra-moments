@@ -1,3 +1,3 @@
 export interface IGetVendorCategoryJoinRequestStatusUseCase {
-  execute(vendorId: any): Promise<boolean>;
+  execute(vendorId: any): Promise<string | undefined>;
 }

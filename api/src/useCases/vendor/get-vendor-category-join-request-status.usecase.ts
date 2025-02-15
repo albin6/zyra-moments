@@ -14,7 +14,7 @@ export class GetVendorCategoryJoinRequestStatusUseCase
     @inject("ICategoryRequestRepository")
     private categoryRequestRepository: ICategoryRequestRepository
   ) {}
-  async execute(vendorId: any): Promise<boolean> {
+  async execute(vendorId: any): Promise<string | undefined> {
     const isVendorExists = await this.vendorRepository.findById(vendorId);
 
     if (!isVendorExists) {
@@ -27,6 +27,8 @@ export class GetVendorCategoryJoinRequestStatusUseCase
     const isVendorRequestedForCategory =
       await this.categoryRequestRepository.findByVendorId(vendorId);
 
-    return isVendorRequestedForCategory ? true : false;
+    return isVendorRequestedForCategory
+      ? isVendorRequestedForCategory.status
+      : "Not Requested";
   }
 }

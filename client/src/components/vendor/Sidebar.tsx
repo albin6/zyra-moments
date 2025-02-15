@@ -13,9 +13,15 @@ interface SidebarProps {
   firstName: string;
   lastName: string;
   avatarUrl: string;
+  joinCategoryRequestStatus: string | undefined;
 }
 
-export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
+export function Sidebar({
+  firstName,
+  lastName,
+  avatarUrl,
+  joinCategoryRequestStatus,
+}: SidebarProps) {
   const navigate = useNavigate();
   const { mutate: logoutReq } = useLogout(logoutVendor);
   const dispatch = useDispatch();
@@ -58,7 +64,11 @@ export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
           >
             My Profile
           </Button>
-          <Button variant="ghost" className="w-full justify-center font-normal">
+          <Button
+            variant="ghost"
+            disabled={joinCategoryRequestStatus !== "accepted"}
+            className="w-full justify-center font-normal"
+          >
             Services
           </Button>
           <Button
@@ -67,10 +77,15 @@ export function Sidebar({ firstName, lastName, avatarUrl }: SidebarProps) {
               location.pathname === "/vendor/work-sample" && "bg-accent"
             }`}
             onClick={() => navigate("/vendor/work-sample")}
+            disabled={joinCategoryRequestStatus !== "accepted"}
           >
             Work Samples
           </Button>
-          <Button variant="ghost" className="w-full justify-center font-normal">
+          <Button
+            disabled={joinCategoryRequestStatus !== "accepted"}
+            variant="ghost"
+            className="w-full justify-center font-normal"
+          >
             Payments
           </Button>
         </nav>
