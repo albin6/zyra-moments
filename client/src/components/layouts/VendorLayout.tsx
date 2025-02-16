@@ -23,6 +23,7 @@ export interface Vendor {
   updatedAt: string;
   bio?: string;
   place?: string;
+  profileImage?: string;
   __v: number;
   category: {
     _id: string;
@@ -52,12 +53,17 @@ function VendorLayout() {
 
   return (
     <div className="min-h-screen bg-background">
-      <VendorHeader />
+      <VendorHeader
+        firstName={vendorData.firstName}
+        lastName={vendorData.lastName}
+        email={vendorData.email}
+        profileImage={vendorData.profileImage || ""}
+      />
       <div className="container mx-auto flex p-6 justify-between bg-background">
         <Sidebar
           firstName={vendorData.firstName}
           lastName={vendorData.lastName}
-          avatarUrl={""}
+          profileImage={vendorData.profileImage || ""}
           joinCategoryRequestStatus={joinCategoryRequestStatus?.status}
         />
 
