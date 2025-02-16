@@ -5,6 +5,8 @@ import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { Vendor } from "@/components/layouts/VendorLayout";
 import { Button } from "@/components/ui/button";
+import { useVendorProfileMutation } from "@/hooks/vendor/useVendorProfile";
+import { toast } from "sonner";
 
 interface VendorContextType {
   vendorData: Vendor | null;
@@ -26,7 +28,29 @@ export default function VendorProfile() {
     useOutletContext<VendorContextType>();
   const [isEdit, setIsEdit] = useState(false);
 
-  const handleUpdateVendorProfile = () => {};
+  const { mutate: updateVendorProfile } = useVendorProfileMutation();
+
+  const handleUpdateVendorProfile = () => {
+    if (vendorData) {
+      updateVendorProfile(
+        {
+          firstName: vendorData?.firstName,
+          lastName: vendorData?.lastName,
+          phoneNumber: vendorData?.phoneNumber,
+          bio: vendorData.bio || "",
+          place: vendorData.place || "",
+          profileImage: vendorData.profileImage || "",
+        },
+        {
+          onSuccess: (data) => {
+            toast.success(data.message);
+            setIsEdit(false);
+          },
+          onError: (error: any) => toast.error(error.response.data.message),
+        }
+      );
+    }
+  };
 
   const handleUpdate = (field: string, value: string) => {
     setVendorData((prev) => (prev ? { ...prev, [field]: value } : null));
@@ -54,7 +78,7 @@ export default function VendorProfile() {
         email={vendorData.email}
         bio=""
         place=""
-        avatarUrl={""}
+        profileImage={vendorData.profileImage || ""}
         phoneNumber={vendorData.phoneNumber}
         onUpdate={handleUpdate}
         isEdit={isEdit}

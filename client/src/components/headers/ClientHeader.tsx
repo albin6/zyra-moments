@@ -18,6 +18,7 @@ import { useLogout } from "@/hooks/auth/useLogout";
 import { toast } from "sonner";
 import { logoutClient } from "@/services/auth/authService";
 import { useNavigate } from "react-router-dom";
+import { Client } from "@/services/client/clientService";
 
 const navItems = [
   { name: "Dashboard", href: "#" },
@@ -26,9 +27,13 @@ const navItems = [
   { name: "Analytics", href: "#" },
 ];
 
-export function ClientHeader() {
+interface ClientHeaderProps {
+  client: Client;
+}
+
+export function ClientHeader({ client }: ClientHeaderProps) {
   const navigate = useNavigate();
-  const { isLoggedIn, client } = useClientAuth();
+  const { isLoggedIn } = useClientAuth();
   const { mutate: logoutReq } = useLogout(logoutClient);
   const dispatch = useDispatch();
 
@@ -46,7 +51,7 @@ export function ClientHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-20 items-center">
+      <div className="container mx-auto p-4 flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
           <a className="mr-6 flex items-center space-x-2" href="#">
             <svg
@@ -114,7 +119,7 @@ export function ClientHeader() {
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src="/placeholder-avatar.jpg"
+                      src={client.profileImage || "/placeholder-avatar.jpg"}
                       alt="@username"
                     />
                     <AvatarFallback>

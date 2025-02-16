@@ -25,8 +25,20 @@ const navItems = [
   { name: "Analytics", href: "#" },
 ];
 
-export function VendorHeader() {
-  const { isLoggedIn, vendor } = useVendorAuth();
+interface SidebarProps {
+  firstName: string;
+  lastName: string;
+  email: string;
+  profileImage: string;
+}
+
+export function VendorHeader({
+  firstName,
+  lastName,
+  email,
+  profileImage,
+}: SidebarProps) {
+  const { isLoggedIn } = useVendorAuth();
   const { mutate: logoutReq } = useLogout(logoutVendor);
   const dispatch = useDispatch();
 
@@ -108,14 +120,9 @@ export function VendorHeader() {
                   className="relative h-8 w-8 rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src="/placeholder-avatar.jpg"
-                      alt="@username"
-                    />
-                    <AvatarFallback>
-                      {vendor &&
-                        vendor?.firstName.charAt(0) +
-                          vendor?.lastName.charAt(0)}
+                    <AvatarImage src={profileImage} alt={firstName} />
+                    <AvatarFallback className="bg-primary/10">
+                      {firstName.charAt(0) + lastName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -124,10 +131,10 @@ export function VendorHeader() {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {vendor && vendor.firstName + " " + vendor.lastName}
+                      {firstName + " " + lastName}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {vendor && vendor.email}
+                      {email}
                     </p>
                   </div>
                 </DropdownMenuLabel>

@@ -8,7 +8,7 @@ export const clientProfileSchema = Yup.object({
     .required("First name is required"),
   lastName: Yup.string()
     .matches(/^[a-zA-Z]+$/, "Last name should only contain letters")
-    .min(1, "Last name must be at least 1 characters")
+    .min(1, "Last name must be at least 1 character")
     .max(50, "Last name must not exceed 50 characters")
     .required("Last name is required"),
   email: Yup.string()
@@ -16,7 +16,8 @@ export const clientProfileSchema = Yup.object({
     .required("Email is required"),
   phoneNumber: Yup.string()
     .matches(/^\+?[1-9]\d{1,14}$/, "Invalid phone number")
-    .required("Contact number is required"),
+    .required("Phone number is required"),
+  profileImage: Yup.string(),
 });
 
 export const passwordResetSchema = Yup.object({

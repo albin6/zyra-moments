@@ -12,14 +12,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 interface SidebarProps {
   firstName: string;
   lastName: string;
-  avatarUrl: string;
+  profileImage: string;
   joinCategoryRequestStatus: string | undefined;
 }
 
 export function Sidebar({
   firstName,
   lastName,
-  avatarUrl,
+  profileImage,
   joinCategoryRequestStatus,
 }: SidebarProps) {
   const navigate = useNavigate();
@@ -44,8 +44,8 @@ export function Sidebar({
       <aside className="w-64 hidden md:flex flex-col p-6 space-y-6">
         <div className="flex flex-col items-center space-y-3">
           <Avatar className="w-20 h-20">
-            <AvatarImage src={avatarUrl} alt={firstName} />
-            <AvatarFallback>
+            <AvatarImage src={profileImage} alt={firstName} />
+            <AvatarFallback className="bg-primary/10">
               {firstName.charAt(0) + lastName.charAt(0)}
             </AvatarFallback>
           </Avatar>

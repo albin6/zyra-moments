@@ -12,7 +12,7 @@ const navItems = [
 interface ClientSidebarProps {
   firstName: string;
   lastName: string;
-  avatarUrl: string;
+  profileImage: string;
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
@@ -20,7 +20,7 @@ interface ClientSidebarProps {
 export function ClientSidebar({
   firstName,
   lastName,
-  avatarUrl,
+  profileImage,
   activeTab,
   setActiveTab,
 }: ClientSidebarProps) {
@@ -29,7 +29,7 @@ export function ClientSidebar({
       <div className="flex flex-col h-full">
         <div className="flex items-center space-x-4 mb-6">
           <Avatar className="w-12 h-12">
-            <AvatarImage src={avatarUrl} alt={`${firstName} ${lastName}`} />
+            <AvatarImage src={profileImage} alt={`${firstName} ${lastName}`} />
             <AvatarFallback>
               {firstName[0]}
               {lastName[0]}

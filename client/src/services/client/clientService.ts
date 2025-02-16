@@ -12,6 +12,7 @@ export type Client = {
   role: string;
   phoneNumber: string;
   masterOfCeremonies: boolean;
+  profileImage?: string;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -27,6 +28,17 @@ export const getClientDetails = async () => {
   const response = await clientAxiosInstance.get<ClientResponse>(
     "/_cl/client/details"
   );
+  return response.data;
+};
+
+export interface IUpdateClientData
+  extends Pick<
+    Client,
+    "firstName" | "lastName" | "phoneNumber" | "profileImage"
+  > {}
+
+export const updateClientProfile = async (data: IUpdateClientData) => {
+  const response = await clientAxiosInstance.put("/_cl/client/details", data);
   return response.data;
 };
 
