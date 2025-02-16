@@ -8,9 +8,13 @@ export interface ICategoryRepository {
 
   findByTitle(title: string): Promise<ICategoryEntity | null>;
 
+  findById(id: any): Promise<ICategoryEntity | null>;
+
   findPaginatedCategory(
     filter: any,
     skip: number,
     limit: number
   ): Promise<PaginatedCategories>;
+
+  updateCategoryStatus(id: any): Promise<void>;
 }

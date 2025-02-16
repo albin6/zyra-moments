@@ -27,12 +27,13 @@ export class GetAllPaginatedCategoryUseCase
     const skip = (validPageNumber - 1) * validPageSize;
     const limit = validPageSize;
 
-    const { categories, total } =
+    const { categories, total, all } =
       await this.categoryRepository.findPaginatedCategory(filter, skip, limit);
 
     const response: PaginatedCategories = {
       categories,
       total: Math.ceil(total / validPageSize),
+      all,
     };
 
     return response;

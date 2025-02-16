@@ -23,7 +23,7 @@ export class GetAllPaginatedCategoryController
 
       const searchTermString = typeof searchTerm === "string" ? searchTerm : "";
 
-      const { categories, total } =
+      const { categories, total, all } =
         await this.getAllPaginatedCategoryUseCase.execute(
           pageNumber,
           pageSize,
@@ -35,6 +35,7 @@ export class GetAllPaginatedCategoryController
         categories,
         totalPages: total,
         currentPage: pageNumber,
+        totalCategory: all,
       });
     } catch (error) {
       if (error instanceof ZodError) {

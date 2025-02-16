@@ -22,6 +22,7 @@ import { GetAllWorkSampleByVendorIdController } from "../../interfaceAdapters/co
 import { UpdateVendorProfileController } from "../../interfaceAdapters/controllers/vendor/update-vendor-profile.controller";
 import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
 import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAdapters/controllers/vendor/get-vendor-category-join-request-status.controller";
+import { UpdateCategoryStatusController } from "../../interfaceAdapters/controllers/admin/update-category-status.controller";
 
 DependencyInjection.registerAll();
 
@@ -95,4 +96,7 @@ export const updateClientProfileController = container.resolve(
 
 export const getVendorCategoryJoinRequestStatusController = container.resolve(
   GetVendorCategoryJoinRequestStatusController
+);
+export const updateCategoryStatusController = container.resolve(
+  UpdateCategoryStatusController
 );

@@ -1,28 +1,25 @@
 import { Request, Response } from "express";
-import { ICreateNewCategoryController } from "../../../entities/controllerInterfaces/admin/create-new-category-controller.interface";
-import { ICreateNewCategoryUseCase } from "../../../entities/useCaseInterfaces/admin/create-new-category-usecase.interface";
-import { ZodError } from "zod";
+import { IUpdateCategoryStatusController } from "../../../entities/controllerInterfaces/admin/update-category-status-controller.interface";
+import { IUpdateCategoryStatusUseCase } from "../../../entities/useCaseInterfaces/admin/update-category-status-usecase.interface";
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import { ZodError } from "zod";
 import { CustomError } from "../../../entities/utils/CustomError";
-import { inject, injectable } from "tsyringe";
 
-@injectable()
-export class CreateNewCategoryController
-  implements ICreateNewCategoryController
+export class UpdateCategoryStatusController
+  implements IUpdateCategoryStatusController
 {
   constructor(
-    @inject("ICreateNewCategoryUseCase")
-    private createNewCategoryUseCase: ICreateNewCategoryUseCase
+    private updateCategoryStatusUseCase: IUpdateCategoryStatusUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { name } = req.body as { name: string };
+      const { categoryId } = req.params;
 
-      await this.createNewCategoryUseCase.execute(name);
+      await this.updateCategoryStatusUseCase.execute(categoryId);
 
       res
-        .status(HTTP_STATUS.CREATED)
-        .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
+        .status(HTTP_STATUS.OK)
+        .json({ success: true, message: SUCCESS_MESSAGES.UPDATE_SUCCESS });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

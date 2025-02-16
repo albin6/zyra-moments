@@ -20,22 +20,36 @@ export class CategoryRespository implements ICategoryRepository {
     });
   }
 
+  async findById(id: any): Promise<ICategoryEntity | null> {
+    return await CategoryModel.findById(id);
+  }
+
   async findPaginatedCategory(
     filter: any,
     skip: number,
     limit: number
   ): Promise<PaginatedCategories> {
-    const [categories, total] = await Promise.all([
+    const [categories, total, all] = await Promise.all([
       CategoryModel.find(filter)
         .select("status title _id")
         .skip(skip)
         .limit(limit),
       CategoryModel.countDocuments(filter),
+      CategoryModel.countDocuments(),
     ]);
 
     return {
       categories,
       total,
+      all,
     };
+  }
+
+  async updateCategoryStatus(id: any): Promise<void> {
+    await CategoryModel.updateOne(id, {
+      $set: {
+        status: { $not: "$status" },
+      },
+    });
   }
 }

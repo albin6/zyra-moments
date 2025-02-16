@@ -1,3 +1,4 @@
+import { adminAxiosInstance } from "@/api/admin.axios";
 import { vendorAxiosInstance } from "@/api/vendor.axios";
 
 export type Category = {
@@ -39,4 +40,29 @@ export const getVendorInCategoryStatus = async () => {
     status: string | undefined;
   }>("/_ve/vendor/category/status");
   return response.data;
+};
+
+export const addAndEditCategory = async (categoryData: {
+  id?: string;
+  status: string;
+  name: string;
+}) => {
+  if (categoryData.id) {
+    const response = await adminAxiosInstance.put(
+      `/_ad/admin/categories/${categoryData.id}`,
+      categoryData
+    );
+    return response.data;
+  } else if (categoryData.status) {
+    const response = await adminAxiosInstance.patch(
+      `/_ad/admin/categories/${categoryData.id}`
+    );
+    return response.data;
+  } else {
+    const response = await adminAxiosInstance.post(
+      "/_ad/admin/categories",
+      categoryData
+    );
+    return response.data;
+  }
 };

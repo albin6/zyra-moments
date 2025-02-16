@@ -16,6 +16,7 @@ type CategoryResponse = {
   categories: CategoryType[];
   totalPages: number;
   currentPage: number;
+  totalCategory: number;
 };
 
 export const useAllCategoryAdminQuery = (

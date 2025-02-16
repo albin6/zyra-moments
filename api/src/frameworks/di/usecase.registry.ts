@@ -69,6 +69,8 @@ import { IUpdateClientProfileUseCase } from "../../entities/useCaseInterfaces/cl
 import { UpdateClientProfileUseCase } from "../../useCases/client/update-client-profile.usecase";
 import { IGetVendorCategoryJoinRequestStatusUseCase } from "../../entities/useCaseInterfaces/vendor/get-vendor-category-join-request-status-usecase.interface";
 import { GetVendorCategoryJoinRequestStatusUseCase } from "../../useCases/vendor/get-vendor-category-join-request-status.usecase";
+import { IUpdateCategoryStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-status-usecase.interface";
+import { UpdateCategoryStatusUseCase } from "../../useCases/admin/update-category-status.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -184,6 +186,11 @@ export class UseCaseRegistry {
     container.register<IGetVendorCategoryJoinRequestStatusUseCase>(
       "IGetVendorCategoryJoinRequestStatusUseCase",
       { useClass: GetVendorCategoryJoinRequestStatusUseCase }
+    );
+
+    container.register<IUpdateCategoryStatusUseCase>(
+      "IUpdateCategoryStatusUseCase",
+      { useClass: UpdateCategoryStatusUseCase }
     );
 
     // Register Strategies

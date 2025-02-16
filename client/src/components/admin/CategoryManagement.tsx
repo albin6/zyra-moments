@@ -1,6 +1,13 @@
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Plus, FolderTree, FileQuestion, Trash2 } from "lucide-react";
+import {
+  Plus,
+  FolderTree,
+  FileQuestion,
+  Trash2,
+  ToggleLeft,
+  ToggleRight,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -31,9 +38,10 @@ import {
 } from "@/hooks/admin/useAllCategory";
 import { getAllCategories } from "@/services/admin/adminService";
 import { Spinner } from "../ui/spinner";
+import { useAllCategoryMutation } from "@/hooks/category/useAllCategory";
+import { addAndEditCategory } from "@/services/category/categoryService";
 
 const CategoryManagement: React.FC = () => {
-  const [newCategoryName, setNewCategoryName] = useState("");
   const [categories, setCategories] = useState<CategoryType[] | null>(null);
 
   const [page, setPage] = useState(1);
@@ -41,7 +49,9 @@ const CategoryManagement: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const limit = 2;
 
-  const handleAddCategory = (newCategory: string) => {};
+  const handleAddCategory = (newCategory: string) => {
+    mutateCategory({ name: newCategory });
+  };
 
   const updateCategoryStatus = (id: string) => {};
 
@@ -51,6 +61,8 @@ const CategoryManagement: React.FC = () => {
     limit,
     searchTerm
   );
+
+  const { mutate: mutateCategory } = useAllCategoryMutation(addAndEditCategory);
 
   useEffect(() => {
     if (!data) return;
@@ -99,7 +111,9 @@ const CategoryManagement: React.FC = () => {
             <FolderTree className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{categories.length}</div>
+            <div className="text-2xl font-bold">
+              {data && data.totalCategory}
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -189,8 +203,17 @@ const CategoryManagement: React.FC = () => {
                       size="icon"
                       onClick={() => updateCategoryStatus(category._id)}
                     >
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Delete</span>
+                      {category.status ? (
+                        <>
+                          <ToggleLeft className="h-4 w-4" />
+                          <span className="sr-only">Block</span>
+                        </>
+                      ) : (
+                        <>
+                          <ToggleRight className="h-4 w-4" />
+                          <span className="sr-only">Unblock</span>
+                        </>
+                      )}
                     </Button>
                   </TableCell>
                 </TableRow>

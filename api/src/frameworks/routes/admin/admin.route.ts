@@ -6,6 +6,7 @@ import {
   getAllUsersController,
   logoutUserController,
   refreshTokenController,
+  updateCategoryStatusController,
   updateUserStatusController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -21,7 +22,7 @@ export class AdminRoutes extends BaseRoute {
   }
   protected initializeRoutes(): void {
     this.router
-      .route('"/admin/categories"')
+      .route("/admin/categories")
       .get((req: Request, res: Response) =>
         getAllPaginatedCategoryController.handle(req, res)
       )
@@ -30,6 +31,21 @@ export class AdminRoutes extends BaseRoute {
         authorizeRole(["admin"]),
         (req: Request, res: Response) =>
           createNewCategoryController.handle(req, res)
+      );
+
+    this.router
+      .route("/admin/categories/:categoryId")
+      .patch(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          updateCategoryStatusController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          updateCategoryStatusController.handle(req, res) // need to change remember!
       );
 
     this.router.get(
