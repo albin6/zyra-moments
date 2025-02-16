@@ -3,6 +3,7 @@ import { ICategoryRequestRepository } from "../../entities/repositoryInterfaces/
 import { IUpdateCategoryRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-request-status-usecase.interface";
 import { CustomError } from "../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 
 @injectable()
 export class UpdateCategoryRequestStatusUseCase
@@ -10,7 +11,8 @@ export class UpdateCategoryRequestStatusUseCase
 {
   constructor(
     @inject("ICategoryRequestRepository")
-    private categoryRequestRepository: ICategoryRequestRepository
+    private categoryRequestRepository: ICategoryRequestRepository,
+    @inject("IVendorRepository") private vendorRepository: IVendorRepository
   ) {}
   async execute(id: any, status: string): Promise<void> {
     const categoryRequestExists = await this.categoryRequestRepository.findById(
@@ -21,6 +23,13 @@ export class UpdateCategoryRequestStatusUseCase
       throw new CustomError(
         ERROR_MESSAGES.REQUEST_NOT_FOUND,
         HTTP_STATUS.NOT_FOUND
+      );
+    }
+
+    if (status === "accepted") {
+      await this.vendorRepository.findByIdAndUpdateVendorCategory(
+        categoryRequestExists.vendorId,
+        categoryRequestExists.categoryId
       );
     }
 

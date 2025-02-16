@@ -14,9 +14,9 @@ export class VendorRepository implements IVendorRepository {
     return await VendorModel.findOne({ email });
   }
 
-  async findByIdAndUpdate(
-    vendorId: ObjectId,
-    categoryId: ObjectId
+  async findByIdAndUpdateVendorCategory(
+    vendorId: any,
+    categoryId: any
   ): Promise<IVendorEntity | null> {
     return await VendorModel.findByIdAndUpdate(
       vendorId,
@@ -43,7 +43,11 @@ export class VendorRepository implements IVendorRepository {
     limit: number
   ): Promise<{ user: IVendorEntity[] | []; total: number }> {
     const [user, total] = await Promise.all([
-      VendorModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      VendorModel.find(filter)
+        .populate({ path: "category", select: "title" })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
       VendorModel.countDocuments(filter),
     ]);
 

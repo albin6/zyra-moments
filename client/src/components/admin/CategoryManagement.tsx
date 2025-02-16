@@ -4,7 +4,6 @@ import {
   Plus,
   FolderTree,
   FileQuestion,
-  Trash2,
   ToggleLeft,
   ToggleRight,
 } from "lucide-react";
@@ -203,7 +202,7 @@ const CategoryManagement: React.FC = () => {
                     {category.title}
                   </TableCell>
                   <TableCell>
-                    {category.status ? "inactive" : "active"}
+                    {category.status ? "active" : "inactive"}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button
@@ -211,7 +210,7 @@ const CategoryManagement: React.FC = () => {
                       size="icon"
                       onClick={() => updateCategoryStatus(category._id)}
                     >
-                      {category.status ? (
+                      {!category.status ? (
                         <>
                           <ToggleLeft className="h-4 w-4" />
                           <span className="sr-only">Block</span>

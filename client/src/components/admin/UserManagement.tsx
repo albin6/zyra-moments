@@ -50,7 +50,10 @@ interface Vendor {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  category: string;
+  category: {
+    _id: string;
+    title: string;
+  };
   categoryRequest?: boolean;
 }
 
@@ -175,7 +178,9 @@ export default function UserManagement() {
             <TableRow key={vendor._id}>
               <TableCell>{vendor.firstName + " " + vendor.lastName}</TableCell>
               <TableCell>{vendor.email}</TableCell>
-              <TableCell>{vendor.category ?? "Not in Category"}</TableCell>
+              <TableCell>
+                {vendor.category?.title ?? "Not in Category"}
+              </TableCell>
               <TableCell>{vendor.phoneNumber}</TableCell>
               <TableCell className="text-center">
                 {/* <Button variant="outline" size="sm" className="mr-2">

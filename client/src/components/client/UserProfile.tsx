@@ -13,11 +13,10 @@ import { useClientProfileMutation } from "@/hooks/client/useClientProfile";
 import { Client } from "@/services/client/clientService";
 import { toast } from "sonner";
 import { useOutletContext } from "react-router-dom";
-import { Vendor } from "../layouts/VendorLayout";
 
 interface ClientContextType {
   clientData: Client | null;
-  setClientData: React.Dispatch<React.SetStateAction<Vendor | null>>;
+  setClientData: React.Dispatch<React.SetStateAction<Client | null>>;
 }
 
 export function UserProfile() {

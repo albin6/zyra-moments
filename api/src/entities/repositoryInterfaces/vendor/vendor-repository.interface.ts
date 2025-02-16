@@ -6,9 +6,9 @@ export interface IVendorRepository {
 
   findByEmail(email: string): Promise<IVendorEntity | null>;
 
-  findByIdAndUpdate(
-    vendorId: ObjectId,
-    categoryId: ObjectId
+  findByIdAndUpdateVendorCategory(
+    vendorId: any,
+    categoryId: any
   ): Promise<IVendorEntity | null>;
 
   findById(id: any): Promise<IVendorEntity | null>;
