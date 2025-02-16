@@ -21,8 +21,8 @@ import { useNavigate } from "react-router-dom";
 import { Client } from "@/services/client/clientService";
 
 const navItems = [
-  { name: "Dashboard", href: "#" },
-  { name: "Orders", href: "#" },
+  { name: "Dashboard", href: "/landing" },
+  { name: "Discover", href: "/events/discover" },
   { name: "Support", href: "#" },
   { name: "Analytics", href: "#" },
 ];

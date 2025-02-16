@@ -6,6 +6,7 @@ import { AuthRoute } from "@/protected/ProtectedRoute";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientLandingPage from "@/pages/client/ClientLanding";
 import { UserProfile } from "@/components/client/UserProfile";
+import { ClientEventListing } from "@/pages/client/ClientEventListing";
 
 function ClientRoutes() {
   return (
@@ -25,6 +26,15 @@ function ClientRoutes() {
           path="/profile"
           element={
             <AuthRoute allowedRoles={["client"]} element={<UserProfile />} />
+          }
+        />
+        <Route
+          path="/events/discover"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<ClientEventListing />}
+            />
           }
         />
       </Route>
