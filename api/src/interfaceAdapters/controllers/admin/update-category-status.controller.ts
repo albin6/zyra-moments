@@ -4,11 +4,14 @@ import { IUpdateCategoryStatusUseCase } from "../../../entities/useCaseInterface
 import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { ZodError } from "zod";
 import { CustomError } from "../../../entities/utils/CustomError";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 export class UpdateCategoryStatusController
   implements IUpdateCategoryStatusController
 {
   constructor(
+    @inject("IUpdateCategoryStatusUseCase")
     private updateCategoryStatusUseCase: IUpdateCategoryStatusUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
