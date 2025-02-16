@@ -37,7 +37,9 @@ export const useVendorJoinCategoryMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: vendorJoinCategory,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["in-category"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["in-category"] });
+      queryClient.invalidateQueries({ queryKey: ["join-requests"] });
+    },
   });
 };

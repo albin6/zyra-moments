@@ -21,6 +21,7 @@ import { UpdateVendorProfileController } from "../../interfaceAdapters/controlle
 import { UpdateClientProfileController } from "../../interfaceAdapters/controllers/client/update-client-profile.controller";
 import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAdapters/controllers/vendor/get-vendor-category-join-request-status.controller";
 import { UpdateCategoryStatusController } from "../../interfaceAdapters/controllers/admin/update-category-status.controller";
+import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/controllers/admin/update-category-request-status.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -110,6 +111,10 @@ export class ControllerRegistry {
 
     container.register("UpdateCategoryStatusController", {
       useClass: UpdateCategoryStatusController,
+    });
+
+    container.register("UpdateCategoryRequestStatusController", {
+      useClass: UpdateCategoryRequestStatusController,
     });
   }
 }

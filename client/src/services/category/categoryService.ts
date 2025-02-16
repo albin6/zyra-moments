@@ -1,4 +1,5 @@
 import { adminAxiosInstance } from "@/api/admin.axios";
+import { clientAxiosInstance } from "@/api/client.axios";
 import { vendorAxiosInstance } from "@/api/vendor.axios";
 
 export type Category = {
@@ -19,6 +20,13 @@ export interface CategoryResponse {
 export const getAllCategories = async () => {
   const response = await vendorAxiosInstance.get<CategoryResponse>(
     "/_ve/vendor/categories"
+  );
+  return response.data;
+};
+
+export const getAllCategoriesForClient = async () => {
+  const response = await clientAxiosInstance.get<CategoryResponse>(
+    "/_cl/client/categories"
   );
   return response.data;
 };
@@ -44,20 +52,22 @@ export const getVendorInCategoryStatus = async () => {
 
 export const addAndEditCategory = async (categoryData: {
   id?: string;
-  status: string;
-  name: string;
+  status?: string;
+  name?: string;
 }) => {
   if (categoryData.id) {
-    const response = await adminAxiosInstance.put(
-      `/_ad/admin/categories/${categoryData.id}`,
-      categoryData
-    );
-    return response.data;
-  } else if (categoryData.status) {
-    const response = await adminAxiosInstance.patch(
-      `/_ad/admin/categories/${categoryData.id}`
-    );
-    return response.data;
+    if (categoryData.status) {
+      const response = await adminAxiosInstance.patch(
+        `/_ad/admin/categories/${categoryData.id}`
+      );
+      return response.data;
+    } else {
+      const response = await adminAxiosInstance.put(
+        `/_ad/admin/categories/${categoryData.id}`,
+        categoryData
+      );
+      return response.data;
+    }
   } else {
     const response = await adminAxiosInstance.post(
       "/_ad/admin/categories",

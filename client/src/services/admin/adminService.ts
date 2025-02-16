@@ -1,4 +1,5 @@
 import { adminAxiosInstance } from "@/api/admin.axios";
+import { AxiosResponse } from "../auth/authService";
 
 export const getAllUsers = async ({
   userType,
@@ -58,7 +59,52 @@ export const getAllCategories = async ({
   return response.data;
 };
 
+export type RequestData = {
+  success: boolean;
+  requests: RequestItem[];
+};
+
+export type RequestItem = {
+  _id: string;
+  vendorId: Vendor;
+  categoryId: Category;
+  status: "pending" | "accepted" | "rejected"; // Assuming possible statuses
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+type Vendor = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+};
+
+type Category = {
+  _id: string;
+  title: string;
+};
+
 export const getAllCategoryJoinRequestFromVendors = async () => {
-  const response = await adminAxiosInstance.get("/_ad/admin/category/request");
+  const response = await adminAxiosInstance.get<RequestData>(
+    "/_ad/admin/category/request"
+  );
+  return response.data;
+};
+
+export const updateCategoryJoinRequestStatus = async (data: {
+  id: string;
+  status: string;
+}) => {
+  const response = await adminAxiosInstance.patch<AxiosResponse>(
+    "/_ad/admin/category/request",
+    {},
+    {
+      params: {
+        requestId: data.id,
+        status: data.status,
+      },
+    }
+  );
   return response.data;
 };

@@ -18,48 +18,46 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-interface CategoryRequest {
-  id: number;
-  vendorName: string;
-  categoryName: string;
-  status: "pending" | "approved" | "rejected";
-}
-
-const mockCategoryRequests: CategoryRequest[] = [
-  {
-    id: 1,
-    vendorName: "TechConf Inc.",
-    categoryName: "Tech Conferences",
-    status: "pending",
-  },
-  {
-    id: 2,
-    vendorName: "GreenEvents",
-    categoryName: "Eco-friendly Workshops",
-    status: "pending",
-  },
-  {
-    id: 3,
-    vendorName: "MusicFest Organizers",
-    categoryName: "Music Festivals",
-    status: "approved",
-  },
-  {
-    id: 4,
-    vendorName: "SportsMeet",
-    categoryName: "Sports Tournaments",
-    status: "rejected",
-  },
-  {
-    id: 5,
-    vendorName: "ArtExpo",
-    categoryName: "Art Exhibitions",
-    status: "pending",
-  },
-];
+import {
+  useAllCategoryJoinRequestQuery,
+  useAllJoinCategoryRequestMutation,
+} from "@/hooks/admin/useAllCategoryJoinRequest";
+import { RequestItem } from "@/services/admin/adminService";
+import { useEffect, useState } from "react";
+import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 const ViewCatgoryRequestModal: React.FC = () => {
+  const [categoryRequest, setCategoryRequest] = useState<RequestItem[] | null>(
+    null
+  );
+  const { data, isLoading } = useAllCategoryJoinRequestQuery();
+  const { mutate: updateRequestStatus } = useAllJoinCategoryRequestMutation();
+
+  const updateStatus = (id: string, newStatus: string) => {
+    updateRequestStatus(
+      { id, status: newStatus },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (data?.success) {
+      setCategoryRequest(data.requests);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!categoryRequest) {
+    return null;
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -83,26 +81,37 @@ const ViewCatgoryRequestModal: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockCategoryRequests.map((request) => (
-                <TableRow key={request.id}>
+              {categoryRequest.map((request) => (
+                <TableRow key={request._id}>
                   <TableCell className="font-medium">
-                    {request.vendorName}
+                    {request.vendorId.firstName +
+                      " " +
+                      request.vendorId.lastName}
                   </TableCell>
-                  <TableCell>{request.categoryName}</TableCell>
+                  <TableCell>{request.categoryId.title}</TableCell>
                   <TableCell className="text-center">
                     {request.status}
                   </TableCell>
                   <TableCell className="flex justify-center">
-                    {["approved", "rejected"].includes(request.status) ? (
+                    {["accepted", "rejected"].includes(request.status) ? (
                       <Button variant={"ghost"} size="sm">
                         Acknowledged
                       </Button>
                     ) : (
                       <>
-                        <Button variant="outline" size="sm" className="mr-2">
+                        <Button
+                          onClick={() => updateStatus(request._id, "accepted")}
+                          variant="outline"
+                          size="sm"
+                          className="mr-2"
+                        >
                           Approve
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          onClick={() => updateStatus(request._id, "rejected")}
+                          variant="outline"
+                          size="sm"
+                        >
                           Reject
                         </Button>
                       </>

@@ -1,20 +1,31 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
-const categories = [
-  "Conferences",
-  "Weddings",
-  "Corporate Events",
-  "Music Festivals",
-  "Workshops",
-  "Charity Galas",
-  "Birthday Parties",
-  "Trade Shows",
-  "Sports Events",
-  "Art Exhibitions",
-];
+import { useAllCategoryQuery } from "@/hooks/category/useAllCategory";
+import {
+  Category,
+  getAllCategoriesForClient,
+} from "@/services/category/categoryService";
+import { useEffect, useState } from "react";
+import { Spinner } from "../ui/spinner";
 
 export function ClientLandingCategorySection() {
+  const [categories, setCategories] = useState<Category[] | null>(null);
+  const { data, isLoading } = useAllCategoryQuery(getAllCategoriesForClient);
+
+  useEffect(() => {
+    if (data) {
+      setCategories(data.categories);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!categories) {
+    return;
+  }
+
   return (
     <section className="py-16 bg-muted/50 rounded-lg">
       <div className="container mx-auto px-4">
@@ -23,13 +34,15 @@ export function ClientLandingCategorySection() {
         </h2>
         <ScrollArea className="w-full whitespace-nowrap rounded-md border">
           <div className="flex w-max space-x-4 p-4">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <Card
-                key={index}
+                key={category.categoryId}
                 className="w-[200px] h-[100px] flex-shrink-0 transition-all duration-300 hover:bg-accent cursor-pointer"
               >
                 <CardContent className="flex items-center justify-center p-6 h-full">
-                  <span className="text-center font-medium">{category}</span>
+                  <span className="text-center font-medium">
+                    {category.title}
+                  </span>
                 </CardContent>
               </Card>
             ))}

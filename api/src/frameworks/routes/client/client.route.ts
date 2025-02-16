@@ -5,6 +5,7 @@ import {
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
+  getAllCategoriesController,
   getClientDetailsController,
   logoutUserController,
   refreshTokenController,
@@ -33,6 +34,14 @@ export class ClientRoutes extends BaseRoute {
         (req: Request, res: Response) =>
           updateClientProfileController.handle(req, res)
       );
+
+    this.router.get(
+      "/client/categories",
+      // verifyAuth,
+      // authorizeRole(["client"]),
+      (req: Request, res: Response) =>
+        getAllCategoriesController.handle(req, res)
+    );
 
     this.router.post(
       "/client/logout",

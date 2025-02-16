@@ -38,6 +38,7 @@ export const ERROR_MESSAGES = {
     "Access denied. You do not have permission to access this resource.",
   NOT_ALLOWED: "You are not allowed",
   EMAIL_EXISTS: "Email Already Exists",
+  REQUEST_NOT_FOUND: "Category Request Not Found",
   CATEGORY_EXISTS: "Category Already Exists",
   CATEGORY_NOT_FOUND: "Category Not Found",
   INVALID_TOKEN: "Invalid token",

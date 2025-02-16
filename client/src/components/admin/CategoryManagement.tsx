@@ -35,10 +35,10 @@ import * as Yup from "yup";
 import {
   CategoryType,
   useAllCategoryAdminQuery,
+  useAllCategoryMutation,
 } from "@/hooks/admin/useAllCategory";
 import { getAllCategories } from "@/services/admin/adminService";
 import { Spinner } from "../ui/spinner";
-import { useAllCategoryMutation } from "@/hooks/category/useAllCategory";
 import { addAndEditCategory } from "@/services/category/categoryService";
 
 const CategoryManagement: React.FC = () => {
@@ -53,7 +53,15 @@ const CategoryManagement: React.FC = () => {
     mutateCategory({ name: newCategory });
   };
 
-  const updateCategoryStatus = (id: string) => {};
+  const updateCategoryStatus = (id: string) => {
+    mutateCategory(
+      { id, status: "updated" },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
 
   const { data, isLoading } = useAllCategoryAdminQuery(
     getAllCategories,

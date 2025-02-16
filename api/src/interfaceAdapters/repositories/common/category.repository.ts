@@ -7,7 +7,7 @@ import { PaginatedCategories } from "../../../entities/models/paginated-category
 @injectable()
 export class CategoryRespository implements ICategoryRepository {
   async find(): Promise<ICategoryEntity[] | []> {
-    return await CategoryModel.find();
+    return await CategoryModel.find({ status: true });
   }
 
   async save(title: string, categoryId: string): Promise<ICategoryEntity> {
@@ -46,10 +46,8 @@ export class CategoryRespository implements ICategoryRepository {
   }
 
   async updateCategoryStatus(id: any): Promise<void> {
-    await CategoryModel.updateOne(id, {
-      $set: {
-        status: { $not: "$status" },
-      },
-    });
+    await CategoryModel.findByIdAndUpdate(id, [
+      { $set: { status: { $not: "$status" } } },
+    ]);
   }
 }

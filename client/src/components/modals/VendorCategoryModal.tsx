@@ -16,7 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAllCategoryQuery } from "@/hooks/category/useAllCategory";
 import { Spinner } from "../ui/spinner";
-import { Category } from "@/services/category/categoryService";
+import {
+  Category,
+  getAllCategories,
+} from "@/services/category/categoryService";
 
 interface VendorCategoryModalProps {
   isOpen: boolean;
@@ -34,7 +37,7 @@ export function VendorCategoryModal({
   // const [newCategory, setNewCategory] = useState<string>("");
   // const [isCreatingNew, setIsCreatingNew] = useState<boolean>(false);
 
-  const { data, isLoading } = useAllCategoryQuery();
+  const { data, isLoading } = useAllCategoryQuery(getAllCategories);
 
   useEffect(() => {
     if (data) {

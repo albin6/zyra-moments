@@ -71,6 +71,8 @@ import { IGetVendorCategoryJoinRequestStatusUseCase } from "../../entities/useCa
 import { GetVendorCategoryJoinRequestStatusUseCase } from "../../useCases/vendor/get-vendor-category-join-request-status.usecase";
 import { IUpdateCategoryStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-status-usecase.interface";
 import { UpdateCategoryStatusUseCase } from "../../useCases/admin/update-category-status.usecase";
+import { IUpdateCategoryRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-request-status-usecase.interface";
+import { UpdateCategoryRequestStatusUseCase } from "../../useCases/admin/update-category-request-status.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -232,5 +234,10 @@ export class UseCaseRegistry {
     container.register<ITokenService>("ITokenService", {
       useClass: JwtService,
     });
+
+    container.register<IUpdateCategoryRequestStatusUseCase>(
+      "IUpdateCategoryRequestStatusUseCase",
+      { useClass: UpdateCategoryRequestStatusUseCase }
+    );
   }
 }

@@ -6,6 +6,7 @@ import {
   getAllUsersController,
   logoutUserController,
   refreshTokenController,
+  updateCategoryRequestStatusController,
   updateCategoryStatusController,
   updateUserStatusController,
 } from "../../di/resolver";
@@ -48,13 +49,20 @@ export class AdminRoutes extends BaseRoute {
           updateCategoryStatusController.handle(req, res) // need to change remember!
       );
 
-    this.router.get(
-      "/admin/category/request",
-      verifyAuth,
-      authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        getAllCategoryJoinRequestController.handle(req, res)
-    );
+    this.router
+      .route("/admin/category/request")
+      .get(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          getAllCategoryJoinRequestController.handle(req, res)
+      )
+      .patch(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          updateCategoryRequestStatusController.handle(req, res)
+      );
 
     this.router.get(
       "/admin/users",
