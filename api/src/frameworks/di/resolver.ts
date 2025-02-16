@@ -24,8 +24,11 @@ import { UpdateClientProfileController } from "../../interfaceAdapters/controlle
 import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAdapters/controllers/vendor/get-vendor-category-join-request-status.controller";
 import { UpdateCategoryStatusController } from "../../interfaceAdapters/controllers/admin/update-category-status.controller";
 import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/controllers/admin/update-category-request-status.controller";
+import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/block-status.middleware";
 
 DependencyInjection.registerAll();
+
+export const blockStatusMiddleware = container.resolve(BlockedStatusMiddleware);
 
 export const registerController = container.resolve(RegisterUserController);
 

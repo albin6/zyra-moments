@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import {
   authorizeRole,
   decodeToken,
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
+  blockStatusMiddleware,
   getAllCategoriesController,
   getClientDetailsController,
   logoutUserController,
@@ -25,20 +26,23 @@ export class ClientRoutes extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["client"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           getClientDetailsController.handle(req, res)
       )
       .put(
         verifyAuth,
         authorizeRole(["client"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           updateClientProfileController.handle(req, res)
       );
 
     this.router.get(
       "/client/categories",
-      // verifyAuth,
-      // authorizeRole(["client"]),
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllCategoriesController.handle(req, res)
     );
@@ -47,6 +51,7 @@ export class ClientRoutes extends BaseRoute {
       "/client/logout",
       verifyAuth,
       authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => {
         logoutUserController.handle(req, res);
       }
@@ -56,6 +61,7 @@ export class ClientRoutes extends BaseRoute {
       "/client/update-password",
       verifyAuth,
       authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         updateClientPasswordController.handle(req, res)
     );

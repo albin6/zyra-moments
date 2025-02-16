@@ -1,6 +1,7 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
+  blockStatusMiddleware,
   createWorkSampleController,
   getAllCategoriesController,
   getAllWorkSampleByVendorIdController,
@@ -27,6 +28,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/categories",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllCategoriesController.handle(req, res)
     );
@@ -35,6 +37,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/categories/join",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => joinCategoryController.handle(req, res)
     );
 
@@ -42,6 +45,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/category/status",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getVendorCategoryJoinRequestStatusController.handle(req, res)
     );
@@ -51,12 +55,14 @@ export class VendorRoutes extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           getVendorDetailsController.handle(req, res)
       )
       .put(
         verifyAuth,
         authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           updateVendorProfileController.handle(req, res)
       );
@@ -65,6 +71,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/work-sample",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         createWorkSampleController.handle(req, res)
     );
@@ -73,6 +80,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/work-sample",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllWorkSampleByVendorIdController.handle(req, res)
     );
@@ -81,6 +89,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/update-password",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         updateVendorPasswordController.handle(req, res)
     );
@@ -97,6 +106,7 @@ export class VendorRoutes extends BaseRoute {
       "/vendor/logout",
       verifyAuth,
       authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => {
         logoutUserController.handle(req, res);
       }

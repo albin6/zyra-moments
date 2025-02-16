@@ -24,8 +24,11 @@ export class AdminRoutes extends BaseRoute {
   protected initializeRoutes(): void {
     this.router
       .route("/admin/categories")
-      .get((req: Request, res: Response) =>
-        getAllPaginatedCategoryController.handle(req, res)
+      .get(
+        verifyAuth,
+        authorizeRole(["admin"]),
+        (req: Request, res: Response) =>
+          getAllPaginatedCategoryController.handle(req, res)
       )
       .post(
         verifyAuth,

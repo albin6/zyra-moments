@@ -23,6 +23,10 @@ export class ClientLoginStrategy implements ILoginStrategy {
       );
     }
 
+    if (client.status !== "active") {
+      throw new CustomError(ERROR_MESSAGES.BLOCKED, HTTP_STATUS.FORBIDDEN);
+    }
+
     const isPasswordMatch = await this.passwordBcrypt.compare(
       user.password,
       client.password
