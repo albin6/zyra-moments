@@ -7,11 +7,13 @@ import {
   getAllWorkSampleByVendorIdController,
   getVendorCategoryJoinRequestStatusController,
   getVendorDetailsController,
+  getWorkSampleByIdController,
   joinCategoryController,
   logoutUserController,
   refreshTokenController,
   updateVendorPasswordController,
   updateVendorProfileController,
+  updateWorkSampleByIdController,
 } from "../../di/resolver";
 import {
   authorizeRole,
@@ -67,23 +69,39 @@ export class VendorRoutes extends BaseRoute {
           updateVendorProfileController.handle(req, res)
       );
 
-    this.router.post(
-      "/vendor/work-sample",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        createWorkSampleController.handle(req, res)
-    );
+    this.router
+      .route("/vendor/work-sample")
+      .post(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          createWorkSampleController.handle(req, res)
+      )
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          getAllWorkSampleByVendorIdController.handle(req, res)
+      );
 
-    this.router.get(
-      "/vendor/work-sample",
-      verifyAuth,
-      authorizeRole(["vendor"]),
-      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllWorkSampleByVendorIdController.handle(req, res)
-    );
+    this.router
+      .route("/vendor/work-sample/:id")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          getWorkSampleByIdController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          updateWorkSampleByIdController.handle(req, res)
+      );
 
     this.router.put(
       "/vendor/update-password",

@@ -30,4 +30,20 @@ export class WorkSampleRepository implements IWorkSampleRepository {
       total,
     };
   }
+
+  async findById(
+    id: any
+  ): Promise<Pick<
+    IWorkSampleEntity,
+    "_id" | "title" | "description" | "images"
+  > | null> {
+    return await WorkSampleModel.findById(id);
+  }
+
+  async findByIdAndUpdate(
+    id: any,
+    data: Partial<IWorkSampleEntity>
+  ): Promise<void> {
+    await WorkSampleModel.findByIdAndUpdate(id, data);
+  }
 }

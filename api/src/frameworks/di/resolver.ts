@@ -25,6 +25,8 @@ import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAda
 import { UpdateCategoryStatusController } from "../../interfaceAdapters/controllers/admin/update-category-status.controller";
 import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/controllers/admin/update-category-request-status.controller";
 import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/block-status.middleware";
+import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
+import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -88,6 +90,14 @@ export const createWorkSampleController = container.resolve(
 
 export const getAllWorkSampleByVendorIdController = container.resolve(
   GetAllWorkSampleByVendorIdController
+);
+
+export const getWorkSampleByIdController = container.resolve(
+  GetWorkSampleByIdController
+);
+
+export const updateWorkSampleByIdController = container.resolve(
+  UpdateWorkSampleByIdController
 );
 
 export const updateVendorProfileController = container.resolve(

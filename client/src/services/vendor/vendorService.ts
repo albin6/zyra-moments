@@ -63,3 +63,21 @@ export const getAllWorkSampleByVendor = async ({
   });
   return response.data;
 };
+
+export const getWorkSampleById = async (id: string) => {
+  const response = await vendorAxiosInstance.get(
+    `/_ve/vendor/work-sample/${id}`
+  );
+  return response.data;
+};
+
+export const updateWorkSampleById = async (data: {
+  id: string;
+  data: WorkSample;
+}) => {
+  const response = await vendorAxiosInstance.put(
+    `/_ve/vendor/work-sample/${data.id}`,
+    data.data
+  );
+  return response.data;
+};

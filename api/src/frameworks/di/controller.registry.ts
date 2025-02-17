@@ -23,6 +23,8 @@ import { GetVendorCategoryJoinRequestStatusController } from "../../interfaceAda
 import { UpdateCategoryStatusController } from "../../interfaceAdapters/controllers/admin/update-category-status.controller";
 import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/controllers/admin/update-category-request-status.controller";
 import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/block-status.middleware";
+import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
+import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -100,6 +102,14 @@ export class ControllerRegistry {
 
     container.register("GetAllWorkSampleByVendorIdController", {
       useClass: GetAllWorkSampleByVendorIdController,
+    });
+
+    container.register("GetWorkSampleByIdController", {
+      useClass: GetWorkSampleByIdController,
+    });
+
+    container.register("UpdateWorkSampleByIdController", {
+      useClass: UpdateWorkSampleByIdController,
     });
 
     container.register("UpdateVendorProfileController", {

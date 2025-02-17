@@ -24,11 +24,28 @@ export const useWorkSampleQuery = (
   });
 };
 
+export interface SingleWorkSampleResponse {
+  success: boolean;
+  workSample: WorkSample;
+}
+
+export const useSingleWorkSampleQuery = (
+  queryFunc: (id: string) => Promise<SingleWorkSampleResponse>,
+  id: string
+) => {
+  return useQuery({
+    queryKey: ["single-work-sample"],
+    queryFn: () => queryFunc(id),
+  });
+};
+
 export const useWorkSampleMutation = (mutationFunc: any) => {
   const queryClient = useQueryClient();
-  return useMutation<IResponse, Error, WorkSample>({
+  return useMutation<IResponse, Error, any>({
     mutationFn: mutationFunc,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["work-sample"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["work-sample"] });
+      queryClient.invalidateQueries({ queryKey: ["single-work-sample"] });
+    },
   });
 };

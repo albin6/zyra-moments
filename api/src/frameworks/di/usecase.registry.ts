@@ -73,6 +73,10 @@ import { IUpdateCategoryStatusUseCase } from "../../entities/useCaseInterfaces/a
 import { UpdateCategoryStatusUseCase } from "../../useCases/admin/update-category-status.usecase";
 import { IUpdateCategoryRequestStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-request-status-usecase.interface";
 import { UpdateCategoryRequestStatusUseCase } from "../../useCases/admin/update-category-request-status.usecase";
+import { IGetWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-work-sample-by-id-usecase.interface";
+import { GetWorkSampleByIdUseCase } from "../../useCases/vendor/get-work-sample-by-id.usecase";
+import { IUpdateWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/update-work-sample-by-id-usecase.interface";
+import { UpdateWorkSampleByIdUseCase } from "../../useCases/vendor/update-work-sample-by-id.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -173,6 +177,15 @@ export class UseCaseRegistry {
     container.register<IGetAllWorkSampleByVendorIdUseCase>(
       "IGetAllWorkSampleByVendorIdUseCase",
       { useClass: GetAllWorkSampleByVendorIdUseCase }
+    );
+
+    container.register<IGetWorkSampleByIdUseCase>("IGetWorkSampleByIdUseCase", {
+      useClass: GetWorkSampleByIdUseCase,
+    });
+
+    container.register<IUpdateWorkSampleByIdUseCase>(
+      "IUpdateWorkSampleByIdUseCase",
+      { useClass: UpdateWorkSampleByIdUseCase }
     );
 
     container.register<IUpdateVendorProfileUseCase>(

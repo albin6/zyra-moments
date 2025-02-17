@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import { useWorkSampleQuery } from "@/hooks/work-sample/useWorkSample";
 import { getAllWorkSampleByVendor } from "@/services/vendor/vendorService";
 import { WorkSample } from "@/types/WorkSample";
+import { useNavigate } from "react-router-dom";
 
 export function WorkSampleList() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [items, setItems] = useState<WorkSample[] | null>(null);
@@ -66,7 +68,7 @@ export function WorkSampleList() {
           <Button
             variant="secondary"
             className="shrink-0"
-            onClick={() => console.log(item._id)}
+            onClick={() => navigate(`/vendor/work-sample/${item._id}`)}
           >
             View
           </Button>

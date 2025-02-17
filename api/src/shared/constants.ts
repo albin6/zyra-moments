@@ -32,6 +32,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  WRONG_ID: "Wrong ID",
   TOKEN_EXPIRED: "Token Expired",
   EMAIL_NOT_FOUND: "Email Not Found",
   FORBIDDEN:
