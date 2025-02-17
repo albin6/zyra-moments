@@ -77,6 +77,8 @@ import { IGetWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vend
 import { GetWorkSampleByIdUseCase } from "../../useCases/vendor/get-work-sample-by-id.usecase";
 import { IUpdateWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/update-work-sample-by-id-usecase.interface";
 import { UpdateWorkSampleByIdUseCase } from "../../useCases/vendor/update-work-sample-by-id.usecase";
+import { IDeleteWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/delete-work-sample-by-id-usecase.interface";
+import { DeleteWorkSampleByIdUseCase } from "../../useCases/vendor/delete-work-sample-by-id.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -186,6 +188,11 @@ export class UseCaseRegistry {
     container.register<IUpdateWorkSampleByIdUseCase>(
       "IUpdateWorkSampleByIdUseCase",
       { useClass: UpdateWorkSampleByIdUseCase }
+    );
+
+    container.register<IDeleteWorkSampleByIdUseCase>(
+      "IDeleteWorkSampleByIdUseCase",
+      { useClass: DeleteWorkSampleByIdUseCase }
     );
 
     container.register<IUpdateVendorProfileUseCase>(

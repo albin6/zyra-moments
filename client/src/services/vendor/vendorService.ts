@@ -81,3 +81,10 @@ export const updateWorkSampleById = async (data: {
   );
   return response.data;
 };
+
+export const deleteWorkSample = async (id: any) => {
+  const response = await vendorAxiosInstance.delete(
+    `/_ve/vendor/work-sample/${id}`
+  );
+  return response.data;
+};

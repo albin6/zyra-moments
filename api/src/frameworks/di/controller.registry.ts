@@ -25,6 +25,7 @@ import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/c
 import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/block-status.middleware";
 import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
 import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
+import { DeleteWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/delete-work-sample-by-id.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -110,6 +111,10 @@ export class ControllerRegistry {
 
     container.register("UpdateWorkSampleByIdController", {
       useClass: UpdateWorkSampleByIdController,
+    });
+
+    container.register("DeleteWorkSampleByIdController", {
+      useClass: DeleteWorkSampleByIdController,
     });
 
     container.register("UpdateVendorProfileController", {

@@ -46,4 +46,8 @@ export class WorkSampleRepository implements IWorkSampleRepository {
   ): Promise<void> {
     await WorkSampleModel.findByIdAndUpdate(id, data);
   }
+
+  async deleteById(id: any): Promise<void> {
+    await WorkSampleModel.deleteOne(id);
+  }
 }

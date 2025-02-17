@@ -23,4 +23,6 @@ export interface IWorkSampleRepository {
   > | null>;
 
   findByIdAndUpdate(id: any, data: Partial<IWorkSampleEntity>): Promise<void>;
+
+  deleteById(id: any): Promise<void>;
 }

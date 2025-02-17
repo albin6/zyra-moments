@@ -3,6 +3,7 @@ import { BaseRoute } from "../base.route";
 import {
   blockStatusMiddleware,
   createWorkSampleController,
+  deleteWorkSampleByIdController,
   getAllCategoriesController,
   getAllWorkSampleByVendorIdController,
   getVendorCategoryJoinRequestStatusController,
@@ -101,6 +102,13 @@ export class VendorRoutes extends BaseRoute {
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           updateWorkSampleByIdController.handle(req, res)
+      )
+      .delete(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          deleteWorkSampleByIdController.handle(req, res)
       );
 
     this.router.put(

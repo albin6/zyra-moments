@@ -4,10 +4,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { WorkSampleHeader } from "./WorkSampleHeader";
 import Pagination from "../Pagination";
 import { useEffect, useState } from "react";
-import { useWorkSampleQuery } from "@/hooks/work-sample/useWorkSample";
-import { getAllWorkSampleByVendor } from "@/services/vendor/vendorService";
+import {
+  useWorkSampleMutation,
+  useWorkSampleQuery,
+} from "@/hooks/work-sample/useWorkSample";
+import {
+  deleteWorkSample,
+  getAllWorkSampleByVendor,
+} from "@/services/vendor/vendorService";
 import { WorkSample } from "@/types/WorkSample";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export function WorkSampleList() {
   const navigate = useNavigate();
@@ -21,6 +28,8 @@ export function WorkSampleList() {
     page,
     limit
   );
+
+  const { mutate: deleteSample } = useWorkSampleMutation(deleteWorkSample);
 
   useEffect(() => {
     if (!data) return;
@@ -65,13 +74,28 @@ export function WorkSampleList() {
               {item.description}
             </p>
           </div>
-          <Button
-            variant="secondary"
-            className="shrink-0"
-            onClick={() => navigate(`/vendor/work-sample/${item._id}`)}
-          >
-            View
-          </Button>
+          <div>
+            <Button
+              variant="outline"
+              className="shrink-0 mr-4"
+              onClick={() =>
+                deleteSample(item._id, {
+                  onSuccess: (data) => toast.success(data.message),
+                  onError: (error: any) =>
+                    toast.error(error.response.data.message),
+                })
+              }
+            >
+              Delete
+            </Button>
+            <Button
+              variant="secondary"
+              className="shrink-0"
+              onClick={() => navigate(`/vendor/work-sample/${item._id}`)}
+            >
+              View
+            </Button>
+          </div>
         </Card>
       ))}
       {totalPages > limit && (

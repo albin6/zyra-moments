@@ -27,6 +27,7 @@ import { UpdateCategoryRequestStatusController } from "../../interfaceAdapters/c
 import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/block-status.middleware";
 import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
 import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
+import { DeleteWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/delete-work-sample-by-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -98,6 +99,10 @@ export const getWorkSampleByIdController = container.resolve(
 
 export const updateWorkSampleByIdController = container.resolve(
   UpdateWorkSampleByIdController
+);
+
+export const deleteWorkSampleByIdController = container.resolve(
+  DeleteWorkSampleByIdController
 );
 
 export const updateVendorProfileController = container.resolve(
