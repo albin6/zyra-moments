@@ -1,7 +1,9 @@
 import VendorLayout from "@/components/layouts/VendorLayout";
+import VendorAddService from "@/pages/vendor/VendorAddService";
 import VendorAddWorkSample from "@/pages/vendor/VendorAddWorkSample";
 import { VendorAuth } from "@/pages/vendor/VendorAuth";
 import VendorProfile from "@/pages/vendor/VendorProfile";
+import VendorServices from "@/pages/vendor/VendorServices";
 import VendorWorkSamples from "@/pages/vendor/VendorWorkSamples";
 import { AuthVendorRoute } from "@/protected/ProtectedRoute";
 import { NoVendorAuthRoute } from "@/protected/PublicRoute";
@@ -36,6 +38,24 @@ function VendorRoutes() {
             <AuthVendorRoute
               allowedRoles={["vendor"]}
               element={<VendorAddWorkSample />}
+            />
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorServices />}
+            />
+          }
+        />
+        <Route
+          path="/services/new"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorAddService />}
             />
           }
         />
