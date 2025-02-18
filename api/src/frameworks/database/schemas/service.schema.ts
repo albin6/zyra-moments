@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 import { IServiceModel } from "../models/service.model";
 
 export const serviceSchema = new Schema<IServiceModel>({
+  vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
   serviceTitle: { type: String, required: true },
   yearsOfExperience: { type: Number, required: true },
   availableDates: [

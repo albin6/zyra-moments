@@ -2,10 +2,13 @@ import { Request, RequestHandler, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
   blockStatusMiddleware,
+  createServiceController,
   createWorkSampleController,
   deleteWorkSampleByIdController,
   getAllCategoriesController,
+  getAllServicesByVendorIdController,
   getAllWorkSampleByVendorIdController,
+  getServiceDetailsByIdController,
   getVendorCategoryJoinRequestStatusController,
   getVendorDetailsController,
   getWorkSampleByIdController,
@@ -109,6 +112,33 @@ export class VendorRoutes extends BaseRoute {
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           deleteWorkSampleByIdController.handle(req, res)
+      );
+
+    this.router
+      .route("/vendor/services")
+      .post(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          createServiceController.handle(req, res)
+      )
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          getAllServicesByVendorIdController.handle(req, res)
+      );
+
+    this.router
+      .route("/vendor/services/:serviceId")
+      .get(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          getServiceDetailsByIdController.handle(req, res)
       );
 
     this.router.put(

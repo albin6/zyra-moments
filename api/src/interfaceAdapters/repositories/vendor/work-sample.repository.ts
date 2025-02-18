@@ -15,7 +15,7 @@ export class WorkSampleRepository implements IWorkSampleRepository {
     skip: number,
     limit: number
   ): Promise<PaginatedWorkSample> {
-    const [workSamples, total] = await Promise.all([
+    const [workSamples, total, all] = await Promise.all([
       WorkSampleModel.find(
         { vendorId },
         { _id: 1, title: 1, description: 1, images: 1 }
@@ -23,11 +23,13 @@ export class WorkSampleRepository implements IWorkSampleRepository {
         .skip(skip)
         .limit(limit),
       WorkSampleModel.countDocuments({ vendorId }),
+      WorkSampleModel.countDocuments(),
     ]);
 
     return {
       workSamples,
       total,
+      all,
     };
   }
 
@@ -48,6 +50,6 @@ export class WorkSampleRepository implements IWorkSampleRepository {
   }
 
   async deleteById(id: any): Promise<void> {
-    await WorkSampleModel.deleteOne(id);
+    await WorkSampleModel.findByIdAndDelete(id);
   }
 }

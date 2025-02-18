@@ -1,7 +1,7 @@
-import { ServicesList } from "@/components/vendor/ServicesList";
+import { ServiceList } from "@/components/vendor/ServiceList";
 
 function VendorServices() {
-  return <ServicesList />;
+  return <ServiceList />;
 }
 
 export default VendorServices;

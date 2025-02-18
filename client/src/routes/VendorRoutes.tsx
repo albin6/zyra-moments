@@ -2,6 +2,7 @@ import VendorLayout from "@/components/layouts/VendorLayout";
 import VendorAddService from "@/pages/vendor/VendorAddService";
 import VendorAddWorkSample from "@/pages/vendor/VendorAddWorkSample";
 import { VendorAuth } from "@/pages/vendor/VendorAuth";
+import VendorEditService from "@/pages/vendor/VendorEditService";
 import VendorProfile from "@/pages/vendor/VendorProfile";
 import VendorServices from "@/pages/vendor/VendorServices";
 import VendorWorkSampleDisplay from "@/pages/vendor/VendorWorkSampleDisplay";
@@ -57,6 +58,15 @@ function VendorRoutes() {
             <AuthVendorRoute
               allowedRoles={["vendor"]}
               element={<VendorServices />}
+            />
+          }
+        />
+        <Route
+          path="/services/:serviceId"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorEditService />}
             />
           }
         />

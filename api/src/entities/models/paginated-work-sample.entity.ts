@@ -5,4 +5,5 @@ export interface PaginatedWorkSample {
     | Pick<IWorkSampleEntity, "_id" | "title" | "description" | "images">[]
     | [];
   total: number;
+  all: number;
 }

@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
-import { IGetAllWorkSampleByVendorIdController } from "../../../entities/controllerInterfaces/vendor/get-all-work-sample-by-vendorid-controller.interface";
-import { IGetAllWorkSampleByVendorIdUseCase } from "../../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";
-import { inject, injectable } from "tsyringe";
+import { IGetAllServicesByVendorIdController } from "../../../../entities/controllerInterfaces/vendor/service/get-all-services-by-vendor-id-controller.interface";
+import { IGetAllServicesByVendorIdUseCase } from "../../../../entities/useCaseInterfaces/vendor/service/get-all-services-by-vendor-id-usecase.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS } from "../../../shared/constants";
-import { CustomError } from "../../../entities/utils/CustomError";
-import { CustomRequest } from "../../middlewares/auth.middleware";
+import { HTTP_STATUS } from "../../../../shared/constants";
+import { CustomError } from "../../../../entities/utils/CustomError";
+import { CustomRequest } from "../../../middlewares/auth.middleware";
+import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class GetAllWorkSampleByVendorIdController
-  implements IGetAllWorkSampleByVendorIdController
+export class GetAllServicesByVendorIdController
+  implements IGetAllServicesByVendorIdController
 {
   constructor(
-    @inject("IGetAllWorkSampleByVendorIdUseCase")
-    private getAllWorkSampleByVendorIdUseCase: IGetAllWorkSampleByVendorIdUseCase
+    @inject("IGetAllServicesByVendorIdUseCase")
+    private getAllServicesByVendorIdUseCase: IGetAllServicesByVendorIdUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
@@ -23,8 +23,8 @@ export class GetAllWorkSampleByVendorIdController
       const pageNumber = Number(page);
       const pageSize = Number(limit);
 
-      const { workSamples, total, all } =
-        await this.getAllWorkSampleByVendorIdUseCase.execute(
+      const { services, total, all } =
+        await this.getAllServicesByVendorIdUseCase.execute(
           vendorId,
           pageNumber,
           pageSize
@@ -32,7 +32,7 @@ export class GetAllWorkSampleByVendorIdController
 
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        workSamples,
+        services,
         totalPages: total,
         currentPage: pageNumber,
         all,

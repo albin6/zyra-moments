@@ -52,52 +52,56 @@ export function WorkSampleList() {
   return (
     <div className="space-y-4 p-4">
       <WorkSampleHeader />
-      {items.map((item) => (
-        <Card
-          key={item._id}
-          className="flex items-center gap-4 p-4 transition-shadow hover:shadow-md"
-        >
-          <div className="shrink-0">
-            {item.images.length ? (
-              <img
-                src={item.images[0] || "/placeholder.svg"}
-                alt=""
-                className="h-16 w-16 rounded-lg object-cover"
-              />
-            ) : (
-              <div className="h-16 w-16 rounded-lg bg-muted" />
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg truncate">{item.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {item.description}
-            </p>
-          </div>
-          <div>
-            <Button
-              variant="outline"
-              className="shrink-0 mr-4"
-              onClick={() =>
-                deleteSample(item._id, {
-                  onSuccess: (data) => toast.success(data.message),
-                  onError: (error: any) =>
-                    toast.error(error.response.data.message),
-                })
-              }
-            >
-              Delete
-            </Button>
-            <Button
-              variant="secondary"
-              className="shrink-0"
-              onClick={() => navigate(`/vendor/work-sample/${item._id}`)}
-            >
-              View
-            </Button>
-          </div>
-        </Card>
-      ))}
+      {totalPages === 0 ? (
+        <h1 className="text-center">No Worksamples</h1>
+      ) : (
+        items.map((item) => (
+          <Card
+            key={item._id}
+            className="flex items-center gap-4 p-4 transition-shadow hover:shadow-md"
+          >
+            <div className="shrink-0">
+              {item.images.length ? (
+                <img
+                  src={item.images[0] || "/placeholder.svg"}
+                  alt=""
+                  className="h-16 w-16 rounded-lg object-cover"
+                />
+              ) : (
+                <div className="h-16 w-16 rounded-lg bg-muted" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-lg truncate">{item.title}</h3>
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {item.description}
+              </p>
+            </div>
+            <div>
+              <Button
+                variant="outline"
+                className="shrink-0 mr-4"
+                onClick={() =>
+                  deleteSample(item._id, {
+                    onSuccess: (data) => toast.success(data.message),
+                    onError: (error: any) =>
+                      toast.error(error.response.data.message),
+                  })
+                }
+              >
+                Delete
+              </Button>
+              <Button
+                variant="secondary"
+                className="shrink-0"
+                onClick={() => navigate(`/vendor/work-sample/${item._id}`)}
+              >
+                View
+              </Button>
+            </div>
+          </Card>
+        ))
+      )}
       {totalPages > limit && (
         <Pagination
           currentPage={page}

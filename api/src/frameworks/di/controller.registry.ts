@@ -26,6 +26,9 @@ import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/blo
 import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
 import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
 import { DeleteWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/delete-work-sample-by-id.controller";
+import { CreateServiceController } from "../../interfaceAdapters/controllers/vendor/service/create-service.controller";
+import { GetAllServicesByVendorIdController } from "../../interfaceAdapters/controllers/vendor/service/get-all-services-by-vendor-id.controller";
+import { GetServiceDetailsByIdController } from "../../interfaceAdapters/controllers/vendor/service/get-service-details-by-id.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -135,6 +138,18 @@ export class ControllerRegistry {
 
     container.register("UpdateCategoryRequestStatusController", {
       useClass: UpdateCategoryRequestStatusController,
+    });
+
+    container.register("CreateServiceController", {
+      useClass: CreateServiceController,
+    });
+
+    container.register("GetAllServicesByVendorIdController", {
+      useClass: GetAllServicesByVendorIdController,
+    });
+
+    container.register("GetServiceDetailsByIdController", {
+      useClass: GetServiceDetailsByIdController,
     });
   }
 }

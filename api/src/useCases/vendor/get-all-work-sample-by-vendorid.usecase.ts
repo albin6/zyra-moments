@@ -36,12 +36,13 @@ export class GetAllWorkSampleByVendorIdUseCase
     const skip = (validPageNumber - 1) * validPageSize;
     const limit = validPageSize;
 
-    const { workSamples, total } =
+    const { workSamples, total, all } =
       await this.workSampleRepository.findAllByVendorId(vendorId, skip, limit);
 
     const response: PaginatedWorkSample = {
       workSamples,
       total: Math.ceil(total / validPageSize),
+      all,
     };
 
     return response;

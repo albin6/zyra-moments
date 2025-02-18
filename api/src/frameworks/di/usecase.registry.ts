@@ -79,6 +79,12 @@ import { IUpdateWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/v
 import { UpdateWorkSampleByIdUseCase } from "../../useCases/vendor/update-work-sample-by-id.usecase";
 import { IDeleteWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/delete-work-sample-by-id-usecase.interface";
 import { DeleteWorkSampleByIdUseCase } from "../../useCases/vendor/delete-work-sample-by-id.usecase";
+import { ICreateServiceUseCase } from "../../entities/useCaseInterfaces/vendor/service/create-service-usecase.interface";
+import { CreateServiceUseCase } from "../../useCases/vendor/service/create-service.usecase";
+import { IGetAllServicesByVendorIdUseCase } from "../../entities/useCaseInterfaces/vendor/service/get-all-services-by-vendor-id-usecase.interface";
+import { GetAllServicesByVendorIdUseCase } from "../../useCases/vendor/service/get-all-services-by-vendor-id.usecase";
+import { IGetServiceDetailsByIdUseCase } from "../../entities/useCaseInterfaces/vendor/service/get-service-details-by-id-usecase.interface";
+import { GetServiceDetailsByIdUseCase } from "../../useCases/vendor/service/get-service-details-by-id.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -213,6 +219,20 @@ export class UseCaseRegistry {
     container.register<IUpdateCategoryStatusUseCase>(
       "IUpdateCategoryStatusUseCase",
       { useClass: UpdateCategoryStatusUseCase }
+    );
+
+    container.register<ICreateServiceUseCase>("ICreateServiceUseCase", {
+      useClass: CreateServiceUseCase,
+    });
+
+    container.register<IGetAllServicesByVendorIdUseCase>(
+      "IGetAllServicesByVendorIdUseCase",
+      { useClass: GetAllServicesByVendorIdUseCase }
+    );
+
+    container.register<IGetServiceDetailsByIdUseCase>(
+      "IGetServiceDetailsByIdUseCase",
+      { useClass: GetServiceDetailsByIdUseCase }
     );
 
     // Register Strategies

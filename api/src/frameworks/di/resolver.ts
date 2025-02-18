@@ -28,6 +28,9 @@ import { BlockedStatusMiddleware } from "../../interfaceAdapters/middlewares/blo
 import { GetWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/get-work-sample-by-id.controller";
 import { UpdateWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/update-work-sample-by-id.controller";
 import { DeleteWorkSampleByIdController } from "../../interfaceAdapters/controllers/vendor/delete-work-sample-by-id.controller";
+import { CreateServiceController } from "../../interfaceAdapters/controllers/vendor/service/create-service.controller";
+import { GetAllServicesByVendorIdController } from "../../interfaceAdapters/controllers/vendor/service/get-all-services-by-vendor-id.controller";
+import { GetServiceDetailsByIdController } from "../../interfaceAdapters/controllers/vendor/service/get-service-details-by-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -123,4 +126,16 @@ export const updateCategoryStatusController = container.resolve(
 
 export const updateCategoryRequestStatusController = container.resolve(
   UpdateCategoryRequestStatusController
+);
+
+export const createServiceController = container.resolve(
+  CreateServiceController
+);
+
+export const getAllServicesByVendorIdController = container.resolve(
+  GetAllServicesByVendorIdController
+);
+
+export const getServiceDetailsByIdController = container.resolve(
+  GetServiceDetailsByIdController
 );

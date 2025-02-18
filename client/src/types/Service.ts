@@ -1,18 +1,16 @@
-import { ObjectId } from "mongoose";
-
-interface TimeSlot {
+export interface TimeSlot {
   startTime: string;
   endTime: string;
   capacity: number;
 }
 
-interface DateSlot {
+export interface DateSlot {
   date: string;
   timeSlots: TimeSlot[];
 }
 
-export interface IServiceEntity {
-  _id?: ObjectId;
+export interface Service {
+  _id?: string;
   vendorId?: string;
   serviceTitle: string;
   yearsOfExperience: number;

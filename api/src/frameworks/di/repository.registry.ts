@@ -17,6 +17,8 @@ import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/aut
 import { RefreshTokenRepository } from "../../interfaceAdapters/repositories/auth/refresh-token.respository";
 import { IWorkSampleRepository } from "../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
 import { WorkSampleRepository } from "../../interfaceAdapters/repositories/vendor/work-sample.repository";
+import { IServiceRepository } from "../../entities/repositoryInterfaces/common/service-repository.interface";
+import { ServiceRepository } from "../../interfaceAdapters/repositories/common/service.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -55,6 +57,10 @@ export class RepositoryRegistry {
 
     container.register<IWorkSampleRepository>("IWorkSampleRepository", {
       useClass: WorkSampleRepository,
+    });
+
+    container.register<IServiceRepository>("IServiceRepository", {
+      useClass: ServiceRepository,
     });
   }
 }

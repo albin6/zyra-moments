@@ -8,43 +8,60 @@ import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { serviceValidationSchema } from "@/utils/service.validator";
 import { ServicesHeader } from "./ServicesHeader";
-import { useServiceMutation } from "@/hooks/service/useService";
-import { createService } from "@/services/vendor/service";
-import { toast } from "sonner";
+import { DateSlot, Service } from "@/types/Service";
 
-interface TimeSlot {
-  startTime: string;
-  endTime: string;
-  capacity: number;
+// interface TimeSlot {
+//   startTime: string;
+//   endTime: string;
+//   capacity: number;
+// }
+
+// interface DateSlot {
+//   date: string;
+//   timeSlots: TimeSlot[];
+// }
+
+// export interface ServiceFormValues {
+//   _id
+//   serviceTitle: string;
+//   yearsOfExperience: string;
+//   availableDates: DateSlot[];
+//   serviceDescription: string;
+//   serviceDuration: string;
+//   servicePrice: string;
+//   additionalHoursPrice: string;
+//   cancellationPolicies: string[];
+//   termsAndConditions: string[];
+// }
+
+interface EditableServiceFormProps {
+  initialValues?: Service;
+  onSubmit: (values: Service) => void;
+  onCancel?: () => void;
 }
 
-interface DateSlot {
-  date: string;
-  timeSlots: TimeSlot[];
-}
+const defaultInitialValues: Service = {
+  serviceTitle: "",
+  yearsOfExperience: 0,
+  availableDates: [] as DateSlot[],
+  serviceDescription: "",
+  serviceDuration: 0,
+  servicePrice: 0,
+  additionalHoursPrice: 0,
+  cancellationPolicies: [""],
+  termsAndConditions: [""],
+};
 
-export const ServiceForm: React.FC = () => {
-  const { mutate: addNewService } = useServiceMutation(createService);
-
+export const EditableServiceForm: React.FC<EditableServiceFormProps> = ({
+  initialValues = defaultInitialValues,
+  onSubmit,
+  onCancel,
+}) => {
   const formik = useFormik({
-    initialValues: {
-      serviceTitle: "",
-      yearsOfExperience: "",
-      availableDates: [] as DateSlot[],
-      serviceDescription: "",
-      serviceDuration: "",
-      servicePrice: "",
-      additionalHoursPrice: "",
-      cancellationPolicies: [""],
-      termsAndConditions: [""],
-    },
+    initialValues: initialValues,
     validationSchema: serviceValidationSchema,
     onSubmit: (values) => {
-      console.log(values);
-      addNewService(values, {
-        onSuccess: (data) => toast.success(data.success),
-        onError: (error: any) => toast.error(error.response.data.message),
-      });
+      onSubmit(values);
     },
   });
 
@@ -195,20 +212,22 @@ export const ServiceForm: React.FC = () => {
                       ];
                       newAvailableDates[dateIndex].timeSlots[
                         timeIndex
-                      ].capacity = parseInt(e.target.value);
+                      ].capacity = parseInt(e.target.value) || 0;
                       formik.setFieldValue("availableDates", newAvailableDates);
                     }}
                     className="w-full sm:w-auto"
                   />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeTimeSlot(dateIndex, timeIndex)}
-                    className="mt-2 sm:mt-0"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  {dateSlot.timeSlots.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeTimeSlot(dateIndex, timeIndex)}
+                      className="mt-2 sm:mt-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               ))}
               <Button
@@ -307,20 +326,23 @@ export const ServiceForm: React.FC = () => {
                 }}
                 className="flex-grow"
               />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  const newPolicies = formik.values.cancellationPolicies.filter(
-                    (_, i) => i !== index
-                  );
-                  formik.setFieldValue("cancellationPolicies", newPolicies);
-                }}
-                className="ml-2"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              {formik.values.cancellationPolicies.length > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    const newPolicies =
+                      formik.values.cancellationPolicies.filter(
+                        (_, i) => i !== index
+                      );
+                    formik.setFieldValue("cancellationPolicies", newPolicies);
+                  }}
+                  className="ml-2"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           ))}
           <Button
@@ -345,20 +367,22 @@ export const ServiceForm: React.FC = () => {
                 }}
                 className="flex-grow"
               />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  const newTerms = formik.values.termsAndConditions.filter(
-                    (_, i) => i !== index
-                  );
-                  formik.setFieldValue("termsAndConditions", newTerms);
-                }}
-                className="ml-2"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              {formik.values.termsAndConditions.length > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    const newTerms = formik.values.termsAndConditions.filter(
+                      (_, i) => i !== index
+                    );
+                    formik.setFieldValue("termsAndConditions", newTerms);
+                  }}
+                  className="ml-2"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           ))}
           <Button
@@ -370,9 +394,15 @@ export const ServiceForm: React.FC = () => {
           </Button>
         </div>
 
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
+        <div className="flex justify-between">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+
+          <Button type="submit" className="w-full">
+            Update Service
+          </Button>
+        </div>
       </form>
     </div>
   );

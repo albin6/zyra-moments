@@ -18,6 +18,7 @@ export const HTTP_STATUS = {
 };
 
 export const SUCCESS_MESSAGES = {
+  CREATED: "Created successfully.",
   LOGIN_SUCCESS: "Login successful.",
   REGISTRATION_SUCCESS: "Registration completed successfully.",
   OTP_SEND_SUCCESS: "OTP sent successfully",

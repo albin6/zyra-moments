@@ -1,3 +1,4 @@
+import { PaginatedWorkSample } from "../../models/paginated-work-sample.entity";
 import { IWorkSampleEntity } from "../../models/work-sample.entity";
 
 export interface IWorkSampleRepository {
@@ -7,13 +8,7 @@ export interface IWorkSampleRepository {
     vendorId: any,
     skip: number,
     limit: number
-  ): Promise<{
-    workSamples: Pick<
-      IWorkSampleEntity,
-      "_id" | "title" | "description" | "images"
-    >[];
-    total: number;
-  }>;
+  ): Promise<PaginatedWorkSample>;
 
   findById(
     id: any
