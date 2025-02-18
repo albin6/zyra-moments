@@ -30,6 +30,7 @@ import { CreateServiceController } from "../../interfaceAdapters/controllers/ven
 import { GetAllServicesByVendorIdController } from "../../interfaceAdapters/controllers/vendor/service/get-all-services-by-vendor-id.controller";
 import { GetServiceDetailsByIdController } from "../../interfaceAdapters/controllers/vendor/service/get-service-details-by-id.controller";
 import { UpdateServiceByIdController } from "../../interfaceAdapters/controllers/vendor/service/update-service-by-id.controller";
+import { GetVendorsUnderCategoryController } from "../../interfaceAdapters/controllers/client/get-vendors-under-category.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -155,6 +156,10 @@ export class ControllerRegistry {
 
     container.register("UpdateServiceByIdController", {
       useClass: UpdateServiceByIdController,
+    });
+
+    container.register("GetVendorsUnderCategoryController", {
+      useClass: GetVendorsUnderCategoryController,
     });
   }
 }

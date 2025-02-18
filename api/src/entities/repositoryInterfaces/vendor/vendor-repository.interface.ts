@@ -29,4 +29,11 @@ export interface IVendorRepository {
     id: string,
     data: Partial<IVendorEntity>
   ): Promise<void>;
+
+  findByCategoryId(
+    filter: any,
+    sort: any,
+    skip: number,
+    limit: number
+  ): Promise<{ vendors: IVendorEntity[] | []; total: number }>;
 }

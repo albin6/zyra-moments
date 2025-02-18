@@ -159,7 +159,7 @@ export function VendorHeader({
 function MobileNav() {
   return (
     <div className="flex flex-col space-y-3">
-      <a className="flex items-center space-x-2" href="#">
+      <Link className="flex items-center space-x-2" to={"/vendor"}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -173,16 +173,16 @@ function MobileNav() {
           <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
         </svg>
         <span className="font-bold">Vendor Portal</span>
-      </a>
+      </Link>
       <nav className="flex flex-col space-y-3">
         {navItems.map((item) => (
-          <a
+          <Link
             key={item.name}
-            href={item.href}
+            to={item.href}
             className="transition-colors hover:text-foreground/80 text-foreground/60"
           >
             {item.name}
-          </a>
+          </Link>
         ))}
       </nav>
     </div>

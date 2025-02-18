@@ -1,10 +1,14 @@
 import { Spinner } from "@/components/ui/spinner";
 import { EditableServiceForm } from "@/components/vendor/EditableServiceForm";
-import { useSingleServiceQuery } from "@/hooks/service/useService";
-import { getServiceById } from "@/services/vendor/service";
+import {
+  useServiceMutation,
+  useSingleServiceQuery,
+} from "@/hooks/service/useService";
+import { getServiceById, updateServiceById } from "@/services/vendor/service";
 import { Service } from "@/types/Service";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 function VendorEditService() {
   const navigate = useNavigate();
@@ -17,6 +21,8 @@ function VendorEditService() {
 
   const { data, isLoading } = useSingleServiceQuery(getServiceById, serviceId);
 
+  const { mutate: updateService } = useServiceMutation(updateServiceById);
+
   useEffect(() => {
     if (data) {
       setService(data.service);
@@ -25,6 +31,13 @@ function VendorEditService() {
 
   const handleSubmit = (service: Service) => {
     console.log(service);
+    updateService(
+      { id: serviceId, service },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
   };
 
   const handleCancel = () => {

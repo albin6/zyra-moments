@@ -33,3 +33,14 @@ export const getServiceById = async (
   const response = await vendorAxiosInstance.get(`/_ve/vendor/services/${id}`);
   return response.data;
 };
+
+export const updateServiceById = async (data: {
+  id: any;
+  service: Service;
+}) => {
+  const response = await vendorAxiosInstance.put(
+    `/_ve/vendor/services/${data.id}`,
+    data.service
+  );
+  return response.data;
+};

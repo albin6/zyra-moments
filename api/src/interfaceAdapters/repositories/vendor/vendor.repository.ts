@@ -75,4 +75,29 @@ export class VendorRepository implements IVendorRepository {
   ): Promise<void> {
     await VendorModel.findByIdAndUpdate(id, { $set: data });
   }
+
+  async findByCategoryId(
+    filter: any,
+    sort: any,
+    skip: number,
+    limit: number
+  ): Promise<{ vendors: IVendorEntity[] | []; total: number }> {
+    const [vendors, total] = await Promise.all([
+      VendorModel.find(filter, {
+        firstName: 1,
+        lastName: 1,
+        profileImage: 1,
+        averageRating: 1,
+      })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      VendorModel.countDocuments(filter),
+    ]);
+    return {
+      vendors,
+      total,
+    };
+  }
 }

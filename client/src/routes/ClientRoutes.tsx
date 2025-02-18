@@ -7,6 +7,7 @@ import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientLandingPage from "@/pages/client/ClientLanding";
 import { UserProfile } from "@/components/client/UserProfile";
 import { ClientEventListing } from "@/pages/client/ClientEventListing";
+import { ClientVendorListing } from "@/pages/client/ClientVendorListing";
 
 function ClientRoutes() {
   return (
@@ -26,6 +27,15 @@ function ClientRoutes() {
           path="/profile"
           element={
             <AuthRoute allowedRoles={["client"]} element={<UserProfile />} />
+          }
+        />
+        <Route
+          path="/categories/:categoryId/vendors"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<ClientVendorListing />}
+            />
           }
         />
         <Route

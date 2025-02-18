@@ -7,8 +7,10 @@ import {
 } from "@/services/category/categoryService";
 import { useEffect, useState } from "react";
 import { Spinner } from "../ui/spinner";
+import { useNavigate } from "react-router-dom";
 
 export function ClientLandingCategorySection() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[] | null>(null);
   const { data, isLoading } = useAllCategoryQuery(getAllCategoriesForClient);
 
@@ -37,6 +39,7 @@ export function ClientLandingCategorySection() {
             {categories.map((category) => (
               <Card
                 key={category.categoryId}
+                onClick={() => navigate(`/categories/${category._id}/vendors`)}
                 className="w-[200px] h-[100px] flex-shrink-0 transition-all duration-300 hover:bg-accent cursor-pointer"
               >
                 <CardContent className="flex items-center justify-center p-6 h-full">

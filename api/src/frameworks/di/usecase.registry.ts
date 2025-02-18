@@ -87,6 +87,8 @@ import { IGetServiceDetailsByIdUseCase } from "../../entities/useCaseInterfaces/
 import { GetServiceDetailsByIdUseCase } from "../../useCases/vendor/service/get-service-details-by-id.usecase";
 import { IUpdateServiceByIdUseCase } from "../../entities/useCaseInterfaces/vendor/service/update-service-by-id-usecase.interface";
 import { UpdateServiceByIdUseCase } from "../../useCases/vendor/service/update-service-by-id.usecase";
+import { IGetVendorsUnderCategoryUseCase } from "../../entities/useCaseInterfaces/client/get-vendors-under-category-usecase.interface";
+import { GetVendorsUnderCategoryUseCase } from "../../useCases/client/get-vendors-under-category.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -240,6 +242,11 @@ export class UseCaseRegistry {
     container.register<IUpdateServiceByIdUseCase>("IUpdateServiceByIdUseCase", {
       useClass: UpdateServiceByIdUseCase,
     });
+
+    container.register<IGetVendorsUnderCategoryUseCase>(
+      "IGetVendorsUnderCategoryUseCase",
+      { useClass: GetVendorsUnderCategoryUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
