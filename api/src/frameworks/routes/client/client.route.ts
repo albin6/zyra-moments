@@ -8,6 +8,7 @@ import {
   blockStatusMiddleware,
   getAllCategoriesController,
   getClientDetailsController,
+  getVendorsUnderCategoryController,
   logoutUserController,
   refreshTokenController,
   updateClientPasswordController,
@@ -45,6 +46,15 @@ export class ClientRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllCategoriesController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/vendors/:categoryId/listing",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getVendorsUnderCategoryController.handle(req, res)
     );
 
     this.router.post(

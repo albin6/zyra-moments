@@ -11,43 +11,39 @@ import {
 } from "@/components/ui/select";
 import { Star } from "lucide-react";
 import Pagination from "../Pagination";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-interface Vendor {
-  id: string;
+export interface VendorForListing {
+  _id: string;
   firstName: string;
   lastName: string;
   profileImage: string;
   averageRating: number;
 }
 
-export const VendorListing: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("rating");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [vendors, setVendors] = useState<Vendor[] | null>([
-    {
-      id: "1",
-      firstName: "John",
-      lastName: "Doe",
-      profileImage: "/placeholder.svg?height=100&width=100",
-      averageRating: 4.5,
-    },
-    {
-      id: "2",
-      firstName: "Jane",
-      lastName: "Smith",
-      profileImage: "/placeholder.svg?height=100&width=100",
-      averageRating: 4.2,
-    },
-    // Add more vendors as needed
-  ]);
-  const limit = 1;
+interface VendorListingProps {
+  vendors: VendorForListing[];
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  sortBy: string;
+  setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  totalPages: number;
+  limit: number;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+}
 
-  if (!vendors) {
-    return null;
-  }
-
+export const VendorListing: React.FC<VendorListingProps> = ({
+  vendors,
+  searchTerm,
+  setSearchTerm,
+  sortBy,
+  setSortBy,
+  limit,
+  page,
+  setPage,
+  totalPages,
+}) => {
   const filteredVendors = vendors.filter((vendor) =>
     `${vendor.firstName} ${vendor.lastName}`
       .toLowerCase()
@@ -81,8 +77,14 @@ export const VendorListing: React.FC = () => {
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="rating">Rating</SelectItem>
-              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="name_asc">Name Ascending</SelectItem>
+              <SelectItem value="name_desc">Name Descending</SelectItem>
+              <SelectItem value="rating_high_to_low">
+                Rating High-Low
+              </SelectItem>
+              <SelectItem value="rating_low_to_high">
+                Rating High-Low
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -90,20 +92,25 @@ export const VendorListing: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {sortedVendors.map((vendor) => (
-          <Card key={vendor.id} className="overflow-hidden">
+          <Card key={vendor._id} className="overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                <img
-                  src={vendor.profileImage || "/placeholder.svg"}
-                  alt={`${vendor.firstName} ${vendor.lastName}`}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
+                <Avatar className="w-16 h-16 rounded-full object-cover">
+                  <AvatarImage
+                    src={vendor.profileImage}
+                    alt={"/placeholder.svg"}
+                  />
+                  <AvatarFallback className="bg-primary/10">
+                    {vendor.firstName.charAt(0) + vendor.lastName.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
                   <h2 className="font-semibold">{`${vendor.firstName} ${vendor.lastName}`}</h2>
                   <div className="flex items-center mt-1">
                     <Star className="w-4 h-4 text-yellow-400 mr-1" />
                     <span className="text-sm">
-                      {vendor.averageRating.toFixed(1)}
+                      {vendor?.averageRating &&
+                        vendor?.averageRating.toFixed(1)}
                     </span>
                   </div>
                 </div>

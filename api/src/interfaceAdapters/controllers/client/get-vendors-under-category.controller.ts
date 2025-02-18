@@ -21,8 +21,9 @@ export class GetVendorsUnderCategoryController
         limit = 10,
         search = "",
         sortBy = "rating_high_to_low",
-        categoryId,
       } = req.query;
+
+      const categoryId = req.params.categoryId;
 
       const pageNumber = Number(page);
       const pageSize = Number(limit);
