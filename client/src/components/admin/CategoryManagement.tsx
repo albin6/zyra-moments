@@ -39,14 +39,19 @@ import {
 import { getAllCategories } from "@/services/admin/adminService";
 import { Spinner } from "../ui/spinner";
 import { addAndEditCategory } from "@/services/category/categoryService";
+import { ConfirmationModal } from "../modals/ConfirmationModal";
 
 const CategoryManagement: React.FC = () => {
+  const [categoryIdToBlock, setCategoryIdToBlock] = useState<string | null>(
+    null
+  );
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [categories, setCategories] = useState<CategoryType[] | null>(null);
 
   const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  const limit = 2;
+  const limit = 5;
 
   const handleAddCategory = (newCategory: string) => {
     mutateCategory({ name: newCategory });
@@ -66,7 +71,7 @@ const CategoryManagement: React.FC = () => {
     getAllCategories,
     page,
     limit,
-    searchTerm
+    ""
   );
 
   const { mutate: mutateCategory } = useAllCategoryMutation(addAndEditCategory);
@@ -94,6 +99,12 @@ const CategoryManagement: React.FC = () => {
       resetForm();
     },
   });
+
+  const onUpdateStatus = () => {
+    if (categoryIdToBlock) {
+      updateCategoryStatus(categoryIdToBlock);
+    }
+  };
 
   if (isLoading) {
     return <Spinner />;
@@ -184,50 +195,53 @@ const CategoryManagement: React.FC = () => {
           <CardDescription>Manage your event categories</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* <ScrollArea className="h-[400px] w-full rounded-md border"> */}
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Category ID</TableHead>
-                <TableHead>Category Name</TableHead>
-                <TableHead>Category Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {categories.map((category, index) => (
-                <TableRow key={category._id}>
-                  <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell className="font-medium">
-                    {category.title}
-                  </TableCell>
-                  <TableCell>
-                    {category.status ? "active" : "inactive"}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => updateCategoryStatus(category._id)}
-                    >
-                      {!category.status ? (
-                        <>
-                          <ToggleLeft className="h-4 w-4" />
-                          <span className="sr-only">Block</span>
-                        </>
-                      ) : (
-                        <>
-                          <ToggleRight className="h-4 w-4" />
-                          <span className="sr-only">Unblock</span>
-                        </>
-                      )}
-                    </Button>
-                  </TableCell>
+          <ScrollArea className="h-[310px] w-full rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Category ID</TableHead>
+                  <TableHead>Category Name</TableHead>
+                  <TableHead>Category Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {/* </ScrollArea> */}
+              </TableHeader>
+              <TableBody>
+                {categories.map((category, index) => (
+                  <TableRow key={category._id}>
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell className="font-medium">
+                      {category.title}
+                    </TableCell>
+                    <TableCell>
+                      {category.status ? "active" : "inactive"}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setCategoryIdToBlock(category._id);
+                          setIsConfirmationModalOpen(true);
+                        }}
+                      >
+                        {!category.status ? (
+                          <>
+                            <ToggleLeft className="h-4 w-4" />
+                            <span className="sr-only">Block</span>
+                          </>
+                        ) : (
+                          <>
+                            <ToggleRight className="h-4 w-4" />
+                            <span className="sr-only">Unblock</span>
+                          </>
+                        )}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
           <Pagination
             currentPage={page}
             totalPages={totalPages}
@@ -239,6 +253,18 @@ const CategoryManagement: React.FC = () => {
       <div className="flex justify-center sm:justify-start">
         <ViewCatgoryRequestModal />
       </div>
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={() => {
+          onUpdateStatus();
+          setCategoryIdToBlock(null);
+        }}
+        title="Confirm Action"
+        message="Are you sure you want to perform this action?"
+        confirmText="Yes, I'm sure"
+        cancelText="No, cancel"
+      />
     </div>
   );
 };

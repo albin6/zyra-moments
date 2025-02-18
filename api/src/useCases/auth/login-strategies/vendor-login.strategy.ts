@@ -23,6 +23,10 @@ export class VendorLoginStrategy implements ILoginStrategy {
       );
     }
 
+    if (vendor.status !== "active") {
+      throw new CustomError(ERROR_MESSAGES.BLOCKED, HTTP_STATUS.FORBIDDEN);
+    }
+
     const isPasswordMatch = await this.passwordBcrypt.compare(
       user.password,
       vendor.password

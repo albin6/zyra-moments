@@ -18,6 +18,8 @@ import { getAllUsers } from "@/services/admin/adminService";
 import { useUpdateUserStatusMutation } from "@/hooks/admin/useUpdateUserStatus";
 import { toast } from "sonner";
 import _ from "lodash";
+import { ConfirmationModal } from "../modals/ConfirmationModal";
+import { ScrollArea } from "../ui/scroll-area";
 
 export interface IClient {
   _id: string;
@@ -61,6 +63,11 @@ export type VendorList = Vendor[];
 
 export default function UserManagement() {
   const [activeTab, setActiveTab] = useState<string>("client");
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [userToBlock, setUserToBlock] = useState<{
+    type: string;
+    id: string;
+  } | null>(null);
 
   const [clients, setClients] = useState<ClientsData>();
   const [vendors, setVendors] = useState<VendorList>();
@@ -69,7 +76,7 @@ export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  const limit = 2;
+  const limit = 5;
 
   const debouncedSearch = useCallback(
     _.debounce((query) => {
@@ -101,6 +108,12 @@ export default function UserManagement() {
         onError: (error: any) => toast.error(error.response.data.message),
       }
     );
+  };
+
+  const confirmBlock = () => {
+    if (userToBlock) {
+      handleBlockUser(userToBlock?.type, userToBlock?.id);
+    }
   };
 
   useEffect(() => {
@@ -150,7 +163,10 @@ export default function UserManagement() {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => handleBlockUser("client", client._id)}
+                  onClick={() => {
+                    setUserToBlock(() => ({ type: "client", id: client._id }));
+                    setIsConfirmationModalOpen(true);
+                  }}
                 >
                   {client.status === "active" ? "Block" : "UnBlock"}
                 </Button>
@@ -189,7 +205,10 @@ export default function UserManagement() {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => handleBlockUser("vendor", vendor._id)}
+                  onClick={() => {
+                    setUserToBlock(() => ({ type: "vendor", id: vendor._id }));
+                    setIsConfirmationModalOpen(true);
+                  }}
                 >
                   {vendor.status === "active" ? "Block" : "UnBlock"}
                 </Button>
@@ -221,10 +240,14 @@ export default function UserManagement() {
           />
         </div>
         <TabsContent value="client" className="overflow-x-auto">
-          {renderClientTable()}
+          <ScrollArea className="h-[287px] w-full rounded-md border">
+            {renderClientTable()}
+          </ScrollArea>
         </TabsContent>
         <TabsContent value="vendor" className="overflow-x-auto">
-          {clients && renderVendorTable()}
+          <ScrollArea className="h-[287px] w-full rounded-md border">
+            {clients && renderVendorTable()}
+          </ScrollArea>
         </TabsContent>
       </Tabs>
       <div className="mt-4 flex justify-center">
@@ -234,6 +257,18 @@ export default function UserManagement() {
           onPageChange={setPage}
         />
       </div>
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={() => {
+          confirmBlock();
+          setUserToBlock(null);
+        }}
+        title="Confirm Action"
+        message="Are you sure you want to perform this action?"
+        confirmText="Yes, I'm sure"
+        cancelText="No, cancel"
+      />
     </div>
   );
 }

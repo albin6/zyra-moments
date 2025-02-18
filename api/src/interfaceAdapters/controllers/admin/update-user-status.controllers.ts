@@ -19,6 +19,9 @@ export class UpdateUserStatusController implements IUpdateUserStatusController {
         userId: any;
       };
 
+      console.log("user type => ", userType);
+      console.log("user id => ", userId);
+
       await this.updateUserStatusUseCase.execute(userType, userId);
 
       res

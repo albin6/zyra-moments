@@ -13,6 +13,7 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
   ) {}
   async execute(userType: string, userId: any): Promise<void> {
     if (userType === "client") {
+      console.log("yes its client");
       const user = await this.clientRepository.findById(userId);
 
       if (!user) {
@@ -26,7 +27,9 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 
       await this.clientRepository.findByIdAndUpdateStatus(userId, newStatus);
     } else if (userType === "vendor") {
-      const user = await this.clientRepository.findById(userId);
+      console.log("yes its vendor");
+
+      const user = await this.vendorRepository.findById(userId);
 
       if (!user) {
         throw new CustomError(

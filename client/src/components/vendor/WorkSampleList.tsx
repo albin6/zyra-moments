@@ -15,6 +15,7 @@ import {
 import { WorkSample } from "@/types/WorkSample";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { ConfirmationModal } from "../modals/ConfirmationModal";
 
 export function WorkSampleList() {
   const navigate = useNavigate();
@@ -22,6 +23,18 @@ export function WorkSampleList() {
   const [totalPages, setTotalPages] = useState(0);
   const [items, setItems] = useState<WorkSample[] | null>(null);
   const limit = 1;
+
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [workSampleToDelete, setWorkSampleToDelete] = useState<string | null>(
+    null
+  );
+
+  const confirmBlock = () => {
+    deleteSample(workSampleToDelete, {
+      onSuccess: (data) => toast.success(data.message),
+      onError: (error: any) => toast.error(error.response.data.message),
+    });
+  };
 
   const { data, isLoading } = useWorkSampleQuery(
     getAllWorkSampleByVendor,
@@ -81,13 +94,10 @@ export function WorkSampleList() {
               <Button
                 variant="outline"
                 className="shrink-0 mr-4"
-                onClick={() =>
-                  deleteSample(item._id, {
-                    onSuccess: (data) => toast.success(data.message),
-                    onError: (error: any) =>
-                      toast.error(error.response.data.message),
-                  })
-                }
+                onClick={() => {
+                  setWorkSampleToDelete(item._id);
+                  setIsConfirmationModalOpen(true);
+                }}
               >
                 Delete
               </Button>
@@ -109,6 +119,18 @@ export function WorkSampleList() {
           totalPages={totalPages}
         />
       )}
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={() => {
+          confirmBlock();
+          setWorkSampleToDelete(null);
+        }}
+        title="Confirm Action"
+        message="Are you sure you want to perform this action?"
+        confirmText="Yes, I'm sure"
+        cancelText="No, cancel"
+      />
     </div>
   );
 }
