@@ -14,7 +14,7 @@ export const NoAuthRoute = ({ element }: NoAuthRouteProps) => {
   }
 
   if (user) {
-    return <Navigate to="/landing" replace />;
+    return <Navigate to="/landing" />;
   }
 
   return element;
@@ -28,7 +28,7 @@ export const NoAdminAuthRoute = ({ element }: NoAuthRouteProps) => {
   }
 
   if (user) {
-    return <Navigate to="/admin/ad_pvt" replace />;
+    return <Navigate to="/admin/ad_pvt" />;
   }
 
   return element;
@@ -42,7 +42,7 @@ export const NoVendorAuthRoute = ({ element }: NoAuthRouteProps) => {
   }
 
   if (user) {
-    return <Navigate to="/vendor/profile" replace />;
+    return <Navigate to="/vendor/profile" />;
   }
 
   return element;

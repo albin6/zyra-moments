@@ -11,4 +11,6 @@ export interface IServiceRepository {
   ): Promise<PaginatedServices>;
 
   findById(id: any): Promise<IServiceEntity | null>;
+
+  findByIdAndUpdate(id: any, data: IServiceEntity): Promise<void>;
 }

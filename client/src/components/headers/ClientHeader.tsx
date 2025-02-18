@@ -17,7 +17,7 @@ import { useClientAuth } from "@/hooks/custom/useAuth";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { toast } from "sonner";
 import { logoutClient } from "@/services/auth/authService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Client } from "@/services/client/clientService";
 
 const navItems = [
@@ -53,7 +53,7 @@ export function ClientHeader({ client }: ClientHeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto p-4 flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
-          <a className="mr-6 flex items-center space-x-2" href="#">
+          <Link className="mr-6 flex items-center space-x-2" to={"/"}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -69,16 +69,16 @@ export function ClientHeader({ client }: ClientHeaderProps) {
             <span className="hidden font-bold sm:inline-block">
               Client Portal
             </span>
-          </a>
+          </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>

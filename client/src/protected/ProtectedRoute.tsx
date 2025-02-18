@@ -9,7 +9,6 @@ interface ProtectedRouteProps {
 
 export const AuthRoute = ({ element, allowedRoles }: ProtectedRouteProps) => {
   const userRole = useSelector((state: RootState) => state.client.client?.role);
-
   if (!userRole) {
     return <Navigate to="/" />;
   }

@@ -37,4 +37,8 @@ export class ServiceRepository implements IServiceRepository {
   async findById(id: any): Promise<IServiceEntity | null> {
     return await ServiceModel.findById(id);
   }
+
+  async findByIdAndUpdate(id: any, data: IServiceEntity): Promise<void> {
+    await ServiceModel.findByIdAndUpdate(id, data);
+  }
 }

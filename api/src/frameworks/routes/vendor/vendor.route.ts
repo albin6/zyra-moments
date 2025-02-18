@@ -15,6 +15,7 @@ import {
   joinCategoryController,
   logoutUserController,
   refreshTokenController,
+  updateServiceByIdController,
   updateVendorPasswordController,
   updateVendorProfileController,
   updateWorkSampleByIdController,
@@ -139,6 +140,13 @@ export class VendorRoutes extends BaseRoute {
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
         (req: Request, res: Response) =>
           getServiceDetailsByIdController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["vendor"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          updateServiceByIdController.handle(req, res)
       );
 
     this.router.put(

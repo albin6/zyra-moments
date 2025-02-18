@@ -31,6 +31,7 @@ import { DeleteWorkSampleByIdController } from "../../interfaceAdapters/controll
 import { CreateServiceController } from "../../interfaceAdapters/controllers/vendor/service/create-service.controller";
 import { GetAllServicesByVendorIdController } from "../../interfaceAdapters/controllers/vendor/service/get-all-services-by-vendor-id.controller";
 import { GetServiceDetailsByIdController } from "../../interfaceAdapters/controllers/vendor/service/get-service-details-by-id.controller";
+import { UpdateServiceByIdController } from "../../interfaceAdapters/controllers/vendor/service/update-service-by-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -138,4 +139,8 @@ export const getAllServicesByVendorIdController = container.resolve(
 
 export const getServiceDetailsByIdController = container.resolve(
   GetServiceDetailsByIdController
+);
+
+export const updateServiceByIdController = container.resolve(
+  UpdateServiceByIdController
 );

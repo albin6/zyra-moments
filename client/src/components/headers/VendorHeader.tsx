@@ -17,6 +17,7 @@ import { useVendorAuth } from "@/hooks/custom/useAuth";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { toast } from "sonner";
 import { logoutVendor } from "@/services/auth/authService";
+import { Link } from "react-router-dom";
 
 const navItems = [
   { name: "Dashboard", href: "#" },
@@ -58,7 +59,7 @@ export function VendorHeader({
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
-          <a className="mr-6 flex items-center space-x-2" href="#">
+          <Link className="mr-6 flex items-center space-x-2" to="/vendor">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -74,16 +75,16 @@ export function VendorHeader({
             <span className="hidden font-bold sm:inline-block">
               Vendor Portal
             </span>
-          </a>
+          </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
