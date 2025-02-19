@@ -31,6 +31,8 @@ import { GetAllServicesByVendorIdController } from "../../interfaceAdapters/cont
 import { GetServiceDetailsByIdController } from "../../interfaceAdapters/controllers/vendor/service/get-service-details-by-id.controller";
 import { UpdateServiceByIdController } from "../../interfaceAdapters/controllers/vendor/service/update-service-by-id.controller";
 import { GetVendorsUnderCategoryController } from "../../interfaceAdapters/controllers/client/get-vendors-under-category.controller";
+import { GetVendorProfileDetailsController } from "../../interfaceAdapters/controllers/client/get-vendor-profile-details.controller";
+import { GetBestVendorsController } from "../../interfaceAdapters/controllers/client/get-best-vendors.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -160,6 +162,14 @@ export class ControllerRegistry {
 
     container.register("GetVendorsUnderCategoryController", {
       useClass: GetVendorsUnderCategoryController,
+    });
+
+    container.register("GetVendorProfileDetailsController", {
+      useClass: GetVendorProfileDetailsController,
+    });
+
+    container.register("GetBestVendorsController", {
+      useClass: GetBestVendorsController,
     });
   }
 }

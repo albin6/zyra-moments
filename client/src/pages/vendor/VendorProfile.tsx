@@ -76,8 +76,8 @@ export default function VendorProfile() {
         firstName={vendorData.firstName}
         lastName={vendorData.lastName}
         email={vendorData.email}
-        bio=""
-        place=""
+        bio={vendorData.bio!}
+        place={vendorData.place!}
         profileImage={vendorData.profileImage || ""}
         phoneNumber={vendorData.phoneNumber}
         onUpdate={handleUpdate}

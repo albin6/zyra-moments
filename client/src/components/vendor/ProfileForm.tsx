@@ -193,6 +193,7 @@ export function ProfileForm({
               <label className="text-sm font-medium">About Me</label>
               <Textarea
                 value={bio}
+                onChange={(e) => onUpdate?.("bio", e.target.value)}
                 disabled={isEdit === false}
                 placeholder="Tell us about yourself and your services..."
                 className="min-h-[100px]"

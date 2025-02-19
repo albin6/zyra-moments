@@ -2,6 +2,7 @@ import { vendorAxiosInstance } from "@/api/vendor.axios";
 import { UpdatePasswordData } from "@/hooks/client/useClientPassword";
 import { AxiosResponse } from "../auth/authService";
 import { WorkSample } from "@/types/WorkSample";
+import { clientAxiosInstance } from "@/api/client.axios";
 
 // getting vendor profile details
 export const getVendorDetails = async () => {
@@ -86,5 +87,27 @@ export const deleteWorkSample = async (id: any) => {
   const response = await vendorAxiosInstance.delete(
     `/_ve/vendor/work-sample/${id}`
   );
+  return response.data;
+};
+
+// -----------------------------------------------------
+
+export interface BestVendor {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string;
+  category: {
+    _id: string;
+    title: string;
+  };
+}
+export interface BestVendorsReponse {
+  success: boolean;
+  vendors: BestVendor[];
+}
+
+export const getBestVendors = async (): Promise<BestVendorsReponse> => {
+  const response = await clientAxiosInstance.get("/_cl/client/best-vendors");
   return response.data;
 };

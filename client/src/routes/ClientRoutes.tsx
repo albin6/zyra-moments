@@ -8,6 +8,7 @@ import ClientLandingPage from "@/pages/client/ClientLanding";
 import { UserProfile } from "@/components/client/UserProfile";
 import { ClientEventListing } from "@/pages/client/ClientEventListing";
 import { ClientVendorListing } from "@/pages/client/ClientVendorListing";
+import ClientVendorProfile from "@/pages/client/ClientVendorProfile";
 
 function ClientRoutes() {
   return (
@@ -35,6 +36,15 @@ function ClientRoutes() {
             <AuthRoute
               allowedRoles={["client"]}
               element={<ClientVendorListing />}
+            />
+          }
+        />
+        <Route
+          path="/discover/:vendorId/profile"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<ClientVendorProfile />}
             />
           }
         />

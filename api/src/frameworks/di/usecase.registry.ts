@@ -89,6 +89,10 @@ import { IUpdateServiceByIdUseCase } from "../../entities/useCaseInterfaces/vend
 import { UpdateServiceByIdUseCase } from "../../useCases/vendor/service/update-service-by-id.usecase";
 import { IGetVendorsUnderCategoryUseCase } from "../../entities/useCaseInterfaces/client/get-vendors-under-category-usecase.interface";
 import { GetVendorsUnderCategoryUseCase } from "../../useCases/client/get-vendors-under-category.usecase";
+import { IGetVendorProfileDetailsUseCase } from "../../entities/useCaseInterfaces/client/get-vendor-profile-details-usecase.interface";
+import { GetVendorProfileDetailsUseCase } from "../../useCases/client/get-vendor-profile-details.usecase";
+import { IGetBestVendorsUseCase } from "../../entities/useCaseInterfaces/client/get-best-vendors-usecase.interface";
+import { GetBestVendorsUseCase } from "../../useCases/client/get-best-vendors.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -247,6 +251,15 @@ export class UseCaseRegistry {
       "IGetVendorsUnderCategoryUseCase",
       { useClass: GetVendorsUnderCategoryUseCase }
     );
+
+    container.register<IGetVendorProfileDetailsUseCase>(
+      "IGetVendorProfileDetailsUseCase",
+      { useClass: GetVendorProfileDetailsUseCase }
+    );
+
+    container.register<IGetBestVendorsUseCase>("IGetBestVendorsUseCase", {
+      useClass: GetBestVendorsUseCase,
+    });
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

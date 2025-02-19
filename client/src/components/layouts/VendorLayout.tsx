@@ -48,7 +48,7 @@ function VendorLayout() {
   }
 
   if (!vendorData) {
-    return null; // Handle loading/error state
+    return null;
   }
 
   return (

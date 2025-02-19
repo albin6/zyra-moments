@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import {
 import { Star } from "lucide-react";
 import Pagination from "../Pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useNavigate } from "react-router-dom";
 
 export interface VendorForListing {
   _id: string;
@@ -44,6 +45,7 @@ export const VendorListing: React.FC<VendorListingProps> = ({
   setPage,
   totalPages,
 }) => {
+  const navigate = useNavigate();
   const filteredVendors = vendors.filter((vendor) =>
     `${vendor.firstName} ${vendor.lastName}`
       .toLowerCase()
@@ -60,7 +62,7 @@ export const VendorListing: React.FC<VendorListingProps> = ({
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Vendors in {}</h1>
+      {/* <h1 className="text-3xl font-bold mb-6">Vendors in {}</h1> */}
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <Input
@@ -115,7 +117,11 @@ export const VendorListing: React.FC<VendorListingProps> = ({
                   </div>
                 </div>
               </div>
-              <Button variant="outline" className="w-full mt-4">
+              <Button
+                onClick={() => navigate(`/discover/${vendor._id}/profile`)}
+                variant="outline"
+                className="w-full mt-4"
+              >
                 View Profile
               </Button>
             </CardContent>

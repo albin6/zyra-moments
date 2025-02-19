@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { IVendorEntity } from "../../models/vendor.entity";
 
 export interface IVendorRepository {
@@ -36,4 +35,6 @@ export interface IVendorRepository {
     skip: number,
     limit: number
   ): Promise<{ vendors: IVendorEntity[] | []; total: number }>;
+
+  findBestVendors(): Promise<IVendorEntity[] | []>;
 }

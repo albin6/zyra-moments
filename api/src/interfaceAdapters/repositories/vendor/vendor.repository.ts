@@ -2,7 +2,6 @@ import { injectable } from "tsyringe";
 import { IVendorEntity } from "../../../entities/models/vendor.entity";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { VendorModel } from "../../../frameworks/database/models/vendor.model";
-import { ObjectId } from "mongoose";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {
@@ -99,5 +98,11 @@ export class VendorRepository implements IVendorRepository {
       vendors,
       total,
     };
+  }
+
+  async findBestVendors(): Promise<IVendorEntity[] | []> {
+    return await VendorModel.find()
+      .limit(6)
+      .populate({ path: "category", select: "title" });
   }
 }

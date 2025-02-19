@@ -7,7 +7,9 @@ import {
 import {
   blockStatusMiddleware,
   getAllCategoriesController,
+  getBestVendorsController,
   getClientDetailsController,
+  getVendorProfileDetailsController,
   getVendorsUnderCategoryController,
   logoutUserController,
   refreshTokenController,
@@ -55,6 +57,23 @@ export class ClientRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getVendorsUnderCategoryController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/:vendorId/details",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getVendorProfileDetailsController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/best-vendors",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) => getBestVendorsController.handle(req, res)
     );
 
     this.router.post(
