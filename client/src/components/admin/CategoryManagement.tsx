@@ -54,7 +54,13 @@ const CategoryManagement: React.FC = () => {
   const limit = 5;
 
   const handleAddCategory = (newCategory: string) => {
-    mutateCategory({ name: newCategory });
+    mutateCategory(
+      { name: newCategory },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
   };
 
   const updateCategoryStatus = (id: string) => {

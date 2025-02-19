@@ -14,3 +14,8 @@ export interface PaginatedServices {
   total: number;
   all: number;
 }
+
+export interface PaginatedVendorServices {
+  services: IServiceEntity[] | [];
+  total: number;
+}

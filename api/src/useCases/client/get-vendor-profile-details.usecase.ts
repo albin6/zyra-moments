@@ -68,7 +68,7 @@ export class GetVendorProfileDetailsUseCase
     const limitService = validServicePageSize;
 
     const { services, total: totalServices } =
-      await this.serviceRepository.findByVendorId(
+      await this.serviceRepository.findByVendorIdForVendorProfileInClient(
         id,
         skipService,
         limitService

@@ -2,7 +2,10 @@ import { injectable } from "tsyringe";
 import { IServiceEntity } from "../../../entities/models/service.entity";
 import { IServiceRepository } from "../../../entities/repositoryInterfaces/common/service-repository.interface";
 import { ServiceModel } from "../../../frameworks/database/models/service.model";
-import { PaginatedServices } from "../../../entities/models/paginated-services.entity";
+import {
+  PaginatedServices,
+  PaginatedVendorServices,
+} from "../../../entities/models/paginated-services.entity";
 
 @injectable()
 export class ServiceRepository implements IServiceRepository {
@@ -31,6 +34,22 @@ export class ServiceRepository implements IServiceRepository {
       services,
       total,
       all,
+    };
+  }
+
+  async findByVendorIdForVendorProfileInClient(
+    id: any,
+    skip: number,
+    limit: number
+  ): Promise<PaginatedVendorServices> {
+    const [services, total] = await Promise.all([
+      ServiceModel.find({ vendorId: id }).skip(skip).limit(limit).lean(),
+      ServiceModel.countDocuments({ vendorId: id }),
+    ]);
+
+    return {
+      services,
+      total,
     };
   }
 

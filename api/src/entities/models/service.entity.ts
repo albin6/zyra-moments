@@ -12,8 +12,8 @@ interface DateSlot {
 }
 
 export interface IServiceEntity {
-  _id?: ObjectId;
-  vendorId?: string;
+  _id?: string | ObjectId;
+  vendorId?: string | ObjectId;
   serviceTitle: string;
   yearsOfExperience: number;
   availableDates: DateSlot[];
