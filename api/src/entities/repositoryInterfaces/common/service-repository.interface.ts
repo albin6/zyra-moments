@@ -22,4 +22,6 @@ export interface IServiceRepository {
   findById(id: any): Promise<IServiceEntity | null>;
 
   findByIdAndUpdate(id: any, data: IServiceEntity): Promise<void>;
+
+  findAllServiceByVendorId(id: any): Promise<IServiceEntity[] | []>;
 }

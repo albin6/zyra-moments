@@ -101,6 +101,8 @@ import { IConfirmPaymentUseCase } from "../../entities/useCaseInterfaces/payment
 import { ConfirmPaymentUseCase } from "../../useCases/payment/confirm-payment.usecase";
 import { IWebHookUseCase } from "../../entities/useCaseInterfaces/payment/webhook-usecase.interface";
 import { WebHookUseCase } from "../../useCases/payment/webhook.usecase";
+import { IGetAllServicesForBookingUseCase } from "../../entities/useCaseInterfaces/client/get-all-services-for-booking-usecase.interface";
+import { GetAllServicesForBookingUseCase } from "../../useCases/client/get-all-services-for-booking.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -281,6 +283,11 @@ export class UseCaseRegistry {
     container.register<IWebHookUseCase>("IWebHookUseCase", {
       useClass: WebHookUseCase,
     });
+
+    container.register<IGetAllServicesForBookingUseCase>(
+      "IGetAllServicesForBookingUseCase",
+      { useClass: GetAllServicesForBookingUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

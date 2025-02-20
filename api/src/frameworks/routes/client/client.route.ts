@@ -7,6 +7,7 @@ import {
 import {
   blockStatusMiddleware,
   getAllCategoriesController,
+  getAllServicesForBookingController,
   getBestVendorsController,
   getClientDetailsController,
   getVendorProfileDetailsController,
@@ -74,6 +75,15 @@ export class ClientRoutes extends BaseRoute {
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => getBestVendorsController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/services/booking",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllServicesForBookingController.handle(req, res)
     );
 
     this.router.post(
