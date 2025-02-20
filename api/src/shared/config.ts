@@ -29,6 +29,11 @@ export const config = {
     PASSWORD: process.env.DATABASE_PASSWORD || "password",
   },
 
+  stripe: {
+    sk: process.env.STRIPE_SK || "",
+    sws: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
+
   jwt: {
     ACCESS_SECRET_KEY: process.env.JWT_ACCESS_KEY || "your-secret-key",
     REFRESH_SECRET_KEY: process.env.JWT_REFRESH_KEY || "your-secret-key",

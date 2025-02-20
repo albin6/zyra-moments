@@ -35,6 +35,9 @@ import { UpdateServiceByIdController } from "../../interfaceAdapters/controllers
 import { GetVendorsUnderCategoryController } from "../../interfaceAdapters/controllers/client/get-vendors-under-category.controller";
 import { GetVendorProfileDetailsController } from "../../interfaceAdapters/controllers/client/get-vendor-profile-details.controller";
 import { GetBestVendorsController } from "../../interfaceAdapters/controllers/client/get-best-vendors.controller";
+import { CreatePaymentIntentController } from "../../interfaceAdapters/controllers/payment/create-payment-intent.controller";
+import { ConfirmPaymentController } from "../../interfaceAdapters/controllers/payment/confirm-payment.controller";
+import { HandleWebHookController } from "../../interfaceAdapters/controllers/payment/handle-webhook.controller";
 
 DependencyInjection.registerAll();
 
@@ -158,4 +161,16 @@ export const getVendorProfileDetailsController = container.resolve(
 
 export const getBestVendorsController = container.resolve(
   GetBestVendorsController
+);
+
+export const createPaymentIntentController = container.resolve(
+  CreatePaymentIntentController
+);
+
+export const confirmPaymentController = container.resolve(
+  ConfirmPaymentController
+);
+
+export const handleWebHookController = container.resolve(
+  HandleWebHookController
 );

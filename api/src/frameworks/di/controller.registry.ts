@@ -33,6 +33,9 @@ import { UpdateServiceByIdController } from "../../interfaceAdapters/controllers
 import { GetVendorsUnderCategoryController } from "../../interfaceAdapters/controllers/client/get-vendors-under-category.controller";
 import { GetVendorProfileDetailsController } from "../../interfaceAdapters/controllers/client/get-vendor-profile-details.controller";
 import { GetBestVendorsController } from "../../interfaceAdapters/controllers/client/get-best-vendors.controller";
+import { CreatePaymentIntentController } from "../../interfaceAdapters/controllers/payment/create-payment-intent.controller";
+import { ConfirmPaymentController } from "../../interfaceAdapters/controllers/payment/confirm-payment.controller";
+import { HandleWebHookController } from "../../interfaceAdapters/controllers/payment/handle-webhook.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -170,6 +173,18 @@ export class ControllerRegistry {
 
     container.register("GetBestVendorsController", {
       useClass: GetBestVendorsController,
+    });
+
+    container.register("CreatePaymentIntentController", {
+      useClass: CreatePaymentIntentController,
+    });
+
+    container.register("ConfirmPaymentController", {
+      useClass: ConfirmPaymentController,
+    });
+
+    container.register("HandleWebHookController", {
+      useClass: HandleWebHookController,
     });
   }
 }

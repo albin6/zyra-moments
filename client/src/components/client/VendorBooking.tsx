@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { PaymentWrapper } from "../stripe/PaymentForm";
 
 // Example services data - replace with your actual data fetching logic
 const exampleServices: Service[] = [
@@ -338,6 +339,7 @@ export default function VendorBooking() {
             >
               Book Now
             </Button>
+            <PaymentWrapper />
           </CardContent>
         </Card>
       </div>

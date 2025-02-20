@@ -13,7 +13,15 @@ import { AdminRegisterStrategy } from "../../useCases/auth/regiter-strategies/ad
 import { AdminLoginStrategy } from "../../useCases/auth/login-strategies/admin-login.strategy";
 
 import { ITokenService } from "../../useCases/auth/interfaces/token-service.interface";
-import { JwtService } from "../../interfaceAdapters/services/jwt-service";
+import { JwtService } from "../../interfaceAdapters/services/jwt.service";
+import { IEmailService } from "../../entities/services/email-service.interface";
+import { EmailService } from "../../interfaceAdapters/services/email.service";
+import { IOTPService } from "../../entities/services/otp-service.inteface";
+import { OTPService } from "../../interfaceAdapters/services/otp.service";
+import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
+import { UserExistenceService } from "../../interfaceAdapters/services/use-existence.service";
+import { IPaymentService } from "../../entities/services/payement-service.interface";
+import { StripeService } from "../../interfaceAdapters/services/stripe.service";
 
 import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
 import { RegisterUserUseCase } from "../../useCases/auth/register-user.usecase";
@@ -21,14 +29,8 @@ import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-u
 import { LoginUserUseCase } from "../../useCases/auth/login.usecase";
 import { ISendEmailUseCase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.inteface";
 import { SendEmailUseCase } from "../../useCases/auth/send-email.usecase";
-import { IEmailService } from "../../entities/services/email-service.interface";
-import { EmailService } from "../../interfaceAdapters/services/email.services";
-import { IOTPService } from "../../entities/services/otp-service.inteface";
-import { OTPService } from "../../interfaceAdapters/services/otp.services";
 import { IVerifyOTPUseCase } from "../../entities/useCaseInterfaces/auth/verify-otp-usecase.interface";
 import { VerifyOTPUseCase } from "../../useCases/auth/verify-otp.usecase";
-import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
-import { UserExistenceService } from "../../interfaceAdapters/services/use-existence.services";
 import { IGenerateTokenUseCase } from "../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
 import { GenerateTokenUseCase } from "../../useCases/auth/generate-token.usecase";
 import { IRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/refresh-toke-usecase.inteface";
@@ -93,6 +95,12 @@ import { IGetVendorProfileDetailsUseCase } from "../../entities/useCaseInterface
 import { GetVendorProfileDetailsUseCase } from "../../useCases/client/get-vendor-profile-details.usecase";
 import { IGetBestVendorsUseCase } from "../../entities/useCaseInterfaces/client/get-best-vendors-usecase.interface";
 import { GetBestVendorsUseCase } from "../../useCases/client/get-best-vendors.usecase";
+import { ICreatePaymentIntentUseCase } from "../../entities/useCaseInterfaces/payment/create-payment-intent-usecase.interface";
+import { CreatePaymentIntentUseCase } from "../../useCases/payment/create-payment-intent.usecase";
+import { IConfirmPaymentUseCase } from "../../entities/useCaseInterfaces/payment/confirm-payment-usecase.interface";
+import { ConfirmPaymentUseCase } from "../../useCases/payment/confirm-payment.usecase";
+import { IWebHookUseCase } from "../../entities/useCaseInterfaces/payment/webhook-usecase.interface";
+import { WebHookUseCase } from "../../useCases/payment/webhook.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -261,6 +269,19 @@ export class UseCaseRegistry {
       useClass: GetBestVendorsUseCase,
     });
 
+    container.register<ICreatePaymentIntentUseCase>(
+      "ICreatePaymentIntentUseCase",
+      { useClass: CreatePaymentIntentUseCase }
+    );
+
+    container.register<IConfirmPaymentUseCase>("IConfirmPaymentUseCase", {
+      useClass: ConfirmPaymentUseCase,
+    });
+
+    container.register<IWebHookUseCase>("IWebHookUseCase", {
+      useClass: WebHookUseCase,
+    });
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -286,7 +307,7 @@ export class UseCaseRegistry {
       useClass: VendorLoginStrategy,
     });
 
-    // register email & otp services
+    // register services
     container.register<IEmailService>("IEmailService", {
       useClass: EmailService,
     });
@@ -305,5 +326,9 @@ export class UseCaseRegistry {
       "IUpdateCategoryRequestStatusUseCase",
       { useClass: UpdateCategoryRequestStatusUseCase }
     );
+
+    container.register<IPaymentService>("IPaymentService", {
+      useClass: StripeService,
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtService } from "../services/jwt-service";
+import { JwtService } from "../services/jwt.service";
 import { JwtPayload } from "jsonwebtoken";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import client from "../../frameworks/cache/redis.client";
