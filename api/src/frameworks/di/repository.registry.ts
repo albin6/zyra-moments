@@ -21,6 +21,8 @@ import { IServiceRepository } from "../../entities/repositoryInterfaces/common/s
 import { ServiceRepository } from "../../interfaceAdapters/repositories/common/service.repository";
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { PaymentRepository } from "../../interfaceAdapters/repositories/payment/payment.repository";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { BookingRepository } from "../../interfaceAdapters/repositories/booking/booking.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -67,6 +69,10 @@ export class RepositoryRegistry {
 
     container.register<IPaymentRepository>("IPaymentRepository", {
       useClass: PaymentRepository,
+    });
+
+    container.register<IBookingRepository>("IBookingRepository", {
+      useClass: BookingRepository,
     });
   }
 }

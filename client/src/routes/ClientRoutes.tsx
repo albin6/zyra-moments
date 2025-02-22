@@ -10,6 +10,7 @@ import { ClientEventListing } from "@/pages/client/ClientEventListing";
 import { ClientVendorListing } from "@/pages/client/ClientVendorListing";
 import ClientVendorProfile from "@/pages/client/ClientVendorProfile";
 import ClientVendorBooking from "@/pages/client/ClientVendorBooking";
+import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 
 function ClientRoutes() {
   return (
@@ -59,11 +60,20 @@ function ClientRoutes() {
           }
         />
         <Route
-          path="/booking"
+          path="/booking/:vendorId"
           element={
             <AuthRoute
               allowedRoles={["client"]}
               element={<ClientVendorBooking />}
+            />
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<ClientBookingListing />}
             />
           }
         />

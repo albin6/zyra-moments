@@ -39,6 +39,7 @@ import { CreatePaymentIntentController } from "../../interfaceAdapters/controlle
 import { ConfirmPaymentController } from "../../interfaceAdapters/controllers/payment/confirm-payment.controller";
 import { HandleWebHookController } from "../../interfaceAdapters/controllers/payment/handle-webhook.controller";
 import { GetAllServicesForBookingController } from "../../interfaceAdapters/controllers/client/get-all-services-for-booking.controller";
+import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 
 DependencyInjection.registerAll();
 
@@ -178,4 +179,8 @@ export const handleWebHookController = container.resolve(
 
 export const getAllServicesForBookingController = container.resolve(
   GetAllServicesForBookingController
+);
+
+export const getAllBookingByClientController = container.resolve(
+  GetAllBookingByClientController
 );

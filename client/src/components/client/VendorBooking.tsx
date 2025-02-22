@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalendarIcon, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -29,38 +29,41 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { PaymentWrapper } from "../stripe/PaymentForm";
+import { useCheckOutQuery } from "@/hooks/booking/useCheckout";
+import { getServicesOfAVendor } from "@/services/booking/bookingServices";
+import { useParams } from "react-router-dom";
+import { Spinner } from "../ui/spinner";
 
-// Example services data - replace with your actual data fetching logic
-const exampleServices: Service[] = [
-  {
-    _id: "1",
-    vendorId: "v1",
-    serviceTitle: "Basic Photography",
-    yearsOfExperience: 5,
-    availableDates: [
-      {
-        date: "2025-02-20",
-        timeSlots: [
-          { startTime: "09:00", endTime: "12:00", capacity: 1 },
-          { startTime: "14:00", endTime: "17:00", capacity: 1 },
-        ],
-      },
-      {
-        date: "2025-02-21",
-        timeSlots: [
-          { startTime: "10:00", endTime: "13:00", capacity: 1 },
-          { startTime: "15:00", endTime: "18:00", capacity: 1 },
-        ],
-      },
-    ],
-    serviceDescription: "Professional photography service",
-    serviceDuration: 3,
-    servicePrice: 150,
-    additionalHoursPrice: 50,
-    cancellationPolicies: ["24 hours notice required"],
-    termsAndConditions: ["Deposit required", "Weather dependent"],
-  },
-];
+// const exampleServices: Service[] = [
+//   {
+//     _id: "1",
+//     vendorId: "v1",
+//     serviceTitle: "Basic Photography",
+//     yearsOfExperience: 5,
+//     availableDates: [
+//       {
+//         date: "2025-02-20",
+//         timeSlots: [
+//           { startTime: "09:00", endTime: "12:00", capacity: 1 },
+//           { startTime: "14:00", endTime: "17:00", capacity: 1 },
+//         ],
+//       },
+//       {
+//         date: "2025-02-21",
+//         timeSlots: [
+//           { startTime: "10:00", endTime: "13:00", capacity: 1 },
+//           { startTime: "15:00", endTime: "18:00", capacity: 1 },
+//         ],
+//       },
+//     ],
+//     serviceDescription: "Professional photography service",
+//     serviceDuration: 3,
+//     servicePrice: 150,
+//     additionalHoursPrice: 50,
+//     cancellationPolicies: ["24 hours notice required"],
+//     termsAndConditions: ["Deposit required", "Weather dependent"],
+//   },
+// ];
 
 export default function VendorBooking() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
@@ -68,6 +71,22 @@ export default function VendorBooking() {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
     null
   );
+
+  const [services, setServices] = useState<Service[] | null>(null);
+
+  const { vendorId } = useParams();
+
+  if (!vendorId) {
+    return null;
+  }
+
+  const { data, isLoading } = useCheckOutQuery(getServicesOfAVendor, vendorId);
+
+  useEffect(() => {
+    if (data) {
+      setServices(data.services);
+    }
+  }, [data]);
 
   // Filter available dates for the calendar
   const availableDates =
@@ -91,6 +110,14 @@ export default function VendorBooking() {
     const gst = platformFee * 0.18;
     return basePrice + platformFee + gst;
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!services) {
+    return null;
+  }
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -195,7 +222,7 @@ export default function VendorBooking() {
               <label className="text-sm font-medium">Choose Service*</label>
               <Select
                 onValueChange={(value) => {
-                  const service = exampleServices.find((s) => s._id === value);
+                  const service = services.find((s) => s._id === value);
                   setSelectedService(service || null);
                   setSelectedDate(null);
                   setSelectedTimeSlot(null);
@@ -205,11 +232,18 @@ export default function VendorBooking() {
                   <SelectValue placeholder="Select a service" />
                 </SelectTrigger>
                 <SelectContent>
-                  {exampleServices.map((service) => (
-                    <SelectItem key={service._id} value={service._id as string}>
-                      {service.serviceTitle}
-                    </SelectItem>
-                  ))}
+                  {services.length === 0 ? (
+                    <h1>Not Services Available..</h1>
+                  ) : (
+                    services.map((service) => (
+                      <SelectItem
+                        key={service._id}
+                        value={service._id as string}
+                      >
+                        {service.serviceTitle}
+                      </SelectItem>
+                    ))
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -332,14 +366,13 @@ export default function VendorBooking() {
               </Card>
             )}
 
-            <Button
-              className="w-full"
-              size="lg"
-              disabled={!selectedService || !selectedDate || !selectedTimeSlot}
-            >
+            {/* <Button className="w-full" size="lg" disabled={}>
               Book Now
-            </Button>
-            <PaymentWrapper />
+            </Button> */}
+
+            {selectedService && selectedDate && selectedTimeSlot && (
+              <PaymentWrapper amount={calculateTotal()} />
+            )}
           </CardContent>
         </Card>
       </div>

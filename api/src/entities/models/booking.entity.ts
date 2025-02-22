@@ -26,3 +26,22 @@ export interface IBookingEntity {
 
   createdAt: Date;
 }
+
+export interface BookingListData {
+  _id: string | ObjectId;
+  clientName: string;
+  serviceRequired: string;
+  requiredDate: string;
+  totalPrice: number;
+  status: string;
+}
+
+export interface BookingListFromRepo {
+  bookings: IBookingEntity[];
+  total: number;
+}
+
+export interface BookingListFromUseCase {
+  bookings: BookingListData[];
+  total: number;
+}

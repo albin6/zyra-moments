@@ -6,6 +6,7 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
   blockStatusMiddleware,
+  getAllBookingByClientController,
   getAllCategoriesController,
   getAllServicesForBookingController,
   getBestVendorsController,
@@ -78,7 +79,7 @@ export class ClientRoutes extends BaseRoute {
     );
 
     this.router.get(
-      "/client/services/booking",
+      "/client/vendor-services",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
@@ -86,6 +87,17 @@ export class ClientRoutes extends BaseRoute {
         getAllServicesForBookingController.handle(req, res)
     );
 
+    // bookings
+    this.router.get(
+      "/client/client-bookings",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllBookingByClientController.handle(req, res)
+    );
+
+    // logout
     this.router.post(
       "/client/logout",
       verifyAuth,
@@ -96,6 +108,7 @@ export class ClientRoutes extends BaseRoute {
       }
     );
 
+    // password update
     this.router.put(
       "/client/update-password",
       verifyAuth,
@@ -105,6 +118,7 @@ export class ClientRoutes extends BaseRoute {
         updateClientPasswordController.handle(req, res)
     );
 
+    // token refresh
     this.router.post(
       "/client/refresh-token",
       decodeToken,

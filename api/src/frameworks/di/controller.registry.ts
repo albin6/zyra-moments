@@ -37,6 +37,7 @@ import { CreatePaymentIntentController } from "../../interfaceAdapters/controlle
 import { ConfirmPaymentController } from "../../interfaceAdapters/controllers/payment/confirm-payment.controller";
 import { HandleWebHookController } from "../../interfaceAdapters/controllers/payment/handle-webhook.controller";
 import { GetAllServicesForBookingController } from "../../interfaceAdapters/controllers/client/get-all-services-for-booking.controller";
+import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -190,6 +191,10 @@ export class ControllerRegistry {
 
     container.register("GetAllServicesForBookingController", {
       useClass: GetAllServicesForBookingController,
+    });
+
+    container.register("GetAllBookingByClientController", {
+      useClass: GetAllBookingByClientController,
     });
   }
 }

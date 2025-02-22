@@ -27,12 +27,20 @@ export class Server {
       cors({
         origin: config.cors.ALLOWED_ORIGIN,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Authorization", "Content-Type"],
+        allowedHeaders: ["Authorization", "Content-Type", "stripe-signature"], // Added stripe-signature
         credentials: true,
       })
     );
 
-    this._app.use(express.json());
+    // Handle raw body for webhook route
+    this._app.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.originalUrl.includes("/client/webhook")) {
+        express.raw({ type: "application/json" })(req, res, next);
+      } else {
+        express.json()(req, res, next);
+      }
+    });
+
     this._app.use(cookieParser());
 
     this._app.use(

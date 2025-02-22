@@ -21,6 +21,7 @@ export class HandleWebHookController implements IHandleWebHookController {
         return;
       }
 
+      console.log("in webhook handle controller");
       await this.webHookUseCase.execute(sig, req.body);
 
       res.status(HTTP_STATUS.OK).json({ received: true });

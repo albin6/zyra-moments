@@ -6,7 +6,7 @@ import { User, Calendar, BarChart2 } from "lucide-react";
 const navItems = [
   { icon: User, label: "Profile", id: "profile" },
   { icon: Calendar, label: "Events", id: "events" },
-  { icon: BarChart2, label: "Stats", id: "stats" },
+  { icon: BarChart2, label: "Bookings", id: "bookings" },
 ];
 
 interface ClientSidebarProps {

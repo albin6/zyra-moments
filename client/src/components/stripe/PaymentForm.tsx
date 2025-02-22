@@ -99,12 +99,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
   );
 };
 
-export const PaymentWrapper: React.FC = () => {
+export const PaymentWrapper: React.FC<{ amount: number }> = ({ amount }) => {
   return (
     <Elements stripe={stripePromise}>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl mb-4">Complete Your Payment</h1>
-        <PaymentForm amount={2000} />
+        <PaymentForm amount={amount} />
       </div>
     </Elements>
   );

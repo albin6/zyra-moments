@@ -13,7 +13,7 @@ import {
   Clock,
   DollarSign,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useClientVendorProifileQuery } from "@/hooks/client/useClientVendorProfile";
 import {
   getVendorProfileDetailsForClientSide,
@@ -21,6 +21,7 @@ import {
 } from "@/services/client/clientVendorProfileService";
 import { Spinner } from "../ui/spinner";
 import Pagination from "../Pagination";
+import { Button } from "../ui/button";
 
 // const vendorData = {
 //   firstName: "John",
@@ -82,6 +83,7 @@ import Pagination from "../Pagination";
 export default function VendorProfile() {
   const { vendorId } = useParams();
   const [activeTab, setActiveTab] = useState("personal");
+  const navigate = useNavigate();
 
   // pagination things!!!!!!!!
   const [currentServicePage, setCurrentServicePage] = useState(1);
@@ -127,32 +129,37 @@ export default function VendorProfile() {
   return (
     <div className="container mx-auto p-4">
       <Card className="w-full max-w-4xVendorProfileResponsel mx-auto">
-        <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
-          <Avatar className="w-24 h-24">
-            <AvatarImage
-              src={vendorData.profileImage}
-              alt={`${vendorData.firstName} ${vendorData.lastName}`}
-            />
-            <AvatarFallback>
-              {vendorData.firstName[0]}
-              {vendorData.lastName[0]}
-            </AvatarFallback>
-          </Avatar>
-          <div className="text-center sm:text-left">
-            <CardTitle className="text-2xl">
-              {vendorData.firstName} {vendorData.lastName}
-            </CardTitle>
-            <p className="text-muted-foreground">
-              {vendorData?.category?.title}
-            </p>
-            <div className="flex items-center justify-center sm:justify-start mt-2">
-              <Star className="w-4 h-4 text-yellow-400 mr-1" />
-              <span>
-                {vendorData?.averageRating || 5} (
-                {vendorData?.totalReviews || 0} reviews)
-              </span>
+        <CardHeader className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Avatar className="w-24 h-24">
+              <AvatarImage
+                src={vendorData.profileImage}
+                alt={`${vendorData.firstName} ${vendorData.lastName}`}
+              />
+              <AvatarFallback>
+                {vendorData.firstName[0]}
+                {vendorData.lastName[0]}
+              </AvatarFallback>
+            </Avatar>
+            <div className="text-center sm:text-left">
+              <CardTitle className="text-2xl">
+                {vendorData.firstName} {vendorData.lastName}
+              </CardTitle>
+              <p className="text-muted-foreground">
+                {vendorData?.category?.title}
+              </p>
+              <div className="flex items-center justify-center sm:justify-start mt-2">
+                <Star className="w-4 h-4 text-yellow-400 mr-1" />
+                <span>
+                  {vendorData?.averageRating || 5} (
+                  {vendorData?.totalReviews || 0} reviews)
+                </span>
+              </div>
             </div>
           </div>
+          <Button onClick={() => navigate(`/booking/${vendorId}`)}>
+            Book Now
+          </Button>
         </CardHeader>
         <CardContent>
           <Tabs

@@ -6,13 +6,13 @@ import { ClientSidebar } from "./ClientSidebar";
 import { ProfileInfo } from "./ProfileInfo";
 import { EditProfileForm } from "./EditProfileForm";
 import { UserEvents } from "./UserEvents";
-import { UserStats } from "./UserStats";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useClientProfileMutation } from "@/hooks/client/useClientProfile";
 import { Client } from "@/services/client/clientService";
 import { toast } from "sonner";
 import { useOutletContext } from "react-router-dom";
+import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 
 interface ClientContextType {
   clientData: Client | null;
@@ -88,7 +88,9 @@ export function UserProfile() {
                   ? "Profile"
                   : activeTab === "events"
                   ? "Events"
-                  : "Statistics"}
+                  : activeTab === "bookings"
+                  ? "Bookings"
+                  : "something"}
               </h2>
               {activeTab === "profile" && (
                 <Button
@@ -126,7 +128,7 @@ export function UserProfile() {
                 <ProfileInfo data={clientData} />
               )}
               {activeTab === "events" && <UserEvents />}
-              {activeTab === "stats" && <UserStats />}
+              {activeTab === "bookings" && <ClientBookingListing />}
             </div>
           </Card>
         </main>

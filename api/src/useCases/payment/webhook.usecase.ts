@@ -10,19 +10,24 @@ import { HTTP_STATUS } from "../../shared/constants";
 export class WebHookUseCase implements IWebHookUseCase {
   private stripe: Stripe;
   private endpointSecret: string;
+
   constructor(
     @inject("IPaymentService") private paymentService: IPaymentService
   ) {
+    console.log("in webhook handle usecase");
     this.stripe = new Stripe(config.stripe.sk, {
       apiVersion: "2025-01-27.acacia",
     });
     this.endpointSecret = config.stripe.sws;
   }
+
   async execute(sig: string, body: any): Promise<void> {
     let event: Stripe.Event;
     try {
+      const payload = body instanceof Buffer ? body.toString() : body;
+
       event = this.stripe.webhooks.constructEvent(
-        body,
+        payload,
         sig,
         this.endpointSecret
       );

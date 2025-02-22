@@ -1,4 +1,4 @@
-import express, { Request, RequestHandler, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import {
   authorizeRole,
   verifyAuth,
@@ -26,10 +26,9 @@ export class PaymentRoutes extends BaseRoute {
         createPaymentIntentController.handle(req, res)
     );
 
-    this.router.post(
-      "/client/webhook",
-      express.raw({ type: "application/json" }),
-      (req: Request, res: Response) => handleWebHookController.handle(req, res)
+    // Remove express.raw middleware as it's now handled globally
+    this.router.post("/client/webhook", (req: Request, res: Response) =>
+      handleWebHookController.handle(req, res)
     );
 
     this.router.post(
