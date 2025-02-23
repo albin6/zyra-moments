@@ -4,6 +4,8 @@ import { inject, injectable } from "tsyringe";
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { PaymentStatus } from "../../entities/models/payment.entity";
 import { config } from "../../shared/config";
+import { CustomError } from "../../entities/utils/CustomError";
+import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
 export class StripeService implements IPaymentService {
@@ -32,7 +34,10 @@ export class StripeService implements IPaymentService {
       return paymentIntent.client_secret!;
     } catch (error) {
       console.error("Error creating payment intent:", error);
-      throw new Error("Failed to create payment intent");
+      throw new CustomError(
+        "Failed to create payment intent",
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -44,7 +49,10 @@ export class StripeService implements IPaymentService {
       return paymentIntent.status === "succeeded";
     } catch (error) {
       console.error("Error confirming payment:", error);
-      throw new Error("Failed to confirm payment");
+      throw new CustomError(
+        "Failed to confirm payment",
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -62,7 +70,10 @@ export class StripeService implements IPaymentService {
     switch (event.type) {
       case "payment_intent.succeeded":
         const successfulPayment = event.data.object as Stripe.PaymentIntent;
-        await this.updatePaymentStatus(successfulPayment.id, "succeeded");
+        await this.updatePaymentStatus(
+          successfulPayment.client_secret!,
+          "succeeded"
+        );
         break;
 
       case "payment_intent.payment_failed":

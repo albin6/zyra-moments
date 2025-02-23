@@ -13,23 +13,19 @@ export class ConfirmPaymentUseCase implements IConfirmPaymentUseCase {
   ) {}
 
   async execute(paymentIntentId: string): Promise<boolean> {
-    try {
-      const isConfirmed = await this.paymentService.confirmPayment(
-        paymentIntentId
-      );
-      if (isConfirmed) {
-        await this.paymentRepository.findByPaymentIntentIdAndUpdateStatus(
-          paymentIntentId,
-          "succeeded"
-        );
-      }
-      return isConfirmed;
-    } catch (error) {
-      console.error("ConfirmPaymentUseCase Error:", error);
+    const isConfirmed = await this.paymentService.confirmPayment(
+      paymentIntentId
+    );
+    if (!isConfirmed) {
       throw new CustomError(
         "Failed to confirm payment",
         HTTP_STATUS.INTERNAL_SERVER_ERROR
       );
+      // await this.paymentRepository.findByPaymentIntentIdAndUpdateStatus(
+      //   paymentIntentId,
+      //   "succeeded"
+      // );
     }
+    return isConfirmed;
   }
 }

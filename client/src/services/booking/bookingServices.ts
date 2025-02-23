@@ -1,4 +1,5 @@
 import { clientAxiosInstance } from "@/api/client.axios";
+import { Booking } from "@/types/Booking";
 
 export const getServicesOfAVendor = async (vendorId: string) => {
   const response = await clientAxiosInstance.get(
@@ -28,6 +29,14 @@ export const getClientBookings = async (data: {
         search: data.search,
       },
     }
+  );
+  return response.data;
+};
+
+export const bookVendorService = async (data: Booking) => {
+  const response = await clientAxiosInstance.post(
+    "/_cl/client/book-vendor",
+    data
   );
   return response.data;
 };

@@ -47,10 +47,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
           if (stripeError) {
             toast.error(stripeError.message || "An error occurred");
           } else if (paymentIntent.status === "succeeded") {
-            await clientAxiosInstance.post("/_pmt/client/confirm-payment", {
-              paymentIntentId: paymentIntent.id,
-            });
-            toast.success(data.message);
+            try {
+              await clientAxiosInstance.post("/_pmt/client/confirm-payment", {
+                paymentIntentId: paymentIntent.id,
+              });
+              toast.success(data.message);
+            } catch (error) {
+              console.log("Error in confirm payement=>", error);
+            }
             setSucceeded(true);
           }
         },

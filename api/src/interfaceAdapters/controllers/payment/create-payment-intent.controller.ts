@@ -20,6 +20,8 @@ export class CreatePaymentIntentController
       const userId = (req as CustomRequest).user.id;
       const { amount, currency = "usd", purpose } = req.body;
 
+      const amountInCents = Math.round(amount * 100);
+
       if (!amount || amount <= 0) {
         res
           .status(HTTP_STATUS.BAD_REQUEST)
@@ -42,7 +44,7 @@ export class CreatePaymentIntentController
       }
 
       const clientSecret = await this.createPaymentIntentUseCase.execute(
-        amount,
+        amountInCents,
         currency,
         purpose,
         userId
