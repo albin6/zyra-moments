@@ -33,6 +33,9 @@ import { useCheckOutQuery } from "@/hooks/booking/useCheckout";
 import { getServicesOfAVendor } from "@/services/booking/bookingServices";
 import { useParams } from "react-router-dom";
 import { Spinner } from "../ui/spinner";
+import { Booking } from "@/types/Booking";
+import { BookingSuccessModal } from "../modals/BookingSuccessModal";
+import moment from "moment";
 
 // const exampleServices: Service[] = [
 //   {
@@ -66,6 +69,7 @@ import { Spinner } from "../ui/spinner";
 // ];
 
 export default function VendorBooking() {
+  const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
@@ -79,6 +83,19 @@ export default function VendorBooking() {
   if (!vendorId) {
     return null;
   }
+
+  const getBookingData = (): Booking => {
+    return {
+      bookingDate: selectedDate!,
+      serviceId: selectedService?._id!,
+      timeSlot: {
+        startTime: selectedTimeSlot?.startTime!,
+        endTime: selectedTimeSlot?.endTime!,
+      },
+      totalPrice: calculateTotal(),
+      vendorId: vendorId,
+    };
+  };
 
   const { data, isLoading } = useCheckOutQuery(getServicesOfAVendor, vendorId);
 
@@ -371,10 +388,22 @@ export default function VendorBooking() {
             </Button> */}
 
             {selectedService && selectedDate && selectedTimeSlot && (
-              <PaymentWrapper amount={calculateTotal()} />
+              <PaymentWrapper
+                amount={calculateTotal()}
+                getBookingData={getBookingData}
+                setBookingSuccess={setIsBookingSuccess}
+              />
             )}
           </CardContent>
         </Card>
+        {isBookingSuccess && (
+          <BookingSuccessModal
+            isOpen={isBookingSuccess}
+            onClose={() => setIsBookingSuccess(false)}
+            eventDate={moment(selectedDate).format("LLL")}
+            eventName={selectedService?.serviceTitle!}
+          />
+        )}
       </div>
     </div>
   );

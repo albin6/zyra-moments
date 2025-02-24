@@ -1,5 +1,8 @@
 import { injectable } from "tsyringe";
-import { BookingListFromRepo } from "../../../entities/models/booking.entity";
+import {
+  BookingListFromRepo,
+  IBookingEntity,
+} from "../../../entities/models/booking.entity";
 import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import { BookingModel } from "../../../frameworks/database/models/booking.model";
 
@@ -12,7 +15,11 @@ export class BookingRepository implements IBookingRepository {
     limit: number
   ): Promise<BookingListFromRepo> {
     const [bookings, total] = await Promise.all([
-      BookingModel.find(filter).sort(sort).skip(skip).limit(limit),
+      BookingModel.find(filter)
+        .populate({ path: "vendorId", select: "firstName lastName" })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit),
       BookingModel.countDocuments(filter),
     ]);
 
@@ -20,5 +27,13 @@ export class BookingRepository implements IBookingRepository {
       bookings,
       total,
     };
+  }
+
+  async save(data: Partial<IBookingEntity>): Promise<IBookingEntity> {
+    return await BookingModel.create(data);
+  }
+
+  async findByIdAndUpdatePaymentId(id: any, paymentId: any): Promise<void> {
+    await BookingModel.findByIdAndUpdate(id, { $set: { paymentId } });
   }
 }

@@ -1,8 +1,11 @@
 import { Schema } from "mongoose";
+import { IBookingModel } from "../models/booking.model";
 
-export const bookingSchema = new Schema({
+export const bookingSchema = new Schema<IBookingModel>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
+
+  paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
 
   serviceDetails: {
     serviceTitle: { type: String, required: true },
@@ -14,7 +17,7 @@ export const bookingSchema = new Schema({
     termsAndConditions: { type: [String], required: true },
   },
 
-  bookingDate: { type: String, required: true },
+  bookingDate: { type: Date, required: true },
   timeSlot: {
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
@@ -29,9 +32,11 @@ export const bookingSchema = new Schema({
 
   status: {
     type: String,
-    enum: ["confirmed", "cancelled", "completed"],
-    default: "confirmed",
+    enum: ["pending", "confirmed", "cancelled", "completed"],
+    default: "pending",
   },
 
   createdAt: { type: Date, default: Date.now },
 });
+
+bookingSchema.index({ paymentId: 1 });

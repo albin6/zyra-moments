@@ -16,7 +16,8 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
     amount: number,
     currency: string,
     purpose: Purpose,
-    userId: string
+    userId: string,
+    bookingId: string
   ): Promise<string> {
     try {
       const paymentIntent = await this.paymentService.createPaymentIntent(
@@ -26,6 +27,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
 
       await this.paymentRepository.save({
         userId,
+        bookingId,
         amount,
         currency,
         purpose,

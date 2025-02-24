@@ -1,4 +1,7 @@
-import { BookingListFromRepo } from "../../models/booking.entity";
+import {
+  BookingListFromRepo,
+  IBookingEntity,
+} from "../../models/booking.entity";
 
 export interface IBookingRepository {
   findByClientId(
@@ -7,4 +10,8 @@ export interface IBookingRepository {
     skip: number,
     limit: number
   ): Promise<BookingListFromRepo>;
+
+  save(data: Partial<IBookingEntity>): Promise<IBookingEntity | null>;
+
+  findByIdAndUpdatePaymentId(id: any, paymentId: any): Promise<void>;
 }

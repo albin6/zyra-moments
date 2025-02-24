@@ -85,6 +85,16 @@ export function Sidebar({
             Work Samples
           </Button>
           <Button
+            variant="ghost"
+            className={`w-full justify-center font-normal ${
+              location.pathname === "/vendor/bookings" && "bg-accent"
+            }`}
+            onClick={() => navigate("/vendor/bookings")}
+            disabled={joinCategoryRequestStatus !== "accepted"}
+          >
+            Bookings
+          </Button>
+          <Button
             disabled={joinCategoryRequestStatus !== "accepted"}
             variant="ghost"
             className="w-full justify-center font-normal"

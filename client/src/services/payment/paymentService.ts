@@ -1,4 +1,5 @@
 import { clientAxiosInstance } from "@/api/client.axios";
+import { Booking } from "@/types/Booking";
 
 export type Purpose = "vendor-booking" | "role-upgrade" | "ticket-purchase";
 
@@ -8,15 +9,17 @@ export interface PaymentResponse {
   message: string;
 }
 
-export const makePayment = async (data: {
+export const makePaymentAndBooking = async (data: {
   amount: number;
   purpose: Purpose;
+  bookingData: Booking;
 }): Promise<PaymentResponse> => {
   const response = await clientAxiosInstance.post(
     "/_pmt/client/create-payment-intent",
     {
       amount: data.amount,
       purpose: data.purpose,
+      bookingData: data.bookingData,
     }
   );
   return response.data;

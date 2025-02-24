@@ -18,6 +18,7 @@ export const HTTP_STATUS = {
 };
 
 export const SUCCESS_MESSAGES = {
+  BOOKING_SUCCESS: "Booking completed.",
   CREATED: "Created successfully.",
   LOGIN_SUCCESS: "Login successful.",
   REGISTRATION_SUCCESS: "Registration completed successfully.",

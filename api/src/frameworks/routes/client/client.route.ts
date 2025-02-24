@@ -88,6 +88,8 @@ export class ClientRoutes extends BaseRoute {
     );
 
     // bookings
+    this.router.post("/client/book-vendor");
+
     this.router.get(
       "/client/client-bookings",
       verifyAuth,

@@ -7,23 +7,30 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { usePaymentMutation } from "@/hooks/payment/usePayment";
-import { makePayment } from "@/services/payment/paymentService";
+import { makePaymentAndBooking } from "@/services/payment/paymentService";
 import { toast } from "sonner";
 import { clientAxiosInstance } from "@/api/client.axios";
+import { Booking } from "@/types/Booking";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 interface PaymentFormProps {
   amount: number;
+  getBookingData: () => Booking;
+  setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({
+  amount,
+  getBookingData,
+  setBookingSuccess,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState<boolean>(false);
   const [succeeded, setSucceeded] = useState<boolean>(false);
 
-  const { mutate: proceedPayment } = usePaymentMutation(makePayment);
+  const { mutate: proceedPayment } = usePaymentMutation(makePaymentAndBooking);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,7 +42,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
     setProcessing(true);
 
     proceedPayment(
-      { amount, purpose: "vendor-booking" },
+      { amount, purpose: "vendor-booking", bookingData: getBookingData() },
       {
         onSuccess: async (data) => {
           const { error: stripeError, paymentIntent } =
@@ -51,7 +58,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
               await clientAxiosInstance.post("/_pmt/client/confirm-payment", {
                 paymentIntentId: paymentIntent.id,
               });
-              toast.success(data.message);
+              toast.success("Payment completed.");
+              setBookingSuccess(true);
             } catch (error) {
               console.log("Error in confirm payement=>", error);
             }
@@ -103,12 +111,20 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ amount }) => {
   );
 };
 
-export const PaymentWrapper: React.FC<{ amount: number }> = ({ amount }) => {
+export const PaymentWrapper: React.FC<{
+  amount: number;
+  getBookingData: () => Booking;
+  setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ amount, getBookingData, setBookingSuccess }) => {
   return (
     <Elements stripe={stripePromise}>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl mb-4">Complete Your Payment</h1>
-        <PaymentForm amount={amount} />
+        <PaymentForm
+          amount={amount}
+          getBookingData={getBookingData}
+          setBookingSuccess={setBookingSuccess}
+        />
       </div>
     </Elements>
   );

@@ -12,6 +12,7 @@ export type Purpose = "vendor-booking" | "role-upgrade" | "ticket-purchase";
 export interface IPaymentEntity {
   _id?: string | ObjectId;
   userId: string | ObjectId;
+  bookingId?: string | ObjectId;
   transactionId: string;
   amount: number;
   currency: string;

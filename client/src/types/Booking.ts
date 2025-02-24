@@ -3,13 +3,11 @@ export interface Booking {
 
   serviceId: string;
 
-  bookingDate: string;
+  bookingDate: Date;
   timeSlot: {
     startTime: string;
     endTime: string;
   };
 
   totalPrice: number;
-  paymentStatus: "pending" | "completed" | "failed" | "refunded";
-  status: "confirmed" | "cancelled" | "completed";
 }

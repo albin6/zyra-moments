@@ -32,7 +32,7 @@ export const useVendorsListing = (
   categoryId: string
 ) => {
   return useQuery({
-    queryKey: ["vendor-listing", page, limit, search],
+    queryKey: ["vendor-listing", page, limit, search, sortBy],
     queryFn: () => queryFunc({ page, limit, search, sortBy, categoryId }),
     placeholderData: (prevData) => prevData,
   });

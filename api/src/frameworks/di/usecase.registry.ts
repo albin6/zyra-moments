@@ -105,6 +105,8 @@ import { IGetAllServicesForBookingUseCase } from "../../entities/useCaseInterfac
 import { GetAllServicesForBookingUseCase } from "../../useCases/client/get-all-services-for-booking.usecase";
 import { IGetAllBookingByClientUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-by-client-usecase.interface";
 import { GetAllBookingByClientUseCase } from "../../useCases/booking/get-all-booking-by-client.usecase";
+import { ICreateNewBookingUseCase } from "../../entities/useCaseInterfaces/booking/create-new-booking-usecase.interface";
+import { CreateNewBookingUseCase } from "../../useCases/booking/create-new-booking.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -295,6 +297,10 @@ export class UseCaseRegistry {
       "IGetAllBookingByClientUseCase",
       { useClass: GetAllBookingByClientUseCase }
     );
+
+    container.register<ICreateNewBookingUseCase>("ICreateNewBookingUseCase", {
+      useClass: CreateNewBookingUseCase,
+    });
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,14 +12,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Search, ChevronDown, ChevronUp } from "lucide-react";
 import Pagination from "../Pagination";
+import moment from "moment";
 
 export interface BookingList {
+  serviceDetails: {
+    serviceTitle: string;
+    serviceDescription: string;
+    serviceDuration: number;
+    servicePrice: number;
+    additionalHoursPrice: number;
+    cancellationPolicies: string[];
+    termsAndConditions: string[];
+  };
+  timeSlot: {
+    startTime: string;
+    endTime: string;
+  };
   _id: string;
-  clientName: string;
-  serviceRequired: string;
-  requiredDate: string;
+  userId: string;
+  vendorId: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  bookingDate: string;
   totalPrice: number;
+  paymentStatus: string;
   status: string;
+  createdAt: string;
+  __v: number;
+  paymentId: string;
 }
 
 interface ClientBookingListProps {
@@ -34,10 +56,10 @@ interface ClientBookingListProps {
 }
 
 const STATUS_COLORS = {
-  confirmed: "bg-green-500/10 text-green-500 hover:bg-green-500/20",
-  pending: "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20",
-  cancelled: "bg-red-500/10 text-red-500 hover:bg-red-500/20",
-  default: "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20",
+  confirmed: "bg-success/10 text-success hover:bg-success/20",
+  pending: "bg-warning/10 text-warning hover:bg-warning/20",
+  cancelled: "bg-destructive/10 text-destructive hover:bg-destructive/20",
+  default: "bg-muted/50 text-muted-foreground hover:bg-muted",
 } as const;
 
 export default function ClientBookingList({
@@ -78,7 +100,7 @@ export default function ClientBookingList({
   }) => (
     <TableHead
       onClick={() => handleSort(field)}
-      className="cursor-pointer hover:bg-gray-50 transition-colors"
+      className="cursor-pointer hover:bg-accent transition-colors"
     >
       <div className="flex items-center space-x-1">
         <span>{children}</span>
@@ -87,18 +109,10 @@ export default function ClientBookingList({
     </TableHead>
   );
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "INR",
     }).format(price);
   };
 
@@ -106,7 +120,7 @@ export default function ClientBookingList({
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
         <CardTitle className="text-lg flex justify-between items-center">
-          <span>{booking.serviceRequired}</span>
+          <span>{booking.serviceDetails.serviceTitle}</span>
           <Badge className={getStatusColor(booking.status)}>
             {booking.status}
           </Badge>
@@ -115,10 +129,12 @@ export default function ClientBookingList({
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-2 text-sm">
           <span className="text-muted-foreground">Client:</span>
-          <span className="text-right font-medium">{booking.clientName}</span>
+          <span className="text-right font-medium">
+            {booking.vendorId.firstName + " " + booking.vendorId.lastName}
+          </span>
           <span className="text-muted-foreground">Date:</span>
           <span className="text-right font-medium">
-            {formatDate(booking.requiredDate)}
+            {moment(booking.bookingDate).format("LLL")}
           </span>
           <span className="text-muted-foreground">Price:</span>
           <span className="text-right font-medium">
@@ -152,7 +168,7 @@ export default function ClientBookingList({
                 Service
               </TableHeadSortable>
               <TableHeadSortable field="clientName">
-                Client Name
+                Vendor Name
               </TableHeadSortable>
               <TableHeadSortable field="date">Date</TableHeadSortable>
               <TableHeadSortable field="price">Price</TableHeadSortable>
@@ -161,12 +177,19 @@ export default function ClientBookingList({
           </TableHeader>
           <TableBody>
             {bookings.map((booking) => (
-              <TableRow key={booking._id} className="hover:bg-gray-50">
+              <TableRow
+                key={booking._id}
+                className="hover:bg-accent cursor-pointer"
+              >
                 <TableCell className="font-medium">
-                  {booking.serviceRequired}
+                  {booking.serviceDetails.serviceTitle}
                 </TableCell>
-                <TableCell>{booking.clientName}</TableCell>
-                <TableCell>{formatDate(booking.requiredDate)}</TableCell>
+                <TableCell>
+                  {booking.vendorId.firstName + " " + booking.vendorId.lastName}
+                </TableCell>
+                <TableCell>
+                  {moment(booking.bookingDate).format("LLL")}
+                </TableCell>
                 <TableCell>{formatPrice(booking.totalPrice)}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(booking.status)}>

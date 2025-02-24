@@ -6,6 +6,9 @@ import { CustomError } from "../../../entities/utils/CustomError";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
+import { ICreateNewBookingUseCase } from "../../../entities/useCaseInterfaces/booking/create-new-booking-usecase.interface";
+import { IPaymentRepository } from "../../../entities/repositoryInterfaces/payment/payment-repository.interface";
+import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
 export class CreatePaymentIntentController
@@ -13,12 +16,16 @@ export class CreatePaymentIntentController
 {
   constructor(
     @inject("ICreatePaymentIntentUseCase")
-    private createPaymentIntentUseCase: ICreatePaymentIntentUseCase
+    private createPaymentIntentUseCase: ICreatePaymentIntentUseCase,
+    @inject("ICreateNewBookingUseCase")
+    private createNewBookingUseCase: ICreateNewBookingUseCase,
+    @inject("IPaymentRepository") private paymentRepository: IPaymentRepository,
+    @inject("IBookingRepository") private bookingRepository: IBookingRepository
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
       const userId = (req as CustomRequest).user.id;
-      const { amount, currency = "usd", purpose } = req.body;
+      const { amount, currency = "usd", purpose, bookingData } = req.body;
 
       const amountInCents = Math.round(amount * 100);
 
@@ -43,13 +50,41 @@ export class CreatePaymentIntentController
         return;
       }
 
+      const newBooking = await this.createNewBookingUseCase.execute(
+        userId,
+        bookingData.vendorId,
+        bookingData
+      );
+
+      if (!newBooking) {
+        res
+          .status(HTTP_STATUS.BAD_REQUEST)
+          .json({ success: false, message: "Invalid booking data" });
+        return;
+      }
+
       const clientSecret = await this.createPaymentIntentUseCase.execute(
         amountInCents,
         currency,
         purpose,
-        userId
+        userId,
+        newBooking?._id as string
       );
-      res.json({ success: true, clientSecret });
+
+      const paymentDetails = await this.paymentRepository.findByPaymentIntentId(
+        clientSecret
+      );
+
+      await this.bookingRepository.findByIdAndUpdatePaymentId(
+        newBooking._id,
+        paymentDetails?._id
+      );
+
+      res.json({
+        success: true,
+        message: "Booking completed and payment successfull.",
+        clientSecret,
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({
