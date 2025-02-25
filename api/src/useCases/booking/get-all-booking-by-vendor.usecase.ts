@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 import { BookingListFromRepo } from "../../entities/models/booking.entity";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IGetAllBookingByClientUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-by-client-usecase.interface";
+import { IGetAllBookingForVendorUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-for-vendor-usecase.interface";
 
 @injectable()
-export class GetAllBookingByClientUseCase
-  implements IGetAllBookingByClientUseCase
+export class GetAllBookingForVendorUseCase
+  implements IGetAllBookingForVendorUseCase
 {
   constructor(
     @inject("IBookingRepository") private bookingRepository: IBookingRepository
@@ -18,7 +18,7 @@ export class GetAllBookingByClientUseCase
     sortBy: string
   ): Promise<BookingListFromRepo> {
     let filter: any = {
-      userId: vendorId,
+      vendorId: vendorId,
     };
 
     if (searchTerm) {

@@ -1,27 +1,27 @@
-import ClientBookingList, {
-  BookingList,
-} from "@/components/client/ClientBookingList";
-import { useBookingQuery } from "@/hooks/booking/useBooking";
-import { getClientBookings } from "@/services/booking/bookingServices";
-import { motion } from "framer-motion";
+import { BookingList } from "@/components/client/ClientBookingList";
+import VendorBookingList from "@/components/vendor/VendorBookingList";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useBookingQuery } from "@/hooks/booking/useBooking";
+import { getVendorBookings } from "@/services/booking/bookingServices";
+import { Spinner } from "@/components/ui/spinner";
 
-export function ClientBookingListing() {
+function VendorBookings() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("Date: Newest");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [sortBy, setSortBy] = useState("Date: Newest");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [search, setSearch] = useState("");
   const limit = 1;
 
   const [bookings, setBookings] = useState<BookingList[] | null>(null);
 
   const { data, isLoading } = useBookingQuery(
-    getClientBookings,
+    getVendorBookings,
     page,
     limit,
     sortBy,
-    search,
+    searchQuery,
     statusFilter
   );
 
@@ -34,7 +34,7 @@ export function ClientBookingListing() {
   }, [data]);
 
   if (isLoading) {
-    return null;
+    return <Spinner />;
   }
 
   if (!bookings) {
@@ -48,18 +48,20 @@ export function ClientBookingListing() {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
     >
-      <ClientBookingList
+      <VendorBookingList
         bookings={bookings}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
         page={page}
         setPage={setPage}
-        search={search}
-        setSearch={setSearch}
         sortBy={sortBy}
         setSortBy={setSortBy}
         totalPages={totalPages}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
       />
     </motion.div>
   );
 }
+
+export default VendorBookings;

@@ -6,6 +6,7 @@ interface FetchBookingsParams {
   limit: number;
   sort: string;
   search: string;
+  statusFilter: string;
 }
 
 type BookingResponse = {
@@ -14,16 +15,17 @@ type BookingResponse = {
   currentPage: number;
 };
 
-export const useBookingClientQuery = (
+export const useBookingQuery = (
   queryFunc: (params: FetchBookingsParams) => Promise<BookingResponse>,
   page: number,
   limit: number,
   sort: string,
-  search: string
+  search: string,
+  statusFilter: string
 ) => {
   return useQuery({
-    queryKey: ["paginated-booking", page, limit, sort],
-    queryFn: () => queryFunc({ page, limit, sort, search }),
+    queryKey: ["paginated-booking", page, limit, sort, search, statusFilter],
+    queryFn: () => queryFunc({ page, limit, sort, search, statusFilter }),
     placeholderData: (prevData) => prevData,
   });
 };

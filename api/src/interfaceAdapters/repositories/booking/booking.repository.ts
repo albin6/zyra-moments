@@ -8,7 +8,7 @@ import { BookingModel } from "../../../frameworks/database/models/booking.model"
 
 @injectable()
 export class BookingRepository implements IBookingRepository {
-  async findByClientId(
+  async findByUserId(
     filter: any,
     sort: any,
     skip: number,

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,40 +17,30 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-
-interface MyBooking {
-  _id: string;
-  vendorName: string;
-  serviceRequired: string;
-  requiredDate: Date;
-  totalPrice: number;
-  status: string;
-}
+import { BookingList } from "../client/ClientBookingList";
+import moment from "moment";
+import { formatPrice } from "@/utils/format/formatPrice";
 
 interface VendorBookingListProps {
-  bookings: MyBooking[];
+  bookings: BookingList[];
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  statusFilter: string;
+  setStatusFilter: React.Dispatch<React.SetStateAction<string>>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  totalPages: number;
+  sortBy: string;
+  setSortBy: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function VendorBookingList({
   bookings,
+  searchQuery,
+  setSearchQuery,
+  statusFilter,
+  setStatusFilter,
 }: VendorBookingListProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-
-  const filteredBookings = bookings.filter((booking) => {
-    const matchesSearch =
-      booking.serviceRequired
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      booking.vendorName.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesStatus =
-      statusFilter === "all" ||
-      booking.status.toLowerCase() === statusFilter.toLowerCase();
-
-    return matchesSearch && matchesStatus;
-  });
-
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "confirmed":
@@ -106,16 +95,18 @@ export default function VendorBookingList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredBookings.map((booking) => (
+            {bookings.map((booking) => (
               <TableRow key={booking._id}>
                 <TableCell className="font-medium">
-                  {booking.serviceRequired}
+                  {booking.serviceDetails.serviceTitle}
                 </TableCell>
-                <TableCell>{booking.vendorName}</TableCell>
                 <TableCell>
-                  {booking.requiredDate.toLocaleDateString()}
+                  {booking.userId.firstName + " " + booking.userId.lastName}
                 </TableCell>
-                <TableCell>${booking.totalPrice}</TableCell>
+                <TableCell>
+                  {moment(booking.bookingDate).format("LLL")}
+                </TableCell>
+                <TableCell>{formatPrice(booking.totalPrice)}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(booking.status)}>
                     {booking.status}
@@ -129,25 +120,27 @@ export default function VendorBookingList({
 
       {/* Mobile View */}
       <div className="grid grid-cols-1 gap-4 md:hidden">
-        {filteredBookings.map((booking) => (
+        {bookings.map((booking) => (
           <Card key={booking._id}>
             <CardHeader>
               <CardTitle className="text-lg">
-                {booking.serviceRequired}
+                {booking.serviceDetails.serviceTitle}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Customer:</span>
-                <span>{booking.vendorName}</span>
+                <span>
+                  {booking.userId.firstName + " " + booking.userId.lastName}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Date:</span>
-                <span>{booking.requiredDate.toLocaleDateString()}</span>
+                <span>{moment(booking.bookingDate).format("LLL")}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Price:</span>
-                <span>${booking.totalPrice}</span>
+                <span>{formatPrice(booking.totalPrice)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">Status:</span>

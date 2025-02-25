@@ -4,7 +4,7 @@ import {
 } from "../../models/booking.entity";
 
 export interface IBookingRepository {
-  findByClientId(
+  findByUserId(
     filter: any,
     sort: any,
     skip: number,

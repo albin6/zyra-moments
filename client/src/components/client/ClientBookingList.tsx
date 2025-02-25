@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Search, ChevronDown, ChevronUp } from "lucide-react";
 import Pagination from "../Pagination";
 import moment from "moment";
+import { formatPrice } from "@/utils/format/formatPrice";
 
 export interface BookingList {
   serviceDetails: {
@@ -29,7 +30,11 @@ export interface BookingList {
     endTime: string;
   };
   _id: string;
-  userId: string;
+  userId: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
   vendorId: {
     _id: string;
     firstName: string;
@@ -53,6 +58,8 @@ interface ClientBookingListProps {
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  statusFilter: string;
+  setStatusFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const STATUS_COLORS = {
@@ -108,13 +115,6 @@ export default function ClientBookingList({
       </div>
     </TableHead>
   );
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "INR",
-    }).format(price);
-  };
 
   const BookingCard = ({ booking }: { booking: BookingList }) => (
     <Card className="hover:shadow-md transition-shadow">
