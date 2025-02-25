@@ -5,6 +5,7 @@ import {
   createServiceController,
   createWorkSampleController,
   deleteWorkSampleByIdController,
+  getAllBookingForVendorController,
   getAllCategoriesController,
   getAllServicesByVendorIdController,
   getAllWorkSampleByVendorIdController,
@@ -148,6 +149,15 @@ export class VendorRoutes extends BaseRoute {
         (req: Request, res: Response) =>
           updateServiceByIdController.handle(req, res)
       );
+
+    this.router.get(
+      "/vendor/vendor-bookings",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllBookingForVendorController.handle(req, res)
+    );
 
     this.router.put(
       "/vendor/update-password",

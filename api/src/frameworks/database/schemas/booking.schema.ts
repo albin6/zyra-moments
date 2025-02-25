@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import { IBookingModel } from "../models/booking.model";
 
 export const bookingSchema = new Schema<IBookingModel>({
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "Client", required: true },
   vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
 
   paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },

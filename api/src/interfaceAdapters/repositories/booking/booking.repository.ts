@@ -17,6 +17,7 @@ export class BookingRepository implements IBookingRepository {
     const [bookings, total] = await Promise.all([
       BookingModel.find(filter)
         .populate({ path: "vendorId", select: "firstName lastName" })
+        .populate({ path: "userId", select: "firstName lastName" })
         .sort(sort)
         .skip(skip)
         .limit(limit),
