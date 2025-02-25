@@ -15,10 +15,11 @@ export class PaymentRepository implements IPaymentRepository {
   async findByPaymentIntentIdAndUpdateStatus(
     paymentIntentId: string,
     status: PaymentStatus
-  ): Promise<void> {
-    await PaymentModel.findOneAndUpdate(
+  ): Promise<IPaymentEntity | null> {
+    return await PaymentModel.findOneAndUpdate(
       { paymentIntentId },
-      { $set: { status } }
+      { $set: { status } },
+      { new: true }
     );
   }
 

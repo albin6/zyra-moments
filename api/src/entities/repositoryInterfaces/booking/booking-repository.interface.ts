@@ -14,4 +14,6 @@ export interface IBookingRepository {
   save(data: Partial<IBookingEntity>): Promise<IBookingEntity | null>;
 
   findByIdAndUpdatePaymentId(id: any, paymentId: any): Promise<void>;
+
+  findByIdAndUpdatePaymentStatus(id: any, status: string): Promise<void>;
 }

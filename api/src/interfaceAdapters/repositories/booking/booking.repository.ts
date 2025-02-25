@@ -37,4 +37,10 @@ export class BookingRepository implements IBookingRepository {
   async findByIdAndUpdatePaymentId(id: any, paymentId: any): Promise<void> {
     await BookingModel.findByIdAndUpdate(id, { $set: { paymentId } });
   }
+
+  async findByIdAndUpdatePaymentStatus(id: any, status: string): Promise<void> {
+    await BookingModel.findByIdAndUpdate(id, {
+      $set: { paymentStatus: status },
+    });
+  }
 }

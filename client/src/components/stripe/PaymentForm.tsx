@@ -18,12 +18,16 @@ interface PaymentFormProps {
   amount: number;
   getBookingData: () => Booking;
   setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
   amount,
   getBookingData,
   setBookingSuccess,
+  setIsOpen,
+  setIsSuccess,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -40,6 +44,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     }
 
     setProcessing(true);
+    setIsOpen(true);
+    setIsSuccess(false);
 
     proceedPayment(
       { amount, purpose: "vendor-booking", bookingData: getBookingData() },
@@ -60,6 +66,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               });
               toast.success("Payment completed.");
               setBookingSuccess(true);
+              setIsSuccess(true);
+              setIsOpen(false);
+              setIsSuccess(false);
             } catch (error) {
               console.log("Error in confirm payement=>", error);
             }
@@ -115,7 +124,15 @@ export const PaymentWrapper: React.FC<{
   amount: number;
   getBookingData: () => Booking;
   setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ amount, getBookingData, setBookingSuccess }) => {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  amount,
+  getBookingData,
+  setBookingSuccess,
+  setIsOpen,
+  setIsSuccess,
+}) => {
   return (
     <Elements stripe={stripePromise}>
       <div className="container mx-auto p-4">
@@ -124,6 +141,8 @@ export const PaymentWrapper: React.FC<{
           amount={amount}
           getBookingData={getBookingData}
           setBookingSuccess={setBookingSuccess}
+          setIsOpen={setIsOpen}
+          setIsSuccess={setIsSuccess}
         />
       </div>
     </Elements>

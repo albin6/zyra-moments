@@ -6,6 +6,7 @@ import { PaymentStatus } from "../../entities/models/payment.entity";
 import { config } from "../../shared/config";
 import { CustomError } from "../../entities/utils/CustomError";
 import { HTTP_STATUS } from "../../shared/constants";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
 export class StripeService implements IPaymentService {
@@ -13,7 +14,8 @@ export class StripeService implements IPaymentService {
   private apiKey: string;
 
   constructor(
-    @inject("IPaymentRepository") private paymentRepository: IPaymentRepository
+    @inject("IPaymentRepository") private paymentRepository: IPaymentRepository,
+    @inject("IBookingRepository") private bookingRepository: IBookingRepository
   ) {
     this.apiKey = config.stripe.sk;
     this.stripe = new Stripe(this.apiKey, {
@@ -60,10 +62,18 @@ export class StripeService implements IPaymentService {
     paymentIntentId: string,
     status: PaymentStatus
   ): Promise<void> {
-    await this.paymentRepository.findByPaymentIntentIdAndUpdateStatus(
-      paymentIntentId,
-      status
-    );
+    const payment =
+      await this.paymentRepository.findByPaymentIntentIdAndUpdateStatus(
+        paymentIntentId,
+        status
+      );
+
+    if (payment) {
+      this.bookingRepository.findByIdAndUpdatePaymentStatus(
+        payment.bookingId,
+        status
+      );
+    }
   }
 
   async handleWebhookEvent(event: Stripe.Event): Promise<void> {

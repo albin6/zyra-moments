@@ -6,7 +6,7 @@ export interface IPaymentRepository {
   findByPaymentIntentIdAndUpdateStatus(
     paymentIntentId: string,
     status: PaymentStatus
-  ): Promise<void>;
+  ): Promise<IPaymentEntity | null>;
 
   findByPaymentIntentId(
     paymentIntentId: string

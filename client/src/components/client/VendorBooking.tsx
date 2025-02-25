@@ -31,11 +31,12 @@ import { Label } from "@/components/ui/label";
 import { PaymentWrapper } from "../stripe/PaymentForm";
 import { useCheckOutQuery } from "@/hooks/booking/useCheckout";
 import { getServicesOfAVendor } from "@/services/booking/bookingServices";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "../ui/spinner";
 import { Booking } from "@/types/Booking";
 import { BookingSuccessModal } from "../modals/BookingSuccessModal";
 import moment from "moment";
+import PaymentProcessingModal from "../modals/PaymentProcessingModal";
 
 // const exampleServices: Service[] = [
 //   {
@@ -69,12 +70,16 @@ import moment from "moment";
 // ];
 
 export default function VendorBooking() {
+  const navigate = useNavigate();
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
     null
   );
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const [services, setServices] = useState<Service[] | null>(null);
 
@@ -392,18 +397,28 @@ export default function VendorBooking() {
                 amount={calculateTotal()}
                 getBookingData={getBookingData}
                 setBookingSuccess={setIsBookingSuccess}
+                setIsOpen={setIsOpen}
+                setIsSuccess={setIsSuccess}
               />
             )}
           </CardContent>
         </Card>
-        {isBookingSuccess && (
-          <BookingSuccessModal
-            isOpen={isBookingSuccess}
-            onClose={() => setIsBookingSuccess(false)}
-            eventDate={moment(selectedDate).format("LLL")}
-            eventName={selectedService?.serviceTitle!}
-          />
-        )}
+
+        <PaymentProcessingModal
+          isOpen={isOpen}
+          onOpenChange={setIsOpen}
+          isSuccess={isSuccess}
+        />
+
+        <BookingSuccessModal
+          isOpen={isBookingSuccess}
+          onClose={() => {
+            setIsBookingSuccess(false);
+            navigate("/landing");
+          }}
+          eventDate={moment(selectedDate).format("LLL")}
+          eventName={selectedService?.serviceTitle!}
+        />
       </div>
     </div>
   );
