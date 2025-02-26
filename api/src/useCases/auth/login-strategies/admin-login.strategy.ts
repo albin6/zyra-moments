@@ -23,15 +23,17 @@ export class AdminLoginStrategy implements ILoginStrategy {
       );
     }
 
-    const isPasswordMatch = await this.passwordBcrypt.compare(
-      user.password,
-      admin.password
-    );
-    if (!isPasswordMatch) {
-      throw new CustomError(
-        ERROR_MESSAGES.INVALID_CREDENTIALS,
-        HTTP_STATUS.BAD_REQUEST
+    if (user.password) {
+      const isPasswordMatch = await this.passwordBcrypt.compare(
+        user.password,
+        admin.password
       );
+      if (!isPasswordMatch) {
+        throw new CustomError(
+          ERROR_MESSAGES.INVALID_CREDENTIALS,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
     }
     return admin;
   }

@@ -14,6 +14,9 @@ import { useDispatch } from "react-redux";
 import { clientLogin } from "@/store/slices/clientSlice";
 import { useTheme } from "@/context/ThemeProvider";
 import { ClientHeader } from "@/components/headers/ClientHeader";
+import { CredentialResponse } from "@react-oauth/google";
+import { useGoogleMutation } from "@/hooks/auth/useGoogle";
+import GoogleAuth from "@/components/auth/GoogleAuth";
 
 export function ClientAuth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,6 +26,24 @@ export function ClientAuth() {
 
   const { mutate: registerClient } = useRegisterMutation();
   const { mutate: loginClient } = useLoginMutation();
+  const { mutate: googleLogin } = useGoogleMutation();
+
+  const google = (credentialResponse: CredentialResponse) => {
+    googleLogin(
+      {
+        credential: credentialResponse.credential,
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        role: "client",
+      },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message);
+          dispatch(clientLogin(data.user));
+        },
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
 
   const handleSignupSubmit = (data: Omit<User, "role">) => {
     registerClient(
@@ -128,7 +149,7 @@ export function ClientAuth() {
                   )}
                 </motion.div>
               </AnimatePresence>
-              {/* <div className="mt-6">
+              <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-muted"></div>
@@ -139,8 +160,8 @@ export function ClientAuth() {
                     </span>
                   </div>
                 </div>
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <Button
+                <div className="mt-6">
+                  {/* <Button
                     variant="outline"
                     onClick={() => handleSocialLogin("google")}
                   >
@@ -153,9 +174,10 @@ export function ClientAuth() {
                   >
                     <FaGithub className="mr-2" />
                     GitHub
-                  </Button>
+                  </Button> */}
+                  <GoogleAuth handleGoogleSuccess={google} />
                 </div>
-              </div> */}
+              </div>
             </div>
           </Card>
         </div>

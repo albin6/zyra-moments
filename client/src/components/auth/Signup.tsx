@@ -191,7 +191,7 @@ export function Signup({ userType, onSubmit, setLogin }: SignupProps) {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-center">
+      <CardFooter className="flex flex-col items-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
           <span

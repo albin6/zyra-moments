@@ -31,8 +31,8 @@ export function ClientSidebar({
           <Avatar className="w-12 h-12">
             <AvatarImage src={profileImage} alt={`${firstName} ${lastName}`} />
             <AvatarFallback>
-              {firstName[0]}
-              {lastName[0]}
+              {firstName && firstName[0].toUpperCase()}
+              {lastName ? lastName[0].toUpperCase() : ""}
             </AvatarFallback>
           </Avatar>
           <div>

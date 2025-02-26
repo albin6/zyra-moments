@@ -38,37 +38,6 @@ import { BookingSuccessModal } from "../modals/BookingSuccessModal";
 import moment from "moment";
 import PaymentProcessingModal from "../modals/PaymentProcessingModal";
 
-// const exampleServices: Service[] = [
-//   {
-//     _id: "1",
-//     vendorId: "v1",
-//     serviceTitle: "Basic Photography",
-//     yearsOfExperience: 5,
-//     availableDates: [
-//       {
-//         date: "2025-02-20",
-//         timeSlots: [
-//           { startTime: "09:00", endTime: "12:00", capacity: 1 },
-//           { startTime: "14:00", endTime: "17:00", capacity: 1 },
-//         ],
-//       },
-//       {
-//         date: "2025-02-21",
-//         timeSlots: [
-//           { startTime: "10:00", endTime: "13:00", capacity: 1 },
-//           { startTime: "15:00", endTime: "18:00", capacity: 1 },
-//         ],
-//       },
-//     ],
-//     serviceDescription: "Professional photography service",
-//     serviceDuration: 3,
-//     servicePrice: 150,
-//     additionalHoursPrice: 50,
-//     cancellationPolicies: ["24 hours notice required"],
-//     termsAndConditions: ["Deposit required", "Weather dependent"],
-//   },
-// ];
-
 export default function VendorBooking() {
   const navigate = useNavigate();
   const [isBookingSuccess, setIsBookingSuccess] = useState(false);
@@ -82,6 +51,18 @@ export default function VendorBooking() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [services, setServices] = useState<Service[] | null>(null);
+  const [vendorData, setVendorData] = useState<{
+    _id: string;
+    firstName: string;
+    lastName: string;
+    place: string;
+    averageRating: number;
+    category: {
+      _id: string;
+      title: string;
+    };
+    profileImage: string;
+  } | null>(null);
 
   const { vendorId } = useParams();
 
@@ -107,14 +88,13 @@ export default function VendorBooking() {
   useEffect(() => {
     if (data) {
       setServices(data.services);
+      setVendorData(data.vendor);
     }
   }, [data]);
 
-  // Filter available dates for the calendar
   const availableDates =
     selectedService?.availableDates.map((d) => new Date(d.date)) || [];
 
-  // Get time slots for selected date
   const getTimeSlots = (date: Date | null) => {
     if (!date || !selectedService) return [];
     const dateStr = format(date, "yyyy-MM-dd");
@@ -124,7 +104,6 @@ export default function VendorBooking() {
     return availableDate?.timeSlots || [];
   };
 
-  // Calculate total price
   const calculateTotal = () => {
     if (!selectedService) return 0;
     const basePrice = selectedService.servicePrice;
@@ -137,14 +116,13 @@ export default function VendorBooking() {
     return <Spinner />;
   }
 
-  if (!services) {
+  if (!services || !vendorData) {
     return null;
   }
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Vendor Details Card */}
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -155,19 +133,23 @@ export default function VendorBooking() {
             <CardContent>
               <div className="flex items-start space-x-4">
                 <Avatar className="h-16 w-16">
-                  <AvatarImage src="/placeholder.svg" />
-                  <AvatarFallback>JJ</AvatarFallback>
+                  <AvatarImage src={vendorData.profileImage} />
+                  <AvatarFallback>
+                    {vendorData.firstName[0] + vendorData.lastName[0]}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="space-y-2">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                     <span className="text-muted-foreground">Name</span>
-                    <span>James Jacob</span>
+                    <span>
+                      {vendorData.firstName + " " + vendorData.lastName}
+                    </span>
                     <span className="text-muted-foreground">Location</span>
-                    <span>Xyz, Abcd</span>
+                    <span>{vendorData.place || "Not Given"}</span>
                     <span className="text-muted-foreground">Category</span>
-                    <span>Photography</span>
+                    <span>{vendorData.category.title}</span>
                     <span className="text-muted-foreground">Rating</span>
-                    <span>4.2</span>
+                    <span>{vendorData.averageRating ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -297,11 +279,15 @@ export default function VendorBooking() {
                         setSelectedTimeSlot(null);
                       }}
                       disabled={(date) => {
-                        return !availableDates.some(
+                        const isInPast = date < new Date();
+
+                        const isAvailable = availableDates.some(
                           (availableDate) =>
                             format(availableDate, "yyyy-MM-dd") ===
                             format(date, "yyyy-MM-dd")
                         );
+
+                        return isInPast || !isAvailable;
                       }}
                       initialFocus
                     />

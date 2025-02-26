@@ -6,6 +6,7 @@ import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
+import { IUserEntity } from "../../../entities/models/user.entity";
 
 @injectable()
 export class ClientRegisterStrategy implements IRegisterStrategy {
@@ -14,7 +15,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
     @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
   ) {}
 
-  async register(user: UserDTO): Promise<void> {
+  async register(user: UserDTO): Promise<IUserEntity | void> {
     if (user.role === "client") {
       const existingClient = await this.clientRepository.findByEmail(
         user.email
@@ -29,16 +30,20 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
       const { firstName, lastName, phoneNumber, password, email } =
         user as ClientDTO;
 
-      const hashedPassword = await this.passwordBcrypt.hash(password);
+      let hashedPassword = null;
+
+      if (password) {
+        hashedPassword = await this.passwordBcrypt.hash(password);
+      }
 
       const clientId = generateRandomUUID();
 
-      await this.clientRepository.save({
+      return await this.clientRepository.save({
         firstName,
         lastName,
         phoneNumber,
         email,
-        password: hashedPassword,
+        password: hashedPassword ?? "",
         clientId,
         role: "client",
       });

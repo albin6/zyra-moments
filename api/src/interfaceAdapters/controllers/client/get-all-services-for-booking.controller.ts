@@ -4,7 +4,10 @@ import { IGetAllServicesForBookingUseCase } from "../../../entities/useCaseInter
 import { ZodError } from "zod";
 import { HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
-import { IServiceEntity } from "../../../entities/models/service.entity";
+import {
+  IServiceEntity,
+  ServiceVendorReturn,
+} from "../../../entities/models/service.entity";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -18,10 +21,16 @@ export class GetAllServicesForBookingController
   async handle(req: Request, res: Response): Promise<void> {
     try {
       const { vendorId } = req.query;
-      const response: IServiceEntity[] =
+      const response: ServiceVendorReturn =
         await this.getAllServicesForBookingUseCase.execute(vendorId);
 
-      res.status(HTTP_STATUS.OK).json({ success: true, services: response });
+      res
+        .status(HTTP_STATUS.OK)
+        .json({
+          success: true,
+          services: response.services,
+          vendor: response.vendor,
+        });
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

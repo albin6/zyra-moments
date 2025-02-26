@@ -12,7 +12,7 @@ export function ClientBookingListing() {
   const [sortBy, setSortBy] = useState("Date: Newest");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
-  const limit = 1;
+  const limit = 5;
 
   const [bookings, setBookings] = useState<BookingList[] | null>(null);
 

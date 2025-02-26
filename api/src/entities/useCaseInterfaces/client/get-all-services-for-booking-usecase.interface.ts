@@ -1,5 +1,8 @@
-import { IServiceEntity } from "../../models/service.entity";
+import {
+  IServiceEntity,
+  ServiceVendorReturn,
+} from "../../models/service.entity";
 
 export interface IGetAllServicesForBookingUseCase {
-  execute(id: any): Promise<IServiceEntity[] | []>;
+  execute(id: any): Promise<ServiceVendorReturn>;
 }

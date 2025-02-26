@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { BaseRoute } from "../base.route";
 import {
+  googleController,
   loginController,
   refreshTokenController,
   registerController,
@@ -20,6 +21,10 @@ export class AuthRoutes extends BaseRoute {
 
     this.router.post("/login", (req: Request, res: Response) => {
       loginController.handle(req, res);
+    });
+
+    this.router.post("/google-auth", (req: Request, res: Response) => {
+      googleController.handle(req, res);
     });
 
     this.router.post("/send-otp", (req: Request, res: Response) => {

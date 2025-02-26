@@ -1,4 +1,5 @@
 import { ObjectId } from "mongoose";
+import { IVendorEntity } from "./vendor.entity";
 
 interface TimeSlot {
   startTime: string;
@@ -23,4 +24,25 @@ export interface IServiceEntity {
   additionalHoursPrice: number;
   cancellationPolicies: string[];
   termsAndConditions: string[];
+}
+
+export interface ServiceForBooking extends Omit<IServiceEntity, "vendorId"> {
+  vendorId: {
+    _id: string | ObjectId;
+    firstName: string;
+    lastName: string;
+    place: string;
+    averageRating: number;
+    category: {
+      _id: string | ObjectId;
+      title: string;
+    };
+  };
+  _id: string | ObjectId;
+  __v?: number;
+}
+
+export interface ServiceVendorReturn {
+  services: IServiceEntity[] | [];
+  vendor: IVendorEntity;
 }

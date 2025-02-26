@@ -109,6 +109,10 @@ import { ICreateNewBookingUseCase } from "../../entities/useCaseInterfaces/booki
 import { CreateNewBookingUseCase } from "../../useCases/booking/create-new-booking.usecase";
 import { IGetAllBookingForVendorUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-for-vendor-usecase.interface";
 import { GetAllBookingForVendorUseCase } from "../../useCases/booking/get-all-booking-by-vendor.usecase";
+import { IGoogleUseCase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface.interface";
+import { GoogleUseCase } from "../../useCases/auth/google.usecase";
+import { ClientGoogleLoginStrategy } from "../../useCases/auth/login-strategies/client-google-login.strategy";
+import { VendorGoogleLoginStrategy } from "../../useCases/auth/login-strategies/vendor-google-login.strategy";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -309,6 +313,10 @@ export class UseCaseRegistry {
       { useClass: GetAllBookingForVendorUseCase }
     );
 
+    container.register<IGoogleUseCase>("IGoogleUseCase", {
+      useClass: GoogleUseCase,
+    });
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -332,6 +340,14 @@ export class UseCaseRegistry {
 
     container.register<ILoginStrategy>("VendorLoginStrategy", {
       useClass: VendorLoginStrategy,
+    });
+
+    container.register<ILoginStrategy>("ClientGoogleLoginStrategy", {
+      useClass: ClientGoogleLoginStrategy,
+    });
+
+    container.register<ILoginStrategy>("VendorGoogleLoginStrategy", {
+      useClass: VendorGoogleLoginStrategy,
     });
 
     // register services

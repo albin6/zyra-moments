@@ -1,5 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { IServiceEntity } from "../../entities/models/service.entity";
+import {
+  IServiceEntity,
+  ServiceVendorReturn,
+} from "../../entities/models/service.entity";
 import { IServiceRepository } from "../../entities/repositoryInterfaces/common/service-repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IGetAllServicesForBookingUseCase } from "../../entities/useCaseInterfaces/client/get-all-services-for-booking-usecase.interface";
@@ -14,11 +17,13 @@ export class GetAllServicesForBookingUseCase
     @inject("IServiceRepository") private serviceRepository: IServiceRepository,
     @inject("IVendorRepository") private vendorRepository: IVendorRepository
   ) {}
-  async execute(id: any): Promise<IServiceEntity[] | []> {
+  async execute(id: any): Promise<ServiceVendorReturn> {
     const isVendorExistsWithId = await this.vendorRepository.findById(id);
     if (!isVendorExistsWithId) {
       throw new CustomError(ERROR_MESSAGES.WRONG_ID, HTTP_STATUS.BAD_REQUEST);
     }
-    return await this.serviceRepository.findAllServiceByVendorId(id);
+    const services = await this.serviceRepository.findAllServiceByVendorId(id);
+    const response = { services, vendor: isVendorExistsWithId };
+    return response;
   }
 }

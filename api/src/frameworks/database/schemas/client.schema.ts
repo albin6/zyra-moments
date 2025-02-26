@@ -5,13 +5,13 @@ import { IClientModel } from "../models/client.model";
 export const ClientSchema = new Schema<IClientModel>(
   {
     clientId: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     role: { type: String, enum: ROLES, required: true },
     profileImage: { type: String },
-    phoneNumber: { type: String, required: true },
+    phoneNumber: { type: String },
     masterOfCeremonies: { type: Boolean, default: false },
     status: { type: String, default: "active" },
   },

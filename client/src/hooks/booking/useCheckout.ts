@@ -3,7 +3,19 @@ import { ServicesResponse } from "../service/useService";
 
 export interface CheckoutVendorServicesResponse
   extends Pick<ServicesResponse, "services"> {
-  success: true;
+  success: boolean;
+  vendor: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    place: string;
+    averageRating: number;
+    profileImage: string;
+    category: {
+      _id: string;
+      title: string;
+    };
+  };
 }
 
 export const useCheckOutQuery = (

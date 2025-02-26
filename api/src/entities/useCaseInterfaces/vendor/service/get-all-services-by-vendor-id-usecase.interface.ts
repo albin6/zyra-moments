@@ -1,5 +1,4 @@
 import { PaginatedServices } from "../../../models/paginated-services.entity";
-import { IServiceEntity } from "../../../models/service.entity";
 
 export interface IGetAllServicesByVendorIdUseCase {
   execute(

@@ -7,6 +7,7 @@ export interface IUserEntity {
   lastName?: string;
   email: string;
   password: string;
+  googleId: string;
   role: TRole;
   profileImage?: string;
   phoneNumber?: string;

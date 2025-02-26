@@ -12,6 +12,9 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { vendorLogin } from "@/store/slices/vendorSlice";
 import { motion } from "framer-motion";
+import { useGoogleMutation } from "@/hooks/auth/useGoogle";
+import { CredentialResponse } from "@react-oauth/google";
+import GoogleAuth from "@/components/auth/GoogleAuth";
 
 export function VendorAuth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,6 +23,24 @@ export function VendorAuth() {
 
   const { mutate: registerClient } = useRegisterMutation();
   const { mutate: loginClient } = useLoginMutation();
+  const { mutate: googleLogin } = useGoogleMutation();
+
+  const google = (credentialResponse: CredentialResponse) => {
+    googleLogin(
+      {
+        credential: credentialResponse.credential,
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        role: "vendor",
+      },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message);
+          dispatch(vendorLogin(data.user));
+        },
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
 
   const handleSignupSubmit = (data: Omit<User, "role">) => {
     registerClient(
@@ -112,6 +133,35 @@ export function VendorAuth() {
                     setLogin={() => setIsLogin(true)}
                   />
                 )}
+              </div>
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-muted"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-card text-muted-foreground">
+                      Or continue with
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  {/* <Button
+                    variant="outline"
+                    onClick={() => handleSocialLogin("google")}
+                  >
+                    <FaGoogle className="mr-2" />
+                    Google
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleSocialLogin("github")}
+                  >
+                    <FaGithub className="mr-2" />
+                    GitHub
+                  </Button> */}
+                  <GoogleAuth handleGoogleSuccess={google} />
+                </div>
               </div>
             </div>
           </div>

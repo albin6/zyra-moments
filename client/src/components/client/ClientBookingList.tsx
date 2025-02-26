@@ -14,6 +14,8 @@ import { Search, ChevronDown, ChevronUp } from "lucide-react";
 import Pagination from "../Pagination";
 import moment from "moment";
 import { formatPrice } from "@/utils/format/formatPrice";
+import { BookingDetailsModal } from "../modals/BookingDetailsModal";
+import { Button } from "../ui/button";
 
 export interface BookingList {
   serviceDetails: {
@@ -177,10 +179,7 @@ export default function ClientBookingList({
           </TableHeader>
           <TableBody>
             {bookings.map((booking) => (
-              <TableRow
-                key={booking._id}
-                className="hover:bg-accent cursor-pointer"
-              >
+              <TableRow key={booking._id} className="hover:bg-accent">
                 <TableCell className="font-medium">
                   {booking.serviceDetails.serviceTitle}
                 </TableCell>
@@ -195,6 +194,12 @@ export default function ClientBookingList({
                   <Badge className={getStatusColor(booking.status)}>
                     {booking.status}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                  <BookingDetailsModal
+                    booking={booking}
+                    trigger={<Button size={"sm"}>View Booking Details</Button>}
+                  />
                 </TableCell>
               </TableRow>
             ))}

@@ -5,10 +5,10 @@ import { ROLES } from "../../../shared/constants";
 export const VendorSchema = new Schema<IVendorModel>(
   {
     vendorId: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     role: { type: String, enum: ROLES, required: true },
     profileImage: { type: String },
     phoneNumber: { type: String },

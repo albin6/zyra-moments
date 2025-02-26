@@ -124,8 +124,10 @@ export function ClientHeader({ client }: ClientHeaderProps) {
                     />
                     <AvatarFallback>
                       {client &&
-                        client?.firstName.charAt(0) +
-                          client?.lastName.charAt(0)}
+                        client?.firstName.charAt(0).toUpperCase() +
+                          (client?.lastName
+                            ? client?.lastName.charAt(0).toUpperCase()
+                            : "")}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -134,7 +136,8 @@ export function ClientHeader({ client }: ClientHeaderProps) {
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      {client && client.firstName + " " + client.lastName}
+                      {client &&
+                        client.firstName + " " + (client?.lastName ?? "")}
                     </p>
                     <p className="text-xs leading-none text-muted-foreground">
                       {client && client.email}

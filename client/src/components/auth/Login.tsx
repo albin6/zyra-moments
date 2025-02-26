@@ -80,7 +80,7 @@ export function Login({ userType, onSubmit, setSignup }: LoginProps) {
         </form>
       </CardContent>
       {userType !== "admin" && (
-        <CardFooter className="flex justify-center">
+        <CardFooter className="flex flex-col items-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
             <span

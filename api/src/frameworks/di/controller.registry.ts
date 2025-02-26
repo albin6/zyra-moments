@@ -39,6 +39,7 @@ import { HandleWebHookController } from "../../interfaceAdapters/controllers/pay
 import { GetAllServicesForBookingController } from "../../interfaceAdapters/controllers/client/get-all-services-for-booking.controller";
 import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 import { GetAllBookingForVendorController } from "../../interfaceAdapters/controllers/booking/get-all-booking-for-vendor.controller";
+import { GoogleController } from "../../interfaceAdapters/controllers/auth/google.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -201,5 +202,7 @@ export class ControllerRegistry {
     container.register("GetAllBookingForVendorController", {
       useClass: GetAllBookingForVendorController,
     });
+
+    container.register("GoogleController", { useClass: GoogleController });
   }
 }

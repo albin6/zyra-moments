@@ -41,6 +41,7 @@ import { HandleWebHookController } from "../../interfaceAdapters/controllers/pay
 import { GetAllServicesForBookingController } from "../../interfaceAdapters/controllers/client/get-all-services-for-booking.controller";
 import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 import { GetAllBookingForVendorController } from "../../interfaceAdapters/controllers/booking/get-all-booking-for-vendor.controller";
+import { GoogleController } from "../../interfaceAdapters/controllers/auth/google.controller";
 
 DependencyInjection.registerAll();
 
@@ -189,3 +190,5 @@ export const getAllBookingByClientController = container.resolve(
 export const getAllBookingForVendorController = container.resolve(
   GetAllBookingForVendorController
 );
+
+export const googleController = container.resolve(GoogleController);
