@@ -6,6 +6,7 @@ import { AuthAdminRoute } from "@/protected/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
 import AdminUserManagement from "@/pages/admin/AdminUserManagement";
 import AdminCategoryManagement from "@/pages/admin/AdminCategoryManagement";
+import { Custom404 } from "@/components/404/Custom404";
 
 function AdminRoutes() {
   return (
@@ -20,6 +21,10 @@ function AdminRoutes() {
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<AdminUserManagement />} />
         <Route path="category" element={<AdminCategoryManagement />} />
+        <Route
+          path="*"
+          element={<Custom404 pathname={window.location.pathname} />}
+        />
       </Route>
     </Routes>
   );

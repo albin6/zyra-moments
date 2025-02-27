@@ -11,12 +11,18 @@ import { ClientVendorListing } from "@/pages/client/ClientVendorListing";
 import ClientVendorProfile from "@/pages/client/ClientVendorProfile";
 import ClientVendorBooking from "@/pages/client/ClientVendorBooking";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
+import { Custom404 } from "@/components/404/Custom404";
 
 function ClientRoutes() {
   return (
     <Routes>
       <Route index element={<NoAuthRoute element={<ClientAuth />} />} />
-      <Route path="/" element={<ClientLayout />}>
+      <Route
+        path="/"
+        element={
+          <AuthRoute allowedRoles={["client"]} element={<ClientLayout />} />
+        }
+      >
         <Route
           path="/landing"
           element={
@@ -77,7 +83,15 @@ function ClientRoutes() {
             />
           }
         />
+        <Route
+          path="/*"
+          element={<Custom404 pathname={window.location.pathname} />}
+        />
       </Route>
+      <Route
+        path="/*"
+        element={<Custom404 pathname={window.location.pathname} />}
+      />
     </Routes>
   );
 }

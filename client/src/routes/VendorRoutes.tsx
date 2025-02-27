@@ -1,3 +1,4 @@
+import { Custom404 } from "@/components/404/Custom404";
 import VendorLayout from "@/components/layouts/VendorLayout";
 import VendorAddService from "@/pages/vendor/VendorAddService";
 import VendorAddWorkSample from "@/pages/vendor/VendorAddWorkSample";
@@ -16,7 +17,15 @@ function VendorRoutes() {
   return (
     <Routes>
       <Route index element={<NoVendorAuthRoute element={<VendorAuth />} />} />
-      <Route path="/" element={<VendorLayout />}>
+      <Route
+        path="/"
+        element={
+          <AuthVendorRoute
+            allowedRoles={["client"]}
+            element={<VendorLayout />}
+          />
+        }
+      >
         <Route
           path="/profile"
           element={
@@ -89,7 +98,15 @@ function VendorRoutes() {
             />
           }
         />
+        <Route
+          path="/*"
+          element={<Custom404 pathname={window.location.pathname} />}
+        />
       </Route>
+      <Route
+        path="/*"
+        element={<Custom404 pathname={window.location.pathname} />}
+      />
     </Routes>
   );
 }
