@@ -49,7 +49,7 @@ export class RegisterUserController implements IRegisterUserController {
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -60,9 +60,10 @@ export class RegisterUserController implements IRegisterUserController {
           .json({ success: false, message: error.message });
         return;
       }
+      console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!", error });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

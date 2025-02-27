@@ -38,7 +38,7 @@ export class Server {
       } else {
         express.json()(req, res, next);
       }
-    });
+    }); // change logic to another file mid
 
     this._app.use(cookieParser());
 

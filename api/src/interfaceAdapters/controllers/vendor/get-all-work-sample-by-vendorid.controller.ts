@@ -3,7 +3,7 @@ import { IGetAllWorkSampleByVendorIdController } from "../../../entities/control
 import { IGetAllWorkSampleByVendorIdUseCase } from "../../../entities/useCaseInterfaces/vendor/get-all-work-sample-by-vendorid-usecase.interface";
 import { inject, injectable } from "tsyringe";
 import { ZodError } from "zod";
-import { HTTP_STATUS } from "../../../shared/constants";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
@@ -45,7 +45,7 @@ export class GetAllWorkSampleByVendorIdController
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -58,8 +58,8 @@ export class GetAllWorkSampleByVendorIdController
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

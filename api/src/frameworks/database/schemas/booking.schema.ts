@@ -26,7 +26,14 @@ export const bookingSchema = new Schema<IBookingModel>({
   totalPrice: { type: Number, required: true },
   paymentStatus: {
     type: String,
-    enum: ["pending", "completed", "failed", "refunded"],
+    enum: [
+      "pending",
+      "processing",
+      "succeeded",
+      "failed",
+      "refunded",
+      "partially_refunded",
+    ],
     default: "pending",
   },
 

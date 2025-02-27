@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { IUpdateCategoryStatusController } from "../../../entities/controllerInterfaces/admin/update-category-status-controller.interface";
 import { IUpdateCategoryStatusUseCase } from "../../../entities/useCaseInterfaces/admin/update-category-status-usecase.interface";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS,
+  SUCCESS_MESSAGES,
+} from "../../../shared/constants";
 import { ZodError } from "zod";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
@@ -31,7 +35,7 @@ export class UpdateCategoryStatusController
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -44,8 +48,8 @@ export class UpdateCategoryStatusController
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

@@ -3,7 +3,11 @@ import { ICreateWorkSampleController } from "../../../entities/controllerInterfa
 import { ICreateWorkSampleUseCase } from "../../../entities/useCaseInterfaces/vendor/create-work-sample-usercase.interface";
 import { inject, injectable } from "tsyringe";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS,
+  SUCCESS_MESSAGES,
+} from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { IWorkSampleEntity } from "../../../entities/models/work-sample.entity";
 import { CustomRequest } from "../../middlewares/auth.middleware";
@@ -42,7 +46,7 @@ export class CreateWorkSampleController implements ICreateWorkSampleController {
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -55,8 +59,8 @@ export class CreateWorkSampleController implements ICreateWorkSampleController {
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

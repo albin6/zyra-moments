@@ -16,4 +16,6 @@ export interface IBookingRepository {
   findByIdAndUpdatePaymentId(id: any, paymentId: any): Promise<void>;
 
   findByIdAndUpdatePaymentStatus(id: any, status: string): Promise<void>;
+
+  findByIdAndUpdateBookingStatus(id: any, status: string): Promise<void>;
 }

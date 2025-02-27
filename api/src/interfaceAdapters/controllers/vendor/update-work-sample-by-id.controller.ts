@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import { IUpdateWorkSampleByIdController } from "../../../entities/controllerInterfaces/vendor/update-work-sample-by-id-controller.interface";
 import { IUpdateWorkSampleByIdUseCase } from "../../../entities/useCaseInterfaces/vendor/update-work-sample-by-id-usecase.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS,
+  SUCCESS_MESSAGES,
+} from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { IWorkSampleEntity } from "../../../entities/models/work-sample.entity";
 import { inject, injectable } from "tsyringe";
@@ -41,7 +45,7 @@ export class UpdateWorkSampleByIdController
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -54,8 +58,8 @@ export class UpdateWorkSampleByIdController
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

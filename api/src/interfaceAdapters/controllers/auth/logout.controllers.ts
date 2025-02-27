@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { ILogoutUserController } from "../../../entities/controllerInterfaces/auth/logout-controller.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS,
+  SUCCESS_MESSAGES,
+} from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { clearAuthCookies } from "../../../shared/utils/cookieHelper";
 import { inject, injectable } from "tsyringe";
@@ -42,7 +46,7 @@ export class LogoutUserController implements ILogoutUserController {
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -55,8 +59,8 @@ export class LogoutUserController implements ILogoutUserController {
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }

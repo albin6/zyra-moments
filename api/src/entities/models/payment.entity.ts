@@ -5,7 +5,8 @@ export type PaymentStatus =
   | "processing"
   | "succeeded"
   | "failed"
-  | "refunded";
+  | "refunded"
+  | "partially_refunded";
 
 export type Purpose = "vendor-booking" | "role-upgrade" | "ticket-purchase";
 

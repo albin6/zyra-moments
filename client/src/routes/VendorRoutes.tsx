@@ -17,15 +17,7 @@ function VendorRoutes() {
   return (
     <Routes>
       <Route index element={<NoVendorAuthRoute element={<VendorAuth />} />} />
-      <Route
-        path="/"
-        element={
-          <AuthVendorRoute
-            allowedRoles={["client"]}
-            element={<VendorLayout />}
-          />
-        }
-      >
+      <Route path="/" element={<VendorLayout />}>
         <Route
           path="/profile"
           element={

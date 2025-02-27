@@ -10,7 +10,14 @@ export const paymentSchema = new Schema<IPaymentModel>(
     currency: { type: String, required: true },
     status: {
       type: String,
-      enum: ["pending", "processing", "succeeded", "failed", "refunded"],
+      enum: [
+        "pending",
+        "processing",
+        "succeeded",
+        "failed",
+        "refunded",
+        "partially_refunded",
+      ],
       default: "pending",
     },
     paymentIntentId: { type: String },

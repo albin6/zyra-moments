@@ -104,6 +104,21 @@ export class StripeService implements IPaymentService {
         const canceledPayment = event.data.object as Stripe.PaymentIntent;
         await this.updatePaymentStatus(canceledPayment.id, "failed");
         break;
+
+      case "charge.refunded":
+        const refundedCharge = event.data.object as Stripe.Charge;
+        if (refundedCharge.amount_refunded < refundedCharge.amount) {
+          await this.updatePaymentStatus(
+            refundedCharge.payment_intent as string,
+            "partially_refunded"
+          );
+        } else {
+          await this.updatePaymentStatus(
+            refundedCharge.payment_intent as string,
+            "refunded"
+          );
+        }
+        break;
     }
   }
 }

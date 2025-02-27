@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 import { IJoinCategoryRequestController } from "../../../entities/controllerInterfaces/vendor/join-category-request-controller.inteface";
 import { IJoinCategoryRequestUseCase } from "../../../entities/useCaseInterfaces/vendor/join-category-request-usecase.interface";
 import { ZodError } from "zod";
-import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
+import {
+  ERROR_MESSAGES,
+  HTTP_STATUS,
+  SUCCESS_MESSAGES,
+} from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
@@ -29,7 +33,7 @@ export class JoinCategoryController implements IJoinCategoryRequestController {
 
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          message: "Validation failed",
+          message: ERROR_MESSAGES.VALIDATION_ERROR,
           errors,
         });
         return;
@@ -42,8 +46,8 @@ export class JoinCategoryController implements IJoinCategoryRequestController {
       }
       console.log(error);
       res
-        .status(500)
-        .json({ success: false, message: "Something went wrong!" });
+        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 }
