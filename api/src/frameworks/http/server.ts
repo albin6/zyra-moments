@@ -1,14 +1,15 @@
 import cors from "cors";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
-import express, { Application, NextFunction, Request, Response } from "express";
-import "reflect-metadata";
+import express, { Application } from "express";
 
 import { config } from "../../shared/config";
 import { AuthRoutes } from "../routes/auth/auth.route";
 import { PrivateRoutes } from "../routes/common/private.route";
+import { errorHandler } from "../../interfaceAdapters/middlewares/error.middleware";
+import { dataParser } from "../../interfaceAdapters/middlewares/data-parser.middleware";
+import { notFound } from "../../interfaceAdapters/middlewares/not-found.middleware";
 
 export class Server {
   private _app: Application;
@@ -32,13 +33,7 @@ export class Server {
       })
     );
 
-    this._app.use((req: Request, res: Response, next: NextFunction) => {
-      if (req.originalUrl.includes("/client/webhook")) {
-        express.raw({ type: "application/json" })(req, res, next);
-      } else {
-        express.json()(req, res, next);
-      }
-    }); // change logic to another file mid
+    this._app.use(dataParser);
 
     this._app.use(cookieParser());
 
@@ -54,26 +49,11 @@ export class Server {
     this._app.use("/api/v_1/auth", new AuthRoutes().router);
     this._app.use("/api/v_1/_pvt", new PrivateRoutes().router);
 
-    this._app.use("*", (req: Request, res: Response) => {
-      res.status(404).json({
-        success: false,
-        message: "Route not found",
-      });
-    });
+    this._app.use("*", notFound);
   }
 
   private configureErrorHandling(): void {
-    this._app.use(
-      (err: any, req: Request, res: Response, next: NextFunction) => {
-        const statusCode: number = err.statusCode || 500;
-        const message = err.message || "Internal server error";
-        res.status(statusCode).json({
-          success: false,
-          statusCode,
-          message,
-        });
-      }
-    );
+    this._app.use(errorHandler);
   }
 
   public getApp(): Application {

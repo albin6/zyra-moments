@@ -57,6 +57,7 @@ export const ERROR_MESSAGES = {
   INVALID_BOOKING_DATE: "The requested booking date is not available",
   INVALID_TIME_SLOT: "The requested time slot is not available",
   TIME_SLOT_FULL: "The requested time slot is already at full capacity",
+  ROUTE_NOT_FOUND: "Route not found.",
 };
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

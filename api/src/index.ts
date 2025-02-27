@@ -12,5 +12,7 @@ mongoConnect.connectDB();
 server
   .getApp()
   .listen(config.server.PORT, () =>
-    console.log(`Server is running on http://localhost:${config.server.PORT}`)
+    console.log(
+      `Server is running on http://${config.server.HOST}:${config.server.PORT}`
+    )
   );
