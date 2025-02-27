@@ -5,6 +5,7 @@ interface TimeSlot {
   startTime: string;
   endTime: string;
   capacity: number;
+  count: number;
 }
 
 interface DateSlot {

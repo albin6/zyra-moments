@@ -17,7 +17,7 @@ export const bookingSchema = new Schema<IBookingModel>({
     termsAndConditions: { type: [String], required: true },
   },
 
-  bookingDate: { type: Date, required: true },
+  bookingDate: { type: String, required: true },
   timeSlot: {
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },

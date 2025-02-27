@@ -54,6 +54,9 @@ export const ERROR_MESSAGES = {
   MISSING_PARAMETERS: "Missing required parameters.",
   WRONG_CURRENT_PASSWORD: "Current password is wrong",
   SAME_CURR_NEW_PASSWORD: "Please enter a different password from current",
+  INVALID_BOOKING_DATE: "The requested booking date is not available",
+  INVALID_TIME_SLOT: "The requested time slot is not available",
+  TIME_SLOT_FULL: "The requested time slot is already at full capacity",
 };
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

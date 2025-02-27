@@ -34,7 +34,10 @@ function VendorEditService() {
     updateService(
       { id: serviceId, service },
       {
-        onSuccess: (data) => toast.success(data.message),
+        onSuccess: (data) => {
+          navigate("/vendor/services");
+          toast.success(data.message);
+        },
         onError: (error: any) => toast.error(error.response.data.message),
       }
     );

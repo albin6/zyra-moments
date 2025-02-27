@@ -14,6 +14,7 @@ export class CreateNewBookingUseCase implements ICreateNewBookingUseCase {
     @inject("IServiceRepository") private serviceRepository: IServiceRepository,
     @inject("IVendorRepository") private vendorRepository: IVendorRepository
   ) {}
+
   async execute(
     userId: any,
     vendorId: any,
@@ -33,6 +34,49 @@ export class CreateNewBookingUseCase implements ICreateNewBookingUseCase {
     if (!service) {
       throw new CustomError(ERROR_MESSAGES.WRONG_ID, HTTP_STATUS.BAD_REQUEST);
     }
+
+    // const bookingDateString =
+    //   typeof data.bookingDate === "string"
+    //     ? data.bookingDate
+    //     : data.bookingDate.toISOString().split("T")[0];
+
+    const availableDateEntry = service.availableDates.find(
+      (availableDate) => availableDate.date === data.bookingDate
+    );
+
+    if (!availableDateEntry) {
+      throw new CustomError(
+        ERROR_MESSAGES.INVALID_BOOKING_DATE,
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    const timeSlot = availableDateEntry.timeSlots.find(
+      (slot) =>
+        slot.startTime === data.timeSlot.startTime &&
+        slot.endTime === data.timeSlot.endTime
+    );
+
+    if (!timeSlot) {
+      throw new CustomError(
+        ERROR_MESSAGES.INVALID_TIME_SLOT,
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    if (timeSlot.count >= timeSlot.capacity) {
+      throw new CustomError(
+        ERROR_MESSAGES.TIME_SLOT_FULL,
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    await this.serviceRepository.saveCount(
+      service._id!,
+      data.bookingDate,
+      data.timeSlot.startTime,
+      data.timeSlot.endTime
+    );
 
     const serviceDetails = {
       serviceTitle: service.serviceTitle,

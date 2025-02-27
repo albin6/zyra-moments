@@ -75,7 +75,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             setSucceeded(true);
           }
         },
-        onError: (error: any) => toast.error(error.response.data.message),
+        onError: (error: any) => {
+          setBookingSuccess(false);
+          setIsOpen(false);
+          setIsSuccess(false);
+          toast.error(error.response.data.message);
+        },
       }
     );
 

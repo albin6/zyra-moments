@@ -3,7 +3,7 @@ export interface Booking {
 
   serviceId: string;
 
-  bookingDate: Date;
+  bookingDate: string;
   timeSlot: {
     startTime: string;
     endTime: string;

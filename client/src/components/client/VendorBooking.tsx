@@ -37,6 +37,7 @@ import { Booking } from "@/types/Booking";
 import { BookingSuccessModal } from "../modals/BookingSuccessModal";
 import moment from "moment";
 import PaymentProcessingModal from "../modals/PaymentProcessingModal";
+import { convertDateFormat } from "@/utils/format/convertDateFormat";
 
 export default function VendorBooking() {
   const navigate = useNavigate();
@@ -71,8 +72,14 @@ export default function VendorBooking() {
   }
 
   const getBookingData = (): Booking => {
+    console.log("selected date before submitting =>", selectedDate);
+    console.log(
+      "selected timeslot before submitting =>",
+      selectedTimeSlot?.startTime,
+      selectedTimeSlot?.endTime
+    );
     return {
-      bookingDate: selectedDate!,
+      bookingDate: convertDateFormat(selectedDate!),
       serviceId: selectedService?._id!,
       timeSlot: {
         startTime: selectedTimeSlot?.startTime!,
@@ -276,6 +283,7 @@ export default function VendorBooking() {
                       selected={selectedDate || undefined}
                       onSelect={(date) => {
                         setSelectedDate(date ?? null);
+                        console.log("this is selected date =>", date);
                         setSelectedTimeSlot(null);
                       }}
                       disabled={(date) => {

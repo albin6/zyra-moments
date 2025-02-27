@@ -17,7 +17,7 @@ export interface IBookingEntity {
     termsAndConditions: string[];
   };
 
-  bookingDate: Date;
+  bookingDate: string;
   timeSlot: {
     startTime: string;
     endTime: string;
@@ -35,7 +35,7 @@ export interface Booking {
 
   serviceId: any;
 
-  bookingDate: Date;
+  bookingDate: string;
   timeSlot: {
     startTime: string;
     endTime: string;

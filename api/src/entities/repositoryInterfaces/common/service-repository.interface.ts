@@ -7,6 +7,13 @@ import { IServiceEntity } from "../../models/service.entity";
 export interface IServiceRepository {
   save(data: IServiceEntity): Promise<void>;
 
+  saveCount(
+    serviceId: any,
+    dateString: string,
+    startTime: string,
+    endTime: string
+  ): Promise<void>;
+
   findByVendorId(
     id: any,
     skip: number,

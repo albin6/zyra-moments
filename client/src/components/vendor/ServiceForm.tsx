@@ -11,6 +11,7 @@ import { ServicesHeader } from "./ServicesHeader";
 import { useServiceMutation } from "@/hooks/service/useService";
 import { createService } from "@/services/vendor/service";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface TimeSlot {
   startTime: string;
@@ -24,6 +25,7 @@ interface DateSlot {
 }
 
 export const ServiceForm: React.FC = () => {
+  const navigate = useNavigate();
   const { mutate: addNewService } = useServiceMutation(createService);
 
   const formik = useFormik({
@@ -42,7 +44,10 @@ export const ServiceForm: React.FC = () => {
     onSubmit: (values) => {
       console.log(values);
       addNewService(values, {
-        onSuccess: (data) => toast.success(data.success),
+        onSuccess: (data) => {
+          toast.success(data.message);
+          navigate("/vendor/services");
+        },
         onError: (error: any) => toast.error(error.response.data.message),
       });
     },

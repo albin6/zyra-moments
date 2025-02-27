@@ -13,6 +13,7 @@ export const serviceSchema = new Schema<IServiceModel>({
           startTime: { type: String, required: true },
           endTime: { type: String, required: true },
           capacity: { type: Number, required: true },
+          count: { type: Number, default: 0 },
         },
       ],
     },

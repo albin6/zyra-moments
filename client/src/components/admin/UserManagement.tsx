@@ -149,7 +149,9 @@ export default function UserManagement() {
         {clients &&
           clients.map((client) => (
             <TableRow key={client.clientId}>
-              <TableCell>{client.firstName + " " + client.lastName}</TableCell>
+              <TableCell>
+                {client.firstName + " " + (client?.lastName ?? "")}
+              </TableCell>
               <TableCell>{client.email}</TableCell>
               <TableCell>{client.phoneNumber}</TableCell>
               <TableCell className="text-center">
@@ -192,7 +194,9 @@ export default function UserManagement() {
         {vendors &&
           vendors.map((vendor) => (
             <TableRow key={vendor._id}>
-              <TableCell>{vendor.firstName + " " + vendor.lastName}</TableCell>
+              <TableCell>
+                {vendor.firstName + " " + (vendor?.lastName ?? "")}
+              </TableCell>
               <TableCell>{vendor.email}</TableCell>
               <TableCell>
                 {vendor.category?.title ?? "Not in Category"}
