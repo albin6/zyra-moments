@@ -87,6 +87,10 @@ export default function ClientBookingList({
     );
   };
 
+  const handleCancelBooking = (id: any) => {
+    console.log(id);
+  };
+
   const getStatusColor = (status: string) => {
     return (
       STATUS_COLORS[status.toLowerCase() as keyof typeof STATUS_COLORS] ||
@@ -200,6 +204,18 @@ export default function ClientBookingList({
                     booking={booking}
                     trigger={<Button size={"sm"}>View Booking Details</Button>}
                   />
+                </TableCell>
+                <TableCell>
+                  {booking.status !== "Cancelled" &&
+                    booking.status !== "Completed" && (
+                      <Button
+                        size={"sm"}
+                        variant="destructive"
+                        onClick={() => handleCancelBooking(booking._id)}
+                      >
+                        Cancel
+                      </Button>
+                    )}
                 </TableCell>
               </TableRow>
             ))}

@@ -20,6 +20,8 @@ import { Search } from "lucide-react";
 import { BookingList } from "../client/ClientBookingList";
 import moment from "moment";
 import { formatPrice } from "@/utils/format/formatPrice";
+import { BookingDetailsModal } from "../modals/BookingDetailsModal";
+import { Button } from "../ui/button";
 
 interface VendorBookingListProps {
   bookings: BookingList[];
@@ -111,6 +113,12 @@ export default function VendorBookingList({
                   <Badge className={getStatusColor(booking.status)}>
                     {booking.status}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                  <BookingDetailsModal
+                    booking={booking}
+                    trigger={<Button size={"sm"}>View Booking Details</Button>}
+                  />
                 </TableCell>
               </TableRow>
             ))}
