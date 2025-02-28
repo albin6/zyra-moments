@@ -1,5 +1,6 @@
 import { BookingList } from "@/components/client/ClientBookingList";
-import { useQuery } from "@tanstack/react-query";
+import { AxiosResponse } from "@/services/auth/authService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface FetchBookingsParams {
   page: number;
@@ -27,5 +28,20 @@ export const useBookingQuery = (
     queryKey: ["paginated-booking", page, limit, sort, search, statusFilter],
     queryFn: () => queryFunc({ page, limit, sort, search, statusFilter }),
     placeholderData: (prevData) => prevData,
+  });
+};
+
+export const useBookingStatusMutation = (
+  mutationFunc: (data: {
+    bookingId: any;
+    status: string;
+  }) => Promise<AxiosResponse>
+) => {
+  const queryClient = useQueryClient();
+  return useMutation<AxiosResponse, Error, { bookingId: any; status: string }>({
+    mutationFn: mutationFunc,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["paginated-booking"] });
+    },
   });
 };

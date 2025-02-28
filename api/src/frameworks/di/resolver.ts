@@ -42,6 +42,7 @@ import { GetAllServicesForBookingController } from "../../interfaceAdapters/cont
 import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 import { GetAllBookingForVendorController } from "../../interfaceAdapters/controllers/booking/get-all-booking-for-vendor.controller";
 import { GoogleController } from "../../interfaceAdapters/controllers/auth/google.controller";
+import { UpdateBookingStatusController } from "../../interfaceAdapters/controllers/booking/update-booking-status.controller";
 
 DependencyInjection.registerAll();
 
@@ -192,3 +193,7 @@ export const getAllBookingForVendorController = container.resolve(
 );
 
 export const googleController = container.resolve(GoogleController);
+
+export const updateBookingStatusController = container.resolve(
+  UpdateBookingStatusController
+);

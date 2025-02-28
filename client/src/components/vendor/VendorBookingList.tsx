@@ -22,6 +22,12 @@ import moment from "moment";
 import { formatPrice } from "@/utils/format/formatPrice";
 import { BookingDetailsModal } from "../modals/BookingDetailsModal";
 import { Button } from "../ui/button";
+import Pagination from "../Pagination";
+import { useBookingStatusMutation } from "@/hooks/booking/useBooking";
+import { vendorUpdateBookingStatus } from "@/services/booking/bookingServices";
+import { ConfirmationModal } from "../modals/ConfirmationModal";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface VendorBookingListProps {
   bookings: BookingList[];
@@ -40,9 +46,14 @@ export default function VendorBookingList({
   bookings,
   searchQuery,
   setSearchQuery,
-  statusFilter,
-  setStatusFilter,
+  page,
+  setPage,
+  totalPages,
 }: VendorBookingListProps) {
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "confirmed":
@@ -53,6 +64,22 @@ export default function VendorBookingList({
         return "bg-red-500/10 text-red-500 hover:bg-red-500/20";
       default:
         return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
+    }
+  };
+
+  const { mutate: updateBookingStatus } = useBookingStatusMutation(
+    vendorUpdateBookingStatus
+  );
+
+  const onUpdateStatus = () => {
+    if (bookingId && status) {
+      updateBookingStatus(
+        { bookingId, status },
+        {
+          onSuccess: (data) => toast.success(data.message),
+          onError: (error: any) => toast.error(error.response.data.message),
+        }
+      );
     }
   };
 
@@ -120,6 +147,35 @@ export default function VendorBookingList({
                     trigger={<Button size={"sm"}>View Booking Details</Button>}
                   />
                 </TableCell>
+                <TableCell>
+                  <Select
+                    value={booking.status}
+                    onValueChange={(value) => {
+                      setBookingId(booking._id);
+                      setStatus(value);
+                      setIsConfirmationModalOpen(true);
+                    }}
+                    disabled={
+                      booking.status === "confirmed" ||
+                      booking.status === "cancelled"
+                    } // Optional: disable if already completed
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">pending</SelectItem>
+                      <SelectItem value="confirmed">confirmed</SelectItem>
+                      <SelectItem value="completed">completed</SelectItem>
+                      <SelectItem
+                        value="cancelled"
+                        className="text-destructive"
+                      >
+                        cancelled
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -160,6 +216,26 @@ export default function VendorBookingList({
           </Card>
         ))}
       </div>
+      <div className="flex justify-center items-center gap-2">
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          totalPages={totalPages}
+        />
+      </div>
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={() => {
+          onUpdateStatus();
+          setBookingId(null);
+          setStatus(null);
+        }}
+        title="Confirm Action"
+        message="Are you sure you want to perform this action?"
+        confirmText="Yes, I'm sure"
+        cancelText="No, cancel"
+      />
     </div>
   );
 }

@@ -30,6 +30,10 @@ export class BookingRepository implements IBookingRepository {
     };
   }
 
+  async findById(id: any): Promise<IBookingEntity | null> {
+    return await BookingModel.findById(id);
+  }
+
   async save(data: Partial<IBookingEntity>): Promise<IBookingEntity> {
     return await BookingModel.create(data);
   }

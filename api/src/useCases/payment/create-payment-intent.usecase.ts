@@ -18,12 +18,13 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
     purpose: Purpose,
     userId: string,
     bookingId: string
-  ): Promise<string> {
+  ): Promise<{
+    paymentIntent: string;
+    clientSecret: string;
+  }> {
     try {
-      const paymentIntent = await this.paymentService.createPaymentIntent(
-        amount,
-        currency
-      );
+      const { paymentIntent, clientSecret } =
+        await this.paymentService.createPaymentIntent(amount, currency);
 
       await this.paymentRepository.save({
         userId,
@@ -37,7 +38,13 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         createdAt: new Date(),
       });
 
-      return paymentIntent;
+      console.log(
+        "in create payment intent paymentintent=>",
+        paymentIntent,
+        clientSecret
+      );
+
+      return { paymentIntent: paymentIntent, clientSecret: clientSecret };
     } catch (error) {
       console.error("CreatePaymentIntentUseCase Error:", error);
       throw new CustomError(

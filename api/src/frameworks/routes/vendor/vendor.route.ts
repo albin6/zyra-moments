@@ -16,6 +16,7 @@ import {
   joinCategoryController,
   logoutUserController,
   refreshTokenController,
+  updateBookingStatusController,
   updateServiceByIdController,
   updateVendorPasswordController,
   updateVendorProfileController,
@@ -157,6 +158,15 @@ export class VendorRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllBookingForVendorController.handle(req, res)
+    );
+
+    this.router.patch(
+      "/vendor/booking/status",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        updateBookingStatusController.handle(req, res)
     );
 
     this.router.put(

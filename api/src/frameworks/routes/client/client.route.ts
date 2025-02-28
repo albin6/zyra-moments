@@ -15,6 +15,7 @@ import {
   getVendorsUnderCategoryController,
   logoutUserController,
   refreshTokenController,
+  updateBookingStatusController,
   updateClientPasswordController,
   updateClientProfileController,
 } from "../../di/resolver";
@@ -87,9 +88,6 @@ export class ClientRoutes extends BaseRoute {
         getAllServicesForBookingController.handle(req, res)
     );
 
-    // bookings
-    this.router.post("/client/book-vendor");
-
     this.router.get(
       "/client/client-bookings",
       verifyAuth,
@@ -97,6 +95,15 @@ export class ClientRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getAllBookingByClientController.handle(req, res)
+    );
+
+    this.router.patch(
+      "/client/booking/status",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        updateBookingStatusController.handle(req, res)
     );
 
     // logout

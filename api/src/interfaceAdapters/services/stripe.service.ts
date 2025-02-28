@@ -5,7 +5,7 @@ import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/
 import { PaymentStatus } from "../../entities/models/payment.entity";
 import { config } from "../../shared/config";
 import { CustomError } from "../../entities/utils/CustomError";
-import { HTTP_STATUS } from "../../shared/constants";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
@@ -23,7 +23,13 @@ export class StripeService implements IPaymentService {
     });
   }
 
-  async createPaymentIntent(amount: number, currency: string): Promise<string> {
+  async createPaymentIntent(
+    amount: number,
+    currency: string
+  ): Promise<{
+    paymentIntent: string;
+    clientSecret: string;
+  }> {
     try {
       const paymentIntent = await this.stripe.paymentIntents.create({
         amount,
@@ -33,7 +39,10 @@ export class StripeService implements IPaymentService {
         },
       });
 
-      return paymentIntent.client_secret!;
+      return {
+        paymentIntent: paymentIntent.id!,
+        clientSecret: paymentIntent.client_secret!,
+      };
     } catch (error) {
       console.error("Error creating payment intent:", error);
       throw new CustomError(
@@ -52,7 +61,52 @@ export class StripeService implements IPaymentService {
     } catch (error) {
       console.error("Error confirming payment:", error);
       throw new CustomError(
-        "Failed to confirm payment",
+        ERROR_MESSAGES.CONFIRM_PAYMENT_FAILED,
+        HTTP_STATUS.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async refundPayment(
+    paymentIntentId: string,
+    amount?: number
+  ): Promise<boolean> {
+    try {
+      const paymentIntent = await this.stripe.paymentIntents.retrieve(
+        paymentIntentId
+      );
+
+      if (!paymentIntent.latest_charge) {
+        throw new CustomError(
+          ERROR_MESSAGES.NO_CHARGE_FOUND,
+          HTTP_STATUS.BAD_REQUEST
+        );
+      }
+
+      const chargeId =
+        typeof paymentIntent.latest_charge === "string"
+          ? paymentIntent.latest_charge
+          : paymentIntent.latest_charge.id;
+
+      const refundParams: Stripe.RefundCreateParams = {
+        charge: chargeId,
+        ...(amount && { amount }),
+      };
+
+      const refund = await this.stripe.refunds.create(refundParams);
+
+      const refundStatus: PaymentStatus =
+        amount && amount < paymentIntent.amount
+          ? "partially_refunded"
+          : "refunded";
+
+      await this.updatePaymentStatus(paymentIntentId, refundStatus);
+
+      return refund.status === "succeeded";
+    } catch (error) {
+      console.error("Error processing refund:", error);
+      throw new CustomError(
+        ERROR_MESSAGES.FAILED_TO_PROCESS_REFUND,
         HTTP_STATUS.INTERNAL_SERVER_ERROR
       );
     }
@@ -73,6 +127,13 @@ export class StripeService implements IPaymentService {
         payment.bookingId,
         status
       );
+
+      if (status === "refunded") {
+        this.bookingRepository.findByIdAndUpdateBookingStatus(
+          payment.bookingId,
+          "cancelled"
+        );
+      }
     }
   }
 
@@ -80,10 +141,8 @@ export class StripeService implements IPaymentService {
     switch (event.type) {
       case "payment_intent.succeeded":
         const successfulPayment = event.data.object as Stripe.PaymentIntent;
-        await this.updatePaymentStatus(
-          successfulPayment.client_secret!,
-          "succeeded"
-        );
+        console.log("webhook trigger=>", successfulPayment);
+        await this.updatePaymentStatus(successfulPayment.id!, "succeeded");
         break;
 
       case "payment_intent.payment_failed":

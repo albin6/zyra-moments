@@ -63,16 +63,23 @@ export class CreatePaymentIntentController
         return;
       }
 
-      const clientSecret = await this.createPaymentIntentUseCase.execute(
-        amountInCents,
-        currency,
-        purpose,
-        userId,
-        newBooking?._id as string
+      const { paymentIntent, clientSecret } =
+        await this.createPaymentIntentUseCase.execute(
+          amountInCents,
+          currency,
+          purpose,
+          userId,
+          newBooking?._id as string
+        );
+
+      console.log(
+        "in create payment controller =>",
+        paymentIntent,
+        clientSecret
       );
 
       const paymentDetails = await this.paymentRepository.findByPaymentIntentId(
-        clientSecret
+        paymentIntent
       );
 
       await this.bookingRepository.findByIdAndUpdatePaymentId(

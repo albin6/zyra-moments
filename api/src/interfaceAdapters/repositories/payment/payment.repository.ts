@@ -36,4 +36,8 @@ export class PaymentRepository implements IPaymentRepository {
   ): Promise<IPaymentEntity[] | []> {
     return await PaymentModel.find({ userId }).skip(skip).limit(limit);
   }
+
+  async findByBookingId(bookingId: any): Promise<IPaymentEntity | null> {
+    return await PaymentModel.findOne({ bookingId });
+  }
 }

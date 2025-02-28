@@ -34,7 +34,11 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  NO_CHARGE_FOUND: "No charge found for this payment",
+  CONFIRM_PAYMENT_FAILED: "Failed to confirm payment",
+  FAILED_TO_PROCESS_REFUND: "Failed to process refund",
   WRONG_ID: "Wrong ID",
+  ID_REQUIRED: "ID required",
   TOKEN_EXPIRED: "Token Expired",
   EMAIL_NOT_FOUND: "Email Not Found",
   FORBIDDEN:

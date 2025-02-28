@@ -113,6 +113,10 @@ import { IGoogleUseCase } from "../../entities/useCaseInterfaces/auth/google-use
 import { GoogleUseCase } from "../../useCases/auth/google.usecase";
 import { ClientGoogleLoginStrategy } from "../../useCases/auth/login-strategies/client-google-login.strategy";
 import { VendorGoogleLoginStrategy } from "../../useCases/auth/login-strategies/vendor-google-login.strategy";
+import { IUpdateBookingStatusUseCase } from "../../entities/useCaseInterfaces/booking/update-booking-status-usecase.interface";
+import { UpdateBookingStatusUseCase } from "../../useCases/booking/update-booking-status.usecase";
+import { ICancelBookingUseCase } from "../../entities/useCaseInterfaces/booking/cancel-booking-usecase.interface";
+import { CancelBookingUseCase } from "../../useCases/booking/cancel-booking.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -315,6 +319,15 @@ export class UseCaseRegistry {
 
     container.register<IGoogleUseCase>("IGoogleUseCase", {
       useClass: GoogleUseCase,
+    });
+
+    container.register<IUpdateBookingStatusUseCase>(
+      "IUpdateBookingStatusUseCase",
+      { useClass: UpdateBookingStatusUseCase }
+    );
+
+    container.register<ICancelBookingUseCase>("ICancelBookingUseCase", {
+      useClass: CancelBookingUseCase,
     });
 
     // Register Strategies

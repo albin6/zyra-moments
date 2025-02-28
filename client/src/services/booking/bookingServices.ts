@@ -56,3 +56,43 @@ export const getVendorBookings = async (data: {
   );
   return response.data;
 };
+
+export const clientUpdateBookingStatus = async ({
+  bookingId,
+  status,
+}: {
+  bookingId: any;
+  status: string;
+}) => {
+  const response = await clientAxiosInstance.patch(
+    "/_cl/client/booking/status",
+    {},
+    {
+      params: {
+        bookingId,
+        status,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const vendorUpdateBookingStatus = async ({
+  bookingId,
+  status,
+}: {
+  bookingId: any;
+  status: string;
+}) => {
+  const response = await vendorAxiosInstance.patch(
+    "/_ve/vendor/booking/status",
+    {},
+    {
+      params: {
+        bookingId,
+        status,
+      },
+    }
+  );
+  return response.data;
+};

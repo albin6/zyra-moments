@@ -17,4 +17,6 @@ export interface IPaymentRepository {
     skip: number,
     limit: number
   ): Promise<IPaymentEntity[]>;
+
+  findByBookingId(bookingId: any): Promise<IPaymentEntity | null>;
 }

@@ -40,6 +40,7 @@ import { GetAllServicesForBookingController } from "../../interfaceAdapters/cont
 import { GetAllBookingByClientController } from "../../interfaceAdapters/controllers/booking/get-all-booking-by-client.controller";
 import { GetAllBookingForVendorController } from "../../interfaceAdapters/controllers/booking/get-all-booking-for-vendor.controller";
 import { GoogleController } from "../../interfaceAdapters/controllers/auth/google.controller";
+import { UpdateBookingStatusController } from "../../interfaceAdapters/controllers/booking/update-booking-status.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -204,5 +205,9 @@ export class ControllerRegistry {
     });
 
     container.register("GoogleController", { useClass: GoogleController });
+
+    container.register("UpdateBookingStatusController", {
+      useClass: UpdateBookingStatusController,
+    });
   }
 }

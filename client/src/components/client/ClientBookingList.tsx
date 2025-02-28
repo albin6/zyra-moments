@@ -16,6 +16,18 @@ import moment from "moment";
 import { formatPrice } from "@/utils/format/formatPrice";
 import { BookingDetailsModal } from "../modals/BookingDetailsModal";
 import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { ConfirmationModal } from "../modals/ConfirmationModal";
+import { useState } from "react";
+import { useBookingStatusMutation } from "@/hooks/booking/useBooking";
+import { clientUpdateBookingStatus } from "@/services/booking/bookingServices";
+import { toast } from "sonner";
 
 export interface BookingList {
   serviceDetails: {
@@ -64,13 +76,6 @@ interface ClientBookingListProps {
   setStatusFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const STATUS_COLORS = {
-  confirmed: "bg-success/10 text-success hover:bg-success/20",
-  pending: "bg-warning/10 text-warning hover:bg-warning/20",
-  cancelled: "bg-destructive/10 text-destructive hover:bg-destructive/20",
-  default: "bg-muted/50 text-muted-foreground hover:bg-muted",
-} as const;
-
 export default function ClientBookingList({
   bookings,
   page,
@@ -81,21 +86,43 @@ export default function ClientBookingList({
   search,
   setSearch,
 }: ClientBookingListProps) {
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+
   const handleSort = (field: string) => {
     setSortBy(
       sortBy === field ? `-${field}` : sortBy === `-${field}` ? "" : field
     );
   };
 
-  const handleCancelBooking = (id: any) => {
-    console.log(id);
+  const { mutate: updateBookingStatus } = useBookingStatusMutation(
+    clientUpdateBookingStatus
+  );
+
+  const onUpdateStatus = () => {
+    if (bookingId && status) {
+      updateBookingStatus(
+        { bookingId, status },
+        {
+          onSuccess: (data) => toast.success(data.message),
+          onError: (error: any) => toast.error(error.response.data.message),
+        }
+      );
+    }
   };
 
   const getStatusColor = (status: string) => {
-    return (
-      STATUS_COLORS[status.toLowerCase() as keyof typeof STATUS_COLORS] ||
-      STATUS_COLORS.default
-    );
+    switch (status.toLowerCase()) {
+      case "confirmed":
+        return "bg-green-500/10 text-green-500 hover:bg-green-500/20";
+      case "pending":
+        return "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20";
+      case "cancelled":
+        return "bg-red-500/10 text-red-500 hover:bg-red-500/20";
+      default:
+        return "bg-gray-500/10 text-gray-500 hover:bg-gray-500/20";
+    }
   };
 
   const getSortIcon = (field: string) => {
@@ -206,21 +233,51 @@ export default function ClientBookingList({
                   />
                 </TableCell>
                 <TableCell>
-                  {booking.status !== "Cancelled" &&
-                    booking.status !== "Completed" && (
-                      <Button
-                        size={"sm"}
-                        variant="destructive"
-                        onClick={() => handleCancelBooking(booking._id)}
+                  <Select
+                    value={booking.status}
+                    onValueChange={(value) => {
+                      setBookingId(booking._id);
+                      setStatus(value);
+                      setIsConfirmationModalOpen(true);
+                    }}
+                    disabled={
+                      booking.status === "confirmed" ||
+                      booking.status === "cancelled"
+                    } // Optional: disable if already completed
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">pending</SelectItem>
+                      <SelectItem value="confirmed">confirmed</SelectItem>
+                      <SelectItem value="completed">completed</SelectItem>
+                      <SelectItem
+                        value="cancelled"
+                        className="text-destructive"
                       >
-                        Cancel
-                      </Button>
-                    )}
+                        cancelled
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <ConfirmationModal
+          isOpen={isConfirmationModalOpen}
+          onClose={() => setIsConfirmationModalOpen(false)}
+          onConfirm={() => {
+            onUpdateStatus();
+            setBookingId(null);
+            setStatus(null);
+          }}
+          title="Confirm Action"
+          message="Are you sure you want to perform this action?"
+          confirmText="Yes, I'm sure"
+          cancelText="No, cancel"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:hidden">
