@@ -23,6 +23,8 @@ import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/
 import { PaymentRepository } from "../../interfaceAdapters/repositories/payment/payment.repository";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import { BookingRepository } from "../../interfaceAdapters/repositories/booking/booking.repository";
+import { IEventRepository } from "../../entities/repositoryInterfaces/event/event-repository.interface";
+import { EventRepository } from "../../interfaceAdapters/repositories/event/event.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -73,6 +75,10 @@ export class RepositoryRegistry {
 
     container.register<IBookingRepository>("IBookingRepository", {
       useClass: BookingRepository,
+    });
+
+    container.register<IEventRepository>("IEventRepository", {
+      useClass: EventRepository,
     });
   }
 }

@@ -117,6 +117,8 @@ import { IUpdateBookingStatusUseCase } from "../../entities/useCaseInterfaces/bo
 import { UpdateBookingStatusUseCase } from "../../useCases/booking/update-booking-status.usecase";
 import { ICancelBookingUseCase } from "../../entities/useCaseInterfaces/booking/cancel-booking-usecase.interface";
 import { CancelBookingUseCase } from "../../useCases/booking/cancel-booking.usecase";
+import { IHostNewEventUseCase } from "../../entities/useCaseInterfaces/event/host-new-event-usecase.interface";
+import { HostNewEventUseCase } from "../../useCases/event/host-new-event.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -328,6 +330,10 @@ export class UseCaseRegistry {
 
     container.register<ICancelBookingUseCase>("ICancelBookingUseCase", {
       useClass: CancelBookingUseCase,
+    });
+
+    container.register<IHostNewEventUseCase>("IHostNewEventUseCase", {
+      useClass: HostNewEventUseCase,
     });
 
     // Register Strategies
