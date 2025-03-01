@@ -12,6 +12,7 @@ import ClientVendorProfile from "@/pages/client/ClientVendorProfile";
 import ClientVendorBooking from "@/pages/client/ClientVendorBooking";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 import { Custom404 } from "@/components/404/Custom404";
+import EventPlatform from "@/components/client/event-hosting/EventPlatform";
 
 function ClientRoutes() {
   return (
@@ -63,6 +64,12 @@ function ClientRoutes() {
               allowedRoles={["client"]}
               element={<ClientEventListing />}
             />
+          }
+        />
+        <Route
+          path="/events/mc"
+          element={
+            <AuthRoute allowedRoles={["client"]} element={<EventPlatform />} />
           }
         />
         <Route

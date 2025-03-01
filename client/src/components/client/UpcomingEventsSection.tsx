@@ -8,6 +8,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const upcomingEvents = [
   {
@@ -43,6 +44,7 @@ const upcomingEvents = [
 ];
 
 export function UpcomingEventsSection() {
+  const navigate = useNavigate();
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -56,9 +58,20 @@ export function UpcomingEventsSection() {
               conferences to festivals, we've got you covered with the most
               exciting gatherings on the horizon.
             </p>
-            <Button className="group w-full sm:w-auto" variant="secondary">
+            <Button
+              onClick={() => navigate("/events/discover")}
+              className="group w-full sm:w-auto"
+              variant="secondary"
+            >
               View All Events
               <ChevronRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <Button
+              onClick={() => navigate("/events/mc")}
+              className="group w-full sm:w-auto ml-2"
+              variant="secondary"
+            >
+              See More
             </Button>
           </div>
           <div className="lg:w-2/3">
