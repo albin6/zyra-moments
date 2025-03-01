@@ -42,6 +42,7 @@ import { GetAllBookingForVendorController } from "../../interfaceAdapters/contro
 import { GoogleController } from "../../interfaceAdapters/controllers/auth/google.controller";
 import { UpdateBookingStatusController } from "../../interfaceAdapters/controllers/booking/update-booking-status.controller";
 import { HostNewEventController } from "../../interfaceAdapters/controllers/event/host-new-event.controller";
+import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controllers/event/get-all-events-by-host-id.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -213,6 +214,10 @@ export class ControllerRegistry {
 
     container.register("HostNewEventController", {
       useClass: HostNewEventController,
+    });
+
+    container.register("GetAllEventsByHostIdController", {
+      useClass: GetAllEventsByHostIdController,
     });
   }
 }

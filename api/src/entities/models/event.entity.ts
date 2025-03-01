@@ -9,13 +9,29 @@ export interface IEventEntity {
   endTime: string;
   pricePerTicket: number;
   ticketLimit: number;
-  eventLocation: {
+  eventLocation: string;
+  coordinates: {
     type: "Point";
     coordinates: number[];
-    address: string;
   };
   posterImage?: string;
   hostId: string | ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface PopulatedEvents extends Omit<IEventEntity, "hostId"> {
+  hostId: {
+    _id: ObjectId;
+    firstName: string;
+    lastName: string;
+    email: string;
+    profileImage: string;
+    phoneNumber: string;
+  };
+}
+
+export interface PaginatedEvents {
+  events: PopulatedEvents[];
+  total: number;
 }

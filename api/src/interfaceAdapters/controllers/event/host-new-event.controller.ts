@@ -10,6 +10,7 @@ import {
 import { CustomError } from "../../../entities/utils/CustomError";
 import { IEventEntity } from "../../../entities/models/event.entity";
 import { inject, injectable } from "tsyringe";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class HostNewEventController implements IHostNewEventController {
@@ -19,9 +20,15 @@ export class HostNewEventController implements IHostNewEventController {
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const eventData = req.body as IEventEntity;
+      const eventData = req.body as Omit<IEventEntity, "hostId">;
+      const userId = (req as CustomRequest).user.id;
 
-      await this.hostNewEventUseCase.execute(eventData);
+      const roundedData: IEventEntity = {
+        ...eventData,
+        hostId: userId,
+      };
+
+      await this.hostNewEventUseCase.execute(roundedData);
 
       res
         .status(HTTP_STATUS.OK)

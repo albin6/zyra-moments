@@ -13,6 +13,8 @@ import { Client } from "@/services/client/clientService";
 import { toast } from "sonner";
 import { useOutletContext } from "react-router-dom";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
+import EventAddEdit from "@/pages/client/EventAddEdit";
+import HostEventListing from "@/pages/client/HostEventListing";
 
 interface ClientContextType {
   clientData: Client | null;
@@ -22,6 +24,7 @@ interface ClientContextType {
 export function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
+  const [isHostEventEditing, setIsHostEventEditing] = useState(false);
   const { clientData } = useOutletContext<ClientContextType>();
   const { mutate: updateClientProfile } = useClientProfileMutation();
 
@@ -90,6 +93,10 @@ export function UserProfile() {
                   ? "Events"
                   : activeTab === "bookings"
                   ? "Bookings"
+                  : activeTab === "host-event"
+                  ? "Bookings"
+                  : activeTab === "event-list"
+                  ? "My Events"
                   : "something"}
               </h2>
               {activeTab === "profile" && (
@@ -99,6 +106,11 @@ export function UserProfile() {
                   onClick={() => setIsEditing(!isEditing)}
                 >
                   <Edit2 className="h-4 w-4" />
+                </Button>
+              )}
+              {activeTab === "event-list" && (
+                <Button size="sm" onClick={() => setActiveTab("host-event")}>
+                  Host An Event
                 </Button>
               )}
             </div>
@@ -129,6 +141,14 @@ export function UserProfile() {
               )}
               {activeTab === "events" && <UserEvents />}
               {activeTab === "bookings" && <ClientBookingListing />}
+              {activeTab === "event-list" && <HostEventListing />}
+              {activeTab === "host-event" && (
+                <EventAddEdit
+                  setActiveTab={setActiveTab}
+                  setIsHostEventEditing={setIsHostEventEditing}
+                  isHostEventEditing={isHostEventEditing}
+                />
+              )}
             </div>
           </Card>
         </main>

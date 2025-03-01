@@ -1,11 +1,10 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { DiscoverTab } from "./DiscoverTab";
 import { BecomeMCTab } from "./BecomeMCTab";
 import { PaymentTab } from "./PaymentTab";
+import { motion } from "framer-motion";
 
 export default function EventPlatform() {
   const [activeTab, setActiveTab] = useState("discover");
@@ -56,6 +55,13 @@ export default function EventPlatform() {
     }, 2000);
   };
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8 lg:p-12">
       <Tabs
@@ -71,29 +77,50 @@ export default function EventPlatform() {
 
         {/* First Tab: Discover Events */}
         <TabsContent value="discover" className="transition-all duration-300">
-          <DiscoverTab onNext={handleNext} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <DiscoverTab onNext={handleNext} />
+          </motion.div>
         </TabsContent>
 
         {/* Second Tab: Become a Master of Ceremonies */}
         <TabsContent value="become-mc" className="transition-all duration-300">
-          <BecomeMCTab
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-            amount={amount}
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <BecomeMCTab
+              onNext={handleNext}
+              onPrevious={handlePrevious}
+              amount={amount}
+            />
+          </motion.div>
         </TabsContent>
 
         {/* Third Tab: Payment */}
         <TabsContent value="payment" className="transition-all duration-300">
-          <PaymentTab
-            onPrevious={handlePrevious}
-            onPayment={handlePayment}
-            selectedPaymentMethod={selectedPaymentMethod}
-            setSelectedPaymentMethod={setSelectedPaymentMethod}
-            amount={amount}
-            userData={userData}
-            loading={loading}
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <PaymentTab
+              onPrevious={handlePrevious}
+              onPayment={handlePayment}
+              selectedPaymentMethod={selectedPaymentMethod}
+              setSelectedPaymentMethod={setSelectedPaymentMethod}
+              amount={amount}
+              userData={userData}
+              loading={loading}
+            />
+          </motion.div>
         </TabsContent>
       </Tabs>
     </div>

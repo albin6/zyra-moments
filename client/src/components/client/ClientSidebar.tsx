@@ -1,12 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { User, Calendar, BarChart2 } from "lucide-react";
+import { User, Calendar, BarChart2, Ticket } from "lucide-react";
 
 const navItems = [
   { icon: User, label: "Profile", id: "profile" },
   { icon: Calendar, label: "Events", id: "events" },
   { icon: BarChart2, label: "Bookings", id: "bookings" },
+  { icon: Ticket, label: "Host Events", id: "event-list" },
 ];
 
 interface ClientSidebarProps {

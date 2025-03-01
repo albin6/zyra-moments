@@ -15,7 +15,7 @@ export function BecomeMCTab({ onNext, onPrevious, amount }: BecomeMCTabProps) {
         <div className="flex flex-col md:flex-row-reverse gap-6 md:gap-8 items-center">
           <div className="w-full md:w-1/2 lg:w-5/12">
             <img
-              src="/placeholder.svg?height=500&width=500"
+              src="https://res.cloudinary.com/dkgic4cru/image/upload/v1740813349/woman-spiral_uvic2g.jpg"
               alt="Colorful spiral with person"
               className="w-full rounded-lg shadow-md"
             />

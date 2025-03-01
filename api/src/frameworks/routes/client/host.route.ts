@@ -5,6 +5,7 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
   blockStatusMiddleware,
+  getAllEventsByHostIdController,
   hostNewEventController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -20,6 +21,15 @@ export class HostRoutes extends BaseRoute {
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => hostNewEventController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/host-event/:hostId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllEventsByHostIdController.handle(req, res)
     );
   }
 }

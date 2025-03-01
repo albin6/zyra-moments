@@ -34,6 +34,10 @@ export const EventSchema: Schema = new Schema<IEventModel>(
       min: 1,
     },
     eventLocation: {
+      type: String,
+      required: false,
+    },
+    coordinates: {
       type: {
         type: String,
         enum: ["Point"],
@@ -41,10 +45,6 @@ export const EventSchema: Schema = new Schema<IEventModel>(
       },
       coordinates: {
         type: [Number],
-        required: true,
-      },
-      address: {
-        type: String,
         required: true,
       },
     },
@@ -62,4 +62,4 @@ export const EventSchema: Schema = new Schema<IEventModel>(
   }
 );
 
-EventSchema.index({ "eventLocation.coordinates": "2dsphere" });
+EventSchema.index({ "coordinates.coordinates": "2dsphere" });
