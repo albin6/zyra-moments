@@ -6,36 +6,33 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useVendorBookingPaymentMutation } from "@/hooks/payment/usePayment";
-import { makePaymentAndBooking } from "@/services/payment/paymentService";
+import { useRolePromoPaymentMutation } from "@/hooks/payment/usePayment";
+import { makePaymentAndUpgradeRole } from "@/services/payment/paymentService";
 import { toast } from "sonner";
 import { clientAxiosInstance } from "@/api/client.axios";
-import { Booking } from "@/types/Booking";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 interface PaymentFormProps {
   amount: number;
-  getBookingData: () => Booking;
-  setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
   amount,
-  getBookingData,
-  setBookingSuccess,
   setIsOpen,
   setIsSuccess,
+  setIsBookingSuccess,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState<boolean>(false);
   const [succeeded, setSucceeded] = useState<boolean>(false);
 
-  const { mutate: proceedPayment } = useVendorBookingPaymentMutation(
-    makePaymentAndBooking
+  const { mutate: proceedPayment } = useRolePromoPaymentMutation(
+    makePaymentAndUpgradeRole
   );
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -45,12 +42,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       return;
     }
 
-    setProcessing(true);
     setIsOpen(true);
     setIsSuccess(false);
 
     proceedPayment(
-      { amount, purpose: "vendor-booking", bookingData: getBookingData() },
+      { amount, purpose: "role-upgrade" },
       {
         onSuccess: async (data) => {
           const { error: stripeError, paymentIntent } =
@@ -67,7 +63,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                 paymentIntentId: paymentIntent.id,
               });
               toast.success("Payment completed.");
-              setBookingSuccess(true);
+              setIsBookingSuccess(true);
               setIsSuccess(true);
               setIsOpen(false);
               setIsSuccess(false);
@@ -78,7 +74,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           }
         },
         onError: (error: any) => {
-          setBookingSuccess(false);
+          setIsBookingSuccess(false);
           setIsOpen(false);
           setIsSuccess(false);
           toast.error(error.response.data.message);
@@ -90,7 +86,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md">
+    <form onSubmit={handleSubmit} className="w-full ">
       <div className="mb-4">
         <CardElement
           options={{
@@ -127,29 +123,21 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   );
 };
 
-export const PaymentWrapper: React.FC<{
+export const RolePromoPaymentWrapper: React.FC<{
   amount: number;
-  getBookingData: () => Booking;
-  setBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({
-  amount,
-  getBookingData,
-  setBookingSuccess,
-  setIsOpen,
-  setIsSuccess,
-}) => {
+  setIsBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ amount, setIsOpen, setIsSuccess, setIsBookingSuccess }) => {
   return (
     <Elements stripe={stripePromise}>
-      <div className="container mx-auto p-4">
+      <div className="w-full">
         <h1 className="text-2xl mb-4">Complete Your Payment</h1>
         <PaymentForm
-          amount={amount}
-          getBookingData={getBookingData}
-          setBookingSuccess={setBookingSuccess}
           setIsOpen={setIsOpen}
           setIsSuccess={setIsSuccess}
+          amount={amount}
+          setIsBookingSuccess={setIsBookingSuccess}
         />
       </div>
     </Elements>

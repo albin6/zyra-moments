@@ -5,6 +5,9 @@ import { DiscoverTab } from "./DiscoverTab";
 import { BecomeMCTab } from "./BecomeMCTab";
 import { PaymentTab } from "./PaymentTab";
 import { motion } from "framer-motion";
+import PaymentProcessingModal from "@/components/modals/PaymentProcessingModal";
+import { PromotionModal } from "@/components/modals/PromotionModal";
+import { useNavigate } from "react-router-dom";
 
 export default function EventPlatform() {
   const [activeTab, setActiveTab] = useState("discover");
@@ -13,10 +16,15 @@ export default function EventPlatform() {
   >(null);
   const [amount] = useState("$49.99");
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isBookingSuccess, setIsBookingSuccess] = useState(false);
   const [userData] = useState({
     name: "John Doe",
     email: "john.doe@example.com",
   });
+
+  const navigate = useNavigate();
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -119,10 +127,26 @@ export default function EventPlatform() {
               amount={amount}
               userData={userData}
               loading={loading}
+              setIsOpen={setIsOpen}
+              setIsSuccess={setIsSuccess}
+              setIsBookingSuccess={setIsBookingSuccess}
             />
           </motion.div>
         </TabsContent>
       </Tabs>
+      <PaymentProcessingModal
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        isSuccess={isSuccess}
+      />
+
+      <PromotionModal
+        isOpen={isBookingSuccess}
+        onClose={() => {
+          setIsBookingSuccess(false);
+          navigate("/landing");
+        }}
+      />
     </div>
   );
 }

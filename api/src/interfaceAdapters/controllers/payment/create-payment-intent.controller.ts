@@ -50,48 +50,66 @@ export class CreatePaymentIntentController
         return;
       }
 
-      const newBooking = await this.createNewBookingUseCase.execute(
-        userId,
-        bookingData.vendorId,
-        bookingData
-      );
+      if (purpose === "vendor-booking") {
+        // for booking a vendor
+        const newBooking = await this.createNewBookingUseCase.execute(
+          userId,
+          bookingData.vendorId,
+          bookingData
+        );
 
-      if (!newBooking) {
-        res
-          .status(HTTP_STATUS.BAD_REQUEST)
-          .json({ success: false, message: "Invalid booking data" });
-        return;
-      }
+        if (!newBooking) {
+          res
+            .status(HTTP_STATUS.BAD_REQUEST)
+            .json({ success: false, message: "Invalid booking data" });
+          return;
+        }
 
-      const { paymentIntent, clientSecret } =
-        await this.createPaymentIntentUseCase.execute(
+        const { paymentIntent, clientSecret } =
+          await this.createPaymentIntentUseCase.execute(
+            amountInCents,
+            currency,
+            purpose,
+            userId,
+            newBooking?._id as string
+          );
+
+        console.log(
+          "in create payment controller =>",
+          paymentIntent,
+          clientSecret
+        );
+
+        const paymentDetails =
+          await this.paymentRepository.findByPaymentIntentId(paymentIntent);
+
+        await this.bookingRepository.findByIdAndUpdatePaymentId(
+          newBooking._id,
+          paymentDetails?._id
+        );
+
+        res.json({
+          success: true,
+          message: "Booking completed and payment successfull.",
+          clientSecret,
+        });
+      } else if (purpose === "role-upgrade") {
+        // for role promo to mc
+        console.log("in side role promo");
+
+        const { clientSecret } = await this.createPaymentIntentUseCase.execute(
           amountInCents,
           currency,
           purpose,
-          userId,
-          newBooking?._id as string
+          userId
         );
 
-      console.log(
-        "in create payment controller =>",
-        paymentIntent,
-        clientSecret
-      );
-
-      const paymentDetails = await this.paymentRepository.findByPaymentIntentId(
-        paymentIntent
-      );
-
-      await this.bookingRepository.findByIdAndUpdatePaymentId(
-        newBooking._id,
-        paymentDetails?._id
-      );
-
-      res.json({
-        success: true,
-        message: "Booking completed and payment successfull.",
-        clientSecret,
-      });
+        res.json({
+          success: true,
+          message: "Booking completed and payment successfull.",
+          clientSecret,
+        });
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         const errors = error.errors.map((err) => ({

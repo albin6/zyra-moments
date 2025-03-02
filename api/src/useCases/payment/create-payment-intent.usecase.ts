@@ -17,7 +17,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
     currency: string,
     purpose: Purpose,
     userId: string,
-    bookingId: string
+    bookingId?: string
   ): Promise<{
     paymentIntent: string;
     clientSecret: string;

@@ -24,3 +24,17 @@ export const makePaymentAndBooking = async (data: {
   );
   return response.data;
 };
+
+export const makePaymentAndUpgradeRole = async (data: {
+  amount: number;
+  purpose: Purpose;
+}): Promise<PaymentResponse> => {
+  const response = await clientAxiosInstance.post(
+    "/_pmt/client/create-payment-intent",
+    {
+      amount: data.amount,
+      purpose: data.purpose,
+    }
+  );
+  return response.data;
+};

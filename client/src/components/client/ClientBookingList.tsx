@@ -250,7 +250,7 @@ export default function ClientBookingList({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="pending">pending</SelectItem>
-                      <SelectItem value="confirmed">confirmed</SelectItem>
+                      {/* <SelectItem value="confirmed">confirmed</SelectItem> */}
                       <SelectItem value="completed">completed</SelectItem>
                       <SelectItem
                         value="cancelled"

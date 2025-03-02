@@ -4,7 +4,7 @@ import { IPaymentModel } from "../models/payment.model";
 export const paymentSchema = new Schema<IPaymentModel>(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
-    bookingId: { type: Schema.Types.ObjectId, ref: "Booking" },
+    bookingId: { type: Schema.Types.ObjectId, default: null },
     transactionId: { type: String, required: true, unique: true },
     amount: { type: Number, min: 0, required: true },
     currency: { type: String, required: true },

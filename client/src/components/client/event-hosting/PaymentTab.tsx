@@ -1,3 +1,4 @@
+import { RolePromoPaymentWrapper } from "@/components/stripe/RolePromoForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -14,16 +15,20 @@ interface PaymentTabProps {
     email: string;
   };
   loading: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function PaymentTab({
   onPrevious,
-  onPayment,
   selectedPaymentMethod,
   setSelectedPaymentMethod,
   amount,
   userData,
-  loading,
+  setIsOpen,
+  setIsSuccess,
+  setIsBookingSuccess,
 }: PaymentTabProps) {
   return (
     <Card className="border-none bg-transparent shadow-none">
@@ -94,22 +99,20 @@ export function PaymentTab({
                 </div>
               </RadioGroup>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <div className="flex flex-col gap-3 pt-4">
+                <RolePromoPaymentWrapper
+                  setIsOpen={setIsOpen}
+                  setIsSuccess={setIsSuccess}
+                  amount={3000}
+                  setIsBookingSuccess={setIsBookingSuccess}
+                />
                 <Button
                   onClick={onPrevious}
                   variant="outline"
-                  className="border-primary text-primary hover:bg-primary/10"
+                  className="border-primary text-primary w-full hover:bg-primary/10"
                   size="lg"
                 >
                   Back
-                </Button>
-                <Button
-                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground"
-                  onClick={onPayment}
-                  disabled={!selectedPaymentMethod || loading}
-                  size="lg"
-                >
-                  {loading ? "Processing..." : "Pay Now"}
                 </Button>
               </div>
             </div>
