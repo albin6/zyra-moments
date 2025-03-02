@@ -121,6 +121,8 @@ import { IHostNewEventUseCase } from "../../entities/useCaseInterfaces/event/hos
 import { HostNewEventUseCase } from "../../useCases/event/host-new-event.usecase";
 import { IGetAllEventsByHostIdUseCase } from "../../entities/useCaseInterfaces/event/get-all-events-by-host-id-usecase.interface";
 import { GetAllEventsByHostIdUseCase } from "../../useCases/event/get-all-events-by-host-id.usecase";
+import { IGetEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces/event/get-event-details-by-id-usecase.interface";
+import { GetEventDetailsByIdUseCase } from "../../useCases/event/get-event-details-by-id.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -341,6 +343,11 @@ export class UseCaseRegistry {
     container.register<IGetAllEventsByHostIdUseCase>(
       "IGetAllEventsByHostIdUseCase",
       { useClass: GetAllEventsByHostIdUseCase }
+    );
+
+    container.register<IGetEventDetailsByIdUseCase>(
+      "IGetEventDetailsByIdUseCase",
+      { useClass: GetEventDetailsByIdUseCase }
     );
 
     // Register Strategies

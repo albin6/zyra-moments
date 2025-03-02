@@ -6,6 +6,7 @@ import {
 import {
   blockStatusMiddleware,
   getAllEventsByHostIdController,
+  getEventDetailsByIdController,
   hostNewEventController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -24,7 +25,16 @@ export class HostRoutes extends BaseRoute {
     );
 
     this.router.get(
-      "/client/host-event/:hostId",
+      "/client/host-event/details",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getEventDetailsByIdController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/hosted-event",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,

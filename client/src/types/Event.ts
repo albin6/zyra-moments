@@ -7,11 +7,24 @@ export interface Event {
   endTime: string;
   pricePerTicket: number;
   ticketLimit: number;
-  eventLocation: {
+  eventLocation: string;
+  coordinates: {
     type: "Point";
     coordinates: number[];
-    address: string;
   };
   posterImage?: string;
   hostId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface PopulatedEvents extends Omit<Event, "hostId"> {
+  hostId: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    profileImage: string;
+    phoneNumber: string;
+  };
 }

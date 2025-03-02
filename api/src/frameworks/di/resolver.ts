@@ -45,6 +45,7 @@ import { GoogleController } from "../../interfaceAdapters/controllers/auth/googl
 import { UpdateBookingStatusController } from "../../interfaceAdapters/controllers/booking/update-booking-status.controller";
 import { HostNewEventController } from "../../interfaceAdapters/controllers/event/host-new-event.controller";
 import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controllers/event/get-all-events-by-host-id.controller";
+import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -204,4 +205,8 @@ export const hostNewEventController = container.resolve(HostNewEventController);
 
 export const getAllEventsByHostIdController = container.resolve(
   GetAllEventsByHostIdController
+);
+
+export const getEventDetailsByIdController = container.resolve(
+  GetEventDetailsByIdController
 );
