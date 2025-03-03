@@ -23,3 +23,17 @@ export interface IPaymentEntity {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface PopulatedPayments extends Omit<IPaymentEntity, "userId"> {
+  userId: {
+    _id: string | ObjectId;
+    firstName?: string;
+    lastName?: string;
+    email: string;
+  };
+}
+
+export interface PopulatedPaymentsResponse {
+  payments: PopulatedPayments[];
+  total: number;
+}

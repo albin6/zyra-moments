@@ -51,4 +51,13 @@ export class ClientRepository implements IClientRepository {
   ): Promise<void> {
     await ClientModel.findByIdAndUpdate(id, { $set: data });
   }
+
+  async findByClientIdAndUpdateMCStatus(id: any): Promise<void> {
+    const client = await ClientModel.findById(id);
+
+    if (client) {
+      client.masterOfCeremonies = !client.masterOfCeremonies;
+      await client.save();
+    }
+  }
 }

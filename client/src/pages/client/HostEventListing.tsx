@@ -6,7 +6,11 @@ import { getAllHostedEventsByClient } from "@/services/event/eventService";
 import { PopulatedEvents } from "@/types/Event";
 import { useEffect, useState } from "react";
 
-export default function HostEventListing() {
+interface EventAddEditProps {
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function HostEventListing({ setActiveTab }: EventAddEditProps) {
   const [hostedEvents, setHostedEvents] = useState<PopulatedEvents[] | null>(
     null
   );
@@ -40,7 +44,11 @@ export default function HostEventListing() {
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col space-y-4">
         {hostedEvents.map((event) => (
-          <EventCard key={event._id} event={event} />
+          <EventCard
+            key={event._id}
+            event={event}
+            setActiveTab={setActiveTab}
+          />
         ))}
         <div className="mt-8">
           {totalPages > eventsPerPage && (

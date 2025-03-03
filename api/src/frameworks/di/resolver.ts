@@ -46,6 +46,7 @@ import { UpdateBookingStatusController } from "../../interfaceAdapters/controlle
 import { HostNewEventController } from "../../interfaceAdapters/controllers/event/host-new-event.controller";
 import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controllers/event/get-all-events-by-host-id.controller";
 import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
+import { GetAllTransactionsByUserIdController } from "../../interfaceAdapters/controllers/payment/get-all-transactions-by-userid.controller";
 
 DependencyInjection.registerAll();
 
@@ -209,4 +210,8 @@ export const getAllEventsByHostIdController = container.resolve(
 
 export const getEventDetailsByIdController = container.resolve(
   GetEventDetailsByIdController
+);
+
+export const getAllTransactionsByUserIdController = container.resolve(
+  GetAllTransactionsByUserIdController
 );

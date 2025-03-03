@@ -15,6 +15,9 @@ import { useOutletContext } from "react-router-dom";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 import EventAddEdit from "@/pages/client/EventAddEdit";
 import HostEventListing from "@/pages/client/HostEventListing";
+import { useEventContext } from "@/context/EventContext";
+import ClientWallet from "@/pages/client/ClientWallet";
+import ClientTransactions from "@/pages/client/ClientTransactions";
 
 interface ClientContextType {
   clientData: Client | null;
@@ -27,6 +30,7 @@ export function UserProfile() {
   const [isHostEventEditing, setIsHostEventEditing] = useState(false);
   const { clientData } = useOutletContext<ClientContextType>();
   const { mutate: updateClientProfile } = useClientProfileMutation();
+  const { resetEventData } = useEventContext();
 
   const handleUpdateClientProfile = (values: {
     firstName: string;
@@ -63,6 +67,7 @@ export function UserProfile() {
             profileImage={clientData.profileImage || ""}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            masterOfCerimoies={clientData.masterOfCeremonies}
           />
         </aside>
 
@@ -79,6 +84,7 @@ export function UserProfile() {
               profileImage={clientData.profileImage || ""}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              masterOfCerimoies={clientData.masterOfCeremonies}
             />
           </SheetContent>
         </Sheet>
@@ -87,7 +93,7 @@ export function UserProfile() {
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">
-                {activeTab === "profile"
+                {/* {activeTab === "profile"
                   ? "Profile"
                   : activeTab === "events"
                   ? "Events"
@@ -97,7 +103,9 @@ export function UserProfile() {
                   ? "Bookings"
                   : activeTab === "event-list"
                   ? "My Events"
-                  : "something"}
+                  : activeTab === "client-wallet"
+                  ? "Wallet"
+                  : "something"} */}
               </h2>
               {activeTab === "profile" && (
                 <Button
@@ -109,7 +117,13 @@ export function UserProfile() {
                 </Button>
               )}
               {activeTab === "event-list" && (
-                <Button size="sm" onClick={() => setActiveTab("host-event")}>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    resetEventData();
+                    setActiveTab("host-event");
+                  }}
+                >
                   Host An Event
                 </Button>
               )}
@@ -141,7 +155,10 @@ export function UserProfile() {
               )}
               {activeTab === "events" && <UserEvents />}
               {activeTab === "bookings" && <ClientBookingListing />}
-              {activeTab === "event-list" && <HostEventListing />}
+
+              {activeTab === "event-list" && (
+                <HostEventListing setActiveTab={setActiveTab} />
+              )}
               {activeTab === "host-event" && (
                 <EventAddEdit
                   setActiveTab={setActiveTab}
@@ -149,6 +166,8 @@ export function UserProfile() {
                   isHostEventEditing={isHostEventEditing}
                 />
               )}
+              {activeTab === "client-wallet" && <ClientWallet />}
+              {activeTab === "transactions" && <ClientTransactions />}
             </div>
           </Card>
         </main>

@@ -44,6 +44,7 @@ import { UpdateBookingStatusController } from "../../interfaceAdapters/controlle
 import { HostNewEventController } from "../../interfaceAdapters/controllers/event/host-new-event.controller";
 import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controllers/event/get-all-events-by-host-id.controller";
 import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
+import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -223,6 +224,10 @@ export class ControllerRegistry {
 
     container.register("GetEventDetailsByIdController", {
       useClass: GetEventDetailsByIdController,
+    });
+
+    container.register("GetAllTransactionsByUserIdUseCase", {
+      useClass: GetAllTransactionsByUserIdUseCase,
     });
   }
 }

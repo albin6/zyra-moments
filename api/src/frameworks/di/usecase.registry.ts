@@ -123,6 +123,8 @@ import { IGetAllEventsByHostIdUseCase } from "../../entities/useCaseInterfaces/e
 import { GetAllEventsByHostIdUseCase } from "../../useCases/event/get-all-events-by-host-id.usecase";
 import { IGetEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces/event/get-event-details-by-id-usecase.interface";
 import { GetEventDetailsByIdUseCase } from "../../useCases/event/get-event-details-by-id.usecase";
+import { IGetAllTransactionsByUserIdUseCase } from "../../entities/useCaseInterfaces/payment/get-all-transactions-by-userid-usecase.interface";
+import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -348,6 +350,11 @@ export class UseCaseRegistry {
     container.register<IGetEventDetailsByIdUseCase>(
       "IGetEventDetailsByIdUseCase",
       { useClass: GetEventDetailsByIdUseCase }
+    );
+
+    container.register<IGetAllTransactionsByUserIdUseCase>(
+      "IGetAllTransactionsByUserIdUseCase",
+      { useClass: GetAllTransactionsByUserIdUseCase }
     );
 
     // Register Strategies

@@ -1,4 +1,8 @@
-import { IPaymentEntity, PaymentStatus } from "../../models/payment.entity";
+import {
+  IPaymentEntity,
+  PaymentStatus,
+  PopulatedPaymentsResponse,
+} from "../../models/payment.entity";
 
 export interface IPaymentRepository {
   save(payment: Partial<IPaymentEntity>): Promise<IPaymentEntity>;
@@ -19,4 +23,10 @@ export interface IPaymentRepository {
   ): Promise<IPaymentEntity[]>;
 
   findByBookingId(bookingId: any): Promise<IPaymentEntity | null>;
+
+  findTransactionByUserId(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<PopulatedPaymentsResponse>;
 }

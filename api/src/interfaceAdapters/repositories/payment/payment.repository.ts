@@ -2,6 +2,8 @@ import { injectable } from "tsyringe";
 import {
   IPaymentEntity,
   PaymentStatus,
+  PopulatedPayments,
+  PopulatedPaymentsResponse,
 } from "../../../entities/models/payment.entity";
 import { IPaymentRepository } from "../../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { PaymentModel } from "../../../frameworks/database/models/payment.model";
@@ -39,5 +41,28 @@ export class PaymentRepository implements IPaymentRepository {
 
   async findByBookingId(bookingId: any): Promise<IPaymentEntity | null> {
     return await PaymentModel.findOne({ bookingId });
+  }
+
+  async findTransactionByUserId(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<PopulatedPaymentsResponse> {
+    const [payments, total] = await Promise.all([
+      PaymentModel.find(filter)
+        .populate({
+          path: "userId",
+          select: "firstName lastName email",
+        })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      PaymentModel.countDocuments(filter),
+    ]);
+
+    return {
+      payments: payments as unknown as PopulatedPayments[],
+      total,
+    };
   }
 }

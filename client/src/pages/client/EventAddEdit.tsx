@@ -1,6 +1,4 @@
-import EventForm, {
-  EventFormValues,
-} from "@/components/client/event-hosting/EventForm";
+import EventForm from "@/components/client/event-hosting/EventForm";
 import { useEventMutation } from "@/hooks/event/useEvent";
 import { hostNewEvent } from "@/services/event/eventService";
 import { TransformedEventData } from "@/utils/format/transformEventFormData";
@@ -11,18 +9,6 @@ interface EventAddEditProps {
   setIsHostEventEditing: React.Dispatch<React.SetStateAction<boolean>>;
   isHostEventEditing: boolean;
 }
-
-const dummyData = {
-  title: "Music Festival 2025",
-  description: "A grand music festival featuring various artists.",
-  date: new Date("2025-06-15"),
-  startTime: "18:00",
-  endTime: "23:00",
-  pricePerTicket: "50",
-  ticketLimit: "500",
-  location: "Central Park, NYC",
-  posterImage: null,
-};
 
 function EventAddEdit({ setActiveTab, isHostEventEditing }: EventAddEditProps) {
   const { mutate: newEvent } = useEventMutation(hostNewEvent);
@@ -38,7 +24,6 @@ function EventAddEdit({ setActiveTab, isHostEventEditing }: EventAddEditProps) {
   return (
     <EventForm
       onSubmit={handleSubmit}
-      initialData={dummyData}
       isEditing={isHostEventEditing}
       setActiveTab={setActiveTab}
     />

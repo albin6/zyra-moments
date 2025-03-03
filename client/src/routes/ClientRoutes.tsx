@@ -13,6 +13,7 @@ import ClientVendorBooking from "@/pages/client/ClientVendorBooking";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 import { Custom404 } from "@/components/404/Custom404";
 import HostEventFlow from "@/pages/client/HostEventFlow";
+import { EventProvider } from "@/context/EventContext";
 
 function ClientRoutes() {
   return (
@@ -36,7 +37,14 @@ function ClientRoutes() {
         <Route
           path="/profile"
           element={
-            <AuthRoute allowedRoles={["client"]} element={<UserProfile />} />
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={
+                <EventProvider>
+                  <UserProfile />
+                </EventProvider>
+              }
+            />
           }
         />
         <Route

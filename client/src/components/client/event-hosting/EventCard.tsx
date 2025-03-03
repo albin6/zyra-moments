@@ -8,13 +8,14 @@ import { useState } from "react";
 
 interface EventCardProps {
   event: PopulatedEvents;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function EventCard({ event }: EventCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <Card className="overflow-hidden" onClick={() => setIsOpen(true)}>
+      <Card className="overflow-hidden">
         <CardContent className="p-0">
           <div className="flex items-center p-6 gap-6">
             <div className="relative h-16 w-16 flex-shrink-0 rounded-md overflow-hidden">
@@ -49,7 +50,12 @@ export function EventCard({ event }: EventCardProps) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Button variant="default" size="sm" className="w-20">
+              <Button
+                onClick={() => setIsOpen(true)}
+                variant="default"
+                size="sm"
+                className="w-20"
+              >
                 View
               </Button>
               <Button variant="outline" size="sm" className="w-20">

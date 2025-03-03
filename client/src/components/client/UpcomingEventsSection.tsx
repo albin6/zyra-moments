@@ -9,42 +9,39 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const upcomingEvents = [
-  {
-    title: "Tech Conference 2025",
-    date: "May 15-17, 2025",
-    location: "San Francisco, CA",
-    attendees: 5000,
-  },
-  {
-    title: "Summer Music Festival",
-    date: "July 1-3, 2025",
-    location: "Austin, TX",
-    attendees: 15000,
-  },
-  {
-    title: "Global Business Summit",
-    date: "September 10-12, 2025",
-    location: "New York, NY",
-    attendees: 3000,
-  },
-  {
-    title: "Art & Design Expo",
-    date: "October 5-7, 2025",
-    location: "Chicago, IL",
-    attendees: 7500,
-  },
-  {
-    title: "Winter Wonderland Gala",
-    date: "December 18, 2025",
-    location: "Aspen, CO",
-    attendees: 1000,
-  },
-];
+import { getAllHostedEventsByClient } from "@/services/event/eventService";
+import { useAllHostedEvents } from "@/hooks/event/useEvent";
+import { PopulatedEvents } from "@/types/Event";
+import { useEffect, useState } from "react";
+import { Spinner } from "../ui/spinner";
+import moment from "moment";
 
 export function UpcomingEventsSection() {
   const navigate = useNavigate();
+
+  const [hostedEvents, setHostedEvents] = useState<PopulatedEvents[] | null>(
+    null
+  );
+
+  const { data, isLoading } = useAllHostedEvents(
+    getAllHostedEventsByClient,
+    1,
+    10
+  );
+
+  useEffect(() => {
+    if (data) {
+      setHostedEvents(data.events);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!hostedEvents) {
+    return null;
+  }
   return (
     <section className="py-8 sm:py-12 md:py-16 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -77,7 +74,7 @@ export function UpcomingEventsSection() {
           <div className="lg:w-2/3">
             <ScrollArea className="w-full whitespace-nowrap rounded-md border">
               <div className="flex w-max space-x-4 p-4">
-                {upcomingEvents.map((event, index) => (
+                {hostedEvents.map((event, index) => (
                   <Card
                     key={index}
                     className="w-[280px] sm:w-[300px] flex-shrink-0"
@@ -89,16 +86,18 @@ export function UpcomingEventsSection() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">
-                        {event.date}
+                        {moment(event.date).format("LLL")}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {event.location}
+                        {!event.eventLocation
+                          ? "Not Available"
+                          : event.eventLocation}
                       </p>
                     </CardContent>
                     <CardFooter className="flex justify-between items-center">
                       <div className="flex items-center text-xs sm:text-sm text-muted-foreground">
                         <CalendarDays className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
-                        {event.attendees.toLocaleString()} attendees
+                        {/* {event.attendees.toLocaleString()} attendees */}
                       </div>
                       <Button variant="ghost" size="sm">
                         Learn More

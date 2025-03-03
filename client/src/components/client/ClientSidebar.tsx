@@ -1,13 +1,22 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { User, Calendar, BarChart2, Ticket } from "lucide-react";
+import {
+  User,
+  Calendar,
+  BarChart2,
+  Ticket,
+  Wallet,
+  Currency,
+} from "lucide-react";
 
 const navItems = [
   { icon: User, label: "Profile", id: "profile" },
   { icon: Calendar, label: "Events", id: "events" },
   { icon: BarChart2, label: "Bookings", id: "bookings" },
   { icon: Ticket, label: "Host Events", id: "event-list" },
+  { icon: Wallet, label: "Wallet", id: "client-wallet" },
+  { icon: Currency, label: "Transactions", id: "transactions" },
 ];
 
 interface ClientSidebarProps {
@@ -16,6 +25,7 @@ interface ClientSidebarProps {
   profileImage: string;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  masterOfCerimoies: boolean;
 }
 
 export function ClientSidebar({
@@ -24,6 +34,7 @@ export function ClientSidebar({
   profileImage,
   activeTab,
   setActiveTab,
+  masterOfCerimoies,
 }: ClientSidebarProps) {
   return (
     <Card className="h-full p-4">
@@ -50,6 +61,7 @@ export function ClientSidebar({
               variant={activeTab === item.id ? "secondary" : "ghost"}
               className="w-full justify-start"
               onClick={() => setActiveTab(item.id)}
+              disabled={!masterOfCerimoies && item.id === "event-list"}
             >
               <item.icon className="mr-2 h-4 w-4" />
               {item.label}

@@ -21,4 +21,6 @@ export interface IClientRepository {
     id: string,
     data: Partial<IClientEntity>
   ): Promise<void>;
+
+  findByClientIdAndUpdateMCStatus(id: any): Promise<void>;
 }

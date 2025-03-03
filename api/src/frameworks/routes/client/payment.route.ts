@@ -7,6 +7,7 @@ import {
   blockStatusMiddleware,
   confirmPaymentController,
   createPaymentIntentController,
+  getAllTransactionsByUserIdController,
   handleWebHookController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -36,6 +37,15 @@ export class PaymentRoutes extends BaseRoute {
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => confirmPaymentController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/transactions",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllTransactionsByUserIdController.handle(req, res)
     );
   }
 }

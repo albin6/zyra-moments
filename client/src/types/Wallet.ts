@@ -1,10 +1,21 @@
-import { ObjectId } from "mongoose";
-import { PaymentStatus, Purpose } from "./payment.entity";
+export enum PaymentStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  REFUNDED = "REFUNDED",
+}
+
+export enum Purpose {
+  DEPOSIT = "DEPOSIT",
+  WITHDRAWAL = "WITHDRAWAL",
+  PAYMENT = "PAYMENT",
+  REFUND = "REFUND",
+}
 
 export interface IWalletEntity {
-  _id?: string | ObjectId;
-  userId: string | ObjectId;
-  paymentId: string[] | ObjectId[];
+  _id?: string;
+  userId: string;
+  paymentId: string[];
   role: string;
   balance: number;
   createdAt?: Date;
@@ -14,13 +25,13 @@ export interface IWalletEntity {
 export interface PopulatedWallet
   extends Omit<IWalletEntity, "userId" | "paymentId"> {
   userId: {
-    _id: string | ObjectId;
+    _id: string;
     firstName: string;
     lastName: string;
     email: string;
   };
   paymentId: {
-    _id: string | ObjectId;
+    _id: string;
     transactionId: string;
     amount: number;
     currency: string;

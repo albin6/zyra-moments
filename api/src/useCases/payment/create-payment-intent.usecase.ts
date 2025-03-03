@@ -5,12 +5,14 @@ import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/
 import { Purpose } from "../../entities/models/payment.entity";
 import { CustomError } from "../../entities/utils/CustomError";
 import { HTTP_STATUS } from "../../shared/constants";
+import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 
 @injectable()
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
     @inject("IPaymentService") private paymentService: IPaymentService,
-    @inject("IPaymentRepository") private paymentRepository: IPaymentRepository
+    @inject("IPaymentRepository") private paymentRepository: IPaymentRepository,
+    @inject("IClientRepository") private clientRepository: IClientRepository
   ) {}
   async execute(
     amount: number,
@@ -37,6 +39,10 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         transactionId: `TXN_${Date.now()}`,
         createdAt: new Date(),
       });
+
+      if (!bookingId && purpose === "role-upgrade") {
+        await this.clientRepository.findByClientIdAndUpdateMCStatus(userId);
+      }
 
       console.log(
         "in create payment intent paymentintent=>",

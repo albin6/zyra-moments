@@ -1,5 +1,5 @@
 import { Purpose } from "@/services/payment/paymentService";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PaymentResponse } from "@/services/payment/paymentService";
 import { Booking } from "@/types/Booking";
 
@@ -21,7 +21,11 @@ export const useRolePromoPaymentMutation = (
     purpose: Purpose;
   }) => Promise<PaymentResponse>
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: mutationFunc,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-profile"] });
+    },
   });
 };
