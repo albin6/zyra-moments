@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -25,23 +19,19 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  MoreHorizontal,
-  Wallet,
-} from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import {
-  PaymentStatus,
-  PopulatedWallet,
-  Purpose,
-  WalletTransactions,
-} from "@/types/Wallet";
+import { PaymentStatus, Purpose } from "@/types/Wallet";
 import moment from "moment";
-import { formatPrice } from "@/utils/format/formatPrice";
+import { PopulatedPayments } from "@/types/Payment";
+
+const formatCurrency = (amount: number, currency = "USD") => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(amount);
+};
 
 const StatusBadge = ({ status }: { status: PaymentStatus }) => {
   const statusVariants = {
@@ -72,35 +62,20 @@ const PurposeBadge = ({ purpose }: { purpose: Purpose }) => {
   );
 };
 
-const TransactionIcon = ({ purpose }: { purpose: Purpose }) => {
-  if (
-    purpose === Purpose.ROLE_UPGRADE ||
-    purpose === Purpose.TICKET_PURCHASE ||
-    purpose === Purpose.VENDOR_BOOKING
-  ) {
-    return <ArrowDownIcon className="h-4 w-4 text-success" />;
-  }
-  return <ArrowUpIcon className="h-4 w-4 text-destructive" />;
-};
-
-interface WalletComponentProps {
-  walletData: Omit<PopulatedWallet, "paymentId">;
-  transactions: WalletTransactions;
+interface VendorTransactionsComponentProps {
+  transactions: PopulatedPayments[];
   userRole: "client" | "vendor" | "admin";
   onRefresh?: () => void;
-  onDeposit?: () => void;
-  onWithdraw?: () => void;
 }
 
-export default function WalletComponent({
-  walletData,
+export default function VendorTransactionsComponent({
   transactions,
   userRole,
-}: WalletComponentProps) {
+}: VendorTransactionsComponentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   // const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Filter transactions based on active tab and search term
+  // // Filter transactions based on active tab and search term
   // const filteredTransactions = transactions.flatMap((wallet) =>
   //   wallet.paymentId
   //     .filter((payment) => {
@@ -131,88 +106,6 @@ export default function WalletComponent({
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Wallet Overview Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="col-span-1 md:col-span-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <div className="space-y-1">
-              <CardTitle className="text-2xl font-bold">My Wallet</CardTitle>
-              <CardDescription>
-                Manage your funds and transactions
-              </CardDescription>
-            </div>
-            <Wallet className="h-8 w-8 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col">
-              <div className="text-2xl font-bold">
-                {formatPrice(walletData.balance)}
-                {/* {walletData.balance} */}
-              </div>
-              <p className="text-xs text-muted-foreground">Available Balance</p>
-            </div>
-          </CardContent>
-          {/* <CardFooter className="flex justify-between gap-2">
-            <Button onClick={onDeposit} className="flex-1" variant="default">
-              <ArrowDownIcon className="mr-2 h-4 w-4" /> Deposit
-            </Button>
-            <Button onClick={onWithdraw} className="flex-1" variant="outline">
-              <ArrowUpIcon className="mr-2 h-4 w-4" /> Withdraw
-            </Button>
-          </CardFooter> */}
-        </Card>
-
-        <Card className="col-span-1">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Quick Stats</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                Total Deposits
-              </span>
-              <span className="font-medium">
-                {formatPrice(
-                  transactions?.paymentId
-                    ? transactions?.paymentId?.reduce(
-                        (sum, wallet) => sum + wallet.amount,
-                        0
-                      )
-                    : 0
-                )}
-              </span>
-            </div>
-            <Separator />
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                Total Withdrawals
-              </span>
-              <span className="font-medium">
-                {formatPrice(
-                  transactions.paymentId?.reduce(
-                    (sum, wallet) => sum + wallet.amount,
-                    0
-                  )
-                )}
-              </span>
-            </div>
-            <Separator />
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">
-                Pending Transactions
-              </span>
-              <span className="font-medium">
-                {
-                  transactions.paymentId?.filter(
-                    (p) => p.status === PaymentStatus.PENDING
-                  ).length
-                }
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Transactions Table Card */}
       <Card>
         <CardHeader>
@@ -277,7 +170,7 @@ export default function WalletComponent({
             </TabsList> */}
 
             <TabsContent value={activeTab} className="mt-0">
-              <ScrollArea className="w-full rounded-md">
+              <ScrollArea className="h-[400px] md:h-[500px] w-full rounded-md">
                 <Table>
                   <TableHeader className="sticky top-0 bg-background">
                     <TableRow>
@@ -291,7 +184,7 @@ export default function WalletComponent({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {transactions.paymentId?.length === 0 ? (
+                    {transactions.length === 0 ? (
                       <TableRow>
                         <TableCell
                           colSpan={userRole === "admin" ? 7 : 6}
@@ -301,27 +194,27 @@ export default function WalletComponent({
                         </TableCell>
                       </TableRow>
                     ) : (
-                      transactions.paymentId?.map((transaction) => (
+                      transactions.map((transaction) => (
                         <TableRow key={`${transaction._id}-${transaction._id}`}>
                           {userRole === "admin" && (
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <Avatar className="h-8 w-8">
                                   <AvatarImage
-                                    src={`https://ui-avatars.com/api/?name=${transactions.userId.firstName}+${transactions.userId.lastName}`}
+                                    src={`https://ui-avatars.com/api/?name=${transaction.userId.firstName}+${transaction.userId.lastName}`}
                                   />
                                   <AvatarFallback>
-                                    {transactions.userId.firstName[0] || ""}
-                                    {transactions.userId.lastName[0] || ""}
+                                    {transaction.userId.firstName[0] || ""}
+                                    {transaction.userId.lastName[0] || ""}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col">
                                   <span className="font-medium text-sm">
-                                    {transactions.userId.firstName[0] || ""}{" "}
-                                    {transactions.userId.lastName[0] || ""}
+                                    {transaction.userId.firstName[0] || ""}{" "}
+                                    {transaction.userId.lastName[0] || ""}
                                   </span>
                                   <span className="text-xs text-muted-foreground">
-                                    {transactions.userId.email}
+                                    {transaction.userId.email}
                                   </span>
                                 </div>
                               </div>
@@ -335,8 +228,9 @@ export default function WalletComponent({
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <TransactionIcon purpose={transaction.purpose} />
-                              <PurposeBadge purpose={transaction.purpose} />
+                              <PurposeBadge
+                                purpose={transaction.purpose as Purpose}
+                              />
                             </div>
                           </TableCell>
                           <TableCell
@@ -346,10 +240,15 @@ export default function WalletComponent({
                                 : "text-destructive"
                             }`}
                           >
-                            {formatPrice(walletData.balance)}
+                            {formatCurrency(
+                              transaction.amount,
+                              transaction.currency
+                            )}
                           </TableCell>
                           <TableCell>
-                            <StatusBadge status={transaction.status} />
+                            <StatusBadge
+                              status={transaction.status as PaymentStatus}
+                            />
                           </TableCell>
                           <TableCell className="text-right">
                             <DropdownMenu>

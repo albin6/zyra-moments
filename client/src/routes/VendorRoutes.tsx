@@ -7,6 +7,8 @@ import VendorBookings from "@/pages/vendor/VendorBookings";
 import VendorEditService from "@/pages/vendor/VendorEditService";
 import VendorProfile from "@/pages/vendor/VendorProfile";
 import VendorServices from "@/pages/vendor/VendorServices";
+import VendorTransactions from "@/pages/vendor/VendorTransactions";
+import VendorWallet from "@/pages/vendor/VendorWallet";
 import VendorWorkSampleDisplay from "@/pages/vendor/VendorWorkSampleDisplay";
 import VendorWorkSamples from "@/pages/vendor/VendorWorkSamples";
 import { AuthVendorRoute } from "@/protected/ProtectedRoute";
@@ -87,6 +89,24 @@ function VendorRoutes() {
             <AuthVendorRoute
               allowedRoles={["vendor"]}
               element={<VendorBookings />}
+            />
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorTransactions />}
+            />
+          }
+        />
+        <Route
+          path="/wallet"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorWallet />}
             />
           }
         />

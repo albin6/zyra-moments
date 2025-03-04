@@ -1,7 +1,13 @@
 import { clientAxiosInstance } from "@/api/client.axios";
 import { PopulatedWallet } from "@/types/Wallet";
 
-export const getClientWalletDetails = async (): Promise<PopulatedWallet> => {
-  const response = await clientAxiosInstance.get("/_cl/client/wallet");
-  return response.data;
-};
+export interface WalletDetailsResponse {
+  walletData: PopulatedWallet;
+  success: boolean;
+}
+
+export const getClientWalletDetails =
+  async (): Promise<WalletDetailsResponse> => {
+    const response = await clientAxiosInstance.get("/_cl/client/wallet");
+    return response.data;
+  };

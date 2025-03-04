@@ -9,6 +9,7 @@ import {
   getAllBookingByClientController,
   getAllCategoriesController,
   getAllServicesForBookingController,
+  getAllTransactionsByUserIdController,
   getBestVendorsController,
   getClientDetailsController,
   getVendorProfileDetailsController,
@@ -115,6 +116,16 @@ export class ClientRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         getWalletDetailsOfUserController.handle(req, res)
+    );
+
+    // transactions
+    this.router.get(
+      "/client/transactions",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllTransactionsByUserIdController.handle(req, res)
     );
 
     // logout

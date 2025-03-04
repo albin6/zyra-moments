@@ -1,11 +1,11 @@
-import TransactionsComponent from "@/components/client/TransactionsComponent";
 import { Spinner } from "@/components/ui/spinner";
-import { useClientTransactionsQuery } from "@/hooks/service/useTransactions";
+import VendorTransactionsComponent from "@/components/vendor/VendorTransactionsComponent";
+import { useVendorTransactionsQuery } from "@/hooks/service/useTransactions";
 import { PopulatedPayments } from "@/types/Payment";
 import { useEffect, useState } from "react";
 
-export default function ClientTransactions() {
-  const { data, isLoading } = useClientTransactionsQuery();
+export default function VendorTransactions() {
+  const { data, isLoading } = useVendorTransactionsQuery();
   const [transactions, setTransactions] = useState<PopulatedPayments[] | null>(
     null
   );
@@ -26,7 +26,7 @@ export default function ClientTransactions() {
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <TransactionsComponent
+      <VendorTransactionsComponent
         transactions={transactions}
         userRole="client" // Change to "vendor" or "admin" to see different views
       />

@@ -6,6 +6,9 @@ export interface ICreatePaymentIntentUseCase {
     currency: string,
     purpose: Purpose,
     userId: string,
+    recieverId: any,
+    createrType: string,
+    receiverType: string,
     bookingId?: string
   ): Promise<{
     paymentIntent: string;

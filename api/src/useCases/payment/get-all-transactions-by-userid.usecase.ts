@@ -18,7 +18,7 @@ export class GetAllTransactionsByUserIdUseCase
   ): Promise<PopulatedPaymentsResponse> {
     let filter: any = {};
     if (userId) {
-      filter.userId = userId;
+      filter.$or = [{ userId: userId }, { receiverId: userId }];
     }
 
     if (purpose) {
@@ -30,8 +30,12 @@ export class GetAllTransactionsByUserIdUseCase
     const skip = (validPageNumber - 1) * validPageSize;
     const limit = validPageSize;
 
+    console.log(filter);
+
     const { payments, total } =
       await this.paymentRepository.findTransactionByUserId(filter, skip, limit);
+
+    console.log("this is the payment queried from the db=>", payments);
 
     const response: PopulatedPaymentsResponse = {
       payments,

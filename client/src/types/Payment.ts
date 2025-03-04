@@ -1,5 +1,3 @@
-import { ObjectId } from "mongoose";
-
 export type PaymentStatus =
   | "pending"
   | "processing"
@@ -11,12 +9,10 @@ export type PaymentStatus =
 export type Purpose = "vendor-booking" | "role-upgrade" | "ticket-purchase";
 
 export interface IPaymentEntity {
-  _id?: string | ObjectId;
-  userId: string | ObjectId;
-  receiverId?: string | ObjectId;
-  bookingId?: string | ObjectId;
-  createrType: "Client" | "Vendor" | "Admin";
-  receiverType: "Client" | "Vendor" | "Admin";
+  _id?: string;
+  userId: string;
+  receiverId?: string;
+  bookingId?: string;
   transactionId: string;
   amount: number;
   currency: string;
@@ -30,15 +26,15 @@ export interface IPaymentEntity {
 export interface PopulatedPayments
   extends Omit<IPaymentEntity, "userId" | "recieverId"> {
   userId: {
-    _id: string | ObjectId;
-    firstName?: string;
-    lastName?: string;
+    _id: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
   recieverId: {
-    _id: string | ObjectId;
-    firstName?: string;
-    lastName?: string;
+    _id: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
 }

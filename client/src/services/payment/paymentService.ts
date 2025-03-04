@@ -13,6 +13,8 @@ export const makePaymentAndBooking = async (data: {
   amount: number;
   purpose: Purpose;
   bookingData: Booking;
+  createrType: string;
+  receiverType: string;
 }): Promise<PaymentResponse> => {
   const response = await clientAxiosInstance.post(
     "/_pmt/client/create-payment-intent",
@@ -20,6 +22,8 @@ export const makePaymentAndBooking = async (data: {
       amount: data.amount,
       purpose: data.purpose,
       bookingData: data.bookingData,
+      createrType: data.createrType,
+      receiverType: data.receiverType,
     }
   );
   return response.data;

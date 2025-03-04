@@ -3,8 +3,27 @@ import { IPaymentModel } from "../models/payment.model";
 
 export const paymentSchema = new Schema<IPaymentModel>(
   {
-    userId: { type: Schema.Types.ObjectId, required: true },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      refPath: "createrType",
+    },
     bookingId: { type: Schema.Types.ObjectId, default: null },
+    receiverId: {
+      type: Schema.Types.ObjectId,
+      default: null,
+      refPath: "receiverType",
+    },
+    createrType: {
+      type: String,
+      required: true,
+      enum: ["Client", "Vendor", "Admin"],
+    },
+    receiverType: {
+      type: String,
+      required: true,
+      enum: ["Client", "Vendor", "Admin"],
+    },
     transactionId: { type: String, required: true, unique: true },
     amount: { type: Number, min: 0, required: true },
     currency: { type: String, required: true },

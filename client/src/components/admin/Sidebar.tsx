@@ -10,12 +10,15 @@ import {
   Settings,
   LogOut,
   ChartBarStacked,
+  Wallet,
+  ArrowLeftRight,
 } from "lucide-react";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/userSlice";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
+import { logoutAdmin } from "@/services/auth/authService";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -39,6 +42,16 @@ const adminRoutes = [
     path: "/admin/ad_pvt/events",
     label: "Events",
     icon: <CalendarDays className="mr-2 h-4 w-4" />,
+  },
+  {
+    path: "/admin/ad_pvt/wallet",
+    label: "Wallet",
+    icon: <Wallet className="mr-2 h-4 w-4" />,
+  },
+  {
+    path: "/admin/ad_pvt/transactions",
+    label: "Transactions",
+    icon: <ArrowLeftRight className="mr-2 h-4 w-4" />,
   },
 ];
 
@@ -68,7 +81,7 @@ export function Sidebar({ className }: SidebarProps) {
 function SidebarContent() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { mutate: logoutReq } = useLogout();
+  const { mutate: logoutReq } = useLogout(logoutAdmin);
   const dispatch = useDispatch();
 
   const logoutUser = () => {

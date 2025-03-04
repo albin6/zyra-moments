@@ -3,7 +3,9 @@ import {
   createNewCategoryController,
   getAllCategoryJoinRequestController,
   getAllPaginatedCategoryController,
+  getAllTransactionsByUserIdController,
   getAllUsersController,
+  getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
   updateCategoryRequestStatusController,
@@ -80,6 +82,24 @@ export class AdminRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       (req: Request, res: Response) =>
         updateUserStatusController.handle(req, res)
+    );
+
+    // wallet
+    this.router.get(
+      "/admin/wallet",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        getWalletDetailsOfUserController.handle(req, res)
+    );
+
+    // transactions
+    this.router.get(
+      "/admin/transactions",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        getAllTransactionsByUserIdController.handle(req, res)
     );
 
     this.router.post(

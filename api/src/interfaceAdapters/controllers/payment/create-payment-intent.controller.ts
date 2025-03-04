@@ -25,7 +25,14 @@ export class CreatePaymentIntentController
   async handle(req: Request, res: Response): Promise<void> {
     try {
       const userId = (req as CustomRequest).user.id;
-      const { amount, currency = "usd", purpose, bookingData } = req.body;
+      const {
+        amount,
+        currency = "usd",
+        purpose,
+        bookingData,
+        createrType,
+        receiverType,
+      } = req.body;
 
       const amountInCents = Math.round(amount * 100);
 
@@ -71,6 +78,9 @@ export class CreatePaymentIntentController
             currency,
             purpose,
             userId,
+            bookingData.vendorId,
+            createrType,
+            receiverType,
             newBooking?._id as string
           );
 
@@ -101,7 +111,10 @@ export class CreatePaymentIntentController
           amountInCents,
           currency,
           purpose,
-          userId
+          userId,
+          "67c672337b3e284a71d98fd5" as any,
+          "Client",
+          "Admin"
         );
 
         res.json({

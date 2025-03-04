@@ -50,7 +50,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     setIsSuccess(false);
 
     proceedPayment(
-      { amount, purpose: "vendor-booking", bookingData: getBookingData() },
+      {
+        amount,
+        purpose: "vendor-booking",
+        bookingData: getBookingData(),
+        createrType: "Client",
+        receiverType: "Vendor",
+      },
       {
         onSuccess: async (data) => {
           const { error: stripeError, paymentIntent } =

@@ -54,6 +54,10 @@ export class PaymentRepository implements IPaymentRepository {
           path: "userId",
           select: "firstName lastName email",
         })
+        .populate({
+          path: "receiverId",
+          select: "firstName lastName email",
+        })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),

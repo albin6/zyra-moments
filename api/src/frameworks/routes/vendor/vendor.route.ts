@@ -8,10 +8,12 @@ import {
   getAllBookingForVendorController,
   getAllCategoriesController,
   getAllServicesByVendorIdController,
+  getAllTransactionsByUserIdController,
   getAllWorkSampleByVendorIdController,
   getServiceDetailsByIdController,
   getVendorCategoryJoinRequestStatusController,
   getVendorDetailsController,
+  getWalletDetailsOfUserController,
   getWorkSampleByIdController,
   joinCategoryController,
   logoutUserController,
@@ -167,6 +169,26 @@ export class VendorRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         updateBookingStatusController.handle(req, res)
+    );
+
+    // wallet
+    this.router.get(
+      "/vendor/wallet",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getWalletDetailsOfUserController.handle(req, res)
+    );
+
+    // transactions
+    this.router.get(
+      "/vendor/transactions",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllTransactionsByUserIdController.handle(req, res)
     );
 
     this.router.put(

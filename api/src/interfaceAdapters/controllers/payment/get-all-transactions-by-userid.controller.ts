@@ -27,7 +27,7 @@ export class GetAllTransactionsByUserIdController
       const { payments, total } =
         await this.getAllTransactionsByUserIdUseCase.execute(
           userId,
-          purposeString,
+          "",
           pageNumber,
           pageSize
         );

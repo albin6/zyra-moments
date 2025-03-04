@@ -8,6 +8,8 @@ export const useVendorBookingPaymentMutation = (
     amount: number;
     purpose: Purpose;
     bookingData: Booking;
+    createrType: string;
+    receiverType: string;
   }) => Promise<PaymentResponse>
 ) => {
   return useMutation({

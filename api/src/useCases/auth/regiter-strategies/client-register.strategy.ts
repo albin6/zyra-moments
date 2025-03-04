@@ -50,7 +50,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
         role: "client",
       });
 
-      await this.walletRepository.create(client._id);
+      await this.walletRepository.create(client._id, "Client", "client");
 
       return client;
     } else {

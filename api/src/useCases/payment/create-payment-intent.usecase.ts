@@ -6,6 +6,7 @@ import { Purpose } from "../../entities/models/payment.entity";
 import { CustomError } from "../../entities/utils/CustomError";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
+import { any } from "zod";
 
 @injectable()
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
@@ -19,6 +20,9 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
     currency: string,
     purpose: Purpose,
     userId: string,
+    receiverId: any,
+    createrType: string,
+    receiverType: string,
     bookingId?: string
   ): Promise<{
     paymentIntent: string;
@@ -30,7 +34,10 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
 
       await this.paymentRepository.save({
         userId,
+        receiverId,
         bookingId,
+        createrType: createrType as any,
+        receiverType: receiverType as any,
         amount,
         currency,
         purpose,

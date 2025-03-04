@@ -1,18 +1,18 @@
-import WalletComponent from "@/components/WalletComponent";
 import { Spinner } from "@/components/ui/spinner";
-import { useClientWallet } from "@/hooks/wallet/useWallet";
-import { PopulatedWallet } from "@/types/Wallet";
+import WalletComponent from "@/components/WalletComponent";
+import { useVendorWallet } from "@/hooks/wallet/useWallet";
+import { PopulatedWallet, WalletTransactions } from "@/types/Wallet";
 import { useEffect, useState } from "react";
 
 // Example usage of the wallet component
-export default function ClientWallet() {
-  const { data, isLoading } = useClientWallet();
+export default function VendorWallet() {
+  const { data, isLoading } = useVendorWallet();
 
   const [walletData, setWalletData] = useState<Omit<
     PopulatedWallet,
     "paymentId"
   > | null>(null);
-  const [transactions, setTransactions] = useState<PopulatedWallet | null>(
+  const [transactions, setTransactions] = useState<WalletTransactions | null>(
     null
   );
 
@@ -20,7 +20,10 @@ export default function ClientWallet() {
     if (data) {
       setWalletData(data.walletData);
 
-      setTransactions(data.walletData);
+      setTransactions({
+        userId: data.walletData.userId,
+        paymentId: data.walletData.paymentId,
+      });
     }
   }, [data]);
 

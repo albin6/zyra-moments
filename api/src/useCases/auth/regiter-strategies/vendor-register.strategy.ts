@@ -50,7 +50,7 @@ export class VendorRegisterStrategy implements IRegisterStrategy {
         role: "vendor",
       });
 
-      await this.walletRepository.create(vendor._id);
+      await this.walletRepository.create(vendor._id, "Vendor", "vendor");
 
       return vendor;
     } else {

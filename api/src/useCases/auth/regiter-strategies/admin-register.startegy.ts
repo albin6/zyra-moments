@@ -35,7 +35,7 @@ export class AdminRegisterStrategy implements IRegisterStrategy {
         role: "admin",
       });
 
-      await this.walletRepository.create(admin._id);
+      await this.walletRepository.create(admin._id, "Admin", "admin");
     } else {
       throw new CustomError(
         "Invalid role for admin registration",
