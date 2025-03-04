@@ -7,12 +7,14 @@ import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
 import { IUserEntity } from "../../../entities/models/user.entity";
+import { IWalletRepository } from "../../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class ClientRegisterStrategy implements IRegisterStrategy {
   constructor(
     @inject("IClientRepository") private clientRepository: IClientRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
+    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt,
+    @inject("IWalletRepository") private walletRepository: IWalletRepository
   ) {}
 
   async register(user: UserDTO): Promise<IUserEntity | void> {
@@ -38,7 +40,7 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
 
       const clientId = generateRandomUUID();
 
-      return await this.clientRepository.save({
+      const client = await this.clientRepository.save({
         firstName,
         lastName,
         phoneNumber,
@@ -47,6 +49,10 @@ export class ClientRegisterStrategy implements IRegisterStrategy {
         clientId,
         role: "client",
       });
+
+      await this.walletRepository.create(client._id);
+
+      return client;
     } else {
       throw new CustomError(
         "Invalid role for client registration",

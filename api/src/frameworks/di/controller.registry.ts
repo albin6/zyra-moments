@@ -45,6 +45,7 @@ import { HostNewEventController } from "../../interfaceAdapters/controllers/even
 import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controllers/event/get-all-events-by-host-id.controller";
 import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
 import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
+import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/controllers/wallet/get-wallet-details-of-user.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -228,6 +229,10 @@ export class ControllerRegistry {
 
     container.register("GetAllTransactionsByUserIdUseCase", {
       useClass: GetAllTransactionsByUserIdUseCase,
+    });
+
+    container.register("GetWalletDetailsOfUserController", {
+      useClass: GetWalletDetailsOfUserController,
     });
   }
 }

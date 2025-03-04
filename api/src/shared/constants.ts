@@ -62,6 +62,7 @@ export const ERROR_MESSAGES = {
   INVALID_TIME_SLOT: "The requested time slot is not available",
   TIME_SLOT_FULL: "The requested time slot is already at full capacity",
   ROUTE_NOT_FOUND: "Route not found.",
+  ID_NOT_PROVIDED: "ID not provided",
 };
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

@@ -4,6 +4,7 @@ import { PaymentStatus, Purpose } from "./payment.entity";
 export interface IWalletEntity {
   _id?: string | ObjectId;
   userId: string | ObjectId;
+  userType: "Client" | "Vendor" | "Admin";
   paymentId: string[] | ObjectId[];
   role: string;
   balance: number;
@@ -20,12 +21,16 @@ export interface PopulatedWallet
     email: string;
   };
   paymentId: {
-    _id: string | ObjectId;
+    _id?: string | ObjectId;
+    userId: string | ObjectId;
+    bookingId?: string | ObjectId;
     transactionId: string;
     amount: number;
     currency: string;
     status: PaymentStatus;
     paymentIntentId?: string;
     purpose: Purpose;
+    createdAt?: Date;
+    updatedAt?: Date;
   }[];
 }

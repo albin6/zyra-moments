@@ -7,12 +7,14 @@ import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
 import { IUserEntity } from "../../../entities/models/user.entity";
+import { IWalletRepository } from "../../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class VendorRegisterStrategy implements IRegisterStrategy {
   constructor(
     @inject("IVendorRepository") private vendorRepository: IVendorRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
+    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt,
+    @inject("IWalletRepository") private walletRepository: IWalletRepository
   ) {}
 
   async register(user: UserDTO): Promise<IUserEntity | void> {
@@ -38,7 +40,7 @@ export class VendorRegisterStrategy implements IRegisterStrategy {
 
       const vendorId = generateRandomUUID();
 
-      return await this.vendorRepository.save({
+      const vendor = await this.vendorRepository.save({
         firstName,
         lastName,
         phoneNumber,
@@ -47,6 +49,10 @@ export class VendorRegisterStrategy implements IRegisterStrategy {
         vendorId,
         role: "vendor",
       });
+
+      await this.walletRepository.create(vendor._id);
+
+      return vendor;
     } else {
       throw new CustomError(
         "Invalid role for vendor registration",

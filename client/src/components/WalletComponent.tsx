@@ -39,19 +39,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { PaymentStatus, PopulatedWallet, Purpose } from "@/types/Wallet";
-
-// Types from your interfaces
-
-// Helper function to format date
-const formatDate = (date: Date | undefined) => {
-  if (!date) return "N/A";
-  return new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
+import {
+  PaymentStatus,
+  PopulatedWallet,
+  Purpose,
+  WalletTransactions,
+} from "@/types/Wallet";
+import moment from "moment";
 
 // Helper function to format currency
 const formatCurrency = (amount: number, currency = "USD") => {
@@ -80,10 +74,9 @@ const StatusBadge = ({ status }: { status: PaymentStatus }) => {
 // Purpose badge component
 const PurposeBadge = ({ purpose }: { purpose: Purpose }) => {
   const purposeVariants = {
-    [Purpose.DEPOSIT]: "bg-success/20 text-success",
-    [Purpose.WITHDRAWAL]: "bg-warning/20 text-warning",
-    [Purpose.PAYMENT]: "bg-primary/20 text-primary",
-    [Purpose.REFUND]: "bg-info/20 text-info",
+    [Purpose.ROLE_UPGRADE]: "bg-success/20 text-success",
+    [Purpose.TICKET_PURCHASE]: "bg-warning/20 text-warning",
+    [Purpose.VENDOR_BOOKING]: "bg-primary/20 text-primary",
   };
 
   return (
@@ -95,15 +88,19 @@ const PurposeBadge = ({ purpose }: { purpose: Purpose }) => {
 
 // Transaction icon component
 const TransactionIcon = ({ purpose }: { purpose: Purpose }) => {
-  if (purpose === Purpose.DEPOSIT || purpose === Purpose.REFUND) {
+  if (
+    purpose === Purpose.ROLE_UPGRADE ||
+    purpose === Purpose.TICKET_PURCHASE ||
+    purpose === Purpose.VENDOR_BOOKING
+  ) {
     return <ArrowDownIcon className="h-4 w-4 text-success" />;
   }
   return <ArrowUpIcon className="h-4 w-4 text-destructive" />;
 };
 
 interface WalletComponentProps {
-  walletData: PopulatedWallet;
-  transactions: PopulatedWallet[];
+  walletData: Omit<PopulatedWallet, "paymentId">;
+  transactions: WalletTransactions;
   userRole: "client" | "vendor" | "admin";
   onRefresh?: () => void;
   onDeposit?: () => void;
@@ -122,33 +119,33 @@ export default function WalletComponent({
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Filter transactions based on active tab and search term
-  const filteredTransactions = transactions.flatMap((wallet) =>
-    wallet.paymentId
-      .filter((payment) => {
-        const matchesTab =
-          activeTab === "all" ||
-          payment.purpose.toLowerCase() === activeTab.toLowerCase();
+  // const filteredTransactions = transactions.flatMap((wallet) =>
+  //   wallet.paymentId
+  //     .filter((payment) => {
+  //       const matchesTab =
+  //         activeTab === "all" ||
+  //         payment.purpose.toLowerCase() === activeTab.toLowerCase();
 
-        const matchesSearch =
-          searchTerm === "" ||
-          payment.transactionId
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          wallet.userId.firstName
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          wallet.userId.lastName
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          wallet.userId.email.toLowerCase().includes(searchTerm.toLowerCase());
+  //       const matchesSearch =
+  //         searchTerm === "" ||
+  //         payment.transactionId
+  //           .toLowerCase()
+  //           .includes(searchTerm.toLowerCase()) ||
+  //         wallet.userId.firstName
+  //           .toLowerCase()
+  //           .includes(searchTerm.toLowerCase()) ||
+  //         wallet.userId.lastName
+  //           .toLowerCase()
+  //           .includes(searchTerm.toLowerCase()) ||
+  //         wallet.userId.email.toLowerCase().includes(searchTerm.toLowerCase());
 
-        return matchesTab && matchesSearch;
-      })
-      .map((payment) => ({
-        ...wallet,
-        paymentId: payment,
-      }))
-  );
+  //       return matchesTab && matchesSearch;
+  //     })
+  //     .map((payment) => ({
+  //       ...wallet,
+  //       paymentId: payment,
+  //     }))
+  // );
 
   return (
     <div className="flex flex-col gap-6">
@@ -193,16 +190,12 @@ export default function WalletComponent({
               </span>
               <span className="font-medium">
                 {formatCurrency(
-                  transactions.reduce(
-                    (sum, wallet) =>
-                      sum +
-                      wallet.paymentId
-                        .filter(
-                          (payment) => payment.purpose === Purpose.DEPOSIT
-                        )
-                        .reduce((pSum, p) => pSum + p.amount, 0),
-                    0
-                  )
+                  transactions?.paymentId
+                    ? transactions?.paymentId?.reduce(
+                        (sum, wallet) => sum + wallet.amount,
+                        0
+                      )
+                    : 0
                 )}
               </span>
             </div>
@@ -213,14 +206,8 @@ export default function WalletComponent({
               </span>
               <span className="font-medium">
                 {formatCurrency(
-                  transactions.reduce(
-                    (sum, wallet) =>
-                      sum +
-                      wallet.paymentId
-                        .filter(
-                          (payment) => payment.purpose === Purpose.WITHDRAWAL
-                        )
-                        .reduce((pSum, p) => pSum + p.amount, 0),
+                  transactions.paymentId?.reduce(
+                    (sum, wallet) => sum + wallet.amount,
                     0
                   )
                 )}
@@ -232,14 +219,11 @@ export default function WalletComponent({
                 Pending Transactions
               </span>
               <span className="font-medium">
-                {transactions.reduce(
-                  (count, wallet) =>
-                    count +
-                    wallet.paymentId.filter(
-                      (p) => p.status === PaymentStatus.PENDING
-                    ).length,
-                  0
-                )}
+                {
+                  transactions.paymentId?.filter(
+                    (p) => p.status === PaymentStatus.PENDING
+                  ).length
+                }
               </span>
             </div>
           </CardContent>
@@ -324,7 +308,7 @@ export default function WalletComponent({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredTransactions.length === 0 ? (
+                    {transactions.paymentId?.length === 0 ? (
                       <TableRow>
                         <TableCell
                           colSpan={userRole === "admin" ? 7 : 6}
@@ -334,73 +318,61 @@ export default function WalletComponent({
                         </TableCell>
                       </TableRow>
                     ) : (
-                      filteredTransactions.map((transaction) => (
-                        <TableRow
-                          key={`${transaction._id}-${transaction.paymentId._id}`}
-                        >
+                      transactions.paymentId?.map((transaction) => (
+                        <TableRow key={`${transaction._id}-${transaction._id}`}>
                           {userRole === "admin" && (
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <Avatar className="h-8 w-8">
                                   <AvatarImage
-                                    src={`https://ui-avatars.com/api/?name=${transaction.userId.firstName}+${transaction.userId.lastName}`}
+                                    src={`https://ui-avatars.com/api/?name=${transactions.userId.firstName}+${transactions.userId.lastName}`}
                                   />
                                   <AvatarFallback>
-                                    {transaction.userId.firstName[0]}
-                                    {transaction.userId.lastName[0]}
+                                    {transactions.userId.firstName[0] || ""}
+                                    {transactions.userId.lastName[0] || ""}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col">
                                   <span className="font-medium text-sm">
-                                    {transaction.userId.firstName}{" "}
-                                    {transaction.userId.lastName}
+                                    {transactions.userId.firstName[0] || ""}{" "}
+                                    {transactions.userId.lastName[0] || ""}
                                   </span>
                                   <span className="text-xs text-muted-foreground">
-                                    {transaction.userId.email}
+                                    {transactions.userId.email}
                                   </span>
                                 </div>
                               </div>
                             </TableCell>
                           )}
                           <TableCell className="font-medium">
-                            {transaction.paymentId.transactionId}
+                            {transaction.transactionId}
                           </TableCell>
                           <TableCell>
-                            {formatDate(transaction.createdAt)}
+                            {moment(transaction.createdAt).format("LLL")}
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              <TransactionIcon
-                                purpose={transaction.paymentId.purpose}
-                              />
-                              <PurposeBadge
-                                purpose={transaction.paymentId.purpose}
-                              />
+                              <TransactionIcon purpose={transaction.purpose} />
+                              <PurposeBadge purpose={transaction.purpose} />
                             </div>
                           </TableCell>
                           <TableCell
-                            className={
-                              transaction.paymentId.purpose ===
-                                Purpose.DEPOSIT ||
-                              transaction.paymentId.purpose === Purpose.REFUND
+                            className={`${
+                              transaction.status === PaymentStatus.COMPLETED
                                 ? "text-success"
                                 : "text-destructive"
-                            }
+                            }`}
                           >
-                            {transaction.paymentId.purpose ===
-                              Purpose.DEPOSIT ||
-                            transaction.paymentId.purpose === Purpose.REFUND
+                            {transaction.status === PaymentStatus.REFUNDED
                               ? "+"
                               : "-"}
                             {formatCurrency(
-                              transaction.paymentId.amount,
-                              transaction.paymentId.currency
+                              transaction.amount,
+                              transaction.currency
                             )}
                           </TableCell>
                           <TableCell>
-                            <StatusBadge
-                              status={transaction.paymentId.status}
-                            />
+                            <StatusBadge status={transaction.status} />
                           </TableCell>
                           <TableCell className="text-right">
                             <DropdownMenu>
@@ -419,7 +391,7 @@ export default function WalletComponent({
                                   Download Receipt
                                 </DropdownMenuItem>
                                 {userRole === "admin" &&
-                                  transaction.paymentId.status ===
+                                  transaction.status ===
                                     PaymentStatus.PENDING && (
                                     <>
                                       <DropdownMenuSeparator />

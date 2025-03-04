@@ -13,6 +13,7 @@ import {
   getClientDetailsController,
   getVendorProfileDetailsController,
   getVendorsUnderCategoryController,
+  getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
   updateBookingStatusController,
@@ -104,6 +105,16 @@ export class ClientRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         updateBookingStatusController.handle(req, res)
+    );
+
+    // wallet
+    this.router.get(
+      "/client/wallet",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getWalletDetailsOfUserController.handle(req, res)
     );
 
     // logout

@@ -5,12 +5,14 @@ import { AdminDTO, UserDTO } from "../../../shared/dtos/user.dto";
 import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { IWalletRepository } from "../../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class AdminRegisterStrategy implements IRegisterStrategy {
   constructor(
     @inject("IAdminRepository") private adminRepository: IAdminRepository,
-    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt
+    @inject("IPasswordBcrypt") private passwordBcrypt: IBcrypt,
+    @inject("IWalletRepository") private walletRepository: IWalletRepository
   ) {}
 
   async register(user: UserDTO): Promise<void> {
@@ -27,11 +29,13 @@ export class AdminRegisterStrategy implements IRegisterStrategy {
 
       const hashedPassword = await this.passwordBcrypt.hash(password);
 
-      await this.adminRepository.save({
+      const admin = await this.adminRepository.save({
         email,
         password: hashedPassword,
         role: "admin",
       });
+
+      await this.walletRepository.create(admin._id);
     } else {
       throw new CustomError(
         "Invalid role for admin registration",

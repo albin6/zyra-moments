@@ -125,6 +125,8 @@ import { IGetEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces/ev
 import { GetEventDetailsByIdUseCase } from "../../useCases/event/get-event-details-by-id.usecase";
 import { IGetAllTransactionsByUserIdUseCase } from "../../entities/useCaseInterfaces/payment/get-all-transactions-by-userid-usecase.interface";
 import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
+import { IGetWalletDetailsOfUserUseCase } from "../../entities/useCaseInterfaces/wallet/get-wallet-details-of-user-usecase.interface";
+import { GetWalletDetailsOfUserUseCase } from "../../useCases/wallet/get-wallet-details-of-user.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -355,6 +357,11 @@ export class UseCaseRegistry {
     container.register<IGetAllTransactionsByUserIdUseCase>(
       "IGetAllTransactionsByUserIdUseCase",
       { useClass: GetAllTransactionsByUserIdUseCase }
+    );
+
+    container.register<IGetWalletDetailsOfUserUseCase>(
+      "IGetWalletDetailsOfUserUseCase",
+      { useClass: GetWalletDetailsOfUserUseCase }
     );
 
     // Register Strategies

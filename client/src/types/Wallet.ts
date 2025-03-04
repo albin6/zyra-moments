@@ -1,20 +1,20 @@
 export enum PaymentStatus {
-  PENDING = "PENDING",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-  REFUNDED = "REFUNDED",
+  PENDING = "pending",
+  COMPLETED = "succeeded",
+  FAILED = "failed",
+  REFUNDED = "refunded",
 }
 
 export enum Purpose {
-  DEPOSIT = "DEPOSIT",
-  WITHDRAWAL = "WITHDRAWAL",
-  PAYMENT = "PAYMENT",
-  REFUND = "REFUND",
+  VENDOR_BOOKING = "vendor-booking",
+  ROLE_UPGRADE = "role-upgrade",
+  TICKET_PURCHASE = "ticket-purchase",
 }
 
 export interface IWalletEntity {
   _id?: string;
   userId: string;
+  userType: "Client" | "Vendor" | "Admin";
   paymentId: string[];
   role: string;
   balance: number;
@@ -31,12 +31,18 @@ export interface PopulatedWallet
     email: string;
   };
   paymentId: {
-    _id: string;
+    _id?: string;
+    userId: string;
+    bookingId?: string;
     transactionId: string;
     amount: number;
     currency: string;
     status: PaymentStatus;
     paymentIntentId?: string;
     purpose: Purpose;
+    createdAt?: Date;
+    updatedAt?: Date;
   }[];
 }
+
+export type WalletTransactions = Pick<PopulatedWallet, "userId" | "paymentId">;
