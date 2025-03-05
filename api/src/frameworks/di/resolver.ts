@@ -48,6 +48,8 @@ import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controll
 import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
 import { GetAllTransactionsByUserIdController } from "../../interfaceAdapters/controllers/payment/get-all-transactions-by-userid.controller";
 import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/controllers/wallet/get-wallet-details-of-user.controller";
+import { CreateTicketController } from "../../interfaceAdapters/controllers/event/ticket/create-ticket.controller";
+import { MarkAttendanceController } from "../../interfaceAdapters/controllers/event/ticket/mark-attendance.controller";
 
 DependencyInjection.registerAll();
 
@@ -219,4 +221,10 @@ export const getAllTransactionsByUserIdController = container.resolve(
 
 export const getWalletDetailsOfUserController = container.resolve(
   GetWalletDetailsOfUserController
+);
+
+export const createTicketController = container.resolve(CreateTicketController);
+
+export const markAttendanceController = container.resolve(
+  MarkAttendanceController
 );

@@ -1,8 +1,10 @@
 import * as QRCode from "qrcode";
 import * as crypto from "crypto";
 import { IQrCodeService } from "../../entities/services/qr-code-service.interface";
+import { injectable } from "tsyringe";
 
-export class QRCodeService implements IQrCodeService {
+@injectable()
+export class QrCodeService implements IQrCodeService {
   generateUniqueQRCode(eventId: string, userId: string): string {
     const uniqueString = `${eventId}-${userId}-${Date.now()}-${crypto
       .randomBytes(16)

@@ -46,6 +46,8 @@ import { GetAllEventsByHostIdController } from "../../interfaceAdapters/controll
 import { GetEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/get-event-details-by-id.controller";
 import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
 import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/controllers/wallet/get-wallet-details-of-user.controller";
+import { CreateTicketController } from "../../interfaceAdapters/controllers/event/ticket/create-ticket.controller";
+import { MarkAttendanceController } from "../../interfaceAdapters/controllers/event/ticket/mark-attendance.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -233,6 +235,14 @@ export class ControllerRegistry {
 
     container.register("GetWalletDetailsOfUserController", {
       useClass: GetWalletDetailsOfUserController,
+    });
+
+    container.register("CreateTicketController", {
+      useClass: CreateTicketController,
+    });
+
+    container.register("MarkAttendanceController", {
+      useClass: MarkAttendanceController,
     });
   }
 }

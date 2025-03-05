@@ -1,7 +1,9 @@
+import { injectable } from "tsyringe";
 import { ITicketEntity } from "../../../entities/models/ticket.entity";
 import { ITicketRepository } from "../../../entities/repositoryInterfaces/event/ticket-repository.interface";
 import { TicketModel } from "../../../frameworks/database/models/ticket.model";
 
+@injectable()
 export class TicketRepository implements ITicketRepository {
   async create(ticket: ITicketEntity): Promise<ITicketEntity> {
     return await TicketModel.create(ticket);

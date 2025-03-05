@@ -22,6 +22,8 @@ import { IUserExistenceService } from "../../entities/services/user-existence-se
 import { UserExistenceService } from "../../interfaceAdapters/services/use-existence.service";
 import { IPaymentService } from "../../entities/services/payement-service.interface";
 import { StripeService } from "../../interfaceAdapters/services/stripe.service";
+import { IQrCodeService } from "../../entities/services/qr-code-service.interface";
+import { QrCodeService } from "../../interfaceAdapters/services/qr-code.service";
 
 import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
 import { RegisterUserUseCase } from "../../useCases/auth/register-user.usecase";
@@ -127,6 +129,10 @@ import { IGetAllTransactionsByUserIdUseCase } from "../../entities/useCaseInterf
 import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-all-transactions-by-userid.usecase";
 import { IGetWalletDetailsOfUserUseCase } from "../../entities/useCaseInterfaces/wallet/get-wallet-details-of-user-usecase.interface";
 import { GetWalletDetailsOfUserUseCase } from "../../useCases/wallet/get-wallet-details-of-user.usecase";
+import { ICreateTicketUseCase } from "../../entities/useCaseInterfaces/event/ticket/create-ticket-usecase.interface";
+import { CreateTicketUseCase } from "../../useCases/event/ticket/create-ticket.usecase";
+import { IMarkAttendanceUseCase } from "../../entities/useCaseInterfaces/event/ticket/mark-attendance-usecase.interface";
+import { MarkAttendanceUseCase } from "../../useCases/event/ticket/mark-attendance.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -263,6 +269,11 @@ export class UseCaseRegistry {
       { useClass: UpdateCategoryStatusUseCase }
     );
 
+    container.register<IUpdateCategoryRequestStatusUseCase>(
+      "IUpdateCategoryRequestStatusUseCase",
+      { useClass: UpdateCategoryRequestStatusUseCase }
+    );
+
     container.register<ICreateServiceUseCase>("ICreateServiceUseCase", {
       useClass: CreateServiceUseCase,
     });
@@ -364,6 +375,14 @@ export class UseCaseRegistry {
       { useClass: GetWalletDetailsOfUserUseCase }
     );
 
+    container.register<ICreateTicketUseCase>("ICreateTicketUseCase", {
+      useClass: CreateTicketUseCase,
+    });
+
+    container.register<IMarkAttendanceUseCase>("IMarkAttendanceUseCase", {
+      useClass: MarkAttendanceUseCase,
+    });
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -412,13 +431,12 @@ export class UseCaseRegistry {
       useClass: JwtService,
     });
 
-    container.register<IUpdateCategoryRequestStatusUseCase>(
-      "IUpdateCategoryRequestStatusUseCase",
-      { useClass: UpdateCategoryRequestStatusUseCase }
-    );
-
     container.register<IPaymentService>("IPaymentService", {
       useClass: StripeService,
+    });
+
+    container.register<IQrCodeService>("IQrCodeService", {
+      useClass: QrCodeService,
     });
   }
 }
