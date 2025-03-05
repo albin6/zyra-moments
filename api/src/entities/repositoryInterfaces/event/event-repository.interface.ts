@@ -7,6 +7,8 @@ import {
 export interface IEventRepository {
   save(data: IEventEntity): Promise<void>;
 
+  findById(id: any): Promise<IEventEntity | null>;
+
   findAllEventsByHostId(
     hostId: any,
     skip: number,

@@ -13,6 +13,10 @@ export class EventRepository implements IEventRepository {
     await EventModel.create(data);
   }
 
+  async findById(id: any): Promise<IEventEntity | null> {
+    return await EventModel.findById(id);
+  }
+
   async findAllEventsByHostId(
     hostId: any,
     skip: number,
