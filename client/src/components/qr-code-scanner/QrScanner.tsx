@@ -12,26 +12,32 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 
-export default function MinimalQRScanner() {
+export default function QRScanner() {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [facingMode, setFacingMode] = useState<"environment" | "user">(
-    "environment"
-  );
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
+  const [facingMode, setFacingMode] = useState<"environment" | "user">("user");
 
   const html5QrCodeRef = useRef<Html5Qrcode | null>(null);
   const scannerContainerRef = useRef<HTMLDivElement>(null);
 
   // Initialize scanner
   useEffect(() => {
-    if (!scannerContainerRef.current) return;
+    console.log("Initializing scanner...", hasPermission);
+    console.log("Scanner container ref:", scannerContainerRef);
+
+    if (!scannerContainerRef.current) {
+      console.warn("Scanner container not found in DOM");
+      return;
+    }
 
     const checkPermissions = async () => {
       try {
+        console.log("Attempting to get camera permission...");
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
         });
+        console.log("Camera permission granted");
         setHasPermission(true);
         stream.getTracks().forEach((track) => track.stop());
       } catch (error) {
@@ -42,10 +48,8 @@ export default function MinimalQRScanner() {
 
     checkPermissions();
 
-    // Initialize Html5Qrcode instance
     html5QrCodeRef.current = new Html5Qrcode("qr-reader");
 
-    // Cleanup function
     return () => {
       if (
         html5QrCodeRef.current?.getState() === Html5QrcodeScannerState.SCANNING
@@ -57,13 +61,14 @@ export default function MinimalQRScanner() {
           );
       }
     };
-  }, []);
+  }, [scannerContainerRef]);
 
   // Start/stop scanning based on the scanning state
   useEffect(() => {
     if (!html5QrCodeRef.current) return;
 
     const startScanner = async () => {
+      console.log("Starting scanner with facingMode:", facingMode);
       if (!html5QrCodeRef.current) return;
 
       try {
@@ -122,6 +127,8 @@ export default function MinimalQRScanner() {
   const handleScan = (decodedText: string) => {
     setResult(decodedText);
     setScanning(false);
+
+    console.log("this is the decoded data ==>", decodedText);
 
     toast.success("QR Code Scanned");
 
@@ -225,9 +232,7 @@ export default function MinimalQRScanner() {
                 className="aspect-square w-full overflow-hidden rounded-lg border"
                 ref={scannerContainerRef}
               >
-                {/* This div will be used by html5-qrcode */}
                 <div id="qr-reader" className="h-full w-full"></div>
-
                 {!scanning && result && (
                   <div className="absolute inset-0 flex items-center justify-center bg-background/90">
                     <div className="text-center p-4 max-w-[90%]">
@@ -266,15 +271,14 @@ export default function MinimalQRScanner() {
                     </div>
                   </div>
                 )}
-              </div>
-
-              {scanning && (
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="h-full w-full flex items-center justify-center">
-                    <div className="border-2 border-primary w-[70%] h-[70%] rounded-lg animate-pulse opacity-50"></div>
+                {scanning && (
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="h-full w-full flex items-center justify-center">
+                      <div className="border-2 border-primary w-[70%] h-[70%] rounded-lg animate-pulse opacity-50"></div>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </CardContent>

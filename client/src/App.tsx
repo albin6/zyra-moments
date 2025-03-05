@@ -5,6 +5,7 @@ import VendorRoutes from "./routes/VendorRoutes";
 import { Toaster } from "sonner";
 import UnauthorizedPage from "./components/UnauthorizedPage";
 import { Custom404 } from "./components/404/Custom404";
+import QRScanner from "./components/qr-code-scanner/QrScanner";
 
 function App() {
   return <AppLayout />;
@@ -20,6 +21,7 @@ function AppLayout() {
         <Route path="/*" element={<ClientRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/vendor/*" element={<VendorRoutes />} />
+        <Route path="/scan" element={<QRScanner />} />
         <Route
           path="*"
           element={<Custom404 pathname={window.location.pathname} />}
