@@ -133,6 +133,8 @@ import { ICreateTicketUseCase } from "../../entities/useCaseInterfaces/event/tic
 import { CreateTicketUseCase } from "../../useCases/event/ticket/create-ticket.usecase";
 import { IMarkAttendanceUseCase } from "../../entities/useCaseInterfaces/event/ticket/mark-attendance-usecase.interface";
 import { MarkAttendanceUseCase } from "../../useCases/event/ticket/mark-attendance.usecase";
+import { IListPaginatedEventsUseCase } from "../../entities/useCaseInterfaces/event/list-paginated-events-usecase.interface";
+import { ListPaginatedEventsUseCase } from "../../useCases/event/list-paginated-events.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -382,6 +384,11 @@ export class UseCaseRegistry {
     container.register<IMarkAttendanceUseCase>("IMarkAttendanceUseCase", {
       useClass: MarkAttendanceUseCase,
     });
+
+    container.register<IListPaginatedEventsUseCase>(
+      "IListPaginatedEventsUseCase",
+      { useClass: ListPaginatedEventsUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

@@ -14,6 +14,7 @@ import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 import { Custom404 } from "@/components/404/Custom404";
 import HostEventFlow from "@/pages/client/HostEventFlow";
 import { EventProvider } from "@/context/EventContext";
+import { ClientEventDetails } from "@/pages/client/ClientEventDetails";
 
 function ClientRoutes() {
   return (
@@ -71,6 +72,15 @@ function ClientRoutes() {
             <AuthRoute
               allowedRoles={["client"]}
               element={<ClientEventListing />}
+            />
+          }
+        />
+        <Route
+          path="/events/discover/:id/details"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<ClientEventDetails />}
             />
           }
         />

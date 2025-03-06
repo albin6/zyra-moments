@@ -1,4 +1,5 @@
 import { clientAxiosInstance } from "@/api/client.axios";
+import { EventQueryParams } from "@/hooks/event/useEvent";
 import { PopulatedEvents } from "@/types/Event";
 import { TransformedEventData } from "@/utils/format/transformEventFormData";
 
@@ -10,7 +11,9 @@ export const hostNewEvent = async (data: TransformedEventData) => {
   return response.data;
 };
 
-export const getEventDetails = async (id: any): Promise<PopulatedEvents> => {
+export const getEventDetails = async (
+  id: any
+): Promise<{ success: boolean; event: PopulatedEvents }> => {
   const response = await clientAxiosInstance.get(
     "/_host/client/host-event/details",
     {
@@ -42,5 +45,25 @@ export const getAllHostedEventsByClient = async ({
       limit,
     },
   });
+  return response.data;
+};
+
+export const getAllHostedEvents = async (params: EventQueryParams = {}) => {
+  const response = await clientAxiosInstance.get(
+    "/_host/client/discover-events",
+    {
+      params: {
+        page: params.page || 1,
+        limit: params.limit || 6,
+        search: params.search || "",
+        category: params.category || "",
+        priceMin: params.priceMin,
+        priceMax: params.priceMax,
+        sortField: params.sortField || "date",
+        sortOrder: params.sortOrder || "desc",
+      },
+    }
+  );
+
   return response.data;
 };

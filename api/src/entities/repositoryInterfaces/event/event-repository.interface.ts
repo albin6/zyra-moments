@@ -1,4 +1,8 @@
 import {
+  EventListDto,
+  EventListResponseDto,
+} from "../../../shared/dtos/event.dto";
+import {
   IEventEntity,
   PaginatedEvents,
   PopulatedEvents,
@@ -16,4 +20,6 @@ export interface IEventRepository {
   ): Promise<PaginatedEvents>;
 
   findEventById(id: any): Promise<PopulatedEvents | null>;
+
+  findUpcomingEvents(criteria: EventListDto): Promise<EventListResponseDto>;
 }

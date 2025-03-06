@@ -74,18 +74,21 @@ interface EventFormProps {
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function MapMarker({
-  position,
-  setPosition,
-}: {
-  position: [number, number];
+export interface MapMarkerProps {
+  position: [number, number] | undefined;
   setPosition: (pos: [number, number]) => void;
-}) {
+}
+
+function MapMarker({ position, setPosition }: MapMarkerProps) {
   const map = useMapEvents({
     click(e) {
       setPosition([e.latlng.lat, e.latlng.lng]);
     },
   });
+
+  if (!position) {
+    return;
+  }
 
   return (
     <Marker

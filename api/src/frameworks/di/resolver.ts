@@ -50,6 +50,7 @@ import { GetAllTransactionsByUserIdController } from "../../interfaceAdapters/co
 import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/controllers/wallet/get-wallet-details-of-user.controller";
 import { CreateTicketController } from "../../interfaceAdapters/controllers/event/ticket/create-ticket.controller";
 import { MarkAttendanceController } from "../../interfaceAdapters/controllers/event/ticket/mark-attendance.controller";
+import { ListPaginatedEventsController } from "../../interfaceAdapters/controllers/event/list-paginated-events.controller";
 
 DependencyInjection.registerAll();
 
@@ -227,4 +228,8 @@ export const createTicketController = container.resolve(CreateTicketController);
 
 export const markAttendanceController = container.resolve(
   MarkAttendanceController
+);
+
+export const listPaginatedEventsController = container.resolve(
+  ListPaginatedEventsController
 );

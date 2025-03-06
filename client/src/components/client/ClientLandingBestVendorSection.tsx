@@ -45,7 +45,7 @@ export const ClientLandingBestVendorSection: React.FC = () => {
                 {vendor.firstName + " " + vendor.lastName}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {vendor.category.title}
+                {vendor.category?.title}
               </p>
             </CardContent>
           </Card>

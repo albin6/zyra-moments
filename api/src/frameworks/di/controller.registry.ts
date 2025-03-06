@@ -48,6 +48,7 @@ import { GetAllTransactionsByUserIdUseCase } from "../../useCases/payment/get-al
 import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/controllers/wallet/get-wallet-details-of-user.controller";
 import { CreateTicketController } from "../../interfaceAdapters/controllers/event/ticket/create-ticket.controller";
 import { MarkAttendanceController } from "../../interfaceAdapters/controllers/event/ticket/mark-attendance.controller";
+import { ListPaginatedEventsController } from "../../interfaceAdapters/controllers/event/list-paginated-events.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -243,6 +244,10 @@ export class ControllerRegistry {
 
     container.register("MarkAttendanceController", {
       useClass: MarkAttendanceController,
+    });
+
+    container.register("ListPaginatedEventsController", {
+      useClass: ListPaginatedEventsController,
     });
   }
 }

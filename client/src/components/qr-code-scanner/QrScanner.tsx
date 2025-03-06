@@ -162,7 +162,7 @@ export default function QRScanner() {
   // Toggle camera facing mode
   const toggleCamera = () => {
     setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
-    // Need to restart scanner with new camera
+
     if (scanning) {
       setScanning(false);
       setTimeout(() => setScanning(true), 300);
