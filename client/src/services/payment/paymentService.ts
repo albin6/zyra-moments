@@ -29,7 +29,7 @@ export const makePaymentAndBooking = async (data: {
   return response.data;
 };
 
-export const makePaymentAndUpgradeRole = async (data: {
+export const makePaymentAndUpgradeRoleOrBookTicket = async (data: {
   amount: number;
   purpose: Purpose;
 }): Promise<PaymentResponse> => {

@@ -17,7 +17,7 @@ export const useVendorBookingPaymentMutation = (
   });
 };
 
-export const useRolePromoPaymentMutation = (
+export const useRolePromoOrTicketBookingPaymentMutation = (
   mutationFunc: (data: {
     amount: number;
     purpose: Purpose;

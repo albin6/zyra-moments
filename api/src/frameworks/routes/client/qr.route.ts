@@ -6,6 +6,7 @@ import {
 import {
   blockStatusMiddleware,
   createTicketController,
+  downloadTicketAsPdfController,
   markAttendanceController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -29,6 +30,14 @@ export class QrRoutes extends BaseRoute {
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) => markAttendanceController.handle(req, res)
+    );
+    this.router.get(
+      "/client/:ticketId/download-pdf",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        downloadTicketAsPdfController.handle(req, res)
     );
   }
 }

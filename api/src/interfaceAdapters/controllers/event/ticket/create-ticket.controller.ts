@@ -6,6 +6,7 @@ import { ERROR_MESSAGES, HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../entities/utils/CustomError";
 import { IQrCodeService } from "../../../../entities/services/qr-code-service.interface";
 import { inject, injectable } from "tsyringe";
+import { CustomRequest } from "../../../middlewares/auth.middleware";
 
 @injectable()
 export class CreateTicketController implements ICreateTicketController {
@@ -16,7 +17,8 @@ export class CreateTicketController implements ICreateTicketController {
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { eventId, userId } = req.body;
+      const { eventId } = req.body;
+      const userId = (req as CustomRequest).user.id;
 
       const ticket = await this.createTicketUseCase.execute(eventId, userId);
 

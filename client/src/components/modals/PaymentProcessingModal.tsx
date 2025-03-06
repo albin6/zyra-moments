@@ -45,7 +45,7 @@ export default function PaymentProcessingModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md z-[1000]">
         <DialogHeader>
           <DialogTitle className="text-center">Processing Payment</DialogTitle>
           <DialogDescription className="text-center">

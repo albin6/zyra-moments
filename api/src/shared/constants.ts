@@ -34,6 +34,8 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  TICKET_ID_REQUIRED: "Ticket ID is required",
+  INCOMPLETE_INFO: "Incomplete information.",
   NO_CHARGE_FOUND: "No charge found for this payment",
   CONFIRM_PAYMENT_FAILED: "Failed to confirm payment",
   FAILED_TO_PROCESS_REFUND: "Failed to process refund",

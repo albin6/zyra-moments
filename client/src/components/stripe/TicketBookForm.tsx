@@ -10,21 +10,28 @@ import { useRolePromoOrTicketBookingPaymentMutation } from "@/hooks/payment/useP
 import { makePaymentAndUpgradeRoleOrBookTicket } from "@/services/payment/paymentService";
 import { toast } from "sonner";
 import { clientAxiosInstance } from "@/api/client.axios";
+import { ITicketEntity } from "../modals/TicketSuccessModal";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 interface PaymentFormProps {
+  eventId: string;
   amount: number;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setIsBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpenChange: (open: boolean) => void;
+  setTicketDetails: React.Dispatch<React.SetStateAction<ITicketEntity | null>>;
 }
 
-const PaymentForm: React.FC<PaymentFormProps> = ({
+const TicketForm: React.FC<PaymentFormProps> = ({
+  eventId,
   amount,
   setIsOpen,
   setIsSuccess,
   setIsBookingSuccess,
+  setTicketDetails,
+  onOpenChange,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -46,7 +53,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     setIsSuccess(false);
 
     proceedPayment(
-      { amount, purpose: "role-upgrade" },
+      { amount, purpose: "ticket-purchase" },
       {
         onSuccess: async (data) => {
           const { error: stripeError, paymentIntent } =
@@ -62,6 +69,15 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               await clientAxiosInstance.post("/_pmt/client/confirm-payment", {
                 paymentIntentId: paymentIntent.id,
               });
+
+              const response = await clientAxiosInstance.post(
+                "/_qr/client/new-ticket",
+                {
+                  eventId,
+                }
+              );
+
+              setTicketDetails(response.data.ticket);
               toast.success("Payment completed.");
               setIsBookingSuccess(true);
               setIsSuccess(true);
@@ -71,6 +87,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               console.log("Error in confirm payement=>", error);
             }
             setSucceeded(true);
+            onOpenChange(false);
           }
         },
         onError: (error: any) => {
@@ -123,21 +140,35 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   );
 };
 
-export const RolePromoPaymentWrapper: React.FC<{
+export const TicketBookPaymentWrapper: React.FC<{
+  setTicketDetails: React.Dispatch<React.SetStateAction<ITicketEntity | null>>;
+  eventId: string;
   amount: number;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpenChange: (open: boolean) => void;
   setIsBookingSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ amount, setIsOpen, setIsSuccess, setIsBookingSuccess }) => {
+}> = ({
+  eventId,
+  amount,
+  setIsOpen,
+  setIsSuccess,
+  setIsBookingSuccess,
+  onOpenChange,
+  setTicketDetails,
+}) => {
   return (
     <Elements stripe={stripePromise}>
       <div className="w-full">
         <h1 className="text-2xl mb-4">Complete Your Payment</h1>
-        <PaymentForm
+        <TicketForm
+          setTicketDetails={setTicketDetails}
+          eventId={eventId}
           setIsOpen={setIsOpen}
           setIsSuccess={setIsSuccess}
           amount={amount}
           setIsBookingSuccess={setIsBookingSuccess}
+          onOpenChange={onOpenChange}
         />
       </div>
     </Elements>

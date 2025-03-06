@@ -122,6 +122,22 @@ export class CreatePaymentIntentController
           message: "Booking completed and payment successfull.",
           clientSecret,
         });
+      } else if (purpose === "ticket-purchase") {
+        const { clientSecret } = await this.createPaymentIntentUseCase.execute(
+          amountInCents,
+          currency,
+          purpose,
+          userId,
+          "67c672337b3e284a71d98fd5" as any,
+          "Client",
+          "Admin"
+        );
+
+        res.json({
+          success: true,
+          message: "Ticket Booking completed and payment successfull.",
+          clientSecret,
+        });
       }
     } catch (error) {
       if (error instanceof ZodError) {

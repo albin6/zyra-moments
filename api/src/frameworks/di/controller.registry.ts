@@ -49,6 +49,7 @@ import { GetWalletDetailsOfUserController } from "../../interfaceAdapters/contro
 import { CreateTicketController } from "../../interfaceAdapters/controllers/event/ticket/create-ticket.controller";
 import { MarkAttendanceController } from "../../interfaceAdapters/controllers/event/ticket/mark-attendance.controller";
 import { ListPaginatedEventsController } from "../../interfaceAdapters/controllers/event/list-paginated-events.controller";
+import { DownloadTicketAsPdfController } from "../../interfaceAdapters/controllers/event/ticket/download-ticket-as-pdf.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -248,6 +249,10 @@ export class ControllerRegistry {
 
     container.register("ListPaginatedEventsController", {
       useClass: ListPaginatedEventsController,
+    });
+
+    container.register("DownloadTicketAsPdfController", {
+      useClass: DownloadTicketAsPdfController,
     });
   }
 }

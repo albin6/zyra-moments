@@ -18,9 +18,13 @@ import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import LoadingEventDetails from "./LoadingEventDetails";
 import { MapMarkerProps } from "./event-hosting/EventForm";
-import { PopulatedEvents } from "@/types/Event";
 import moment from "moment";
 import { Event } from "@/hooks/event/useEvent";
+import TicketBookingModal from "../modals/TicketBookingModal";
+import PaymentProcessingModal from "../modals/PaymentProcessingModal";
+import TicketSuccessModal, {
+  ITicketEntity,
+} from "../modals/TicketSuccessModal";
 
 function MapMarker({ position, setPosition }: MapMarkerProps) {
   const map = useMapEvents({
@@ -51,20 +55,15 @@ function MapMarker({ position, setPosition }: MapMarkerProps) {
 
 export default function EventDetails({ event }: { event: Event }) {
   const [ticketCount, setTicketCount] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // // Convert 24h time format to 12h format
-  // const formatTime = (time: string) => {
-  //   const [hours, minutes] = time.split(":");
-  //   const hour = parseInt(hours);
-  //   const ampm = hour >= 12 ? "PM" : "AM";
-  //   const formattedHour = hour % 12 || 12;
-  //   return `${formattedHour}:${minutes} ${ampm}`;
-  // };
+  const [isBookingSuccess, setIsBookingSuccess] = useState(false);
+  const [ticketDetails, setTicketDetails] = useState<ITicketEntity | null>(
+    null
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  // const startTime = formatTime(event.startTime);
-  // const endTime = formatTime(event.endTime);
-
-  // Calculate total price
   const totalPrice = event.pricePerTicket * ticketCount;
 
   if (!event) {
@@ -81,7 +80,6 @@ export default function EventDetails({ event }: { event: Event }) {
       <Separator className="mb-6" />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Event Poster */}
         <div className="relative w-full rounded-lg">
           <img
             src={event.posterImage || "/placeholder.svg"}
@@ -90,7 +88,6 @@ export default function EventDetails({ event }: { event: Event }) {
           />
         </div>
 
-        {/* Event Information */}
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
@@ -177,7 +174,6 @@ export default function EventDetails({ event }: { event: Event }) {
         </Card>
       </div>
 
-      {/* About The Event & Map Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardContent className="p-6">
@@ -227,17 +223,6 @@ export default function EventDetails({ event }: { event: Event }) {
         {/* Map */}
         <Card>
           <CardContent className="p-0 h-[300px] md:h-[400px] relative">
-            {/* {event.coordinates && (
-              <iframe
-                title="Event Location"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                style={{ border: 0 }}
-                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${event.coordinates.coordinates[1]},${event.coordinates.coordinates[0]}&zoom=15`}
-                allowFullScreen
-              ></iframe>
-            )} */}
             <div className="relative w-full h-[350px] rounded-md overflow-hidden border">
               {typeof window !== "undefined" && (
                 <MapContainer
@@ -277,7 +262,6 @@ export default function EventDetails({ event }: { event: Event }) {
         </Card>
       </div>
 
-      {/* Ticket Booking Section */}
       <Card className="mb-8">
         <CardContent className="p-6">
           <h2 className="text-xl font-bold mb-4">Book Your Tickets</h2>
@@ -312,12 +296,36 @@ export default function EventDetails({ event }: { event: Event }) {
               <p className="text-xl font-bold">₹{totalPrice}</p>
             </div>
 
-            <Button className="w-full md:w-auto">Proceed to Checkout</Button>
+            <Button onClick={() => setIsModalOpen(true)}>
+              Proceed With Booking
+            </Button>
+
+            <TicketBookingModal
+              setTicketDetails={setTicketDetails}
+              event={event}
+              open={isModalOpen}
+              onOpenChange={setIsModalOpen}
+              setIsBookingSuccess={setIsBookingSuccess}
+              setIsOpen={setIsOpen}
+              setIsSuccess={setIsSuccess}
+            />
+
+            <PaymentProcessingModal
+              isOpen={isOpen}
+              onOpenChange={setIsOpen}
+              isSuccess={isSuccess}
+            />
+
+            <TicketSuccessModal
+              isOpen={isBookingSuccess}
+              onClose={() => setIsSuccess(false)}
+              event={event}
+              ticketDetails={ticketDetails!}
+            />
           </div>
         </CardContent>
       </Card>
 
-      {/* Organizer Information */}
       <Card className="bg-primary text-primary-foreground">
         <CardContent className="p-6">
           <h2 className="text-xl font-bold mb-2">
