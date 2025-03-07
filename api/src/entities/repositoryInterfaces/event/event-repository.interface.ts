@@ -19,6 +19,8 @@ export interface IEventRepository {
     limit: number
   ): Promise<PaginatedEvents>;
 
+  findEventByIdAndUpdate(id: any, data: Partial<IEventEntity>): Promise<void>;
+
   findEventById(id: any): Promise<PopulatedEvents | null>;
 
   findFew(): Promise<PopulatedEvents[]>;

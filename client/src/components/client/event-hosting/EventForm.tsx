@@ -72,6 +72,7 @@ interface EventFormProps {
   onSubmit: (data: TransformedEventData) => void;
   isEditing?: boolean;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  id?: string;
 }
 
 export interface MapMarkerProps {

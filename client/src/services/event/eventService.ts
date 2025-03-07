@@ -11,6 +11,15 @@ export const hostNewEvent = async (data: TransformedEventData) => {
   return response.data;
 };
 
+export const editHostEvent = async (event: { id: string; data: any }) => {
+  console.log(event);
+  const response = await clientAxiosInstance.put("/_host/client/host-event", {
+    eventId: event.id,
+    eventData: event.data,
+  });
+  return response.data;
+};
+
 export const getEventDetails = async (
   id: any
 ): Promise<{ success: boolean; event: PopulatedEvents }> => {

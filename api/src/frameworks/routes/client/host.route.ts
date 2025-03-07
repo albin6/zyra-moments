@@ -10,6 +10,7 @@ import {
   getUpcomingEventsController,
   hostNewEventController,
   listPaginatedEventsController,
+  updateEventDetailsByIdController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
 
@@ -18,13 +19,21 @@ export class HostRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
-    this.router.post(
-      "/client/host-event",
-      verifyAuth,
-      authorizeRole(["client"]),
-      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => hostNewEventController.handle(req, res)
-    );
+    this.router
+      .route("/client/host-event")
+      .post(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) => hostNewEventController.handle(req, res)
+      )
+      .put(
+        verifyAuth,
+        authorizeRole(["client"]),
+        blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+        (req: Request, res: Response) =>
+          updateEventDetailsByIdController.handle(req, res)
+      );
 
     this.router.get(
       "/client/host-event/details",

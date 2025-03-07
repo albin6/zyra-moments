@@ -5,8 +5,7 @@ import {
   getUpcomingEvents,
   PaginatedHostedEventsResponse,
 } from "@/services/event/eventService";
-import { TransformedEventData } from "@/utils/format/transformEventFormData";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export interface Event {
   _id: string;
@@ -57,10 +56,14 @@ export interface EventListResponse {
 }
 
 export const useEventMutation = (
-  mutationFunc: (data: TransformedEventData) => Promise<AuthResponse>
+  mutationFunc: (data: any) => Promise<AuthResponse>
 ) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: mutationFunc,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["hosted-events"] });
+    },
   });
 };
 
@@ -80,7 +83,7 @@ export const useAllHostedEvents = (
   limit: number
 ) => {
   return useQuery({
-    queryKey: ["hosted-events"],
+    queryKey: ["hosted-events", page, limit],
     queryFn: () => queryFunc({ page, limit }),
   });
 };

@@ -13,19 +13,15 @@ import { Client } from "@/services/client/clientService";
 import { toast } from "sonner";
 import { useOutletContext } from "react-router-dom";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
-import EventAddEdit from "@/pages/client/EventAddEdit";
-import HostEventListing from "@/pages/client/HostEventListing";
-import { useEventContext } from "@/context/EventContext";
 import ClientWallet from "@/pages/client/ClientWallet";
 import ClientTransactions from "@/pages/client/ClientTransactions";
-import QRScanner from "../qr-code-scanner/QrScanner";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+
+import { TransformedEventData } from "@/utils/format/transformEventFormData";
+import { EventList } from "./event-hosting/EventList";
+import EventForm from "./event-hosting/EventForm";
+import EditEvent from "./event-hosting/EditEvent";
+import { useEventMutation } from "@/hooks/event/useEvent";
+import { editHostEvent, hostNewEvent } from "@/services/event/eventService";
 
 export interface ClientContextType {
   clientData: Client | null;
@@ -35,12 +31,11 @@ export interface ClientContextType {
 export function UserProfile() {
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
-  const [isHostEventEditing, setIsHostEventEditing] = useState(false);
   const { clientData } = useOutletContext<ClientContextType>();
   const { mutate: updateClientProfile } = useClientProfileMutation();
-  const { resetEventData } = useEventContext();
+  // const { resetEventData } = useEventContext();
 
-  const [showQRScannerModal, setShowQRScannerModal] = useState(false);
+  const [currentEventId, setCurrentEventId] = useState<string | null>(null);
 
   const handleUpdateClientProfile = (values: {
     firstName: string;
@@ -61,6 +56,54 @@ export function UserProfile() {
         onError: (error: any) => toast.error(error.response.data.message),
       }
     );
+  };
+
+  const { mutate: newEvent } = useEventMutation(hostNewEvent);
+  const { mutate: updateEvent } = useEventMutation(editHostEvent);
+
+  const handleCreateSubmit = async (data: TransformedEventData) => {
+    try {
+      console.log("Creating event with data:", data);
+
+      newEvent(data, {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      });
+
+      setActiveTab("event-list");
+    } catch (error) {
+      console.error("Error creating event:", error);
+      toast.error("Failed to create event. Please try again.");
+    }
+  };
+
+  const handleEditSubmit = async (data: TransformedEventData) => {
+    try {
+      console.log("Updating event with ID:", currentEventId);
+      console.log("Update data:", data);
+
+      updateEvent(
+        { id: currentEventId, data },
+        {
+          onSuccess: (data) => toast.success(data.message),
+          onError: (error: any) => toast.error(error.response.data.message),
+        }
+      );
+
+      setActiveTab("event-list");
+    } catch (error) {
+      console.error("Error updating event:", error);
+      toast.error("Failed to update event. Please try again.");
+    }
+  };
+
+  const startCreateEvent = () => {
+    setActiveTab("create-event");
+  };
+
+  const startEditEvent = (eventId: string) => {
+    setCurrentEventId(eventId);
+    setActiveTab("edit-event");
   };
 
   if (!clientData) {
@@ -126,24 +169,6 @@ export function UserProfile() {
                   <Edit2 className="h-4 w-4" />
                 </Button>
               )}
-              <div className="flex space-x-4">
-                {activeTab === "event-list" && (
-                  <Button size="sm" onClick={() => setShowQRScannerModal(true)}>
-                    Track Attendance
-                  </Button>
-                )}
-                {activeTab === "event-list" && (
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      resetEventData();
-                      setActiveTab("host-event");
-                    }}
-                  >
-                    Host An Event
-                  </Button>
-                )}
-              </div>
             </div>
 
             <div
@@ -174,38 +199,44 @@ export function UserProfile() {
               {activeTab === "bookings" && <ClientBookingListing />}
 
               {activeTab === "event-list" && (
-                <HostEventListing setActiveTab={setActiveTab} />
+                <EventList
+                  onCreateNew={startCreateEvent}
+                  onEdit={startEditEvent}
+                />
               )}
-              {activeTab === "host-event" && (
+
+              {activeTab === "create-event" && (
+                <EventForm
+                  onSubmit={handleCreateSubmit}
+                  setActiveTab={setActiveTab}
+                />
+              )}
+
+              {activeTab === "edit-event" && currentEventId && (
+                <EditEvent
+                  eventId={currentEventId}
+                  onSubmit={handleEditSubmit}
+                  setActiveTab={setActiveTab}
+                />
+              )}
+
+              {/* {activeTab === "event-list" && (
+                <HostEventListing
+                  setIsHostEventEditing={setIsHostEventEditing}
+                  setActiveTab={setActiveTab}
+                />
+              )} */}
+              {/* {activeTab === "host-event" && (
                 <EventAddEdit
                   setActiveTab={setActiveTab}
                   setIsHostEventEditing={setIsHostEventEditing}
                   isHostEventEditing={isHostEventEditing}
                 />
-              )}
+              )} */}
               {activeTab === "client-wallet" && <ClientWallet />}
               {activeTab === "transactions" && <ClientTransactions />}
             </div>
           </Card>
-          <Dialog
-            open={showQRScannerModal}
-            onOpenChange={setShowQRScannerModal}
-          >
-            <DialogContent className="sm:max-w-xl">
-              <DialogHeader>
-                <DialogTitle>Scan QR Code</DialogTitle>
-              </DialogHeader>
-              <div className="flex items-center justify-center p-6">
-                {/* QR Scanner component rendered inside the modal */}
-                {showQRScannerModal && <QRScanner />}
-              </div>
-              <DialogFooter>
-                <Button onClick={() => setShowQRScannerModal(false)}>
-                  Close
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </main>
       </div>
     </div>

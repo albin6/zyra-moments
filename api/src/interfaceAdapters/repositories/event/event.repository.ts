@@ -134,4 +134,11 @@ export class EventRepository implements IEventRepository {
       },
     };
   }
+
+  async findEventByIdAndUpdate(
+    id: any,
+    data: Partial<IEventEntity>
+  ): Promise<void> {
+    await EventModel.findByIdAndUpdate(id, data);
+  }
 }
