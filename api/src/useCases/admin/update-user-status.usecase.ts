@@ -4,6 +4,7 @@ import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/ve
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
 import { CustomError } from "../../entities/utils/CustomError";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import client from "../../frameworks/cache/redis.client";
 
 @injectable()
 export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
@@ -26,6 +27,10 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
       const newStatus = user.status === "active" ? "inactive" : "active";
 
       await this.clientRepository.findByIdAndUpdateStatus(userId, newStatus);
+
+      await client.set(`user_status:client:${userId}`, newStatus, {
+        EX: 3600,
+      });
     } else if (userType === "vendor") {
       console.log("yes its vendor");
 
@@ -41,6 +46,10 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
       const newStatus = user.status === "active" ? "inactive" : "active";
 
       await this.vendorRepository.findByIdAndUpdateStatus(userId, newStatus);
+
+      await client.set(`user_status:vendor:${userId}`, newStatus, {
+        EX: 3600,
+      });
     }
   }
 }

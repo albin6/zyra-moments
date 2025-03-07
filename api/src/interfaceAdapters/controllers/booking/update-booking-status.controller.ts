@@ -10,6 +10,7 @@ import {
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
 import { ICancelBookingUseCase } from "../../../entities/useCaseInterfaces/booking/cancel-booking-usecase.interface";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class UpdateBookingStatusController
@@ -23,6 +24,7 @@ export class UpdateBookingStatusController
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
+      const userId = (req as CustomRequest).user.id;
       const { bookingId, status } = req.query;
 
       if (!bookingId) {
@@ -37,7 +39,11 @@ export class UpdateBookingStatusController
       if (status === "cancelled") {
         await this.cancelBookingUseCase.execute(bookingId);
       } else if (status === "confirmed" || status === "completed") {
-        await this.updateBookingStatusUseCase.execute(bookingId, statusString);
+        await this.updateBookingStatusUseCase.execute(
+          userId,
+          bookingId,
+          statusString
+        );
       }
 
       res

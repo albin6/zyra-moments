@@ -7,13 +7,17 @@ import { CustomError } from "../../entities/utils/CustomError";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 import { any } from "zod";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/admin/admin-repository.interface";
+import { IWalletRepository } from "../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 
 @injectable()
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
     @inject("IPaymentService") private paymentService: IPaymentService,
     @inject("IPaymentRepository") private paymentRepository: IPaymentRepository,
-    @inject("IClientRepository") private clientRepository: IClientRepository
+    @inject("IClientRepository") private clientRepository: IClientRepository,
+    @inject("IAdminRepository") private adminRepository: IAdminRepository,
+    @inject("IWalletRepository") private walletRepository: IWalletRepository
   ) {}
   async execute(
     amount: number,
@@ -32,7 +36,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
       const { paymentIntent, clientSecret } =
         await this.paymentService.createPaymentIntent(amount, currency);
 
-      await this.paymentRepository.save({
+      const payment = await this.paymentRepository.save({
         userId,
         receiverId,
         bookingId,
@@ -46,6 +50,16 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         transactionId: `TXN_${Date.now()}`,
         createdAt: new Date(),
       });
+
+      const admin = await this.adminRepository.findByEmail(
+        "albinpariyarath@gmail.com"
+      );
+
+      await this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
+        admin?._id,
+        amount / 100,
+        payment._id
+      );
 
       if (!bookingId && purpose === "role-upgrade") {
         await this.clientRepository.findByClientIdAndUpdateMCStatus(userId);

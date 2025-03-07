@@ -20,4 +20,10 @@ export interface IBookingRepository {
   findByIdAndUpdatePaymentStatus(id: any, status: string): Promise<void>;
 
   findByIdAndUpdateBookingStatus(id: any, status: string): Promise<void>;
+
+  updateClientApproved(id: any): Promise<IBookingEntity | null>;
+
+  updateVendorApproved(id: any): Promise<IBookingEntity | null>;
+
+  isBothApproved(bookingId: any): Promise<IBookingEntity | null>;
 }

@@ -51,4 +51,28 @@ export class BookingRepository implements IBookingRepository {
   async findByIdAndUpdateBookingStatus(id: any, status: string): Promise<void> {
     await BookingModel.findByIdAndUpdate(id, { $set: { status } });
   }
+
+  async updateClientApproved(id: any): Promise<IBookingEntity | null> {
+    return await BookingModel.findOneAndUpdate(
+      { userId: id },
+      { $set: { isClientApproved: true } },
+      { new: true }
+    );
+  }
+
+  async updateVendorApproved(id: any): Promise<IBookingEntity | null> {
+    return await BookingModel.findOneAndUpdate(
+      { vendorId: id },
+      { $set: { isVendorApproved: true } },
+      { new: true }
+    );
+  }
+
+  async isBothApproved(bookingId: any): Promise<IBookingEntity | null> {
+    return await BookingModel.findOne({
+      _id: bookingId,
+      isClientApproved: true,
+      isVendorApproved: true,
+    });
+  }
 }

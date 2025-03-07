@@ -6,6 +6,8 @@ import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/ve
 import { IBlackListTokenUseCase } from "../../entities/useCaseInterfaces/auth/blacklist-token-usecase.interface";
 import { IRevokeRefreshTokenUseCase } from "../../entities/useCaseInterfaces/auth/revoke-refresh-token-usecase.interface";
 import { inject, injectable } from "tsyringe";
+import client from "../../frameworks/cache/redis.client";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
 export class BlockedStatusMiddleware {
@@ -27,56 +29,62 @@ export class BlockedStatusMiddleware {
   ) => {
     try {
       if (!req.user) {
-        res.status(401).json({
-          status: "error",
-          message: "Unauthorized: No user found in request",
+        res.status(HTTP_STATUS.UNAUTHORIZED).json({
+          success: false,
+          message: ERROR_MESSAGES.UNAUTH_NO_USER_FOUND,
         });
         return;
       }
 
       const { id, role } = req.user;
+      const cacheKey = `user_status:${role}:${id}`;
 
-      let status: string | undefined = "active";
+      let status: string | null | undefined = await client.get(cacheKey);
 
-      if (role === "client") {
-        const client = await this.clientRepository.findById(id);
-        if (!client) {
-          res.status(404).json({
+      if (!status) {
+        if (role === "client") {
+          const client = await this.clientRepository.findById(id);
+          if (!client) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+              success: false,
+              message: ERROR_MESSAGES.USER_NOT_FOUND,
+            });
+            return;
+          }
+          status = client.status;
+        } else if (role === "vendor") {
+          const vendor = await this.vendorRepository.findById(id);
+          if (!vendor) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+              success: false,
+              message: ERROR_MESSAGES.USER_NOT_FOUND,
+            });
+            return;
+          }
+          status = vendor.status;
+        } else {
+          res.status(HTTP_STATUS.BAD_REQUEST).json({
             success: false,
-            message: "Client not found",
+            message: ERROR_MESSAGES.INVALID_ROLE,
           });
           return;
         }
-        status = client.status;
-      } else if (role === "vendor") {
-        const vendor = await this.vendorRepository.findById(id);
-        if (!vendor) {
-          res.status(404).json({
-            success: false,
-            message: "Vendor not found",
-          });
-          return;
-        }
-        status = vendor.status;
-      } else {
-        res.status(400).json({
-          success: false,
-          message: "Invalid user role",
+
+        await client.set(cacheKey, status ?? "null", {
+          EX: 3600,
         });
-        return;
       }
 
       if (status !== "active") {
         await this.blackListTokenUseCase.execute(req.user.access_token);
-
         await this.revokeRefreshTokenUseCase.execute(req.user.refresh_token);
 
         const accessTokenName = `${role}_access_token`;
         const refreshTokenName = `${role}_refresh_token`;
         clearAuthCookies(res, accessTokenName, refreshTokenName);
-        res.status(403).json({
+        res.status(HTTP_STATUS.FORBIDDEN).json({
           success: false,
-          message: "Access denied: Your account has been blocked",
+          message: ERROR_MESSAGES.BLOCKED,
         });
         return;
       }
@@ -84,9 +92,9 @@ export class BlockedStatusMiddleware {
       next();
     } catch (error) {
       console.error("Error in blocked status middleware:", error);
-      res.status(500).json({
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
         success: false,
-        message: "Internal server error while checking blocked status",
+        message: ERROR_MESSAGES.SERVER_ERROR,
       });
       return;
     }

@@ -21,7 +21,7 @@ export class WalletRepository implements IWalletRepository {
   }
 
   async findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-    userId: any,
+    userId: string,
     balance: number,
     paymentId: any
   ): Promise<void> {
@@ -31,10 +31,13 @@ export class WalletRepository implements IWalletRepository {
       throw new CustomError(ERROR_MESSAGES.WRONG_ID, HTTP_STATUS.BAD_REQUEST);
     }
 
-    wallet.balance += balance;
+    const newBalance = wallet.balance + balance;
+    if (newBalance < 0) {
+      throw new CustomError("Insufficient funds", HTTP_STATUS.BAD_REQUEST);
+    }
 
+    wallet.balance = newBalance;
     wallet.paymentId.push(paymentId);
-
     await wallet.save();
   }
 }

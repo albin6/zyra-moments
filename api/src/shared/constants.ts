@@ -34,6 +34,9 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  INVALID_ROLE: "Invalid user role",
+  UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",
+  BOOKING_NOT_FOUND: "Booking not found",
   TICKET_ID_REQUIRED: "Ticket ID is required",
   INCOMPLETE_INFO: "Incomplete information.",
   NO_CHARGE_FOUND: "No charge found for this payment",

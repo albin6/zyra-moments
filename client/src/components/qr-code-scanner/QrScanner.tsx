@@ -13,7 +13,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { useTicketMutation } from "@/hooks/event/useTicket";
 
-export default function QRScanner() {
+export default function QRScanner({
+  handleShowSuccess,
+  handleShowError,
+  setShowQRScannerModal,
+}: {
+  handleShowSuccess: () => void;
+  handleShowError: () => void;
+  setShowQRScannerModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean>(false);
@@ -137,44 +145,43 @@ export default function QRScanner() {
       {
         onSuccess: (data) => {
           setResult(decodedText);
-          toast.success(data.message || "Attendance marked successfully");
-          setScanning(false);
 
-          // Vibrate if available
+          toast.success(data.message || "Attendance marked successfully");
+          handleShowSuccess();
+          setScanning(false);
+          setShowQRScannerModal(false);
+
           if (navigator.vibrate) {
             navigator.vibrate(100);
           }
         },
         onError: (error: any) => {
+          handleShowError();
           toast.error(
             error.response.datamessage || "Failed to mark attendance"
           );
-          // Optionally continue scanning
+          setScanning(false);
+          setShowQRScannerModal(false);
         },
       }
     );
 
     toast.success("QR Code Scanned");
 
-    // Vibrate if available
     if (navigator.vibrate) {
       navigator.vibrate(100);
     }
   };
 
-  // Handle scan errors
   const handleScanError = (error: string | Error) => {
-    // Only log errors, don't show to user
     console.error("QR Scan error:", error);
   };
 
-  // Copy result to clipboard
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard");
   };
 
-  // Open URL if the result is a URL
   const openUrl = (url: string) => {
     if (url.startsWith("http://") || url.startsWith("https://")) {
       window.open(url, "_blank", "noopener,noreferrer");
@@ -183,7 +190,6 @@ export default function QRScanner() {
     }
   };
 
-  // Toggle camera facing mode
   const toggleCamera = () => {
     setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
 
@@ -193,14 +199,12 @@ export default function QRScanner() {
     }
   };
 
-  // Truncate text for display
   const truncateText = (text: string, maxLength: number) => {
     return text.length > maxLength
       ? `${text.substring(0, maxLength)}...`
       : text;
   };
 
-  // Request camera permissions
   const requestPermission = async () => {
     try {
       await navigator.mediaDevices.getUserMedia({ video: true });
@@ -211,13 +215,11 @@ export default function QRScanner() {
     }
   };
 
-  // Reset scanner
   const resetScanner = () => {
     setScanning(true);
     setResult(null);
   };
 
-  // Check if text is a URL
   const isUrl = (text: string) => {
     return (
       text.startsWith("http://") ||

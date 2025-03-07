@@ -54,6 +54,9 @@ export interface BookingList {
     firstName: string;
     lastName: string;
   };
+  isClientApproved: boolean;
+  isVendorApproved: boolean;
+
   bookingDate: string;
   totalPrice: number;
   paymentStatus: string;
@@ -241,16 +244,16 @@ export default function ClientBookingList({
                       setIsConfirmationModalOpen(true);
                     }}
                     disabled={
-                      booking.status === "confirmed" ||
+                      (booking.isClientApproved &&
+                        booking.status === "completed") ||
                       booking.status === "cancelled"
-                    } // Optional: disable if already completed
+                    }
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="pending">pending</SelectItem>
-                      {/* <SelectItem value="confirmed">confirmed</SelectItem> */}
                       <SelectItem value="completed">completed</SelectItem>
                       <SelectItem
                         value="cancelled"
@@ -260,6 +263,20 @@ export default function ClientBookingList({
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    size={"sm"}
+                    onClick={() => {
+                      setBookingId(booking._id);
+                      setStatus("completed");
+                      setIsConfirmationModalOpen(true);
+                    }}
+                    disabled={booking.isClientApproved}
+                  >
+                    Mark as Complete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

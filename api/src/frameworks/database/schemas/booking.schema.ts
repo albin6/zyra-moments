@@ -7,6 +7,9 @@ export const bookingSchema = new Schema<IBookingModel>({
 
   paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
 
+  isClientApproved: { type: Boolean, default: false },
+  isVendorApproved: { type: Boolean, default: false },
+
   serviceDetails: {
     serviceTitle: { type: String, required: true },
     serviceDescription: { type: String, required: true },

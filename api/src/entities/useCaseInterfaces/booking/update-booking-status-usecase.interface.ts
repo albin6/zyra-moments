@@ -1,3 +1,3 @@
 export interface IUpdateBookingStatusUseCase {
-  execute(bookingId: any, status: string): Promise<void>;
+  execute(userId: any, bookingId: any, status: string): Promise<void>;
 }

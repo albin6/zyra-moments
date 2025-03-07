@@ -138,7 +138,7 @@ export default function VendorBookingList({
                 <TableCell>{formatPrice(booking.totalPrice)}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(booking.status)}>
-                    {booking.status}
+                    {booking.isVendorApproved ? booking.status : "Pending"}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -149,16 +149,19 @@ export default function VendorBookingList({
                 </TableCell>
                 <TableCell>
                   <Select
-                    value={booking.status}
+                    value={
+                      booking.isVendorApproved ? booking.status : "pending"
+                    }
                     onValueChange={(value) => {
                       setBookingId(booking._id);
                       setStatus(value);
                       setIsConfirmationModalOpen(true);
                     }}
                     disabled={
-                      booking.status === "confirmed" ||
+                      (booking.isVendorApproved &&
+                        booking.status === "completed") ||
                       booking.status === "cancelled"
-                    } // Optional: disable if already completed
+                    }
                   >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Status" />
@@ -175,6 +178,19 @@ export default function VendorBookingList({
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    size={"sm"}
+                    onClick={() => {
+                      setBookingId(booking._id);
+                      setStatus("completed");
+                      setIsConfirmationModalOpen(true);
+                    }}
+                    disabled={booking.isVendorApproved}
+                  >
+                    Mark as Complete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

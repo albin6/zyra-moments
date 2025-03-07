@@ -18,16 +18,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  MoreHorizontal,
-  Download,
-  Filter,
-  RefreshCw,
-} from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { ArrowDownIcon, ArrowUpIcon, MoreHorizontal } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PaymentStatus, Purpose } from "@/types/Wallet";
@@ -94,10 +86,9 @@ interface AdminTransactionsComponentProps {
 export default function AdminTransactionsComponent({
   transactions,
   userRole,
-  onRefresh,
 }: AdminTransactionsComponentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  // const [searchTerm, setSearchTerm] = useState<string>("");
 
   // // Filter transactions based on active tab and search term
   // const filteredTransactions = transactions.flatMap((wallet) =>
@@ -135,7 +126,7 @@ export default function AdminTransactionsComponent({
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <CardTitle>Transaction History</CardTitle>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <div className="relative w-full md:w-auto">
                 <Input
                   placeholder="Search transactions..."
@@ -176,7 +167,7 @@ export default function AdminTransactionsComponent({
               <Button variant="outline" size="icon">
                 <Download className="h-4 w-4" />
               </Button>
-            </div>
+            </div> */}
           </div>
         </CardHeader>
         <CardContent>
@@ -185,13 +176,13 @@ export default function AdminTransactionsComponent({
             value={activeTab}
             onValueChange={setActiveTab}
           >
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-4">
+            {/* <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-4">
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="deposit">Deposits</TabsTrigger>
               <TabsTrigger value="withdrawal">Withdrawals</TabsTrigger>
               <TabsTrigger value="payment">Payments</TabsTrigger>
               <TabsTrigger value="refund">Refunds</TabsTrigger>
-            </TabsList>
+            </TabsList> */}
 
             <TabsContent value={activeTab} className="mt-0">
               <ScrollArea className="h-[400px] md:h-[500px] w-full rounded-md">

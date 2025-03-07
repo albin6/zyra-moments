@@ -7,6 +7,9 @@ export interface IBookingEntity {
 
   paymentId?: string | ObjectId;
 
+  isClientApproved: boolean;
+  isVendorApproved: boolean;
+
   serviceDetails: {
     serviceTitle: string;
     serviceDescription: string;

@@ -1,4 +1,5 @@
 import { EventModal } from "@/components/modals/EventModal";
+import { QrVerificationModal } from "@/components/modals/QrVerificationModal";
 import Pagination from "@/components/Pagination";
 import QRScanner from "@/components/qr-code-scanner/QrScanner";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,11 @@ export const EventList = ({
   );
   const [showQRScannerModal, setShowQRScannerModal] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState<
+    "success" | "error"
+  >("success");
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const eventsPerPage = 1;
@@ -41,6 +47,16 @@ export const EventList = ({
     currentPage,
     eventsPerPage
   );
+
+  const handleShowSuccess = () => {
+    setVerificationStatus("success");
+    setShowModal(true);
+  };
+
+  const handleShowError = () => {
+    setVerificationStatus("error");
+    setShowModal(true);
+  };
 
   useEffect(() => {
     if (data) {
@@ -148,13 +164,6 @@ export const EventList = ({
               />
             )}
           </div>
-          {/* <Button
-            className="mt-4"
-            variant="outline"
-            onClick={() => onEdit("sample-event-id")}
-          >
-            Edit Sample Event (Demo)
-          </Button> */}
         </div>
       </CardContent>
       <Dialog open={showQRScannerModal} onOpenChange={setShowQRScannerModal}>
@@ -164,13 +173,27 @@ export const EventList = ({
           </DialogHeader>
           <div className="flex items-center justify-center p-6">
             {/* QR Scanner component rendered inside the modal */}
-            {showQRScannerModal && <QRScanner />}
+            {showQRScannerModal && (
+              <QRScanner
+                setShowQRScannerModal={setShowQRScannerModal}
+                handleShowError={handleShowError}
+                handleShowSuccess={handleShowSuccess}
+              />
+            )}
           </div>
           <DialogFooter>
             <Button onClick={() => setShowQRScannerModal(false)}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <QrVerificationModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        status={verificationStatus}
+        userName="The user"
+        eventName="the Event."
+        errorMessage="This QR code has already been scanned. Entry is not allowed."
+      />
     </Card>
   );
 };
