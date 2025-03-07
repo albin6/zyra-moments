@@ -18,6 +18,14 @@ import HostEventListing from "@/pages/client/HostEventListing";
 import { useEventContext } from "@/context/EventContext";
 import ClientWallet from "@/pages/client/ClientWallet";
 import ClientTransactions from "@/pages/client/ClientTransactions";
+import QRScanner from "../qr-code-scanner/QrScanner";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 interface ClientContextType {
   clientData: Client | null;
@@ -31,6 +39,8 @@ export function UserProfile() {
   const { clientData } = useOutletContext<ClientContextType>();
   const { mutate: updateClientProfile } = useClientProfileMutation();
   const { resetEventData } = useEventContext();
+
+  const [showQRScannerModal, setShowQRScannerModal] = useState(false);
 
   const handleUpdateClientProfile = (values: {
     firstName: string;
@@ -116,17 +126,24 @@ export function UserProfile() {
                   <Edit2 className="h-4 w-4" />
                 </Button>
               )}
-              {activeTab === "event-list" && (
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    resetEventData();
-                    setActiveTab("host-event");
-                  }}
-                >
-                  Host An Event
-                </Button>
-              )}
+              <div className="flex space-x-4">
+                {activeTab === "event-list" && (
+                  <Button size="sm" onClick={() => setShowQRScannerModal(true)}>
+                    Track Attendance
+                  </Button>
+                )}
+                {activeTab === "event-list" && (
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      resetEventData();
+                      setActiveTab("host-event");
+                    }}
+                  >
+                    Host An Event
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div
@@ -170,6 +187,25 @@ export function UserProfile() {
               {activeTab === "transactions" && <ClientTransactions />}
             </div>
           </Card>
+          <Dialog
+            open={showQRScannerModal}
+            onOpenChange={setShowQRScannerModal}
+          >
+            <DialogContent className="sm:max-w-xl">
+              <DialogHeader>
+                <DialogTitle>Scan QR Code</DialogTitle>
+              </DialogHeader>
+              <div className="flex items-center justify-center p-6">
+                {/* QR Scanner component rendered inside the modal */}
+                {showQRScannerModal && <QRScanner />}
+              </div>
+              <DialogFooter>
+                <Button onClick={() => setShowQRScannerModal(false)}>
+                  Close
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </main>
       </div>
     </div>
