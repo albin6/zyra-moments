@@ -27,7 +27,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 
-interface ClientContextType {
+export interface ClientContextType {
   clientData: Client | null;
   setClientData: React.Dispatch<React.SetStateAction<Client | null>>;
 }

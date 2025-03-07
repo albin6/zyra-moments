@@ -8,26 +8,23 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { getAllHostedEventsByClient } from "@/services/event/eventService";
-import { useAllHostedEvents } from "@/hooks/event/useEvent";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { useUpcomingEventsQuery } from "@/hooks/event/useEvent";
 import { PopulatedEvents } from "@/types/Event";
 import { useEffect, useState } from "react";
 import { Spinner } from "../ui/spinner";
 import moment from "moment";
+import { ClientContextType } from "./UserProfile";
 
 export function UpcomingEventsSection() {
+  const { clientData } = useOutletContext<ClientContextType>();
   const navigate = useNavigate();
 
   const [hostedEvents, setHostedEvents] = useState<PopulatedEvents[] | null>(
     null
   );
 
-  const { data, isLoading } = useAllHostedEvents(
-    getAllHostedEventsByClient,
-    1,
-    10
-  );
+  const { data, isLoading } = useUpcomingEventsQuery();
 
   useEffect(() => {
     if (data) {
@@ -67,6 +64,7 @@ export function UpcomingEventsSection() {
               onClick={() => navigate("/events/mc")}
               className="group w-full sm:w-auto ml-2"
               variant="secondary"
+              disabled={clientData?.masterOfCeremonies}
             >
               See More
             </Button>
@@ -99,7 +97,13 @@ export function UpcomingEventsSection() {
                         <CalendarDays className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
                         {/* {event.attendees.toLocaleString()} attendees */}
                       </div>
-                      <Button variant="ghost" size="sm">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() =>
+                          navigate(`/events/discover/${event._id}/details`)
+                        }
+                      >
                         Learn More
                       </Button>
                     </CardFooter>

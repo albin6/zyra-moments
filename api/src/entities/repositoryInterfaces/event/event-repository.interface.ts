@@ -21,5 +21,7 @@ export interface IEventRepository {
 
   findEventById(id: any): Promise<PopulatedEvents | null>;
 
+  findFew(): Promise<PopulatedEvents[]>;
+
   findUpcomingEvents(criteria: EventListDto): Promise<EventListResponseDto>;
 }

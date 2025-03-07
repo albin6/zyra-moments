@@ -52,6 +52,15 @@ export class EventRepository implements IEventRepository {
     })) as unknown as PopulatedEvents;
   }
 
+  async findFew(): Promise<PopulatedEvents[]> {
+    return (await EventModel.find()
+      .populate({
+        path: "hostId",
+        select: "firstName lastName email profileImage phoneNumber",
+      })
+      .limit(6)) as unknown as PopulatedEvents[];
+  }
+
   async findUpcomingEvents(
     criteria: EventListDto
   ): Promise<EventListResponseDto> {

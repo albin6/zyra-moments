@@ -2,6 +2,7 @@ import { AuthResponse } from "@/services/auth/authService";
 import {
   getAllHostedEvents,
   getEventDetails,
+  getUpcomingEvents,
   PaginatedHostedEventsResponse,
 } from "@/services/event/eventService";
 import { TransformedEventData } from "@/utils/format/transformEventFormData";
@@ -88,5 +89,12 @@ export const useEventListing = (params: EventQueryParams = {}) => {
   return useQuery<EventListResponse, Error>({
     queryKey: ["events", params],
     queryFn: () => getAllHostedEvents(params),
+  });
+};
+
+export const useUpcomingEventsQuery = () => {
+  return useQuery({
+    queryKey: ["upcomings"],
+    queryFn: getUpcomingEvents,
   });
 };

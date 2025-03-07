@@ -137,6 +137,8 @@ import { IListPaginatedEventsUseCase } from "../../entities/useCaseInterfaces/ev
 import { ListPaginatedEventsUseCase } from "../../useCases/event/list-paginated-events.usecase";
 import { IDownloadTicketAsPdfUseCase } from "../../entities/useCaseInterfaces/event/ticket/download-ticket-as-pdf-usecase.inteface";
 import { DownloadTicketAsPdfUseCase } from "../../useCases/event/ticket/download-ticket-as-pdf.usecase";
+import { IGetUpcomingEventsUseCase } from "../../entities/useCaseInterfaces/event/get-upcoming-events-usecase.interface";
+import { GetUpcomingEventsUseCase } from "../../useCases/event/get-upcoming-events.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -396,6 +398,10 @@ export class UseCaseRegistry {
       "IDownloadTicketAsPdfUseCase",
       { useClass: DownloadTicketAsPdfUseCase }
     );
+
+    container.register<IGetUpcomingEventsUseCase>("IGetUpcomingEventsUseCase", {
+      useClass: GetUpcomingEventsUseCase,
+    });
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

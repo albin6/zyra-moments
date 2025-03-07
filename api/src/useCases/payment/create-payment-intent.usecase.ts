@@ -38,7 +38,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         bookingId,
         createrType: createrType as any,
         receiverType: receiverType as any,
-        amount,
+        amount: amount / 100,
         currency,
         purpose,
         status: "pending",

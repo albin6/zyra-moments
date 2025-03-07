@@ -67,3 +67,8 @@ export const getAllHostedEvents = async (params: EventQueryParams = {}) => {
 
   return response.data;
 };
+
+export const getUpcomingEvents = async () => {
+  const response = await clientAxiosInstance.get("/_host/client/upcomings");
+  return response.data;
+};
