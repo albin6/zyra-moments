@@ -9,16 +9,10 @@ export class TicketRepository implements ITicketRepository {
     return await TicketModel.create(ticket);
   }
 
-  async findByTicketId(ticketId: string): Promise<ITicketEntity | null> {
-    try {
-      return await TicketModel.findOne({ ticketId })
-        .populate("userId")
-        .populate("eventId");
-    } catch (error) {
-      throw new Error(
-        `Error finding ticket by ticketId: ${(error as Error).message}`
-      );
-    }
+  async findByTicketId(ticketId: any): Promise<ITicketEntity | null> {
+    return await TicketModel.findById(ticketId)
+      .populate("userId")
+      .populate("eventId");
   }
 
   async findByQRCode(qrCode: string): Promise<ITicketEntity | null> {

@@ -158,20 +158,12 @@ const TicketSuccessModal = ({
         />
       )}
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <DialogContent className="sm:max-w-md md:max-w-lg">
+        <DialogContent className="sm:max-w-md md:max-w-lg z-[1000]">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <DialogTitle className="text-xl sm:text-2xl font-bold">
                 Booking Confirmed!
               </DialogTitle>
-              <Button
-                variant="ghost"
-                className="h-8 w-8 p-0 rounded-full"
-                onClick={onClose}
-              >
-                <X className="h-4 w-4" />
-                <span className="sr-only">Close</span>
-              </Button>
             </div>
             <DialogDescription>
               <div className="flex items-center space-x-2 text-green-600">

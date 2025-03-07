@@ -17,6 +17,6 @@ export class PrivateRoutes extends BaseRoute {
     this.router.use("/_ve", new VendorRoutes().router);
     this.router.use("/_pmt", new PaymentRoutes().router);
     this.router.use("/_host", new HostRoutes().router);
-    this.router.use("_qr", new QrRoutes().router);
+    this.router.use("/_qr", new QrRoutes().router);
   }
 }

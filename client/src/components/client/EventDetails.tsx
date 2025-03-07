@@ -316,12 +316,14 @@ export default function EventDetails({ event }: { event: Event }) {
               isSuccess={isSuccess}
             />
 
-            <TicketSuccessModal
-              isOpen={isBookingSuccess}
-              onClose={() => setIsSuccess(false)}
-              event={event}
-              ticketDetails={ticketDetails!}
-            />
+            {isBookingSuccess && (
+              <TicketSuccessModal
+                isOpen={isBookingSuccess}
+                onClose={() => setIsBookingSuccess(false)}
+                event={event}
+                ticketDetails={ticketDetails!}
+              />
+            )}
           </div>
         </CardContent>
       </Card>

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { useTicketMutation } from "@/hooks/event/useTicket";
 
 export default function QRScanner() {
   const [scanning, setScanning] = useState(false);
@@ -20,6 +21,8 @@ export default function QRScanner() {
 
   const html5QrCodeRef = useRef<Html5Qrcode | null>(null);
   const scannerContainerRef = useRef<HTMLDivElement>(null);
+
+  const { mutate: markAttendance } = useTicketMutation();
 
   // Initialize scanner
   useEffect(() => {
@@ -129,6 +132,27 @@ export default function QRScanner() {
     setScanning(false);
 
     console.log("this is the decoded data ==>", decodedText);
+    markAttendance(
+      { qrCode: decodedText },
+      {
+        onSuccess: (data) => {
+          setResult(decodedText);
+          toast.success(data.message || "Attendance marked successfully");
+          setScanning(false);
+
+          // Vibrate if available
+          if (navigator.vibrate) {
+            navigator.vibrate(100);
+          }
+        },
+        onError: (error: any) => {
+          toast.error(
+            error.response.datamessage || "Failed to mark attendance"
+          );
+          // Optionally continue scanning
+        },
+      }
+    );
 
     toast.success("QR Code Scanned");
 

@@ -33,12 +33,12 @@ export class DownloadTicketAsPdfUseCase implements IDownloadTicketAsPdfUseCase {
       ticket.qrCode,
       {
         ticketId: ticket.ticketId,
-        eventName: event.name,
+        eventName: event.title,
         userName: `${user.firstName} ${user.lastName}`,
-        eventDate: event.startDate
-          ? new Date(event.startDate).toLocaleDateString()
+        eventDate: event.date
+          ? new Date(event.date).toLocaleDateString()
           : undefined,
-        eventLocation: event.location,
+        eventLocation: event.eventLocation,
       }
     );
 
