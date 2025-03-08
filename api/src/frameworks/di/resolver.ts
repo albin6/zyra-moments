@@ -54,6 +54,7 @@ import { ListPaginatedEventsController } from "../../interfaceAdapters/controlle
 import { DownloadTicketAsPdfController } from "../../interfaceAdapters/controllers/event/ticket/download-ticket-as-pdf.controller";
 import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers/event/get-upcoming-events.controller";
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
+import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
 
 DependencyInjection.registerAll();
 
@@ -247,4 +248,8 @@ export const getUpcomingEventsController = container.resolve(
 
 export const updateEventDetailsByIdController = container.resolve(
   UpdateEventDetailsByIdController
+);
+
+export const getEventAttendanceController = container.resolve(
+  GetEventAttendanceController
 );

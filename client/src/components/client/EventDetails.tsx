@@ -131,7 +131,7 @@ export default function EventDetails({ event }: { event: Event }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 mb-6">
+            {/* <div className="flex items-center gap-2 mb-6">
               <span className="text-sm font-medium">Share:</span>
               <div className="flex gap-2">
                 <Button
@@ -167,7 +167,7 @@ export default function EventDetails({ event }: { event: Event }) {
                   <span className="sr-only">Share on Instagram</span>
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             <Button className="w-full">Book Now</Button>
           </CardContent>
@@ -266,7 +266,7 @@ export default function EventDetails({ event }: { event: Event }) {
         <CardContent className="p-6">
           <h2 className="text-xl font-bold mb-4">Book Your Tickets</h2>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            <div className="flex items-center gap-4">
+            {/* <div className="flex items-center gap-4">
               <Button
                 variant="outline"
                 size="icon"
@@ -289,11 +289,13 @@ export default function EventDetails({ event }: { event: Event }) {
               <span className="text-muted-foreground">
                 {ticketCount} {ticketCount === 1 ? "ticket" : "tickets"}
               </span>
-            </div>
+            </div> */}
 
             <div className="text-right">
-              <p className="text-muted-foreground">Total Price</p>
-              <p className="text-xl font-bold">₹{totalPrice}</p>
+              <p className="text-muted-foreground">
+                Total Price{" "}
+                <span className="text-xl font-bold">₹{totalPrice}</span>
+              </p>
             </div>
 
             <Button onClick={() => setIsModalOpen(true)}>

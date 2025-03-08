@@ -17,3 +17,6 @@ export const ticketSchema = new Schema<ITicketModel>(
   },
   { timestamps: true }
 );
+
+ticketSchema.index({ eventId: 1 });
+ticketSchema.index({ userId: 1 });

@@ -72,7 +72,7 @@ export default function QRScanner({
           );
       }
     };
-  }, [scannerContainerRef]);
+  }, [scannerContainerRef, hasPermission]);
 
   // Start/stop scanning based on the scanning state
   useEffect(() => {
@@ -149,7 +149,7 @@ export default function QRScanner({
           toast.success(data.message || "Attendance marked successfully");
           handleShowSuccess();
           setScanning(false);
-          setShowQRScannerModal(false);
+          // setShowQRScannerModal(false);
 
           if (navigator.vibrate) {
             navigator.vibrate(100);
@@ -161,7 +161,7 @@ export default function QRScanner({
             error.response.datamessage || "Failed to mark attendance"
           );
           setScanning(false);
-          setShowQRScannerModal(false);
+          // setShowQRScannerModal(false);
         },
       }
     );

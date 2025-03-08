@@ -52,6 +52,7 @@ import { ListPaginatedEventsController } from "../../interfaceAdapters/controlle
 import { DownloadTicketAsPdfController } from "../../interfaceAdapters/controllers/event/ticket/download-ticket-as-pdf.controller";
 import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers/event/get-upcoming-events.controller";
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
+import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -263,6 +264,10 @@ export class ControllerRegistry {
 
     container.register("UpdateEventDetailsByIdController", {
       useClass: UpdateEventDetailsByIdController,
+    });
+
+    container.register("GetEventAttendanceController", {
+      useClass: GetEventAttendanceController,
     });
   }
 }

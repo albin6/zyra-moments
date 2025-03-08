@@ -6,6 +6,7 @@ import {
 import {
   blockStatusMiddleware,
   getAllEventsByHostIdController,
+  getEventAttendanceController,
   getEventDetailsByIdController,
   getUpcomingEventsController,
   hostNewEventController,
@@ -69,6 +70,15 @@ export class HostRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         listPaginatedEventsController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/events/:eventId/attendance",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getEventAttendanceController.handle(req, res)
     );
   }
 }

@@ -28,9 +28,13 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 
       await this.clientRepository.findByIdAndUpdateStatus(userId, newStatus);
 
-      await client.set(`user_status:client:${userId}`, newStatus, {
-        EX: 3600,
-      });
+      if (newStatus === "inactive") {
+        await client.set(`user_status:client:${userId}`, newStatus, {
+          EX: 3600,
+        });
+      } else if (newStatus === "active") {
+        await client.del(`user_status:client:${userId}`);
+      }
     } else if (userType === "vendor") {
       console.log("yes its vendor");
 
@@ -47,9 +51,13 @@ export class UpdateUserStatusUseCase implements IUpdateUserStatusUseCase {
 
       await this.vendorRepository.findByIdAndUpdateStatus(userId, newStatus);
 
-      await client.set(`user_status:vendor:${userId}`, newStatus, {
-        EX: 3600,
-      });
+      if (newStatus === "inactive") {
+        await client.set(`user_status:vendor:${userId}`, newStatus, {
+          EX: 3600,
+        });
+      } else if (newStatus === "active") {
+        await client.del(`user_status:vendor:${userId}`);
+      }
     }
   }
 }

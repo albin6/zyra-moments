@@ -2,15 +2,8 @@ import type React from "react";
 
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
-import {
-  CalendarIcon,
-  Clock,
-  MapPin,
-  MinusCircle,
-  PlusCircle,
-} from "lucide-react";
+import { CalendarIcon, Clock, MapPin } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -176,7 +169,7 @@ export default function TicketBookingModal({
                 </div>
                 <div className="flex items-center gap-4">
                   <p className="font-medium">₹{event.pricePerTicket}</p>
-                  <div className="flex items-center gap-2">
+                  {/* <div className="flex items-center gap-2">
                     <Button
                       variant="outline"
                       size="icon"
@@ -204,7 +197,7 @@ export default function TicketBookingModal({
                       <PlusCircle className="h-4 w-4" />
                       <span className="sr-only">Increase</span>
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -225,7 +218,7 @@ export default function TicketBookingModal({
                 Please provide your details for the booking
               </CardDescription>
             </CardHeader>
-            <CardContent></CardContent>
+            {/* <CardContent></CardContent> */}
           </Card>
         </div>
 

@@ -28,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useNavigate } from "react-router-dom";
 
 export interface IEventEntity {
   _id?: string;
@@ -81,6 +82,8 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
   }, [isOpen]);
 
   const formattedDate = format(new Date(event.date), "EEEE, MMMM d, yyyy");
+
+  const naviagte = useNavigate();
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -264,6 +267,12 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
                     )}
                   </div>
                 </CardContent>
+                <Button
+                  className="m-4"
+                  onClick={() => naviagte(`/events/${event._id}/attendance`)}
+                >
+                  View Attendance
+                </Button>
               </Card>
             )}
           </div>

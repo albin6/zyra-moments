@@ -141,6 +141,8 @@ import { IGetUpcomingEventsUseCase } from "../../entities/useCaseInterfaces/even
 import { GetUpcomingEventsUseCase } from "../../useCases/event/get-upcoming-events.usecase";
 import { IUpdateEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces/event/update-event-details-by-id-usecase.interface";
 import { UpdateEventDetailsByIdUseCase } from "../../useCases/event/update-event-details-by-id.usecase";
+import { IGetEventAttendanceUseCase } from "../../entities/useCaseInterfaces/event/get-event-attendance-usecase.interface";
+import { GetEventAttendanceUseCase } from "../../useCases/event/get-event-attendance.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -408,6 +410,11 @@ export class UseCaseRegistry {
     container.register<IUpdateEventDetailsByIdUseCase>(
       "IUpdateEventDetailsByIdUseCase",
       { useClass: UpdateEventDetailsByIdUseCase }
+    );
+
+    container.register<IGetEventAttendanceUseCase>(
+      "IGetEventAttendanceUseCase",
+      { useClass: GetEventAttendanceUseCase }
     );
 
     // Register Strategies

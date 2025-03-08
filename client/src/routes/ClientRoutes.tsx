@@ -15,6 +15,7 @@ import { Custom404 } from "@/components/404/Custom404";
 import HostEventFlow from "@/pages/client/HostEventFlow";
 import { EventProvider } from "@/context/EventContext";
 import { ClientEventDetails } from "@/pages/client/ClientEventDetails";
+import { EventAttendancePage } from "@/pages/client/EventAttendancePage";
 
 function ClientRoutes() {
   return (
@@ -88,6 +89,15 @@ function ClientRoutes() {
           path="/events/mc"
           element={
             <AuthRoute allowedRoles={["client"]} element={<HostEventFlow />} />
+          }
+        />
+        <Route
+          path="/events/:eventId/attendance"
+          element={
+            <AuthRoute
+              allowedRoles={["client"]}
+              element={<EventAttendancePage />}
+            />
           }
         />
         <Route
