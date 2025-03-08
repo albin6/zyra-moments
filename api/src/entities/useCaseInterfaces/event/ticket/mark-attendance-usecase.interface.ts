@@ -1,3 +1,6 @@
 export interface IMarkAttendanceUseCase {
-  execute(qrCode: string): Promise<{ success: boolean; message: string }>;
+  execute(
+    userId: any,
+    qrCode: string
+  ): Promise<{ success: boolean; message: string }>;
 }

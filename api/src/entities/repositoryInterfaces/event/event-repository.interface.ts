@@ -13,6 +13,8 @@ export interface IEventRepository {
 
   findById(id: any): Promise<IEventEntity | null>;
 
+  findEventByHostAndEventId(id: any, hostId: any): Promise<IEventEntity | null>;
+
   findAllEventsByHostId(
     hostId: any,
     skip: number,

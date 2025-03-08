@@ -158,15 +158,13 @@ export default function QRScanner({
         onError: (error: any) => {
           handleShowError();
           toast.error(
-            error.response.datamessage || "Failed to mark attendance"
+            error.response.data.message || "Failed to mark attendance"
           );
           setScanning(false);
           // setShowQRScannerModal(false);
         },
       }
     );
-
-    toast.success("QR Code Scanned");
 
     if (navigator.vibrate) {
       navigator.vibrate(100);

@@ -22,6 +22,13 @@ export class EventRepository implements IEventRepository {
     return await EventModel.findById(id);
   }
 
+  async findEventByHostAndEventId(
+    id: any,
+    hostId: any
+  ): Promise<IEventEntity | null> {
+    return await EventModel.findOne({ _id: id, hostId: hostId });
+  }
+
   async findAllEventsByHostId(
     hostId: any,
     skip: number,

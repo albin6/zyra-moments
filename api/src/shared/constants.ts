@@ -69,6 +69,8 @@ export const ERROR_MESSAGES = {
   TIME_SLOT_FULL: "The requested time slot is already at full capacity",
   ROUTE_NOT_FOUND: "Route not found.",
   ID_NOT_PROVIDED: "ID not provided",
+  NOT_ABLE_TO_MARK_ATTENDANCE:
+    "You are not able to mark the attendance. Not the Host.",
 };
 
 export const VERIFICATION_MAIL_CONTENT = (otp: string) => `

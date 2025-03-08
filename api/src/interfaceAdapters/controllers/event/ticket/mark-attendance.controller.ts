@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../../shared/constants";
 import { CustomError } from "../../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
+import { CustomRequest } from "../../../middlewares/auth.middleware";
 
 @injectable()
 export class MarkAttendanceController implements IMarkAttendanceController {
@@ -15,8 +16,9 @@ export class MarkAttendanceController implements IMarkAttendanceController {
   async handle(req: Request, res: Response): Promise<void> {
     try {
       const { qrCode } = req.body;
+      const userId = (req as CustomRequest).user.id;
 
-      const result = await this.markAttendanceUseCase.execute(qrCode);
+      const result = await this.markAttendanceUseCase.execute(userId, qrCode);
 
       if (result.success) {
         res.status(HTTP_STATUS.OK).json(result);
