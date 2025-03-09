@@ -16,6 +16,7 @@ import HostEventFlow from "@/pages/client/HostEventFlow";
 import { EventProvider } from "@/context/EventContext";
 import { ClientEventDetails } from "@/pages/client/ClientEventDetails";
 import { EventAttendancePage } from "@/pages/client/EventAttendancePage";
+import ClientChatPage from "@/pages/client/ClientChatPage";
 
 function ClientRoutes() {
   return (
@@ -116,6 +117,13 @@ function ClientRoutes() {
               allowedRoles={["client"]}
               element={<ClientBookingListing />}
             />
+          }
+        />
+
+        <Route
+          path="/client/chat"
+          element={
+            <AuthRoute allowedRoles={["client"]} element={<ClientChatPage />} />
           }
         />
         <Route
