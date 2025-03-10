@@ -10,7 +10,7 @@ export interface EventListDto {
     priceMax?: number;
   };
   sort?: {
-    field: "date" | "startTime" | "pricePerTicket";
+    field: "date" | "startTime" | "pricePerTicket" | "title";
     order: "asc" | "desc";
   };
 }

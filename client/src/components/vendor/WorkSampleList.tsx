@@ -22,7 +22,7 @@ export function WorkSampleList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [items, setItems] = useState<WorkSample[] | null>(null);
-  const limit = 1;
+  const limit = 5;
 
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [workSampleToDelete, setWorkSampleToDelete] = useState<string | null>(

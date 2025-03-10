@@ -37,7 +37,8 @@ export class ListPaginatedEventsController
                 field: req.query.sortField as
                   | "date"
                   | "startTime"
-                  | "pricePerTicket",
+                  | "pricePerTicket"
+                  | "title",
                 order: (req.query.sortOrder as "asc" | "desc") || "asc",
               }
             : undefined,

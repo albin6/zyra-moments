@@ -17,7 +17,7 @@ export function validateCriteria(criteria: EventListDto): void {
 
   // Sort validation
   if (criteria.sort) {
-    const validSortFields = ["date", "startTime", "pricePerTicket"];
+    const validSortFields = ["date", "startTime", "pricePerTicket", "title"];
     if (!validSortFields.includes(criteria.sort.field)) {
       throw new DomainError("INVALID_SORT_FIELD", "Invalid sort field");
     }
