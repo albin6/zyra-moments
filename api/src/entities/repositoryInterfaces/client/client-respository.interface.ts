@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { IClientEntity } from "../../models/client.entity";
 
 export interface IClientRepository {
@@ -23,4 +24,12 @@ export interface IClientRepository {
   ): Promise<void>;
 
   findByClientIdAndUpdateMCStatus(id: any): Promise<void>;
+
+  // ----------------------- FOR CHAT-----------------------------
+  findByIdForChat(id: any): Promise<IClientEntity | null>;
+
+  findByIdAndUpdateOnlineStatus(
+    id: any,
+    onlineStatus: "online" | "offline"
+  ): Promise<void>;
 }

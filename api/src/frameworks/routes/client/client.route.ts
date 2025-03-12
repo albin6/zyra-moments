@@ -108,6 +108,8 @@ export class ClientRoutes extends BaseRoute {
         updateBookingStatusController.handle(req, res)
     );
 
+    this.router.get("/client/vendors/:id");
+
     // wallet
     this.router.get(
       "/client/wallet",

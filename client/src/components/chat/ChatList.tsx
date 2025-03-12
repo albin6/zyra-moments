@@ -23,7 +23,7 @@ interface ChatListProps {
   selectedContactId?: string;
   className?: string;
   title?: string;
-  userType: "client" | "vendor";
+  userType: "Client" | "Vendor"; // Updated
 }
 
 export function ChatList({
@@ -32,7 +32,7 @@ export function ChatList({
   selectedContactId,
   className,
   title = "Messages",
-  userType = "client",
+  userType = "Client",
 }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -48,7 +48,7 @@ export function ChatList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={`Search ${
-              userType === "client" ? "vendors" : "clients"
+              userType === "Client" ? "vendors" : "clients"
             }...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -64,7 +64,7 @@ export function ChatList({
               {searchQuery
                 ? "No contacts found matching your search."
                 : `No ${
-                    userType === "client" ? "vendors" : "clients"
+                    userType === "Client" ? "vendors" : "clients"
                   } to display.`}
             </p>
           </div>

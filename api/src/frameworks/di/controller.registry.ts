@@ -53,6 +53,7 @@ import { DownloadTicketAsPdfController } from "../../interfaceAdapters/controlle
 import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers/event/get-upcoming-events.controller";
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
 import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
+import { ChatController } from "../../interfaceAdapters/controllers/chat/chat.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -269,5 +270,8 @@ export class ControllerRegistry {
     container.register("GetEventAttendanceController", {
       useClass: GetEventAttendanceController,
     });
+
+    // -----chat-----
+    container.register("ChatController", { useClass: ChatController });
   }
 }

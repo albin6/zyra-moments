@@ -143,6 +143,12 @@ import { IUpdateEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces
 import { UpdateEventDetailsByIdUseCase } from "../../useCases/event/update-event-details-by-id.usecase";
 import { IGetEventAttendanceUseCase } from "../../entities/useCaseInterfaces/event/get-event-attendance-usecase.interface";
 import { GetEventAttendanceUseCase } from "../../useCases/event/get-event-attendance.usecase";
+import { IGetChatHistoryUseCase } from "../../entities/useCaseInterfaces/chat/get-chat-history-usecase.interface";
+import { GetChatHistoryUseCase } from "../../useCases/chat/get-chat-history.usecase";
+import { IGetUserChatsUseCase } from "../../entities/useCaseInterfaces/chat/get-user-chats-usecase.interface";
+import { GetUserChatsUseCase } from "../../useCases/chat/get-user-chats.usecase";
+import { ISendMessageUseCase } from "../../entities/useCaseInterfaces/chat/send-message-usecase.interface";
+import { SendMessageUseCase } from "../../useCases/chat/send-message.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -471,6 +477,20 @@ export class UseCaseRegistry {
 
     container.register<IQrCodeService>("IQrCodeService", {
       useClass: QrCodeService,
+    });
+
+    // -----chat-----
+
+    container.register<IGetChatHistoryUseCase>("IGetChatHistoryUseCase", {
+      useClass: GetChatHistoryUseCase,
+    });
+
+    container.register<IGetUserChatsUseCase>("IGetUserChatsUseCase", {
+      useClass: GetUserChatsUseCase,
+    });
+
+    container.register<ISendMessageUseCase>("ISendMessageUseCase", {
+      useClass: SendMessageUseCase,
     });
   }
 }

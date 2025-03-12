@@ -9,10 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 interface Message {
-  id: string;
+  _id: string;
+  chatRoomId: string;
   content: string;
-  sender: "client" | "vendor";
-  timestamp: Date;
+  senderId: string;
+  senderType: "Client" | "Vendor"; // Updated
+  read: boolean;
+  createdAt: Date;
 }
 
 interface ChatInterfaceProps {
@@ -21,7 +24,7 @@ interface ChatInterfaceProps {
   messages?: Message[];
   onSendMessage?: (message: string) => void;
   className?: string;
-  userType: "client" | "vendor";
+  userType: "Client" | "Vendor"; // Updated
 }
 
 export function ChatInterface({
@@ -30,7 +33,7 @@ export function ChatInterface({
   messages = [],
   onSendMessage,
   className,
-  userType = "client",
+  userType = "Client",
 }: ChatInterfaceProps) {
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -71,7 +74,7 @@ export function ChatInterface({
         <div>
           <h3 className="font-medium">{recipientName}</h3>
           <p className="text-sm text-muted-foreground">
-            {userType === "client" ? "Vendor" : "Client"}
+            {userType === "Client" ? "Vendor" : "Client"}
           </p>
         </div>
       </div>
@@ -87,23 +90,25 @@ export function ChatInterface({
         ) : (
           messages.map((message) => (
             <div
-              key={message.id}
+              key={message._id} // Changed from id to _id
               className={cn(
                 "flex",
-                message.sender === userType ? "justify-end" : "justify-start"
+                message.senderType === userType
+                  ? "justify-end"
+                  : "justify-start"
               )}
             >
               <div
                 className={cn(
                   "max-w-[80%] rounded-lg p-3",
-                  message.sender === userType
+                  message.senderType === userType
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted"
                 )}
               >
                 <p className="break-words">{message.content}</p>
                 <p className="text-xs mt-1 opacity-70">
-                  {new Date(message.timestamp).toLocaleTimeString([], {
+                  {new Date(message.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}

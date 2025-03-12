@@ -18,6 +18,12 @@ export const VendorSchema = new Schema<IVendorModel>(
     averageRating: { type: Number },
     totalReviews: { type: Number },
     status: { type: String, default: "active" },
+    onlineStatus: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
+    },
+    lastStatusUpdated: { type: Date, default: Date.now },
   },
   {
     timestamps: true,

@@ -60,4 +60,19 @@ export class ClientRepository implements IClientRepository {
       await client.save();
     }
   }
+
+  // ----------------------------------------------------------------------
+  async findByIdForChat(id: any): Promise<IClientEntity | null> {
+    return ClientModel.findById(id).exec();
+  }
+
+  async findByIdAndUpdateOnlineStatus(
+    id: any,
+    onlineStatus: "online" | "offline"
+  ): Promise<void> {
+    await ClientModel.updateOne(
+      { _id: id },
+      { onlineStatus, lastStatusUpdated: new Date() }
+    );
+  }
 }

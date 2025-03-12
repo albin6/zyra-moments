@@ -29,6 +29,10 @@ import { IWalletRepository } from "../../entities/repositoryInterfaces/wallet/wa
 import { WalletRepository } from "../../interfaceAdapters/repositories/wallet/wallet.repository";
 import { ITicketRepository } from "../../entities/repositoryInterfaces/event/ticket-repository.interface";
 import { TicketRepository } from "../../interfaceAdapters/repositories/event/ticket.repository";
+import { IChatRoomRepository } from "../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
+import { ChatRoomRepository } from "../../interfaceAdapters/repositories/chat/chat-room.repository";
+import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/message-repository.interface";
+import { MessageRepository } from "../../interfaceAdapters/repositories/chat/message.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -91,6 +95,16 @@ export class RepositoryRegistry {
 
     container.register<ITicketRepository>("ITicketRepository", {
       useClass: TicketRepository,
+    });
+
+    // -----chat-----
+
+    container.register<IChatRoomRepository>("IChatRoomRepository", {
+      useClass: ChatRoomRepository,
+    });
+
+    container.register<IMessageRepository>("IMessageRepository", {
+      useClass: MessageRepository,
     });
   }
 }

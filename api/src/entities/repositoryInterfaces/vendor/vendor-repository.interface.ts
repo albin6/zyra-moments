@@ -37,4 +37,12 @@ export interface IVendorRepository {
   ): Promise<{ vendors: IVendorEntity[] | []; total: number }>;
 
   findBestVendors(): Promise<IVendorEntity[] | []>;
+
+  // ---------------------------------FOR CHAT---------------------------------
+  findByIdForChat(id: any): Promise<IVendorEntity | null>;
+
+  findByIdAndUpdateOnlineStatus(
+    id: any,
+    onlineStatus: "online" | "offline"
+  ): Promise<void>;
 }

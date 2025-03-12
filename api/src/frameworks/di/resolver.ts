@@ -55,6 +55,7 @@ import { DownloadTicketAsPdfController } from "../../interfaceAdapters/controlle
 import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers/event/get-upcoming-events.controller";
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
 import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
+import { ChatController } from "../../interfaceAdapters/controllers/chat/chat.controller";
 
 DependencyInjection.registerAll();
 
@@ -253,3 +254,5 @@ export const updateEventDetailsByIdController = container.resolve(
 export const getEventAttendanceController = container.resolve(
   GetEventAttendanceController
 );
+
+export const chatController = container.resolve(ChatController);

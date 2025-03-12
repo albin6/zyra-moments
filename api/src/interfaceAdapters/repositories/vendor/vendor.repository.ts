@@ -105,4 +105,19 @@ export class VendorRepository implements IVendorRepository {
       .limit(6)
       .populate({ path: "category", select: "title" });
   }
+
+  // -------------------------------------------------------------------------
+  async findByIdForChat(id: any): Promise<IVendorEntity | null> {
+    return VendorModel.findById(id).exec();
+  }
+
+  async findByIdAndUpdateOnlineStatus(
+    id: any,
+    onlineStatus: "online" | "offline"
+  ): Promise<void> {
+    await VendorModel.updateOne(
+      { _id: id },
+      { onlineStatus, lastStatusUpdated: new Date() }
+    );
+  }
 }

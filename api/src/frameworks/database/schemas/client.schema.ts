@@ -14,6 +14,12 @@ export const ClientSchema = new Schema<IClientModel>(
     phoneNumber: { type: String },
     masterOfCeremonies: { type: Boolean, default: false },
     status: { type: String, default: "active" },
+    onlineStatus: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
+    },
+    lastStatusUpdated: { type: Date, default: Date.now },
   },
   {
     timestamps: true,

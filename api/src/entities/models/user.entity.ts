@@ -12,6 +12,8 @@ export interface IUserEntity {
   profileImage?: string;
   phoneNumber?: string;
   masterOfCeremonies?: boolean;
+  onlineStatus?: "online" | "offline";
+  lastStatusUpdated: Date;
   status?: string;
   createdAt: Date;
   updatedAt: Date;

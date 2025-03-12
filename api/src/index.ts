@@ -10,7 +10,7 @@ const mongoConnect = new MongoConnect();
 mongoConnect.connectDB();
 
 server
-  .getApp()
+  .getServer()
   .listen(config.server.PORT, () =>
     console.log(
       `Server is running on http://${config.server.HOST}:${config.server.PORT}`
