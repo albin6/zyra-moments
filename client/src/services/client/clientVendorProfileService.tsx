@@ -10,6 +10,7 @@ export interface VendorProfileData {
   profileImage?: string;
   phoneNumber?: string;
   status: string;
+  canChat: boolean
   vendorId: string;
   category?: {
     _id: string;

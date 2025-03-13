@@ -149,6 +149,12 @@ import { IGetUserChatsUseCase } from "../../entities/useCaseInterfaces/chat/get-
 import { GetUserChatsUseCase } from "../../useCases/chat/get-user-chats.usecase";
 import { ISendMessageUseCase } from "../../entities/useCaseInterfaces/chat/send-message-usecase.interface";
 import { SendMessageUseCase } from "../../useCases/chat/send-message.usecase";
+import { IGetTheClientVendorConnectionStatusUseCase } from "../../entities/useCaseInterfaces/client/get-the-client-vendor-connection-status-usecase.interface";
+import { GetTheClientVendorConnectionStatusUseCase } from "../../useCases/client/get-the-client-vendor-connection-status.usecase";
+import { IGetVendorDetailsForChatUseCase } from "../../entities/useCaseInterfaces/chat/get-vendor-details-usecase.interface";
+import { GetVendorDetailsForChatUseCase } from "../../useCases/chat/get-vendor-details.usecase";
+import { ICreateChatRoomUseCase } from "../../entities/useCaseInterfaces/chat/create-chat-room-usecase.interface";
+import { CreateChatRoomUseCase } from "../../useCases/chat/create-chat-room,.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -423,6 +429,10 @@ export class UseCaseRegistry {
       { useClass: GetEventAttendanceUseCase }
     );
 
+    container.register<ICreateChatRoomUseCase>("ICreateChatRoomUseCase", {
+      useClass: CreateChatRoomUseCase,
+    });
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -492,5 +502,15 @@ export class UseCaseRegistry {
     container.register<ISendMessageUseCase>("ISendMessageUseCase", {
       useClass: SendMessageUseCase,
     });
+
+    container.register<IGetVendorDetailsForChatUseCase>(
+      "IGetVendorDetailsForChatUseCase",
+      { useClass: GetVendorDetailsForChatUseCase }
+    );
+
+    container.register<IGetTheClientVendorConnectionStatusUseCase>(
+      "IGetTheClientVendorConnectionStatusUseCase",
+      { useClass: GetTheClientVendorConnectionStatusUseCase }
+    );
   }
 }

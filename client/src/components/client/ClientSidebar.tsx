@@ -8,6 +8,7 @@ import {
   Ticket,
   Wallet,
   Currency,
+  MessageCircle,
 } from "lucide-react";
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
   { icon: Ticket, label: "Host Events", id: "event-list" },
   { icon: Wallet, label: "Wallet", id: "client-wallet" },
   { icon: Currency, label: "Transactions", id: "transactions" },
+  { icon: MessageCircle, label: "Messages", id: "chat" },
 ];
 
 interface ClientSidebarProps {

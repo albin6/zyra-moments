@@ -22,66 +22,11 @@ import {
 import { Spinner } from "../ui/spinner";
 import Pagination from "../Pagination";
 import { Button } from "../ui/button";
-
-// const vendorData = {
-//   firstName: "John",
-//   lastName: "Doe",
-//   email: "john.doe@example.com",
-//   profileImage: "/placeholder.svg?height=100&width=100",
-//   phoneNumber: "+1 234 567 8900",
-//   category: "Photography",
-//   bio: "Professional photographer with 10 years of experience specializing in weddings and events.",
-//   place: "New York, NY",
-//   averageRating: 4.8,
-//   totalReviews: 120,
-//   workSamples: [
-//     {
-//       title: "Wedding Photography",
-//       description: "Capturing beautiful moments on your special day.",
-//       images: [
-//         "/placeholder.svg?height=200&width=300",
-//         "/placeholder.svg?height=200&width=300",
-//       ],
-//     },
-//     {
-//       title: "Event Coverage",
-//       description:
-//         "Professional event photography for corporate and social gatherings.",
-//       images: [
-//         "/placeholder.svg?height=200&width=300",
-//         "/placeholder.svg?height=200&width=300",
-//       ],
-//     },
-//   ],
-//   services: [
-//     {
-//       serviceTitle: "Wedding Photography Package",
-//       yearsOfExperience: 10,
-//       availableDates: [
-//         {
-//           date: "2023-08-15",
-//           timeSlots: [{ startTime: "10:00", endTime: "18:00", capacity: 1 }],
-//         },
-//       ],
-//       serviceDescription:
-//         "Comprehensive wedding photography package including engagement shoot and full-day coverage.",
-//       serviceDuration: 8,
-//       servicePrice: 2500,
-//       additionalHoursPrice: 200,
-//       cancellationPolicies: [
-//         "Full refund if cancelled 30 days before the event",
-//         "50% refund if cancelled 14 days before the event",
-//       ],
-//       termsAndConditions: [
-//         "Deposit required to secure booking",
-//         "Travel fees may apply for destinations outside of New York City",
-//       ],
-//     },
-//   ],
-// };
+import { ClientOneToOneChatPage } from "@/pages/client/ClientOneToOneChatPage";
 
 export default function VendorProfile() {
   const { vendorId } = useParams();
+  const [showChat, setShowChat] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
   const navigate = useNavigate();
 
@@ -157,9 +102,16 @@ export default function VendorProfile() {
               </div>
             </div>
           </div>
-          <Button onClick={() => navigate(`/booking/${vendorId}`)}>
-            Book Now
-          </Button>
+          <div>
+            {vendorData.canChat && (
+              <Button onClick={() => setShowChat(true)} className="mr-2">
+                Message
+              </Button>
+            )}
+            <Button onClick={() => navigate(`/booking/${vendorId}`)}>
+              Book Now
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs
@@ -311,6 +263,14 @@ export default function VendorProfile() {
           </Tabs>
         </CardContent>
       </Card>
+      {showChat && (
+        <div className="mt-4 border rounded-lg">
+          <ClientOneToOneChatPage
+            vendorId={vendorId}
+            onClose={() => setShowChat(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }

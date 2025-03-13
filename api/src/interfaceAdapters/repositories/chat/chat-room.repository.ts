@@ -1,3 +1,4 @@
+// frameworks/database/repositories/chat-room.repository.ts
 import { injectable } from "tsyringe";
 import { IChatRoomEntity } from "../../../entities/models/chat-room.entity";
 import { IChatRoomRepository } from "../../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
@@ -21,20 +22,28 @@ export class ChatRoomRepository implements IChatRoomRepository {
     clientId: any,
     vendorId: any,
     lastMessage: string,
-    lastMessageAt: any
+    lastMessageAt: Date
   ): Promise<IChatRoomEntity> {
-    let chatRoom = await ChatRoomModel.findOne({
-      clientId,
-      vendorId,
-    }).exec();
+    let chatRoom = await ChatRoomModel.findOne({ clientId, vendorId }).exec();
     if (!chatRoom) {
       chatRoom = await ChatRoomModel.create({
         clientId,
         vendorId,
-        lastMessage: null,
+        lastMessage,
         lastMessageAt,
       });
     }
     return chatRoom;
+  }
+
+  async updateLastMessage(
+    chatRoomId: any,
+    lastMessage: string,
+    lastMessageAt: Date
+  ): Promise<void> {
+    await ChatRoomModel.updateOne(
+      { _id: chatRoomId },
+      { lastMessage, lastMessageAt }
+    ).exec();
   }
 }

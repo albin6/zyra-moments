@@ -12,6 +12,7 @@ import {
   getAllTransactionsByUserIdController,
   getBestVendorsController,
   getClientDetailsController,
+  getVendorDetailsForChatController,
   getVendorProfileDetailsController,
   getVendorsUnderCategoryController,
   getWalletDetailsOfUserController,
@@ -108,7 +109,14 @@ export class ClientRoutes extends BaseRoute {
         updateBookingStatusController.handle(req, res)
     );
 
-    this.router.get("/client/vendors/:id");
+    this.router.get(
+      "/client/vendors/:vendorId",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getVendorDetailsForChatController.handle(req, res)
+    );
 
     // wallet
     this.router.get(

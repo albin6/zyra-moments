@@ -22,6 +22,7 @@ import EventForm from "./event-hosting/EventForm";
 import EditEvent from "./event-hosting/EditEvent";
 import { useEventMutation } from "@/hooks/event/useEvent";
 import { editHostEvent, hostNewEvent } from "@/services/event/eventService";
+import ClientChatPage from "@/pages/client/ClientChatPage";
 
 export interface ClientContextType {
   clientData: Client | null;
@@ -235,6 +236,8 @@ export function UserProfile() {
               )} */}
               {activeTab === "client-wallet" && <ClientWallet />}
               {activeTab === "transactions" && <ClientTransactions />}
+              {activeTab === "chat" && <ClientChatPage />}
+
             </div>
           </Card>
         </main>

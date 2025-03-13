@@ -54,6 +54,8 @@ import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
 import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
 import { ChatController } from "../../interfaceAdapters/controllers/chat/chat.controller";
+import { GetVendorDetailsForChatController } from "../../interfaceAdapters/controllers/chat/get-vendor-details.controller";
+import { CreateChatRoomController } from "../../interfaceAdapters/controllers/chat/create-chat-room-controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -273,5 +275,13 @@ export class ControllerRegistry {
 
     // -----chat-----
     container.register("ChatController", { useClass: ChatController });
+
+    container.register("GetVendorDetailsForChatController", {
+      useClass: GetVendorDetailsForChatController,
+    });
+
+    container.register("CreateChatRoomController", {
+      useClass: CreateChatRoomController,
+    });
   }
 }

@@ -2,10 +2,11 @@ import { IMessageEntity } from "../../models/message.entity";
 
 export interface ISendMessageUseCase {
   execute(
-    clientId: any,
-    vendorId: any,
-    senderId: any,
+    clientId: string,
+    vendorId: string,
+    senderId: string,
     senderType: "Client" | "Vendor",
-    content: string
+    content: string,
+    chatRoomId?: string 
   ): Promise<IMessageEntity>;
 }

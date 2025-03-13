@@ -21,6 +21,8 @@ export interface IBookingRepository {
 
   findByIdAndUpdateBookingStatus(id: any, status: string): Promise<void>;
 
+  findByClientIdAndVendorId(clientId: any, vendorId: any) : Promise<IBookingEntity | null>
+
   updateClientApproved(id: any): Promise<IBookingEntity | null>;
 
   updateVendorApproved(id: any): Promise<IBookingEntity | null>;
