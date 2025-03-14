@@ -48,6 +48,7 @@ export interface EventQueryParams {
   latitude?: number; // New
   maxDistance?: number; // New
 }
+
 // Response interface from the backend
 export interface EventListResponse {
   events: Event[];

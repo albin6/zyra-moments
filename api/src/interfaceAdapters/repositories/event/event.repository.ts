@@ -83,21 +83,20 @@ export class EventRepository implements IEventRepository {
       maxDistance = 10000, // New: Default 10km in meters
     } = criteria;
 
-    // Construct base query for upcoming events
-    const baseQuery: mongoose.FilterQuery<Event> = {
-      date: { $gte: new Date() },
+    let baseQuery: mongoose.FilterQuery<Event> = {
+      date: { $gte: new Date() }, // Uncommented this line
     };
-
+    
     // Add geospatial query if nearby is enabled
     if (nearby && longitude !== undefined && latitude !== undefined) {
-      baseQuery.coordinates = {
+      baseQuery["coordinates.coordinates"] = {
         $near: {
           $geometry: {
             type: "Point",
             coordinates: [longitude, latitude], // [lng, lat] as per GeoJSON
           },
           $maxDistance: maxDistance, // Distance in meters
-        },
+        }
       };
     }
 
@@ -135,7 +134,7 @@ export class EventRepository implements IEventRepository {
     // Calculate pagination
     const skip = (page - 1) * limit;
 
-    console.log("base query for the data =>", baseQuery);
+    console.dir(baseQuery, { depth: null });
 
     // Execute query
     const events = await EventModel.find(baseQuery)
@@ -146,11 +145,15 @@ export class EventRepository implements IEventRepository {
         path: "hostId",
         select: "_id firstName lastName email profileImage phoneNumber",
       })
-      .lean() 
+      .lean()
       .exec();
 
+      console.log('after performing db operation => ', events)
+
     // Count total events
-    const totalEvents = await EventModel.countDocuments(baseQuery);
+    const totalEvents = (await EventModel.find(baseQuery)).length
+
+    console.log('after getting total events,=>', totalEvents)
 
     return {
       events: events as PopulatedEvents[], // Type assertion to match PopulatedEvents

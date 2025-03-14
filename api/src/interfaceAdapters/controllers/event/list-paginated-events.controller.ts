@@ -40,10 +40,14 @@ export class ListPaginatedEventsController implements IListPaginatedEventsContro
 
       // Validate geospatial parameters if nearby is true
       if (criteria.nearby && (!criteria.longitude || !criteria.latitude)) {
-        throw new CustomError("Longitude and latitude are required for nearby search", HTTP_STATUS.BAD_REQUEST);
+        throw new CustomError(ERROR_MESSAGES.LAT_LON_REQUIRED, HTTP_STATUS.BAD_REQUEST);
       }
 
+      console.log('this is clog before usecase ===>')
+
       const result = await this.listPaginatedEventsUseCase.execute(criteria);
+
+      console.log('this is the result from usecase ===>', result)
 
       res.json({
         success: true,
