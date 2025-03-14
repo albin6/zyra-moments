@@ -35,6 +35,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  LAT_LON_REQUIRED: "Longitude and latitude are required for nearby search",
   INVALID_ROLE: "Invalid user role",
   UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",
   BOOKING_NOT_FOUND: "Booking not found",

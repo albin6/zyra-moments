@@ -22,7 +22,7 @@ export interface IEventEntity {
 
 export interface PopulatedEvents extends Omit<IEventEntity, "hostId"> {
   hostId: {
-    _id: ObjectId;
+    _id: ObjectId | string;
     firstName: string;
     lastName: string;
     email: string;

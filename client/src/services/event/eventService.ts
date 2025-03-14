@@ -70,6 +70,10 @@ export const getAllHostedEvents = async (params: EventQueryParams = {}) => {
         priceMax: params.priceMax,
         sortField: params.sortField || "date",
         sortOrder: params.sortOrder || "desc",
+        nearby: params.nearby || false, // Include geospatial flag
+        longitude: params.longitude, // Include user's longitude
+        latitude: params.latitude, // Include user's latitude
+        maxDistance: params.maxDistance || 10000, // Default to 10km if not provided
       },
     }
   );

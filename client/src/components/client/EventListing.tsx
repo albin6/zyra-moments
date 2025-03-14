@@ -13,25 +13,17 @@ import { EventListingSkeletonCard } from "./EventListingSkeletonCard";
 import { EventQueryParams, useEventListing } from "@/hooks/event/useEvent";
 
 export const EventListing: React.FC = () => {
-  // Enhanced Filtering States
   const [filters, setFilters] = useState<EventQueryParams>({
     search: "",
     category: "All",
     page: 1,
     limit: 6,
+    nearby: false, // New flag for nearby events
+    longitude: undefined, // New field for user's longitude
+    latitude: undefined, // New field for user's latitude
+    maxDistance: 10000, // Default 10km in meters
   });
 
-  // // Categories list
-  // const categories = [
-  //   "All",
-  //   "Wedding",
-  //   "Corporate",
-  //   "Birthday",
-  //   "Concert",
-  //   "Exhibition",
-  // ];
-
-  // Sort options updated to match API fields
   const sortOptions = [
     { label: "Date: Newest", field: "date", order: "desc" },
     { label: "Date: Oldest", field: "date", order: "asc" },
@@ -41,7 +33,6 @@ export const EventListing: React.FC = () => {
     { label: "Price: High to Low", field: "pricePerTicket", order: "desc" },
   ];
 
-  // Fetch events using the hook with filters
   const { data, isLoading } = useEventListing({
     page: filters.page,
     limit: filters.limit,
@@ -51,24 +42,42 @@ export const EventListing: React.FC = () => {
     priceMax: filters.priceMax,
     sortField: filters.sortField,
     sortOrder: filters.sortOrder,
+    nearby: filters.nearby, // Pass nearby flag
+    longitude: filters.longitude, // Pass user's longitude
+    latitude: filters.latitude, // Pass user's latitude
+    maxDistance: filters.maxDistance, // Pass max distance
   });
 
-  // Pagination Handler
+  // Get user's location
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          handleFilterChange({ latitude, longitude, nearby: true });
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          alert("Unable to fetch location. Please allow location access.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
+
   const paginate = (pageNumber: number) => {
     setFilters((prev) => ({ ...prev, page: pageNumber }));
   };
 
-  // Handle filter changes
   const handleFilterChange = (filterUpdate: Partial<EventQueryParams>) => {
     setFilters((prev) => ({
       ...prev,
       ...filterUpdate,
-      // Reset to page 1 when filters change
       page: filterUpdate.page || 1,
     }));
   };
 
-  // Handle sort change
   const handleSortChange = (value: string) => {
     const [field, order] = value.split(":");
     handleFilterChange({
@@ -89,23 +98,6 @@ export const EventListing: React.FC = () => {
           onChange={(e) => handleFilterChange({ search: e.target.value })}
           className="md:w-1/4"
         />
-
-        {/* Category Filter */}
-        {/* <Select
-          value={filters.category || "All"}
-          onValueChange={(value) => handleFilterChange({ category: value })}
-        >
-          <SelectTrigger className="md:w-1/4">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select> */}
 
         {/* Price Range Inputs */}
         <Input
@@ -133,9 +125,7 @@ export const EventListing: React.FC = () => {
 
         {/* Sorting Dropdown */}
         <Select
-          value={`${filters.sortField || "date"}:${
-            filters.sortOrder || "desc"
-          }`}
+          value={`${filters.sortField || "date"}:${filters.sortOrder || "desc"}`}
           onValueChange={handleSortChange}
         >
           <SelectTrigger className="md:w-1/4">
@@ -152,6 +142,15 @@ export const EventListing: React.FC = () => {
             ))}
           </SelectContent>
         </Select>
+
+        {/* Nearby Events Button */}
+        <Button
+          onClick={getUserLocation}
+          variant={filters.nearby ? "default" : "outline"}
+          className="md:w-1/4"
+        >
+          {filters.nearby ? "Showing Nearby Events" : "Find Nearby Events"}
+        </Button>
       </div>
 
       {/* Events Grid */}
