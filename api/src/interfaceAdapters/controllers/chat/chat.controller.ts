@@ -79,23 +79,24 @@ export class ChatController implements IChatController {
           senderId,
           senderType,
           content,
+          chatRoomId, // Add chatRoomId
         }: {
           clientId: string;
           vendorId: string;
           senderId: string;
           senderType: "Client" | "Vendor";
           content: string;
+          chatRoomId?: string; // Optional
         }) => {
           const message = await this.sendMessageUseCase.execute(
             clientId,
             vendorId,
             senderId,
             senderType,
-            content
+            content,
+            chatRoomId as string
           );
-          const chatRoom = await this.getChatHistoryUseCase.execute(
-            message.chatRoomId
-          );
+          const chatRoom = await this.getChatHistoryUseCase.execute(message.chatRoomId);
           this.io
             ?.to(clientId.toString())
             .to(vendorId.toString())
@@ -148,7 +149,7 @@ export class ChatController implements IChatController {
 
   async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { userId, userType } = req.params;
+      const { userId, userType } = req.params; // client, client id
       if (
         !userId ||
         !["Client", "Vendor"].includes(

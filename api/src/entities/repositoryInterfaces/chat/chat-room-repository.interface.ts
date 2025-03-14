@@ -5,7 +5,7 @@ export interface IChatRoomRepository {
     clientId: any,
     vendorId: any,
     lastMessage: string,
-    lastMessageAt: any
+    lastMessageAt: Date
   ): Promise<IChatRoomEntity>;
 
   findById(id: any): Promise<IChatRoomEntity | null>;
@@ -13,4 +13,10 @@ export interface IChatRoomRepository {
   findByClientId(clientId: any): Promise<IChatRoomEntity[]>;
 
   findByVendorId(vendorId: any): Promise<IChatRoomEntity[]>;
+
+  updateLastMessage(
+    chatRoomId: any,
+    lastMessage: string,
+    lastMessageAt: Date
+  ): Promise<void>;
 }

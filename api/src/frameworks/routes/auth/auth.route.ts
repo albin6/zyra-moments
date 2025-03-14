@@ -3,7 +3,6 @@ import { BaseRoute } from "../base.route";
 import {
   googleController,
   loginController,
-  refreshTokenController,
   registerController,
   sendEmailController,
   veryfyOTPController,

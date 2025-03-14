@@ -5,6 +5,8 @@ import { ZodError } from "zod";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { CustomError } from "../../../entities/utils/CustomError";
 import { inject, injectable } from "tsyringe";
+import { CustomRequest } from "../../middlewares/auth.middleware";
+import { IGetTheClientVendorConnectionStatusUseCase } from "../../../entities/useCaseInterfaces/client/get-the-client-vendor-connection-status-usecase.interface";
 
 @injectable()
 export class GetVendorProfileDetailsController
@@ -12,10 +14,13 @@ export class GetVendorProfileDetailsController
 {
   constructor(
     @inject("IGetVendorProfileDetailsUseCase")
-    private getVendorProfileDetailsUseCase: IGetVendorProfileDetailsUseCase
+    private getVendorProfileDetailsUseCase: IGetVendorProfileDetailsUseCase,
+    @inject("IGetTheClientVendorConnectionStatusUseCase")
+    private getTheClientVendorConnectionStatusUseCase: IGetTheClientVendorConnectionStatusUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
     try {
+      const userId = (req as CustomRequest).user.id;
       const { vendorId } = req.params;
       const { servicePage, workSamplePage, limit } = req.query;
 
@@ -23,14 +28,17 @@ export class GetVendorProfileDetailsController
       const workSamplePageNumber = Number(workSamplePage);
       const pageSize = Number(limit);
 
-      const vendorDetails = await this.getVendorProfileDetailsUseCase.execute(
-        vendorId,
-        {
+      const [isClientConncetedWithVendor, vendorDetails] = await Promise.all([
+        this.getTheClientVendorConnectionStatusUseCase.execute(
+          userId,
+          vendorId
+        ),
+        this.getVendorProfileDetailsUseCase.execute(vendorId, {
           servicePage: servicePageNumber,
           workSamplePage: workSamplePageNumber,
           limit: pageSize,
-        }
-      );
+        }),
+      ]);
 
       const response = {
         _id: vendorDetails._id!,
@@ -40,6 +48,7 @@ export class GetVendorProfileDetailsController
         profileImage: vendorDetails?.profileImage,
         phoneNumber: vendorDetails?.phoneNumber,
         status: vendorDetails.status,
+        canChat: isClientConncetedWithVendor,
         vendorId: vendorDetails.vendorId,
         category: vendorDetails.category,
         bio: vendorDetails.bio,

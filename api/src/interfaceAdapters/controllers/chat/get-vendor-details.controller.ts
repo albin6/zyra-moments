@@ -2,15 +2,16 @@ import { inject, injectable } from "tsyringe";
 import { IGetVendorDetailsForChatUseCase } from "../../../entities/useCaseInterfaces/chat/get-vendor-details-usecase.interface";
 import { Request, Response } from "express";
 import { HTTP_STATUS } from "../../../shared/constants";
+import { IGetVendorDetailsForChatController } from "../../../entities/controllerInterfaces/chat/get-vendor-details-for-chat-controller.interface";
 
 @injectable()
-export class VendorController {
+export class GetVendorDetailsForChatController implements IGetVendorDetailsForChatController {
   constructor(
     @inject("IGetVendorDetailsForChatUseCase")
     private getVendorDetailsForChatUseCase: IGetVendorDetailsForChatUseCase
   ) {}
 
-  async getVendorDetails(req: Request, res: Response): Promise<void> {
+  async handle(req: Request, res: Response): Promise<void> {
     try {
       const { vendorId } = req.params;
 

@@ -56,6 +56,8 @@ import { GetUpcomingEventsController } from "../../interfaceAdapters/controllers
 import { UpdateEventDetailsByIdController } from "../../interfaceAdapters/controllers/event/update-event-details-by-id.controller";
 import { GetEventAttendanceController } from "../../interfaceAdapters/controllers/event/get-event-attendance.controller";
 import { ChatController } from "../../interfaceAdapters/controllers/chat/chat.controller";
+import { GetVendorDetailsForChatController } from "../../interfaceAdapters/controllers/chat/get-vendor-details.controller";
+import { CreateChatRoomController } from "../../interfaceAdapters/controllers/chat/create-chat-room-controller";
 
 DependencyInjection.registerAll();
 
@@ -256,3 +258,11 @@ export const getEventAttendanceController = container.resolve(
 );
 
 export const chatController = container.resolve(ChatController);
+
+export const getVendorDetailsForChatController = container.resolve(
+  GetVendorDetailsForChatController
+);
+
+export const createChatRoomController = container.resolve(
+  CreateChatRoomController
+);

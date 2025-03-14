@@ -13,9 +13,14 @@ export interface EventListDto {
     field: "date" | "startTime" | "pricePerTicket" | "title";
     order: "asc" | "desc";
   };
+  // New geospatial fields
+  nearby?: boolean; // Flag to enable geospatial search
+  longitude?: number; // User's longitude
+  latitude?: number; // User's latitude
+  maxDistance?: number; // Max distance in meters (default can be set later)
 }
 
-// Response DTO
+// Response DTO (unchanged for now)
 export interface EventListResponseDto {
   events: PopulatedEvents[];
   pagination: {

@@ -5,8 +5,8 @@ export const chatRoomSchema = new Schema<IChatRoomModel>(
   {
     clientId: { type: Schema.Types.ObjectId, required: true },
     vendorId: { type: Schema.Types.ObjectId, required: true },
-    lastMessage: { type: String, required: true },
-    lastMessageAt: { type: Date, required: true },
+    lastMessage: { type: String, required: false }, 
+    lastMessageAt: { type: Date, required: false },
     unreadCount: { type: Number, required: true, default: 0 },
   },
   {

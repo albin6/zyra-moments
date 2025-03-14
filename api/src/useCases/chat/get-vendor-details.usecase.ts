@@ -12,6 +12,6 @@ export class GetVendorDetailsForChatUseCase
   ) {}
 
   async execute(vendorId: any): Promise<IVendorEntity | null> {
-    return this.vendorRepository.findByIdForChat(vendorId);
+    return await this.vendorRepository.findByIdForChat(vendorId);
   }
 }

@@ -34,7 +34,7 @@ function ChatSection({
             recipientName={vendor.name}
             recipientAvatar={vendor.avatar}
             onSendMessage={handleSendMessage}
-            userType="client"
+            userType="Client"
             messages={[]}
           />
         ) : (
