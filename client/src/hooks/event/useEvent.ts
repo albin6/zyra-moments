@@ -41,10 +41,13 @@ export interface EventQueryParams {
   category?: string;
   priceMin?: number;
   priceMax?: number;
-  sortField?: "date" | "title" | "pricePerTicket";
+  sortField?: "date" | "startTime" | "pricePerTicket" | "title";
   sortOrder?: "asc" | "desc";
+  nearby?: boolean; // New
+  longitude?: number; // New
+  latitude?: number; // New
+  maxDistance?: number; // New
 }
-
 // Response interface from the backend
 export interface EventListResponse {
   events: Event[];

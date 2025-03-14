@@ -14,6 +14,7 @@ export class ListPaginatedEventsUseCase implements IListPaginatedEventsUseCase {
   ) {}
   async execute(criteria: EventListDto): Promise<EventListResponseDto> {
     validateCriteria(criteria);
+
     return this.eventRepository.findUpcomingEvents(criteria);
   }
 }

@@ -77,6 +77,10 @@ export class EventRepository implements IEventRepository {
       search = "",
       filters = {},
       sort = { field: "date", order: "asc" },
+      nearby = false, // New: Geospatial flag
+      longitude, // New: User's longitude
+      latitude, // New: User's latitude
+      maxDistance = 10000, // New: Default 10km in meters
     } = criteria;
 
     // Construct base query for upcoming events
@@ -84,7 +88,20 @@ export class EventRepository implements IEventRepository {
       date: { $gte: new Date() },
     };
 
-    // Add search conditions
+    // Add geospatial query if nearby is enabled
+    if (nearby && longitude !== undefined && latitude !== undefined) {
+      baseQuery.coordinates = {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude], // [lng, lat] as per GeoJSON
+          },
+          $maxDistance: maxDistance, // Distance in meters
+        },
+      };
+    }
+
+    // Add search conditions (applied even with nearby)
     if (search) {
       baseQuery.$or = [
         { title: { $regex: search, $options: "i" } },
@@ -93,8 +110,8 @@ export class EventRepository implements IEventRepository {
       ];
     }
 
-    // Add location filter
-    if (filters.location) {
+    // Add location filter (string-based, only if nearby is false)
+    if (!nearby && filters.location) {
       baseQuery.eventLocation = { $regex: filters.location, $options: "i" };
     }
 
@@ -110,9 +127,10 @@ export class EventRepository implements IEventRepository {
     }
 
     // Construct sort object
-    const sortOptions: { [key: string]: 1 | -1 } = {
-      [sort.field]: sort.order === "asc" ? 1 : -1,
-    };
+    // When nearby is true, proximity is implicit, but we can still sort by other fields
+    const sortOptions: { [key: string]: 1 | -1 } = nearby
+      ? { [sort.field]: sort.order === "asc" ? 1 : -1 } // Preserve secondary sort
+      : { [sort.field]: sort.order === "asc" ? 1 : -1 };
 
     // Calculate pagination
     const skip = (page - 1) * limit;
@@ -124,16 +142,18 @@ export class EventRepository implements IEventRepository {
       .sort(sortOptions)
       .skip(skip)
       .limit(limit)
-      .populate({
+      .populate<{ hostId: PopulatedEvents["hostId"] }>({
         path: "hostId",
         select: "_id firstName lastName email profileImage phoneNumber",
-      });
+      })
+      .lean() 
+      .exec();
 
     // Count total events
     const totalEvents = await EventModel.countDocuments(baseQuery);
 
     return {
-      events: events as any[], // Type assertion to bypass strict typing
+      events: events as PopulatedEvents[], // Type assertion to match PopulatedEvents
       pagination: {
         totalEvents,
         totalPages: Math.ceil(totalEvents / limit),
