@@ -173,12 +173,13 @@ export default function PurchasedTickets() {
 
                       <div className="mt-6 flex justify-between items-center">
                         <div className="font-bold">
-                          {ticket.eventId.pricePerTicket}
+                        ₹{ticket.eventId.pricePerTicket}
                         </div>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleCancelTicket(ticket.eventId._id)}
+                          disabled={ticket.status === "USED" || ticket.status === "CANCELLED" }
+                          onClick={() => handleCancelTicket(ticket._id)}
                         >
                           Cancel Ticket
                         </Button>
