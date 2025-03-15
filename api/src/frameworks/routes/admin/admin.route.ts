@@ -33,6 +33,12 @@ export class AdminRoutes extends BaseRoute {
         getPaginatedEventsController.handle(req, res)
     );
 
+    this.router.get(
+      "/admin/dashboard-stats",
+      verifyAuth,
+      authorizeRole(["admin"])
+    );
+
     this.router
       .route("/admin/categories")
       .get(
