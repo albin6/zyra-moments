@@ -24,6 +24,12 @@ export class AdminRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
+    this.router.get(
+      "/admin/dashboard-stats",
+      verifyAuth,
+      authorizeRole(["admin"])
+    );
+
     this.router
       .route("/admin/categories")
       .get(

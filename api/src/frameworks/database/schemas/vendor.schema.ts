@@ -29,3 +29,5 @@ export const VendorSchema = new Schema<IVendorModel>(
     timestamps: true,
   }
 );
+
+VendorSchema.index({ status: 1 });

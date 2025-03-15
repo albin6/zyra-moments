@@ -25,3 +25,5 @@ export const ClientSchema = new Schema<IClientModel>(
     timestamps: true,
   }
 );
+
+ClientSchema.index({ status: 1 });

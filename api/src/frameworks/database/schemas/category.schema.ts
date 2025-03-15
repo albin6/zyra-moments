@@ -9,3 +9,5 @@ export const CategorySchema = new Schema<ICategoryModel>(
   },
   { timestamps: true }
 );
+
+CategorySchema.index({ status: 1 });
