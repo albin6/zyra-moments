@@ -1,6 +1,6 @@
 import { AxiosResponse } from "@/services/auth/authService";
-import { markAttendance } from "@/services/ticket/ticketService";
-import { useMutation } from "@tanstack/react-query";
+import { cancelTicket, getAllPurchasedTickets, markAttendance } from "@/services/ticket/ticketService";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 type MarkAttendanceParams = {
   qrCode: string;
@@ -11,3 +11,16 @@ export const useTicketMutation = () => {
     mutationFn: markAttendance,
   });
 };
+
+export const useTicketByUserQuery = (page: number, limit: number) => {
+  return useQuery({
+    queryKey: ['purchased-tickets', page, limit], 
+    queryFn: () => getAllPurchasedTickets(page, limit) 
+  })
+}
+
+export const useTicket = () => {
+  return useMutation<AxiosResponse, Error, {ticketId: string}>({
+    mutationFn: cancelTicket
+  })
+}

@@ -9,6 +9,10 @@ import {
 import { EventModel } from "../../../frameworks/database/models/event.model";
 import mongoose from "mongoose";
 import { CustomError } from "../../../entities/utils/CustomError";
+import {
+  PaginatedTicket,
+  PopulatedTicket,
+} from "../../../entities/models/paginated-ticket..entity";
 
 @injectable()
 export class TicketRepository implements ITicketRepository {
@@ -96,5 +100,30 @@ export class TicketRepository implements ITicketRepository {
       totalTickets: attendance.length,
       scannedTickets: attendance.filter((t) => t.isScanned).length,
     };
+  }
+
+  async findAllByUserId(
+    userId: any,
+    skip: number,
+    limit: number
+  ): Promise<PaginatedTicket> {
+    const [tickets, total] = await Promise.all([
+      TicketModel.find({ userId })
+        .populate(
+          "eventId",
+          "title description date pricePerTicket ticketLimit eventLocation startTime endTime"
+        )
+        .skip(skip)
+        .limit(limit),
+      TicketModel.countDocuments({ userId }),
+    ]);
+    return {
+      total,
+      tickets: tickets as unknown as PopulatedTicket[],
+    };
+  }
+
+  async findByIdAndCancel(id: any): Promise<void> {
+    await TicketModel.findByIdAndUpdate(id, { status: "CANCELLED" });
   }
 }

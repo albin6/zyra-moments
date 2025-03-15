@@ -155,6 +155,10 @@ import { IGetVendorDetailsForChatUseCase } from "../../entities/useCaseInterface
 import { GetVendorDetailsForChatUseCase } from "../../useCases/chat/get-vendor-details.usecase";
 import { ICreateChatRoomUseCase } from "../../entities/useCaseInterfaces/chat/create-chat-room-usecase.interface";
 import { CreateChatRoomUseCase } from "../../useCases/chat/create-chat-room,.usecase";
+import { IGetAllTicketsByUserIdUseCase } from "../../entities/useCaseInterfaces/event/ticket/get-all-tickets-by-user-id-usecase.interface";
+import { GetAllTicketsByUserIdUseCase } from "../../useCases/event/ticket/get-all-tickets-by-user-id.usecase";
+import { ICancelTicketUseCase } from "../../entities/useCaseInterfaces/event/ticket/cancel-ticket-usecase.interface";
+import { CancelTicketUseCase } from "../../useCases/event/ticket/cancel-ticket.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -431,6 +435,15 @@ export class UseCaseRegistry {
 
     container.register<ICreateChatRoomUseCase>("ICreateChatRoomUseCase", {
       useClass: CreateChatRoomUseCase,
+    });
+
+    container.register<IGetAllTicketsByUserIdUseCase>(
+      "IGetAllTicketsByUserIdUseCase",
+      { useClass: GetAllTicketsByUserIdUseCase }
+    );
+
+    container.register<ICancelTicketUseCase>("ICancelTicketUseCase", {
+      useClass: CancelTicketUseCase,
     });
 
     // Register Strategies

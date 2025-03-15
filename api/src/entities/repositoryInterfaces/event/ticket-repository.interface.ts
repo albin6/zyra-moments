@@ -1,4 +1,5 @@
 import { GetEventAttendanceResponse } from "../../models/attendance.entity";
+import { PaginatedTicket } from "../../models/paginated-ticket..entity";
 import { ITicketEntity } from "../../models/ticket.entity";
 
 export interface ITicketRepository {
@@ -14,4 +15,12 @@ export interface ITicketRepository {
     eventId: any,
     hostId: any
   ): Promise<GetEventAttendanceResponse>;
+
+  findAllByUserId(
+    userId: any,
+    skip: number,
+    limit: number
+  ): Promise<PaginatedTicket>;
+
+  findByIdAndCancel(id: any): Promise<void>
 }
