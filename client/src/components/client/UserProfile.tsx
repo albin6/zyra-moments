@@ -5,7 +5,7 @@ import { Edit2, Menu } from "lucide-react";
 import { ClientSidebar } from "./ClientSidebar";
 import { ProfileInfo } from "./ProfileInfo";
 import { EditProfileForm } from "./EditProfileForm";
-import { UserEvents } from "./UserEvents";
+import PurchasedTickets from "./PurchasedTickets";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useClientProfileMutation } from "@/hooks/client/useClientProfile";
@@ -196,7 +196,7 @@ export function UserProfile() {
               {activeTab === "profile" && !isEditing && (
                 <ProfileInfo data={clientData} />
               )}
-              {activeTab === "events" && <UserEvents />}
+              {activeTab === "events" && <PurchasedTickets />}
               {activeTab === "bookings" && <ClientBookingListing />}
 
               {activeTab === "event-list" && (

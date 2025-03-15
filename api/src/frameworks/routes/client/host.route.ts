@@ -5,7 +5,9 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
   blockStatusMiddleware,
+  cancelTicketController,
   getAllEventsByHostIdController,
+  getAllTicketsByUserIdController,
   getEventAttendanceController,
   getEventDetailsByIdController,
   getUpcomingEventsController,
@@ -70,6 +72,23 @@ export class HostRoutes extends BaseRoute {
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
       (req: Request, res: Response) =>
         listPaginatedEventsController.handle(req, res)
+    );
+
+    this.router.get(
+      "/client/purchased-tickets",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) =>
+        getAllTicketsByUserIdController.handle(req, res)
+    );
+
+    this.router.patch(
+      "/client/ticket/cancel",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      (req: Request, res: Response) => cancelTicketController.handle(req, res)
     );
 
     this.router.get(

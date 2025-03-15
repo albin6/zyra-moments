@@ -26,6 +26,7 @@ export const SUCCESS_MESSAGES = {
   OTP_SEND_SUCCESS: "OTP sent successfully",
   LOGOUT_SUCCESS: "Logged out successfully.",
   UPDATE_SUCCESS: "Updated successfully.",
+  CANCEL_SUCCESS: "Cancelled successfully.",
   DELETE_SUCCESS: "Deleted successfully.",
   OPERATION_SUCCESS: "Operation completed successfully.",
   PASSWORD_RESET_SUCCESS: "Password reset successfully.",
