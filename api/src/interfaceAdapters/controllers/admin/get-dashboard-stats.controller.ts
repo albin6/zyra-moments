@@ -20,7 +20,7 @@ export class GetDashboardStatsController
       const stats = await this.getDashboardStatsUseCase.execute();
       res.status(HTTP_STATUS.OK).json({
         success: true,
-        data: stats,
+        stats,
       });
     } catch (error) {
       if (error instanceof ZodError) {

@@ -33,6 +33,8 @@ import { IChatRoomRepository } from "../../entities/repositoryInterfaces/chat/ch
 import { ChatRoomRepository } from "../../interfaceAdapters/repositories/chat/chat-room.repository";
 import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/message-repository.interface";
 import { MessageRepository } from "../../interfaceAdapters/repositories/chat/message.repository";
+import { IDashBoardStatsRepository } from "../../entities/repositoryInterfaces/admin/dashboard-stats-repository.interface";
+import { DashboardStatsRepository } from "../../interfaceAdapters/repositories/admin/dashboard-stats.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -95,6 +97,10 @@ export class RepositoryRegistry {
 
     container.register<ITicketRepository>("ITicketRepository", {
       useClass: TicketRepository,
+    });
+
+    container.register<IDashBoardStatsRepository>("IDashBoardStatsRepository", {
+      useClass: DashboardStatsRepository,
     });
 
     // -----chat-----

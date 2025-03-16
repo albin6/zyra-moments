@@ -9,6 +9,7 @@ import AdminCategoryManagement from "@/pages/admin/AdminCategoryManagement";
 import { Custom404 } from "@/components/404/Custom404";
 import AdminTransactions from "@/pages/admin/AdminTransactions";
 import AdminWallet from "@/pages/admin/AdminWallet";
+import EventManagement from "@/components/admin/EventManagement";
 
 function AdminRoutes() {
   return (
@@ -25,6 +26,7 @@ function AdminRoutes() {
         <Route path="category" element={<AdminCategoryManagement />} />
         <Route path="wallet" element={<AdminWallet />} />
         <Route path="transactions" element={<AdminTransactions />} />
+        <Route path="events" element={<EventManagement />} />
         <Route
           path="*"
           element={<Custom404 pathname={window.location.pathname} />}

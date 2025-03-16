@@ -5,7 +5,7 @@ import {
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
   getAllUsersController,
-  getPaginatedEventsController,
+  getDashboardStatsController,
   getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
@@ -26,17 +26,11 @@ export class AdminRoutes extends BaseRoute {
   }
   protected initializeRoutes(): void {
     this.router.get(
-      "/admin/events",
+      "/admin/dashboard-stats",
       verifyAuth,
       authorizeRole(["admin"]),
       (req: Request, res: Response) =>
-        getPaginatedEventsController.handle(req, res)
-    );
-
-    this.router.get(
-      "/admin/dashboard-stats",
-      verifyAuth,
-      authorizeRole(["admin"])
+        getDashboardStatsController.handle(req, res)
     );
 
     this.router
