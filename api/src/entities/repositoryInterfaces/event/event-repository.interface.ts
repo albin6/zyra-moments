@@ -3,6 +3,7 @@ import {
   EventListResponseDto,
 } from "../../../shared/dtos/event.dto";
 import {
+  EventFilterParams,
   IEventEntity,
   PaginatedEvents,
   PopulatedEvents,
@@ -28,4 +29,6 @@ export interface IEventRepository {
   findFew(): Promise<PopulatedEvents[]>;
 
   findUpcomingEvents(criteria: EventListDto): Promise<EventListResponseDto>;
+
+  getPaginatedEvents(filter: any, skip: number, limit: number): Promise<PaginatedEvents>;
 }

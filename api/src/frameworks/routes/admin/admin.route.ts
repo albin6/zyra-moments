@@ -5,6 +5,7 @@ import {
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
   getAllUsersController,
+  getPaginatedEventsController,
   getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
@@ -24,6 +25,14 @@ export class AdminRoutes extends BaseRoute {
     super();
   }
   protected initializeRoutes(): void {
+    this.router.get(
+      "/admin/events",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        getPaginatedEventsController.handle(req, res)
+    );
+
     this.router
       .route("/admin/categories")
       .get(

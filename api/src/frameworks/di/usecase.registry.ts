@@ -159,6 +159,8 @@ import { IGetAllTicketsByUserIdUseCase } from "../../entities/useCaseInterfaces/
 import { GetAllTicketsByUserIdUseCase } from "../../useCases/event/ticket/get-all-tickets-by-user-id.usecase";
 import { ICancelTicketUseCase } from "../../entities/useCaseInterfaces/event/ticket/cancel-ticket-usecase.interface";
 import { CancelTicketUseCase } from "../../useCases/event/ticket/cancel-ticket.usecase";
+import { IGetPaginatedEventsUseCase } from "../../entities/useCaseInterfaces/event/get-paginated-events-usecase.interface";
+import { GetPaginatedEventsUseCase } from "../../useCases/event/get-paginated-events.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -445,6 +447,11 @@ export class UseCaseRegistry {
     container.register<ICancelTicketUseCase>("ICancelTicketUseCase", {
       useClass: CancelTicketUseCase,
     });
+
+    container.register<IGetPaginatedEventsUseCase>(
+      "IGetPaginatedEventsUseCase",
+      { useClass: GetPaginatedEventsUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

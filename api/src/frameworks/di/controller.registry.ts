@@ -58,6 +58,7 @@ import { GetVendorDetailsForChatController } from "../../interfaceAdapters/contr
 import { CreateChatRoomController } from "../../interfaceAdapters/controllers/chat/create-chat-room-controller";
 import { GetAllTicketsByUserIdController } from "../../interfaceAdapters/controllers/event/ticket/get-all-tickets-by-user-id.controller";
 import { CancelTicketController } from "../../interfaceAdapters/controllers/event/ticket/cancel-ticket.controller";
+import { GetPaginatedEventsController } from "../../interfaceAdapters/controllers/event/get-paginated-events.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -292,6 +293,10 @@ export class ControllerRegistry {
 
     container.register("CreateChatRoomController", {
       useClass: CreateChatRoomController,
+    });
+
+    container.register("GetPaginatedEventsController", {
+      useClass: GetPaginatedEventsController,
     });
   }
 }
