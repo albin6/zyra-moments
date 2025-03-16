@@ -5,6 +5,7 @@ import {
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
   getAllUsersController,
+  getDashboardStatsController,
   getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
@@ -27,7 +28,9 @@ export class AdminRoutes extends BaseRoute {
     this.router.get(
       "/admin/dashboard-stats",
       verifyAuth,
-      authorizeRole(["admin"])
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        getDashboardStatsController.handle(req, res)
     );
 
     this.router
