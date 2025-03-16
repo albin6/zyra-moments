@@ -161,6 +161,8 @@ import { ICancelTicketUseCase } from "../../entities/useCaseInterfaces/event/tic
 import { CancelTicketUseCase } from "../../useCases/event/ticket/cancel-ticket.usecase";
 import { IGetDashboardStatsUseCase } from "../../entities/useCaseInterfaces/admin/get-dashboard-stats-usecase.interface";
 import { GetDashboardStatsUseCase } from "../../useCases/admin/get-dashboard-stats.usecase";
+import { IGetPaginatedEventsUseCase } from "../../entities/useCaseInterfaces/event/get-paginated-events-usecase.interface";
+import { GetPaginatedEventsUseCase } from "../../useCases/event/get-paginated-events.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -451,6 +453,11 @@ export class UseCaseRegistry {
     container.register<IGetDashboardStatsUseCase>("IGetDashboardStatsUseCase", {
       useClass: GetDashboardStatsUseCase,
     });
+
+    container.register<IGetPaginatedEventsUseCase>(
+      "IGetPaginatedEventsUseCase",
+      { useClass: GetPaginatedEventsUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

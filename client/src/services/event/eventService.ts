@@ -1,6 +1,7 @@
+import { adminAxiosInstance } from "@/api/admin.axios";
 import { clientAxiosInstance } from "@/api/client.axios";
 import { EventQueryParams } from "@/hooks/event/useEvent";
-import { PopulatedEvents } from "@/types/Event";
+import { PaginatedEvents, PopulatedEvents } from "@/types/Event";
 import { TransformedEventData } from "@/utils/format/transformEventFormData";
 
 export const hostNewEvent = async (data: TransformedEventData) => {
@@ -83,5 +84,22 @@ export const getAllHostedEvents = async (params: EventQueryParams = {}) => {
 
 export const getUpcomingEvents = async () => {
   const response = await clientAxiosInstance.get("/_host/client/upcomings");
+  return response.data;
+};
+
+export const getPaginatedEvents = async (
+  page: number,
+  limit: number,
+  search: string,
+  status: string,
+  date?: Date
+) => {
+  const newStatus = status === "all" ? "" : status === "active" ? true : false;
+  const response = await adminAxiosInstance.get<PaginatedEvents>(
+    "/_ad/admin/events",
+    {
+      params: { page, limit, search, date, status: newStatus },
+    }
+  );
   return response.data;
 };

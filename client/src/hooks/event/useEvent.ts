@@ -2,6 +2,7 @@ import { AuthResponse } from "@/services/auth/authService";
 import {
   getAllHostedEvents,
   getEventDetails,
+  getPaginatedEvents,
   getUpcomingEvents,
   PaginatedHostedEventsResponse,
 } from "@/services/event/eventService";
@@ -103,5 +104,18 @@ export const useUpcomingEventsQuery = () => {
   return useQuery({
     queryKey: ["upcomings"],
     queryFn: getUpcomingEvents,
+  });
+};
+
+export const usePaginatedEvents = (
+  page: number,
+  limit: number,
+  search: string,
+  status: string,
+  date?: Date
+) => {
+  return useQuery({
+    queryKey: ["admin-events", page, limit, search, date, status],
+    queryFn: () => getPaginatedEvents(page, limit, search, status, date),
   });
 };

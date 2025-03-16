@@ -5,7 +5,7 @@ export interface IEventEntity {
   title: string;
   description: string;
   date: Date;
-  status: boolean
+  status: boolean;
   startTime: string;
   endTime: string;
   pricePerTicket: number;
@@ -35,4 +35,12 @@ export interface PopulatedEvents extends Omit<IEventEntity, "hostId"> {
 export interface PaginatedEvents {
   events: PopulatedEvents[];
   total: number;
+}
+
+export interface EventFilterParams {
+  pageNumber: number;
+  pageSize: number;
+  searchString: string;
+  parsedStatus: boolean | undefined
+  dateValue?: Date;
 }
