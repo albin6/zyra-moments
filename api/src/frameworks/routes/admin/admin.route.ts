@@ -6,6 +6,7 @@ import {
   getAllTransactionsByUserIdController,
   getAllUsersController,
   getDashboardStatsController,
+  getPaginatedEventsController,
   getWalletDetailsOfUserController,
   logoutUserController,
   refreshTokenController,
@@ -31,6 +32,14 @@ export class AdminRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       (req: Request, res: Response) =>
         getDashboardStatsController.handle(req, res)
+    );
+
+    this.router.get(
+      "/admin/events",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      (req: Request, res: Response) =>
+        getPaginatedEventsController.handle(req, res)
     );
 
     this.router
