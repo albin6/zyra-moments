@@ -86,7 +86,7 @@ export class EventRepository implements IEventRepository {
     let baseQuery: mongoose.FilterQuery<Event> = {
       date: { $gte: new Date() }, // Uncommented this line
     };
-    
+
     // Add geospatial query if nearby is enabled
     if (nearby && longitude !== undefined && latitude !== undefined) {
       baseQuery["coordinates.coordinates"] = {
@@ -96,7 +96,7 @@ export class EventRepository implements IEventRepository {
             coordinates: [longitude, latitude], // [lng, lat] as per GeoJSON
           },
           $maxDistance: maxDistance, // Distance in meters
-        }
+        },
       };
     }
 
@@ -148,12 +148,12 @@ export class EventRepository implements IEventRepository {
       .lean()
       .exec();
 
-      console.log('after performing db operation => ', events)
+    console.log("after performing db operation => ", events);
 
     // Count total events
-    const totalEvents = (await EventModel.find(baseQuery)).length
+    const totalEvents = (await EventModel.find(baseQuery)).length;
 
-    console.log('after getting total events,=>', totalEvents)
+    console.log("after getting total events,=>", totalEvents);
 
     return {
       events: events as PopulatedEvents[], // Type assertion to match PopulatedEvents
@@ -170,5 +170,28 @@ export class EventRepository implements IEventRepository {
     data: Partial<IEventEntity>
   ): Promise<void> {
     await EventModel.findByIdAndUpdate(id, data);
+  }
+
+  async getPaginatedEvents(
+    filter: any,
+    skip: number,
+    limit: number
+  ): Promise<PaginatedEvents> {
+    const [events, total] = await Promise.all([
+      EventModel.find(filter)
+        .populate({
+          path: "hostId",
+          select: "firstName lastName email profileImage phoneNumber",
+        })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      EventModel.countDocuments(filter),
+    ]);
+
+    return {
+      events: events as unknown as PopulatedEvents[],
+      total,
+    };
   }
 }
