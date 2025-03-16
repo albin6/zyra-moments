@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import _ from "lodash";
 import { ConfirmationModal } from "../modals/ConfirmationModal";
 import { ScrollArea } from "../ui/scroll-area";
+import { Card } from "../ui/card";
 
 export interface IClient {
   _id: string;
@@ -224,55 +225,59 @@ export default function UserManagement() {
   );
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold mb-6">User Management</h1>
-      <Tabs
-        value={activeTab}
-        onValueChange={(value) => setActiveTab(value)}
-        className="w-full"
-      >
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="client">Clients</TabsTrigger>
-          <TabsTrigger value="vendor">Vendors</TabsTrigger>
-        </TabsList>
-        <div className="my-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <Input
-            placeholder={`Search ${activeTab}...`}
-            value={searchTerm}
-            onChange={handleSearch}
-            className="max-w-sm"
+    <div className="p-4 sm:p-6 space-y-6">
+      <Card className="w-full">
+        <div className="p-6 space-y-6">
+          <h1 className="text-3xl font-bold mb-6">User Management</h1>
+          <Tabs
+            value={activeTab}
+            onValueChange={(value) => setActiveTab(value)}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="client">Clients</TabsTrigger>
+              <TabsTrigger value="vendor">Vendors</TabsTrigger>
+            </TabsList>
+            <div className="my-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <Input
+                placeholder={`Search ${activeTab}...`}
+                value={searchTerm}
+                onChange={handleSearch}
+                className="max-w-sm"
+              />
+            </div>
+            <TabsContent value="client" className="overflow-x-auto">
+              <ScrollArea className="h-[287px] w-full rounded-md border">
+                {renderClientTable()}
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="vendor" className="overflow-x-auto">
+              <ScrollArea className="h-[287px] w-full rounded-md border">
+                {clients && renderVendorTable()}
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+          <div className="mt-4 flex justify-center">
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </div>
+          <ConfirmationModal
+            isOpen={isConfirmationModalOpen}
+            onClose={() => setIsConfirmationModalOpen(false)}
+            onConfirm={() => {
+              confirmBlock();
+              setUserToBlock(null);
+            }}
+            title="Confirm Action"
+            message="Are you sure you want to perform this action?"
+            confirmText="Yes, I'm sure"
+            cancelText="No, cancel"
           />
         </div>
-        <TabsContent value="client" className="overflow-x-auto">
-          <ScrollArea className="h-[287px] w-full rounded-md border">
-            {renderClientTable()}
-          </ScrollArea>
-        </TabsContent>
-        <TabsContent value="vendor" className="overflow-x-auto">
-          <ScrollArea className="h-[287px] w-full rounded-md border">
-            {clients && renderVendorTable()}
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
-      <div className="mt-4 flex justify-center">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      </div>
-      <ConfirmationModal
-        isOpen={isConfirmationModalOpen}
-        onClose={() => setIsConfirmationModalOpen(false)}
-        onConfirm={() => {
-          confirmBlock();
-          setUserToBlock(null);
-        }}
-        title="Confirm Action"
-        message="Are you sure you want to perform this action?"
-        confirmText="Yes, I'm sure"
-        cancelText="No, cancel"
-      />
+      </Card>
     </div>
   );
 }

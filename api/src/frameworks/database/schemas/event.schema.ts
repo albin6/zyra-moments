@@ -15,6 +15,10 @@ export const EventSchema: Schema = new Schema<IEventModel>(
       type: Date,
       required: true,
     },
+    status: {
+      type: Boolean,
+      default : true
+    },
     startTime: {
       type: String,
       required: true,
@@ -63,3 +67,4 @@ export const EventSchema: Schema = new Schema<IEventModel>(
 );
 
 EventSchema.index({ "coordinates.coordinates": "2dsphere" });
+EventSchema.index({ status: 1 });

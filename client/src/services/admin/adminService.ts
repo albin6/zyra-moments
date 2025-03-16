@@ -1,5 +1,6 @@
 import { adminAxiosInstance } from "@/api/admin.axios";
 import { AxiosResponse } from "../auth/authService";
+import { DashboardStats } from "@/hooks/admin/useDashboardStats";
 
 export const getAllUsers = async ({
   userType,
@@ -68,7 +69,7 @@ export type RequestItem = {
   _id: string;
   vendorId: Vendor;
   categoryId: Category;
-  status: "pending" | "accepted" | "rejected"; // Assuming possible statuses
+  status: "pending" | "accepted" | "rejected";
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -106,5 +107,15 @@ export const updateCategoryJoinRequestStatus = async (data: {
       },
     }
   );
+  return response.data;
+};
+
+export interface DashboardStatsResponse {
+  success: boolean
+  stats: DashboardStats
+}
+
+export const getDashboardStats = async () => {
+  const response = await adminAxiosInstance.get<DashboardStatsResponse>("/_ad/admin/dashboard-stats");
   return response.data;
 };

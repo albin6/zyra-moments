@@ -5,7 +5,7 @@ export interface IEventEntity {
   title: string;
   description: string;
   date: Date;
-  status: boolean;
+  status: boolean
   startTime: string;
   endTime: string;
   pricePerTicket: number;
