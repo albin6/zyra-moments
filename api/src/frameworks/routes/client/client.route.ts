@@ -23,6 +23,7 @@ import {
   updateClientProfileController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class ClientRoutes extends BaseRoute {
   constructor() {
@@ -36,15 +37,19 @@ export class ClientRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["client"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getClientDetailsController.handle(req, res)
+        asyncHandler(
+          getClientDetailsController.handle.bind(getClientDetailsController)
+        )
       )
       .put(
         verifyAuth,
         authorizeRole(["client"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          updateClientProfileController.handle(req, res)
+        asyncHandler(
+          updateClientProfileController.handle.bind(
+            updateClientProfileController
+          )
+        )
       );
 
     this.router.get(
@@ -52,8 +57,9 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllCategoriesController.handle(req, res)
+      asyncHandler(
+        getAllCategoriesController.handle.bind(getAllCategoriesController)
+      )
     );
 
     this.router.get(
@@ -61,8 +67,11 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getVendorsUnderCategoryController.handle(req, res)
+      asyncHandler(
+        getVendorsUnderCategoryController.handle.bind(
+          getVendorsUnderCategoryController
+        )
+      )
     );
 
     this.router.get(
@@ -70,8 +79,11 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getVendorProfileDetailsController.handle(req, res)
+      asyncHandler(
+        getVendorProfileDetailsController.handle.bind(
+          getVendorProfileDetailsController
+        )
+      )
     );
 
     this.router.get(
@@ -79,7 +91,9 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => getBestVendorsController.handle(req, res)
+      asyncHandler(
+        getBestVendorsController.handle.bind(getBestVendorsController)
+      )
     );
 
     this.router.get(
@@ -87,8 +101,11 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllServicesForBookingController.handle(req, res)
+      asyncHandler(
+        getAllServicesForBookingController.handle.bind(
+          getAllServicesForBookingController
+        )
+      )
     );
 
     this.router.get(
@@ -96,8 +113,11 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllBookingByClientController.handle(req, res)
+      asyncHandler(
+        getAllBookingByClientController.handle.bind(
+          getAllBookingByClientController
+        )
+      )
     );
 
     this.router.patch(
@@ -105,8 +125,9 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        updateBookingStatusController.handle(req, res)
+      asyncHandler(
+        updateBookingStatusController.handle.bind(updateBookingStatusController)
+      )
     );
 
     this.router.get(
@@ -114,58 +135,61 @@ export class ClientRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getVendorDetailsForChatController.handle(req, res)
+      asyncHandler(
+        getVendorDetailsForChatController.handle.bind(
+          getVendorDetailsForChatController
+        )
+      )
     );
 
-    // wallet
     this.router.get(
       "/client/wallet",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getWalletDetailsOfUserController.handle(req, res)
+      asyncHandler(
+        getWalletDetailsOfUserController.handle.bind(
+          getWalletDetailsOfUserController
+        )
+      )
     );
 
-    // transactions
     this.router.get(
       "/client/transactions",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllTransactionsByUserIdController.handle(req, res)
+      asyncHandler(
+        getAllTransactionsByUserIdController.handle.bind(
+          getAllTransactionsByUserIdController
+        )
+      )
     );
 
-    // logout
     this.router.post(
       "/client/logout",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
-      }
+      asyncHandler(logoutUserController.handle.bind(logoutUserController))
     );
 
-    // password update
     this.router.put(
       "/client/update-password",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        updateClientPasswordController.handle(req, res)
+      asyncHandler(
+        updateClientPasswordController.handle.bind(
+          updateClientPasswordController
+        )
+      )
     );
 
-    // token refresh
     this.router.post(
       "/client/refresh-token",
       decodeToken,
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
+      asyncHandler(refreshTokenController.handle.bind(refreshTokenController))
     );
   }
 }

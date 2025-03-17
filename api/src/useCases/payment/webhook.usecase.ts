@@ -3,7 +3,7 @@ import { IPaymentService } from "../../entities/services/payement-service.interf
 import { IWebHookUseCase } from "../../entities/useCaseInterfaces/payment/webhook-usecase.interface";
 import { config } from "../../shared/config";
 import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

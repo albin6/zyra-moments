@@ -21,7 +21,7 @@ export default App;
 function AppLayout() {
   return (
     <Router>
-      <Toaster position="bottom-right" richColors />
+      <Toaster position="bottom-right" />
       <Routes>
         <Route path="/*" element={<ClientRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />

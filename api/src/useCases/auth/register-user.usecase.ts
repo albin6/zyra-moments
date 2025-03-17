@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IRegisterUserUseCase } from "../../entities/useCaseInterfaces/auth/register-usecase.inteface";
 import { UserDTO } from "../../shared/dtos/user.dto";
 import { IRegisterStrategy } from "./regiter-strategies/register-strategy.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { VendorProfileForClient } from "../../entities/models/vendor-profile-for-client.entity";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IGetVendorProfileDetailsUseCase } from "../../entities/useCaseInterfaces/client/get-vendor-profile-details-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IWorkSampleRepository } from "../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
 import { IServiceRepository } from "../../entities/repositoryInterfaces/common/service-repository.interface";

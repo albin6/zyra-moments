@@ -19,7 +19,7 @@ export class RefreshTokenController implements IRefreshTokenController {
     @inject("IRefreshTokenUseCase")
     private refreshTokenUseCase: IRefreshTokenUseCase
   ) {}
-  handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response):Promise<void> {
     try {
       const refreshToken = (req as CustomRequest).user.refresh_token;
       const newTokens = this.refreshTokenUseCase.execute(refreshToken);

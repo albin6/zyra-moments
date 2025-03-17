@@ -3,7 +3,7 @@ import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { IPaymentService } from "../../entities/services/payement-service.interface";
 import { ICancelBookingUseCase } from "../../entities/useCaseInterfaces/booking/cancel-booking-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IWalletRepository } from "../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 

@@ -2,7 +2,7 @@ import { ObjectId } from "mongoose";
 import { IJoinCategoryRequestUseCase } from "../../entities/useCaseInterfaces/vendor/join-category-request-usecase.interface";
 import { inject, injectable } from "tsyringe";
 import { ICategoryRequestRepository } from "../../entities/repositoryInterfaces/common/category-request-respository.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

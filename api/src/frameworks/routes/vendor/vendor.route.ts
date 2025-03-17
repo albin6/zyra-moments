@@ -29,6 +29,7 @@ import {
   decodeToken,
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class VendorRoutes extends BaseRoute {
   constructor() {
@@ -40,8 +41,9 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllCategoriesController.handle(req, res)
+      asyncHandler(
+        getAllCategoriesController.handle.bind(getAllCategoriesController)
+      )
     );
 
     this.router.post(
@@ -49,7 +51,7 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => joinCategoryController.handle(req, res)
+      asyncHandler(joinCategoryController.handle.bind(joinCategoryController))
     );
 
     this.router.get(
@@ -57,8 +59,11 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getVendorCategoryJoinRequestStatusController.handle(req, res)
+      asyncHandler(
+        getVendorCategoryJoinRequestStatusController.handle.bind(
+          getVendorCategoryJoinRequestStatusController
+        )
+      )
     );
 
     this.router
@@ -67,15 +72,19 @@ export class VendorRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getVendorDetailsController.handle(req, res)
+        asyncHandler(
+          getVendorDetailsController.handle.bind(getVendorDetailsController)
+        )
       )
       .put(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          updateVendorProfileController.handle(req, res)
+        asyncHandler(
+          updateVendorProfileController.handle.bind(
+            updateVendorProfileController
+          )
+        )
       );
 
     this.router
@@ -84,15 +93,19 @@ export class VendorRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          createWorkSampleController.handle(req, res)
+        asyncHandler(
+          createWorkSampleController.handle.bind(createWorkSampleController)
+        )
       )
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getAllWorkSampleByVendorIdController.handle(req, res)
+        asyncHandler(
+          getAllWorkSampleByVendorIdController.handle.bind(
+            getAllWorkSampleByVendorIdController
+          )
+        )
       );
 
     this.router
@@ -101,22 +114,29 @@ export class VendorRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getWorkSampleByIdController.handle(req, res)
+        asyncHandler(
+          getWorkSampleByIdController.handle.bind(getWorkSampleByIdController)
+        )
       )
       .put(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          updateWorkSampleByIdController.handle(req, res)
+        asyncHandler(
+          updateWorkSampleByIdController.handle.bind(
+            updateWorkSampleByIdController
+          )
+        )
       )
       .delete(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          deleteWorkSampleByIdController.handle(req, res)
+        asyncHandler(
+          deleteWorkSampleByIdController.handle.bind(
+            deleteWorkSampleByIdController
+          )
+        )
       );
 
     this.router
@@ -125,15 +145,19 @@ export class VendorRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          createServiceController.handle(req, res)
+        asyncHandler(
+          createServiceController.handle.bind(createServiceController)
+        )
       )
       .get(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getAllServicesByVendorIdController.handle(req, res)
+        asyncHandler(
+          getAllServicesByVendorIdController.handle.bind(
+            getAllServicesByVendorIdController
+          )
+        )
       );
 
     this.router
@@ -142,15 +166,19 @@ export class VendorRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          getServiceDetailsByIdController.handle(req, res)
+        asyncHandler(
+          getServiceDetailsByIdController.handle.bind(
+            getServiceDetailsByIdController
+          )
+        )
       )
       .put(
         verifyAuth,
         authorizeRole(["vendor"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          updateServiceByIdController.handle(req, res)
+        asyncHandler(
+          updateServiceByIdController.handle.bind(updateServiceByIdController)
+        )
       );
 
     this.router.get(
@@ -158,8 +186,11 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllBookingForVendorController.handle(req, res)
+      asyncHandler(
+        getAllBookingForVendorController.handle.bind(
+          getAllBookingForVendorController
+        )
+      )
     );
 
     this.router.patch(
@@ -167,8 +198,9 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        updateBookingStatusController.handle(req, res)
+      asyncHandler(
+        updateBookingStatusController.handle.bind(updateBookingStatusController)
+      )
     );
 
     // wallet
@@ -177,8 +209,11 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getWalletDetailsOfUserController.handle(req, res)
+      asyncHandler(
+        getWalletDetailsOfUserController.handle.bind(
+          getWalletDetailsOfUserController
+        )
+      )
     );
 
     // transactions
@@ -187,8 +222,11 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllTransactionsByUserIdController.handle(req, res)
+      asyncHandler(
+        getAllTransactionsByUserIdController.handle.bind(
+          getAllTransactionsByUserIdController
+        )
+      )
     );
 
     this.router.put(
@@ -196,16 +234,17 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        updateVendorPasswordController.handle(req, res)
+      asyncHandler(
+        updateVendorPasswordController.handle.bind(
+          updateVendorPasswordController
+        )
+      )
     );
 
     this.router.post(
       "/vendor/refresh-token",
       decodeToken,
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
+      asyncHandler(refreshTokenController.handle.bind(refreshTokenController))
     );
 
     this.router.post(
@@ -213,9 +252,7 @@ export class VendorRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["vendor"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
-      }
+      asyncHandler(logoutUserController.handle.bind(logoutUserController))
     );
   }
 }

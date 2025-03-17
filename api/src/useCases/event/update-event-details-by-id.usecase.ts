@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IEventEntity } from "../../entities/models/event.entity";
 import { IEventRepository } from "../../entities/repositoryInterfaces/event/event-repository.interface";
 import { IUpdateEventDetailsByIdUseCase } from "../../entities/useCaseInterfaces/event/update-event-details-by-id-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

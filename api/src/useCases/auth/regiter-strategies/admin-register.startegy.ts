@@ -3,7 +3,7 @@ import { IRegisterStrategy } from "./register-strategy.interface";
 import { IAdminRepository } from "../../../entities/repositoryInterfaces/admin/admin-repository.interface";
 import { AdminDTO, UserDTO } from "../../../shared/dtos/user.dto";
 import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { CustomError } from "../../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { IWalletRepository } from "../../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 

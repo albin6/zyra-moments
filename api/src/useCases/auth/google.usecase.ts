@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IGoogleUseCase } from "../../entities/useCaseInterfaces/auth/google-usecase.interface.interface";
 import { IRegisterStrategy } from "./regiter-strategies/register-strategy.interface";
 import { HTTP_STATUS } from "../../shared/constants";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { OAuth2Client } from "google-auth-library";
 import { IUserEntity } from "../../entities/models/user.entity";
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";

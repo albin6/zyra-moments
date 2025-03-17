@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IEmailService } from "../../entities/services/email-service.interface";
 import { IOTPService } from "../../entities/services/otp-service.inteface";
 import { ISendEmailUseCase } from "../../entities/useCaseInterfaces/auth/send-email-usecase.inteface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IUserExistenceService } from "../../entities/services/user-existence-service.interface";
 import { IBcrypt } from "../../frameworks/security/bcrypt.interface";

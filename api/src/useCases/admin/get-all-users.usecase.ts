@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IGetAllUsersUseCase } from "../../entities/useCaseInterfaces/admin/get-all-users-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { PaginatedUsers } from "../../entities/models/paginated-users.entity";
 

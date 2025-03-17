@@ -3,13 +3,7 @@ import { IUpdateVendorPasswordController } from "../../../entities/controllerInt
 import { IUpdateVendorPasswordUseCase } from "../../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
 import { inject, injectable } from "tsyringe";
 import { CustomRequest } from "../../middlewares/auth.middleware";
-import {
-  ERROR_MESSAGES,
-  HTTP_STATUS,
-  SUCCESS_MESSAGES,
-} from "../../../shared/constants";
-import { ZodError } from "zod";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 
 @injectable()
 export class UpdateVendorPasswordController
@@ -20,45 +14,20 @@ export class UpdateVendorPasswordController
     private updateVendorPasswordUseCase: IUpdateVendorPasswordUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
-    try {
-      const id = (req as CustomRequest).user.id;
-      const { currentPassword, newPassword } = req.body as {
-        currentPassword: string;
-        newPassword: string;
-      };
+    const id = (req as CustomRequest).user.id;
+    const { currentPassword, newPassword } = req.body as {
+      currentPassword: string;
+      newPassword: string;
+    };
 
-      await this.updateVendorPasswordUseCase.execute(
-        id,
-        currentPassword,
-        newPassword
-      );
+    await this.updateVendorPasswordUseCase.execute(
+      id,
+      currentPassword,
+      newPassword
+    );
 
-      res
-        .status(200)
-        .json({ success: true, message: SUCCESS_MESSAGES.UPDATE_SUCCESS });
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map((err) => ({
-          message: err.message,
-        }));
-
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.VALIDATION_ERROR,
-          errors,
-        });
-        return;
-      }
-      if (error instanceof CustomError) {
-        res
-          .status(error.statusCode)
-          .json({ success: false, message: error.message });
-        return;
-      }
-      console.log(error);
-      res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
-    }
+    res
+      .status(HTTP_STATUS.OK)
+      .json({ success: true, message: SUCCESS_MESSAGES.UPDATE_SUCCESS });
   }
 }

@@ -1,18 +1,21 @@
 import cors from "cors";
+import http from "http";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import express, { Application } from "express";
-import http from "http";
 
-import { config } from "../../shared/config";
 import { AuthRoutes } from "../routes/auth/auth.route";
 import { PrivateRoutes } from "../routes/common/private.route";
-import { errorHandler } from "../../interfaceAdapters/middlewares/error.middleware";
 import { dataParser } from "../../interfaceAdapters/middlewares/data-parser.middleware";
 import { notFound } from "../../interfaceAdapters/middlewares/not-found.middleware";
 import { ChatRoutes } from "../routes/chat/chat.route";
-import { chatController } from "../di/resolver";
+import {
+  chatController,
+  injectedErrorMiddleware,
+  injectedLoggerMiddleware,
+} from "../di/resolver";
+import { corsOptions } from "../../interfaceAdapters/middlewares/cors-options";
 
 export class Server {
   private _app: Application;
@@ -30,16 +33,13 @@ export class Server {
   private configureMiddlewares(): void {
     this._app.use(helmet());
 
-    this._app.use(
-      cors({
-        origin: config.cors.ALLOWED_ORIGIN,
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Authorization", "Content-Type", "stripe-signature"],
-        credentials: true,
-      })
-    );
+    this._app.use(cors(corsOptions));
 
     this._app.use(dataParser);
+
+    this._app.use(
+      injectedLoggerMiddleware.handle.bind(injectedLoggerMiddleware)
+    );
 
     this._app.use(cookieParser());
 
@@ -64,7 +64,9 @@ export class Server {
   }
 
   private configureErrorHandling(): void {
-    this._app.use(errorHandler);
+    this._app.use(
+      injectedErrorMiddleware.handleError.bind(injectedErrorMiddleware)
+    );
   }
 
   public getApp(): Application {
@@ -72,7 +74,6 @@ export class Server {
   }
 
   public getServer(): http.Server {
-    // Added method
     return this._server;
   }
 }

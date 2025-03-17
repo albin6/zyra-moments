@@ -16,6 +16,7 @@ import {
   updateEventDetailsByIdController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class HostRoutes extends BaseRoute {
   constructor() {
@@ -28,14 +29,17 @@ export class HostRoutes extends BaseRoute {
         verifyAuth,
         authorizeRole(["client"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) => hostNewEventController.handle(req, res)
+        asyncHandler(hostNewEventController.handle.bind(hostNewEventController))
       )
       .put(
         verifyAuth,
         authorizeRole(["client"]),
         blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-        (req: Request, res: Response) =>
-          updateEventDetailsByIdController.handle(req, res)
+        asyncHandler(
+          updateEventDetailsByIdController.handle.bind(
+            updateEventDetailsByIdController
+          )
+        )
       );
 
     this.router.get(
@@ -43,8 +47,9 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getEventDetailsByIdController.handle(req, res)
+      asyncHandler(
+        getEventDetailsByIdController.handle.bind(getEventDetailsByIdController)
+      )
     );
 
     this.router.get(
@@ -52,8 +57,11 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllEventsByHostIdController.handle(req, res)
+      asyncHandler(
+        getAllEventsByHostIdController.handle.bind(
+          getAllEventsByHostIdController
+        )
+      )
     );
 
     this.router.get(
@@ -61,8 +69,9 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getUpcomingEventsController.handle(req, res)
+      asyncHandler(
+        getUpcomingEventsController.handle.bind(getUpcomingEventsController)
+      )
     );
 
     this.router.get(
@@ -70,8 +79,9 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        listPaginatedEventsController.handle(req, res)
+      asyncHandler(
+        listPaginatedEventsController.handle.bind(listPaginatedEventsController)
+      )
     );
 
     this.router.get(
@@ -79,8 +89,11 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getAllTicketsByUserIdController.handle(req, res)
+      asyncHandler(
+        getAllTicketsByUserIdController.handle.bind(
+          getAllTicketsByUserIdController
+        )
+      )
     );
 
     this.router.patch(
@@ -88,7 +101,7 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => cancelTicketController.handle(req, res)
+      asyncHandler(cancelTicketController.handle.bind(cancelTicketController))
     );
 
     this.router.get(
@@ -96,8 +109,9 @@ export class HostRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        getEventAttendanceController.handle(req, res)
+      asyncHandler(
+        getEventAttendanceController.handle.bind(getEventAttendanceController)
+      )
     );
   }
 }

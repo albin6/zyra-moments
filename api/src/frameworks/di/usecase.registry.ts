@@ -163,6 +163,10 @@ import { IGetDashboardStatsUseCase } from "../../entities/useCaseInterfaces/admi
 import { GetDashboardStatsUseCase } from "../../useCases/admin/get-dashboard-stats.usecase";
 import { IGetPaginatedEventsUseCase } from "../../entities/useCaseInterfaces/event/get-paginated-events-usecase.interface";
 import { GetPaginatedEventsUseCase } from "../../useCases/event/get-paginated-events.usecase";
+import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
+import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
+import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
+import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -514,6 +518,18 @@ export class UseCaseRegistry {
     container.register<IQrCodeService>("IQrCodeService", {
       useClass: QrCodeService,
     });
+
+    // ----- logger-----
+
+    container.register<ILogger>("ILogger", { useClass: WinstonLoggerAdapter });
+
+    container.register<LoggerMiddleware>("LoggerMiddleware", {
+      useClass: LoggerMiddleware,
+    });
+
+    // ----- error handler -----
+
+    container.register<ErrorMiddleware>('ErrorMiddleware', { useClass: ErrorMiddleware });
 
     // -----chat-----
 

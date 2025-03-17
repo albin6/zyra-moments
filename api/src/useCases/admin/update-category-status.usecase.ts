@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/category-repository.interface";
 import { IUpdateCategoryStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-category-status-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 import { IUpdateClientPasswordUseCase } from "../../entities/useCaseInterfaces/client/update-client-password-usecase.interface";
 import { IBcrypt } from "../../frameworks/security/bcrypt.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

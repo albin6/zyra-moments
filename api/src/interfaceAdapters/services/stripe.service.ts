@@ -4,7 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { PaymentStatus } from "../../entities/models/payment.entity";
 import { config } from "../../shared/config";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 

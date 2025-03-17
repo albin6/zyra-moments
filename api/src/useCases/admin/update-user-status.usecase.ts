@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IUpdateUserStatusUseCase } from "../../entities/useCaseInterfaces/admin/update-user-status-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import client from "../../frameworks/cache/redis.client";
 

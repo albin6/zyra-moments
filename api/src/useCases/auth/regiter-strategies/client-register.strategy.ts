@@ -3,7 +3,7 @@ import { IRegisterStrategy } from "./register-strategy.interface";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
 import { ClientDTO, UserDTO } from "../../../shared/dtos/user.dto";
 import { IBcrypt } from "../../../frameworks/security/bcrypt.interface";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { CustomError } from "../../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { generateRandomUUID } from "../../../frameworks/security/randomid.bcrypt";
 import { IUserEntity } from "../../../entities/models/user.entity";

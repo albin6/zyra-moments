@@ -3,7 +3,7 @@ import { IPaymentService } from "../../entities/services/payement-service.interf
 import { ICreatePaymentIntentUseCase } from "../../entities/useCaseInterfaces/payment/create-payment-intent-usecase.interface";
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
 import { Purpose } from "../../entities/models/payment.entity";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 import { any } from "zod";

@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IEventRepository } from "../../../entities/repositoryInterfaces/event/event-repository.interface";
 import { ITicketRepository } from "../../../entities/repositoryInterfaces/event/ticket-repository.interface";
 import { IMarkAttendanceUseCase } from "../../../entities/useCaseInterfaces/event/ticket/mark-attendance-usecase.interface";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { CustomError } from "../../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()

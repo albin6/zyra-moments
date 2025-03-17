@@ -20,6 +20,7 @@ import {
   decodeToken,
   verifyAuth,
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class AdminRoutes extends BaseRoute {
   constructor() {
@@ -30,16 +31,18 @@ export class AdminRoutes extends BaseRoute {
       "/admin/dashboard-stats",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        getDashboardStatsController.handle(req, res)
+      asyncHandler(
+        getDashboardStatsController.handle.bind(getDashboardStatsController)
+      )
     );
 
     this.router.get(
       "/admin/events",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        getPaginatedEventsController.handle(req, res)
+      asyncHandler(
+        getPaginatedEventsController.handle.bind(getPaginatedEventsController)
+      )
     );
 
     this.router
@@ -47,14 +50,18 @@ export class AdminRoutes extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          getAllPaginatedCategoryController.handle(req, res)
+        asyncHandler(
+          getAllPaginatedCategoryController.handle.bind(
+            getAllPaginatedCategoryController
+          )
+        )
       )
       .post(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          createNewCategoryController.handle(req, res)
+        asyncHandler(
+          createNewCategoryController.handle.bind(createNewCategoryController)
+        )
       );
 
     this.router
@@ -62,14 +69,20 @@ export class AdminRoutes extends BaseRoute {
       .patch(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          updateCategoryStatusController.handle(req, res)
+        asyncHandler(
+          updateCategoryStatusController.handle.bind(
+            updateCategoryStatusController
+          )
+        )
       )
       .put(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          updateCategoryStatusController.handle(req, res) // need to change remember!
+        asyncHandler(
+          updateCategoryStatusController.handle.bind(
+            updateCategoryStatusController
+          )
+        ) // Note: You mentioned this needs to change
       );
 
     this.router
@@ -77,29 +90,36 @@ export class AdminRoutes extends BaseRoute {
       .get(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          getAllCategoryJoinRequestController.handle(req, res)
+        asyncHandler(
+          getAllCategoryJoinRequestController.handle.bind(
+            getAllCategoryJoinRequestController
+          )
+        )
       )
       .patch(
         verifyAuth,
         authorizeRole(["admin"]),
-        (req: Request, res: Response) =>
-          updateCategoryRequestStatusController.handle(req, res)
+        asyncHandler(
+          updateCategoryRequestStatusController.handle.bind(
+            updateCategoryRequestStatusController
+          )
+        )
       );
 
     this.router.get(
       "/admin/users",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) => getAllUsersController.handle(req, res)
+      asyncHandler(getAllUsersController.handle.bind(getAllUsersController))
     );
 
     this.router.patch(
       "/admin/user-status",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        updateUserStatusController.handle(req, res)
+      asyncHandler(
+        updateUserStatusController.handle.bind(updateUserStatusController)
+      )
     );
 
     // wallet
@@ -107,8 +127,11 @@ export class AdminRoutes extends BaseRoute {
       "/admin/wallet",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        getWalletDetailsOfUserController.handle(req, res)
+      asyncHandler(
+        getWalletDetailsOfUserController.handle.bind(
+          getWalletDetailsOfUserController
+        )
+      )
     );
 
     // transactions
@@ -116,25 +139,24 @@ export class AdminRoutes extends BaseRoute {
       "/admin/transactions",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) =>
-        getAllTransactionsByUserIdController.handle(req, res)
+      asyncHandler(
+        getAllTransactionsByUserIdController.handle.bind(
+          getAllTransactionsByUserIdController
+        )
+      )
     );
 
     this.router.post(
       "/admin/logout",
       verifyAuth,
       authorizeRole(["admin"]),
-      (req: Request, res: Response) => {
-        logoutUserController.handle(req, res);
-      }
+      asyncHandler(logoutUserController.handle.bind(logoutUserController))
     );
 
     this.router.post(
       "/admin/refresh-token",
       decodeToken,
-      (req: Request, res: Response) => {
-        refreshTokenController.handle(req, res);
-      }
+      asyncHandler(refreshTokenController.handle.bind(refreshTokenController))
     );
   }
 }

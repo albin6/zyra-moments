@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { DownloadTicketPDFResponse } from "../../../entities/models/download-ticket-as-pdf-response.entity";
 import { ITicketRepository } from "../../../entities/repositoryInterfaces/event/ticket-repository.interface";
 import { IDownloadTicketAsPdfUseCase } from "../../../entities/useCaseInterfaces/event/ticket/download-ticket-as-pdf-usecase.inteface";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { CustomError } from "../../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 import { IQrCodeService } from "../../../entities/services/qr-code-service.interface";
 

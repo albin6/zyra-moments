@@ -10,6 +10,7 @@ import {
   handleWebHookController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class PaymentRoutes extends BaseRoute {
   constructor() {
@@ -22,12 +23,14 @@ export class PaymentRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        createPaymentIntentController.handle(req, res)
+      asyncHandler(
+        createPaymentIntentController.handle.bind(createPaymentIntentController)
+      )
     );
 
-    this.router.post("/client/webhook", (req: Request, res: Response) =>
-      handleWebHookController.handle(req, res)
+    this.router.post(
+      "/client/webhook",
+      asyncHandler(handleWebHookController.handle.bind(handleWebHookController))
     );
 
     this.router.post(
@@ -35,7 +38,9 @@ export class PaymentRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => confirmPaymentController.handle(req, res)
+      asyncHandler(
+        confirmPaymentController.handle.bind(confirmPaymentController)
+      )
     );
   }
 }

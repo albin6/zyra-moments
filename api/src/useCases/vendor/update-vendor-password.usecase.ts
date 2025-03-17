@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IUpdateVendorPasswordUseCase } from "../../entities/useCaseInterfaces/vendor/update-vendor-password-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { IBcrypt } from "../../frameworks/security/bcrypt.interface";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 

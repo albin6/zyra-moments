@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { PopulatedWallet } from "../../entities/models/wallet.entity";
 import { IWalletRepository } from "../../entities/repositoryInterfaces/wallet/wallet-repository.interface";
 import { IGetWalletDetailsOfUserUseCase } from "../../entities/useCaseInterfaces/wallet/get-wallet-details-of-user-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

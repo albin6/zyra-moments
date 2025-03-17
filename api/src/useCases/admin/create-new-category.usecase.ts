@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/common/category-repository.interface";
 import { ICreateNewCategoryUseCase } from "../../entities/useCaseInterfaces/admin/create-new-category-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { generateRandomUUID } from "../../frameworks/security/randomid.bcrypt";
 

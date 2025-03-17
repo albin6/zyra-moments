@@ -9,8 +9,6 @@ import {
 } from "../../../shared/constants";
 import { LoginUserDTO } from "../../../shared/dtos/user.dto";
 import { loginSchema } from "./validation/user-login-validation.schema";
-import { CustomError } from "../../../entities/utils/CustomError";
-import { ZodError } from "zod";
 import { IGenerateTokenUseCase } from "../../../entities/useCaseInterfaces/auth/generate-token-usecase.interface";
 import { setAuthCookies } from "../../../shared/utils/cookieHelper";
 
@@ -23,7 +21,6 @@ export class LoginUserController implements ILoginUserController {
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
-    try {
       const data = req.body as LoginUserDTO;
 
       console.log(data);
@@ -73,29 +70,6 @@ export class LoginUserController implements ILoginUserController {
           role: user.role,
         },
       });
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map((err) => ({
-          message: err.message,
-        }));
-
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.VALIDATION_ERROR,
-          errors,
-        });
-        return;
-      }
-      if (error instanceof CustomError) {
-        res
-          .status(error.statusCode)
-          .json({ success: false, message: error.message });
-        return;
-      }
-      console.log(error);
-      res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
-    }
+    
   }
 }

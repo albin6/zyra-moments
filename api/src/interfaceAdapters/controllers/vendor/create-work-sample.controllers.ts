@@ -2,13 +2,7 @@ import { Request, Response } from "express";
 import { ICreateWorkSampleController } from "../../../entities/controllerInterfaces/vendor/create-work-sample-controller.interface";
 import { ICreateWorkSampleUseCase } from "../../../entities/useCaseInterfaces/vendor/create-work-sample-usercase.interface";
 import { inject, injectable } from "tsyringe";
-import { ZodError } from "zod";
-import {
-  ERROR_MESSAGES,
-  HTTP_STATUS,
-  SUCCESS_MESSAGES,
-} from "../../../shared/constants";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { HTTP_STATUS, SUCCESS_MESSAGES } from "../../../shared/constants";
 import { IWorkSampleEntity } from "../../../entities/models/work-sample.entity";
 import { CustomRequest } from "../../middlewares/auth.middleware";
 
@@ -19,48 +13,23 @@ export class CreateWorkSampleController implements ICreateWorkSampleController {
     private createWorkSampleUseCase: ICreateWorkSampleUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
-    try {
-      const { title, description, images } = req.body as Omit<
-        IWorkSampleEntity,
-        "vendorId"
-      >;
-      const vendorId = (req as CustomRequest).user.id as any;
+    const { title, description, images } = req.body as Omit<
+      IWorkSampleEntity,
+      "vendorId"
+    >;
+    const vendorId = (req as CustomRequest).user.id as any;
 
-      const data: IWorkSampleEntity = {
-        title,
-        description,
-        images,
-        vendorId,
-      };
+    const data: IWorkSampleEntity = {
+      title,
+      description,
+      images,
+      vendorId,
+    };
 
-      await this.createWorkSampleUseCase.execute(data);
+    await this.createWorkSampleUseCase.execute(data);
 
-      res
-        .status(HTTP_STATUS.CREATED)
-        .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map((err) => ({
-          message: err.message,
-        }));
-
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.VALIDATION_ERROR,
-          errors,
-        });
-        return;
-      }
-      if (error instanceof CustomError) {
-        res
-          .status(error.statusCode)
-          .json({ success: false, message: error.message });
-        return;
-      }
-      console.log(error);
-      res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
-    }
+    res
+      .status(HTTP_STATUS.CREATED)
+      .json({ success: true, message: SUCCESS_MESSAGES.OPERATION_SUCCESS });
   }
 }

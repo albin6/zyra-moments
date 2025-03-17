@@ -8,7 +8,7 @@ import {
 } from "../../../entities/models/attendance.entity";
 import { EventModel } from "../../../frameworks/database/models/event.model";
 import mongoose from "mongoose";
-import { CustomError } from "../../../entities/utils/CustomError";
+import { CustomError } from "../../../entities/utils/custom-error";
 import {
   PaginatedTicket,
   PopulatedTicket,

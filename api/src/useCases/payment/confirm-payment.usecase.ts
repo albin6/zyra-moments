@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IPaymentService } from "../../entities/services/payement-service.interface";
 import { IConfirmPaymentUseCase } from "../../entities/useCaseInterfaces/payment/confirm-payment-usecase.interface";
 import { IPaymentRepository } from "../../entities/repositoryInterfaces/payment/payment-repository.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

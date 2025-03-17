@@ -8,7 +8,7 @@ import {
 import { IMessageEntity } from "../../entities/models/message.entity";
 import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/message-repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 import { IClientRepository } from "../../entities/repositoryInterfaces/client/client-respository.interface";
 

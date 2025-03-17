@@ -9,8 +9,6 @@ import {
   HTTP_STATUS,
   SUCCESS_MESSAGES,
 } from "../../../shared/constants";
-import { CustomError } from "../../../entities/utils/CustomError";
-import { ZodError } from "zod";
 
 @injectable()
 export class RegisterUserController implements IRegisterUserController {
@@ -20,50 +18,25 @@ export class RegisterUserController implements IRegisterUserController {
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
-    try {
-      const { role } = req.body as UserDTO;
+    const { role } = req.body as UserDTO;
 
-      const schema = userSchemas[role];
+    const schema = userSchemas[role];
 
-      if (!schema) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.INVALID_CREDENTIALS,
-        });
-        return;
-      }
-
-      const validatedData = schema.parse(req.body);
-
-      await this.registerUserUseCase.execute(validatedData);
-
-      res.status(HTTP_STATUS.CREATED).json({
-        success: true,
-        message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
+    if (!schema) {
+      res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: ERROR_MESSAGES.INVALID_CREDENTIALS,
       });
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const errors = error.errors.map((err) => ({
-          message: err.message,
-        }));
-
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.VALIDATION_ERROR,
-          errors,
-        });
-        return;
-      }
-      if (error instanceof CustomError) {
-        res
-          .status(error.statusCode)
-          .json({ success: false, message: error.message });
-        return;
-      }
-      console.log(error);
-      res
-        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-        .json({ success: false, message: ERROR_MESSAGES.SERVER_ERROR });
+      return;
     }
+
+    const validatedData = schema.parse(req.body);
+
+    await this.registerUserUseCase.execute(validatedData);
+
+    res.status(HTTP_STATUS.CREATED).json({
+      success: true,
+      message: SUCCESS_MESSAGES.REGISTRATION_SUCCESS,
+    });
   }
 }

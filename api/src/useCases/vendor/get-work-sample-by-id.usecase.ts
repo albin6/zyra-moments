@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IWorkSampleEntity } from "../../entities/models/work-sample.entity";
 import { IWorkSampleRepository } from "../../entities/repositoryInterfaces/vendor/work-sample-repository.interface";
 import { IGetWorkSampleByIdUseCase } from "../../entities/useCaseInterfaces/vendor/get-work-sample-by-id-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

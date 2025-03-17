@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IVendorEntity } from "../../entities/models/vendor.entity";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IUpdateVendorProfileUseCase } from "../../entities/useCaseInterfaces/vendor/update-vendor-profile-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()

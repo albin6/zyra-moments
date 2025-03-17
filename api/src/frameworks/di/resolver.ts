@@ -62,6 +62,10 @@ import { GetAllTicketsByUserIdController } from "../../interfaceAdapters/control
 import { CancelTicketController } from "../../interfaceAdapters/controllers/event/ticket/cancel-ticket.controller";
 import { GetDashboardStatsController } from "../../interfaceAdapters/controllers/admin/get-dashboard-stats.controller";
 import { GetPaginatedEventsController } from "../../interfaceAdapters/controllers/event/get-paginated-events.controller";
+import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
+import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
+import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
+import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 
 DependencyInjection.registerAll();
 
@@ -284,3 +288,11 @@ export const getDashboardStatsController = container.resolve(
 export const getPaginatedEventsController = container.resolve(
   GetPaginatedEventsController
 );
+
+
+// -------------------------------- logger service middleware -----------------------------
+export const injectedLoggerMiddleware = container.resolve<LoggerMiddleware>('LoggerMiddleware');
+export const injectedLogger = container.resolve<ILogger>('ILogger');
+
+// -------------------------------- error handler middleware ------------------------------
+export const injectedErrorMiddleware = container.resolve<ErrorMiddleware>('ErrorMiddleware');

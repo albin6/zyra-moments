@@ -1,4 +1,4 @@
-import { DomainError } from "../../entities/utils/DomainError";
+import { DomainError } from "../../entities/utils/domain-error";
 import { EventListDto } from "../dtos/event.dto";
 
 export function validateCriteria(criteria: EventListDto): void {

@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ILoginUserUseCase } from "../../entities/useCaseInterfaces/auth/login-usecase.interface";
 import { LoginUserDTO } from "../../shared/dtos/user.dto";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { HTTP_STATUS } from "../../shared/constants";
 import { ILoginStrategy } from "./login-strategies/login-strategy.interface";
 import { IUserEntity } from "../../entities/models/user.entity";

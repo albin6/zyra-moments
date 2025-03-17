@@ -10,6 +10,7 @@ import {
   markAttendanceController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class QrRoutes extends BaseRoute {
   constructor() {
@@ -21,7 +22,7 @@ export class QrRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => createTicketController.handle(req, res)
+      asyncHandler(createTicketController.handle.bind(createTicketController))
     );
 
     this.router.put(
@@ -29,15 +30,19 @@ export class QrRoutes extends BaseRoute {
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) => markAttendanceController.handle(req, res)
+      asyncHandler(
+        markAttendanceController.handle.bind(markAttendanceController)
+      )
     );
+
     this.router.get(
       "/client/:ticketId/download-pdf",
       verifyAuth,
       authorizeRole(["client"]),
       blockStatusMiddleware.checkBlockedStatus as RequestHandler,
-      (req: Request, res: Response) =>
-        downloadTicketAsPdfController.handle(req, res)
+      asyncHandler(
+        downloadTicketAsPdfController.handle.bind(downloadTicketAsPdfController)
+      )
     );
   }
 }

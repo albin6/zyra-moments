@@ -6,7 +6,7 @@ import {
 import { IServiceRepository } from "../../entities/repositoryInterfaces/common/service-repository.interface";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { IGetAllServicesForBookingUseCase } from "../../entities/useCaseInterfaces/client/get-all-services-for-booking-usecase.interface";
-import { CustomError } from "../../entities/utils/CustomError";
+import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
