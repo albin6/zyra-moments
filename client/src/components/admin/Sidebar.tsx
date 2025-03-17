@@ -44,6 +44,11 @@ const adminRoutes = [
     icon: <CalendarDays className="mr-2 h-4 w-4" />,
   },
   {
+    path: "/admin/ad_pvt/bookings",
+    label: "Bookings",
+    icon: <CalendarDays className="mr-2 h-4 w-4" />,
+  },
+  {
     path: "/admin/ad_pvt/wallet",
     label: "Wallet",
     icon: <Wallet className="mr-2 h-4 w-4" />,

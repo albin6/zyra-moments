@@ -111,8 +111,9 @@ function VendorRoutes() {
             />
           }
         />
+
         <Route
-          path="/vendor/chat"
+          path="/chat"
           element={
             <AuthVendorRoute
               allowedRoles={["vendor"]}
@@ -120,6 +121,16 @@ function VendorRoutes() {
             />
           }
         />
+
+        {/* <Route
+          path="/vendor/chat"
+          element={
+            <AuthVendorRoute
+              allowedRoles={["vendor"]}
+              element={<VendorChatPage />}
+            />
+          }
+        /> */}
         <Route
           path="/*"
           element={<Custom404 pathname={window.location.pathname} />}

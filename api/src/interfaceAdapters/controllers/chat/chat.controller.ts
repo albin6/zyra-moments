@@ -32,6 +32,7 @@ export class ChatController implements IChatController {
         methods: ["GET", "POST"],
         credentials: true,
       },
+      path: "/api/v_1/_chat",
     });
     this.initializeSocketEvents();
   }
@@ -42,34 +43,32 @@ export class ChatController implements IChatController {
     this.io.on("connection", (socket: Socket) => {
       console.log("User connected:", socket.id);
 
-      socket.on(
-        "join",
-        async ({
+      socket.on("join", async ({ userId, userType }) => {
+        socket.data.userId = userId;
+        socket.data.userType = userType;
+        socket.join(userId);
+        if (userType === "Client") {
+          await this.clientRepository.findByIdAndUpdateOnlineStatus(
+            userId,
+            "online"
+          );
+        } else {
+          await this.vendorRepository.findByIdAndUpdateOnlineStatus(
+            userId,
+            "online"
+          );
+        }
+        socket.broadcast.emit("userStatus", {
           userId,
           userType,
-        }: {
-          userId: string;
-          userType: "Client" | "Vendor";
-        }) => {
-          socket.join(userId);
-          if (userType === "Client") {
-            await this.clientRepository.findByIdAndUpdateOnlineStatus(
-              userId,
-              "online"
-            );
-          } else {
-            await this.vendorRepository.findByIdAndUpdateOnlineStatus(
-              userId,
-              "online"
-            );
-          }
-          socket.broadcast.emit("userStatus", {
-            userId,
-            userType,
-            status: "online",
-          });
-        }
-      );
+          status: "online",
+        });
+      });
+
+      socket.on("getUserChats", async ({ userId, userType }) => {
+        const chatRooms = await this.getUserChatsUseCase.execute(userId, userType);
+        socket.emit("userChats", chatRooms);
+      });
 
       socket.on(
         "sendMessage",
@@ -79,14 +78,7 @@ export class ChatController implements IChatController {
           senderId,
           senderType,
           content,
-          chatRoomId, // Add chatRoomId
-        }: {
-          clientId: string;
-          vendorId: string;
-          senderId: string;
-          senderType: "Client" | "Vendor";
-          content: string;
-          chatRoomId?: string; // Optional
+          chatRoomId,
         }) => {
           const message = await this.sendMessageUseCase.execute(
             clientId,
@@ -94,17 +86,13 @@ export class ChatController implements IChatController {
             senderId,
             senderType,
             content,
-            chatRoomId as string
+            chatRoomId
           );
-          const chatRoom = await this.getChatHistoryUseCase.execute(message.chatRoomId);
-          this.io
-            ?.to(clientId.toString())
-            .to(vendorId.toString())
-            .emit("message", message);
-          this.io
-            ?.to(clientId.toString())
-            .to(vendorId.toString())
-            .emit("chatUpdate", chatRoom);
+          const chatRoom = await this.getChatHistoryUseCase.execute(
+            message.chatRoomId
+          );
+          this.io?.to(clientId).to(vendorId).emit("message", message);
+          this.io?.to(clientId).to(vendorId).emit("chatUpdate", chatRoom);
         }
       );
 
@@ -114,10 +102,9 @@ export class ChatController implements IChatController {
       });
 
       socket.on("disconnect", async () => {
-        const userId = Array.from(socket.rooms)[1];
-        if (userId) {
-          const client = await this.clientRepository.findById(userId);
-          if (client) {
+        const { userId, userType } = socket.data;
+        if (userId && userType) {
+          if (userType === "Client") {
             await this.clientRepository.findByIdAndUpdateOnlineStatus(
               userId,
               "offline"
@@ -128,18 +115,15 @@ export class ChatController implements IChatController {
               status: "offline",
             });
           } else {
-            const vendor = await this.vendorRepository.findById(userId);
-            if (vendor) {
-              await this.vendorRepository.findByIdAndUpdateOnlineStatus(
-                userId,
-                "offline"
-              );
-              socket.broadcast.emit("userStatus", {
-                userId,
-                userType: "vendor",
-                status: "offline",
-              });
-            }
+            await this.vendorRepository.findByIdAndUpdateOnlineStatus(
+              userId,
+              "offline"
+            );
+            socket.broadcast.emit("userStatus", {
+              userId,
+              userType: "vendor",
+              status: "offline",
+            });
           }
         }
         console.log("User disconnected:", socket.id);

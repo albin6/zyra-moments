@@ -1,3 +1,4 @@
+// components/UserProfile.tsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,14 +16,13 @@ import { useOutletContext } from "react-router-dom";
 import { ClientBookingListing } from "@/pages/client/ClientBookingListing";
 import ClientWallet from "@/pages/client/ClientWallet";
 import ClientTransactions from "@/pages/client/ClientTransactions";
-
 import { TransformedEventData } from "@/utils/format/transformEventFormData";
 import { EventList } from "./event-hosting/EventList";
 import EventForm from "./event-hosting/EventForm";
 import EditEvent from "./event-hosting/EditEvent";
 import { useEventMutation } from "@/hooks/event/useEvent";
 import { editHostEvent, hostNewEvent } from "@/services/event/eventService";
-import ClientChatPage from "@/pages/client/ClientChatPage";
+import { ChatPage } from "@/pages/chat/ChatPage";
 
 export interface ClientContextType {
   clientData: Client | null;
@@ -34,7 +34,6 @@ export function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const { clientData } = useOutletContext<ClientContextType>();
   const { mutate: updateClientProfile } = useClientProfileMutation();
-  // const { resetEventData } = useEventContext();
 
   const [currentEventId, setCurrentEventId] = useState<string | null>(null);
 
@@ -65,12 +64,10 @@ export function UserProfile() {
   const handleCreateSubmit = async (data: TransformedEventData) => {
     try {
       console.log("Creating event with data:", data);
-
       newEvent(data, {
         onSuccess: (data) => toast.success(data.message),
         onError: (error: any) => toast.error(error.response.data.message),
       });
-
       setActiveTab("event-list");
     } catch (error) {
       console.error("Error creating event:", error);
@@ -82,7 +79,6 @@ export function UserProfile() {
     try {
       console.log("Updating event with ID:", currentEventId);
       console.log("Update data:", data);
-
       updateEvent(
         { id: currentEventId, data },
         {
@@ -90,7 +86,6 @@ export function UserProfile() {
           onError: (error: any) => toast.error(error.response.data.message),
         }
       );
-
       setActiveTab("event-list");
     } catch (error) {
       console.error("Error updating event:", error);
@@ -108,7 +103,7 @@ export function UserProfile() {
   };
 
   if (!clientData) {
-    return;
+    return null; // Or a loading state
   }
 
   return (
@@ -147,19 +142,25 @@ export function UserProfile() {
           <Card className="p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">
-                {/* {activeTab === "profile"
+                {activeTab === "profile"
                   ? "Profile"
                   : activeTab === "events"
-                  ? "Events"
+                  ? "Purchased Tickets"
                   : activeTab === "bookings"
-                  ? "Bookings"
-                  : activeTab === "host-event"
                   ? "Bookings"
                   : activeTab === "event-list"
                   ? "My Events"
+                  : activeTab === "create-event"
+                  ? "Create Event"
+                  : activeTab === "edit-event"
+                  ? "Edit Event"
                   : activeTab === "client-wallet"
                   ? "Wallet"
-                  : "something"} */}
+                  : activeTab === "transactions"
+                  ? "Transactions"
+                  : activeTab === "chat"
+                  ? "Messages"
+                  : "Unknown"}
               </h2>
               {activeTab === "profile" && (
                 <Button
@@ -193,26 +194,15 @@ export function UserProfile() {
                 !isEditing ? "opacity-100" : "opacity-0"
               )}
             >
-              {activeTab === "profile" && !isEditing && (
-                <ProfileInfo data={clientData} />
-              )}
+              {activeTab === "profile" && !isEditing && <ProfileInfo data={clientData} />}
               {activeTab === "events" && <PurchasedTickets />}
               {activeTab === "bookings" && <ClientBookingListing />}
-
               {activeTab === "event-list" && (
-                <EventList
-                  onCreateNew={startCreateEvent}
-                  onEdit={startEditEvent}
-                />
+                <EventList onCreateNew={startCreateEvent} onEdit={startEditEvent} />
               )}
-
               {activeTab === "create-event" && (
-                <EventForm
-                  onSubmit={handleCreateSubmit}
-                  setActiveTab={setActiveTab}
-                />
+                <EventForm onSubmit={handleCreateSubmit} setActiveTab={setActiveTab} />
               )}
-
               {activeTab === "edit-event" && currentEventId && (
                 <EditEvent
                   eventId={currentEventId}
@@ -220,24 +210,9 @@ export function UserProfile() {
                   setActiveTab={setActiveTab}
                 />
               )}
-
-              {/* {activeTab === "event-list" && (
-                <HostEventListing
-                  setIsHostEventEditing={setIsHostEventEditing}
-                  setActiveTab={setActiveTab}
-                />
-              )} */}
-              {/* {activeTab === "host-event" && (
-                <EventAddEdit
-                  setActiveTab={setActiveTab}
-                  setIsHostEventEditing={setIsHostEventEditing}
-                  isHostEventEditing={isHostEventEditing}
-                />
-              )} */}
               {activeTab === "client-wallet" && <ClientWallet />}
               {activeTab === "transactions" && <ClientTransactions />}
-              {activeTab === "chat" && <ClientChatPage />}
-
+              {activeTab === "chat" && <ChatPage userType="Client" />}
             </div>
           </Card>
         </main>

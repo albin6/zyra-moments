@@ -1,12 +1,26 @@
-// hooks/useChat.ts
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { chatAxiosInstance } from "@/api/chat.axios";
-import { clientAxiosInstance } from "@/api/client.axios";
+import { useEffect, useCallback } from "react";
 import { useSocket } from "@/context/SocketContext";
-import { vendorAxiosInstance } from "@/api/vendor.axios";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+import {
+  addMessage,
+  setContacts,
+  setMessages,
+  updateContactStatus,
+} from "@/store/slices/chatSlice";
 
-interface IMessageEntity {
+export interface Contact {
+  id: string;
+  chatRoomId: string;
+  name: string;
+  avatar?: string;
+  lastMessage?: string;
+  lastMessageTime?: Date;
+  unreadCount?: number;
+  status?: "online" | "offline";
+}
+
+interface Message {
   _id: string;
   chatRoomId: string;
   content: string;
@@ -16,154 +30,106 @@ interface IMessageEntity {
   createdAt: Date;
 }
 
-interface ChatContact {
-  id: string;
-  name: string;
-  avatar?: string;
-  lastMessage?: string;
-  lastMessageTime?: Date;
-  unreadCount?: number;
-  status?: "online" | "offline";
-  chatRoomId: string;
-}
-
 export function useChat(userId: string, userType: "Client" | "Vendor") {
   const socket = useSocket();
-  const [messages, setMessages] = useState<IMessageEntity[]>([]);
-  const [contacts, setContacts] = useState<ChatContact[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!userId || !socket) return;
+    if (!socket || !userId) return;
 
     socket.emit("join", { userId, userType });
 
-    socket.on("message", (message: IMessageEntity) => {
-      setMessages((prev) => {
-        if (prev.some((m) => m._id === message._id)) return prev; 
-        return [...prev, message];
-      });
-      updateContactLastMessage(message);
+    socket.on("connect_error", () => {
+      toast.error("Failed to connect to chat server");
     });
 
-    socket.on("chatHistory", (history: IMessageEntity[]) => {
-      setMessages(history);
+    socket.on("message", (message: Message) => {
+      dispatch(addMessage(message));
     });
 
-    socket.on("userStatus", ({ userId: contactId, status }: { userId: string; status: "online" | "offline" }) => {
-      setContacts((prev) =>
-        prev.map((contact) =>
-          contact.id === contactId ? { ...contact, status } : contact
-        )
-      );
-    });
+    socket.on(
+      "userStatus",
+      ({
+        userId: contactId,
+        status,
+      }: {
+        userId: string;
+        status: "online" | "offline";
+      }) => {
+        dispatch(updateContactStatus({ contactId, status }));
+      }
+    );
+
+    socket.on(
+      "typing",
+      ({ chatRoomId, senderId }: { chatRoomId: string; senderId: string }) => {
+        // Dispatch typing indicator if needed
+        console.log(chatRoomId, senderId)
+      }
+    );
 
     return () => {
+      socket.off("connect_error");
       socket.off("message");
-      socket.off("chatHistory");
       socket.off("userStatus");
+      socket.off("typing");
     };
-  }, [userId, userType, socket]);
+  }, [socket, userId, userType, dispatch]);
 
-  const fetchContacts = async () => {
-    try {
-      const response = await chatAxiosInstance.get(`/${userId}/${userType.toLowerCase()}`);
-      const chatRooms = response.data;
-
-      const transformedContacts: ChatContact[] = await Promise.all(
-        chatRooms.map(async (room: any) => {
-          if (userType === "Client") {
-            const vendorResponse = await clientAxiosInstance.get(`/_cl/client/vendors/${room.vendorId}`);
-            const vendor = vendorResponse.data;
-            const lastMessage = messages.find((m) => m.chatRoomId === room._id) || {
-              content: "",
-              createdAt: room.createdAt,
-            };
-            return {
-              id: room.vendorId,
-              name: `${vendor.firstName} + " " + ${vendor.lastName}` || "Unknown Vendor",
-              avatar: vendor.profileImage || "/placeholder.svg?height=48&width=48",
-              lastMessage: lastMessage.content,
-              lastMessageTime: new Date(lastMessage.createdAt),
-              unreadCount: messages.filter(
-                (m) => m.chatRoomId === room._id && m.senderType === "Vendor" && !m.read
-              ).length,
-              status: "offline",
-              chatRoomId: room._id,
-            };
-          } else {
-            // Vendor case
-            const clientResponse = await vendorAxiosInstance.get(`/_ve/vendor/${room.clientId}`);
-            const client = clientResponse.data;
-            const lastMessage = messages.find((m) => m.chatRoomId === room._id) || {
-              content: "",
-              createdAt: room.createdAt,
-            };
-            return {
-              id: room.clientId,
-              name: client.name || "Unknown Client",
-              avatar: client.avatar || "/placeholder.svg?height=48&width=48",
-              lastMessage: lastMessage.content,
-              lastMessageTime: new Date(lastMessage.createdAt),
-              unreadCount: messages.filter(
-                (m) => m.chatRoomId === room._id && m.senderType === "Client" && !m.read
-              ).length,
-              status: "offline",
-              chatRoomId: room._id,
-            };
-          }
-        })
-      );
-      setContacts(transformedContacts);
-    } catch (error) {
-      console.error("Failed to fetch contacts:", error);
-      toast.error("Failed to load contacts");
-    }
-  };
-
-  const updateContactLastMessage = (message: IMessageEntity) => {
-    setContacts((prev) =>
-      prev.map((contact) =>
-        contact.chatRoomId === message.chatRoomId
-          ? {
-              ...contact,
-              lastMessage: message.content,
-              lastMessageTime: new Date(message.createdAt),
-              unreadCount:
-                message.senderType !== userType && !messages.some((m) => m._id === message._id && m.read)
-                  ? (contact.unreadCount || 0) + 1
-                  : contact.unreadCount,
-            }
-          : contact
-      )
-    );
-  };
-
-  const sendMessage = (chatRoomId: string, content: string, recipientId: string) => {
+  const fetchContacts = useCallback(() => {
     if (!socket) return;
-    const payload = {
-      clientId: userType === "Client" ? userId : recipientId,
-      vendorId: userType === "Vendor" ? userId : recipientId,
-      senderId: userId,
-      senderType: userType,
-      content,
-      chatRoomId,
-    };
-    socket.emit("sendMessage", payload);
-    toast.success("Message sent successfully.");
-  };
+    socket.emit("getUserChats", { userId, userType });
+    socket.once("userChats", (chatRooms: any[]) => {
+      console.log("Fetched contacts:", chatRooms);
+      const mappedContacts = chatRooms.map((room) => ({
+        id: room.recipientId,
+        chatRoomId: room.chatRoomId,
+        name: room.recipientName,
+        avatar: room.recipientAvatar,
+        lastMessage: room.lastMessage,
+        lastMessageTime: room.lastMessageTime
+          ? new Date(room.lastMessageTime)
+          : undefined,
+        unreadCount: room.unreadCount,
+        status: room.recipientStatus,
+      }));
+      dispatch(setContacts(mappedContacts));
+    });
+  }, [socket, userId, userType, dispatch]);
 
-  const fetchChatHistory = (chatRoomId: string) => {
-    if (socket) {
+  const fetchChatHistory = useCallback(
+    (chatRoomId: string) => {
+      if (!socket) return;
       socket.emit("getChatHistory", chatRoomId);
-    }
-  };
+      socket.once("chatHistory", (history: Message[]) => {
+        dispatch(setMessages({ chatRoomId, messages: history }));
+      });
+    },
+    [socket, dispatch]
+  );
 
-  return {
-    socket,
-    messages,
-    contacts,
-    fetchContacts,
-    sendMessage,
-    fetchChatHistory,
-  };
+  const sendMessage = useCallback(
+    (chatRoomId: string, content: string, recipientId: string) => {
+      if (!socket) return;
+      socket.emit("sendMessage", {
+        clientId: userType === "Client" ? userId : recipientId,
+        vendorId: userType === "Vendor" ? userId : recipientId,
+        senderId: userId,
+        senderType: userType,
+        content,
+        chatRoomId,
+      });
+    },
+    [socket, userId, userType]
+  );
+
+  const sendTyping = useCallback(
+    (chatRoomId: string) => {
+      if (!socket) return;
+      socket.emit("typing", { chatRoomId, senderId: userId });
+    },
+    [socket, userId]
+  );
+
+  return { socket, fetchContacts, sendMessage, fetchChatHistory, sendTyping };
 }

@@ -1,3 +1,4 @@
+import { IBookingModel } from "../../../frameworks/database/models/booking.model";
 import {
   BookingListFromRepo,
   IBookingEntity,
@@ -28,4 +29,10 @@ export interface IBookingRepository {
   updateVendorApproved(id: any): Promise<IBookingEntity | null>;
 
   isBothApproved(bookingId: any): Promise<IBookingEntity | null>;
+
+  // latest for chat
+
+  findByClientId(clientId: string): Promise<IBookingModel[]>;
+
+  findByVendorId(vendorId: string): Promise<IBookingModel[]>;
 }

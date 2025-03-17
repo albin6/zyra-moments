@@ -1,3 +1,4 @@
+// components/chat/ChatList.tsx
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
@@ -6,9 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface ChatContact {
-  id: string;
+  id: string; // clientId or vendorId
+  chatRoomId: string; // Added to match ChatPage usage
   name: string;
   avatar?: string;
   lastMessage?: string;
@@ -18,23 +22,22 @@ interface ChatContact {
 }
 
 interface ChatListProps {
-  contacts?: ChatContact[];
   onSelectContact?: (contactId: string) => void;
   selectedContactId?: string;
   className?: string;
   title?: string;
-  userType: "Client" | "Vendor"; // Updated
+  userType: "Client" | "Vendor";
 }
 
 export function ChatList({
-  contacts = [],
   onSelectContact,
   selectedContactId,
   className,
   title = "Messages",
-  userType = "Client",
+  userType,
 }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const contacts = useSelector((state: RootState) => state.chat.contacts);
 
   const filteredContacts = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -47,9 +50,7 @@ export function ChatList({
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder={`Search ${
-              userType === "Client" ? "vendors" : "clients"
-            }...`}
+            placeholder={`Search ${userType === "Client" ? "vendors" : "clients"}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -63,9 +64,7 @@ export function ChatList({
             <p className="text-muted-foreground text-center">
               {searchQuery
                 ? "No contacts found matching your search."
-                : `No ${
-                    userType === "Client" ? "vendors" : "clients"
-                  } to display.`}
+                : `No ${userType === "Client" ? "vendors" : "clients"} to display.`}
             </p>
           </div>
         ) : (
@@ -84,10 +83,7 @@ export function ChatList({
                     <div className="relative">
                       <Avatar className="h-12 w-12 mr-3">
                         <img
-                          src={
-                            contact.avatar ||
-                            "/placeholder.svg?height=48&width=48"
-                          }
+                          src={contact.avatar || "/placeholder.svg?height=48&width=48"}
                           alt={contact.name}
                           className="object-cover"
                         />
@@ -101,9 +97,7 @@ export function ChatList({
                         <h3 className="font-medium truncate">{contact.name}</h3>
                         {contact.lastMessageTime && (
                           <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
-                            {new Date(
-                              contact.lastMessageTime
-                            ).toLocaleDateString([], {
+                            {new Date(contact.lastMessageTime).toLocaleDateString([], {
                               month: "short",
                               day: "numeric",
                             })}
@@ -111,15 +105,11 @@ export function ChatList({
                         )}
                       </div>
                       {contact.lastMessage && (
-                        <p className="text-sm text-muted-foreground truncate">
-                          {contact.lastMessage}
-                        </p>
+                        <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                       )}
                     </div>
                     {contact.unreadCount && contact.unreadCount > 0 && (
-                      <Badge className="ml-2 flex-shrink-0">
-                        {contact.unreadCount}
-                      </Badge>
+                      <Badge className="ml-2 flex-shrink-0">{contact.unreadCount}</Badge>
                     )}
                   </div>
                 </Button>

@@ -16,7 +16,7 @@ import HostEventFlow from "@/pages/client/HostEventFlow";
 import { EventProvider } from "@/context/EventContext";
 import { ClientEventDetails } from "@/pages/client/ClientEventDetails";
 import { EventAttendancePage } from "@/pages/client/EventAttendancePage";
-import ClientChatPage from "@/pages/client/ClientChatPage";
+import { ClientChatPage } from "@/pages/chat/ChatPage";
 
 function ClientRoutes() {
   return (
@@ -121,11 +121,18 @@ function ClientRoutes() {
         />
 
         <Route
-          path="/client/chat"
+          path="/chat"
           element={
             <AuthRoute allowedRoles={["client"]} element={<ClientChatPage />} />
           }
         />
+
+        {/* <Route
+          path="/client/chat"
+          element={
+            <AuthRoute allowedRoles={["client"]} element={<ClientChatPage />} />
+          }
+        /> */}
         <Route
           path="/*"
           element={<Custom404 pathname={window.location.pathname} />}

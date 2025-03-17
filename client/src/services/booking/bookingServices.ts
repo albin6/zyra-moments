@@ -35,6 +35,28 @@ export const getClientBookings = async (data: {
   return response.data;
 };
 
+export const getClientBookingsInAdmin = async (data: {
+  page: number;
+  limit: number;
+  sort: string;
+  search: string;
+  statusFilter: string;
+}) => {
+  const response = await clientAxiosInstance.get(
+    "/_ad/admin/client-bookings",
+    {
+      params: {
+        page: data.page,
+        limit: data.limit,
+        sort: data.sort,
+        search: data.search,
+        statusFilter: data.statusFilter,
+      },
+    }
+  );
+  return response.data;
+};
+
 export const getVendorBookings = async (data: {
   page: number;
   limit: number;

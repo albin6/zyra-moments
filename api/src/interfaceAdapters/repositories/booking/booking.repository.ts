@@ -4,7 +4,10 @@ import {
   IBookingEntity,
 } from "../../../entities/models/booking.entity";
 import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
-import { BookingModel } from "../../../frameworks/database/models/booking.model";
+import {
+  BookingModel,
+  IBookingModel,
+} from "../../../frameworks/database/models/booking.model";
 
 @injectable()
 export class BookingRepository implements IBookingRepository {
@@ -52,8 +55,11 @@ export class BookingRepository implements IBookingRepository {
     await BookingModel.findByIdAndUpdate(id, { $set: { status } });
   }
 
-  async findByClientIdAndVendorId(clientId: any, vendorId: any): Promise<IBookingEntity | null> {
-      return await BookingModel.findOne({userId:clientId, vendorId}).exec()
+  async findByClientIdAndVendorId(
+    clientId: any,
+    vendorId: any
+  ): Promise<IBookingEntity | null> {
+    return await BookingModel.findOne({ userId: clientId, vendorId }).exec();
   }
 
   async updateClientApproved(id: any): Promise<IBookingEntity | null> {
@@ -78,5 +84,22 @@ export class BookingRepository implements IBookingRepository {
       isClientApproved: true,
       isVendorApproved: true,
     });
+  }
+
+  // latest for chat
+
+  async findByClientId(clientId: string): Promise<IBookingModel[]> {
+    return await BookingModel.find({ userId: clientId })
+      .populate(
+        "vendorId",
+        "firstName lastName email profileImage onlineStatus"
+      )
+      .exec();
+  }
+
+  async findByVendorId(vendorId: string): Promise<IBookingModel[]> {
+    return await BookingModel.find({ vendorId })
+      .populate("userId", "firstName lastName email profileImage onlineStatus")
+      .exec();
   }
 }

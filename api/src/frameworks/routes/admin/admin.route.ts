@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createNewCategoryController,
+  getAllBookingByClientController,
   getAllCategoryJoinRequestController,
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
@@ -42,6 +43,17 @@ export class AdminRoutes extends BaseRoute {
       authorizeRole(["admin"]),
       asyncHandler(
         getPaginatedEventsController.handle.bind(getPaginatedEventsController)
+      )
+    );
+
+    this.router.get(
+      "/admin/client-bookings",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      asyncHandler(
+        getAllBookingByClientController.handle.bind(
+          getAllBookingByClientController
+        )
       )
     );
 

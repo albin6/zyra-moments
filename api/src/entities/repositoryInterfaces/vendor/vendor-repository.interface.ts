@@ -1,3 +1,4 @@
+import { IVendorModel } from "../../../frameworks/database/models/vendor.model";
 import { IVendorEntity } from "../../models/vendor.entity";
 
 export interface IVendorRepository {
@@ -42,7 +43,9 @@ export interface IVendorRepository {
   findByIdForChat(id: any): Promise<IVendorEntity | null>;
 
   findByIdAndUpdateOnlineStatus(
-    id: any,
-    onlineStatus: "online" | "offline"
-  ): Promise<void>;
+    vendorId: string,
+    status: "online" | "offline"
+  ): Promise<IVendorModel | null>;
+
+  findByIds(vendorIds: string[]): Promise<IVendorModel[]>;
 }

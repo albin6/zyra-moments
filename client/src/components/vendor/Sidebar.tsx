@@ -114,6 +114,16 @@ export function Sidebar({
           >
             Transactions
           </Button>
+          <Button
+            variant="ghost"
+            className={`w-full justify-center font-normal ${
+              location.pathname === "/vendor/chat" && "bg-accent"
+            }`}
+            onClick={() => navigate("/vendor/chat")}
+            disabled={joinCategoryRequestStatus !== "accepted"}
+          >
+            Messages
+          </Button>
         </nav>
 
         <Button

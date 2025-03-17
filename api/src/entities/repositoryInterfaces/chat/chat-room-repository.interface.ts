@@ -1,3 +1,4 @@
+import { IChatRoomModel } from "../../../frameworks/database/models/chat-room.model";
 import { IChatRoomEntity } from "../../models/chat-room.entity";
 
 export interface IChatRoomRepository {
@@ -19,4 +20,17 @@ export interface IChatRoomRepository {
     lastMessage: string,
     lastMessageAt: Date
   ): Promise<void>;
+
+  // latest for chat
+
+  findByClientAndVendorAndBooking(
+    clientId: string,
+    vendorId: string,
+    bookingId: string
+  ): Promise<IChatRoomModel | null>;
+  create(data: {
+    clientId: string;
+    vendorId: string;
+    bookingId: string;
+  }): Promise<IChatRoomModel>;
 }

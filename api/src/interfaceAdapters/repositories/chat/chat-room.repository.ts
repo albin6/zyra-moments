@@ -2,7 +2,10 @@
 import { injectable } from "tsyringe";
 import { IChatRoomEntity } from "../../../entities/models/chat-room.entity";
 import { IChatRoomRepository } from "../../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
-import { ChatRoomModel } from "../../../frameworks/database/models/chat-room.model";
+import {
+  ChatRoomModel,
+  IChatRoomModel,
+} from "../../../frameworks/database/models/chat-room.model";
 
 @injectable()
 export class ChatRoomRepository implements IChatRoomRepository {
@@ -45,5 +48,35 @@ export class ChatRoomRepository implements IChatRoomRepository {
       { _id: chatRoomId },
       { lastMessage, lastMessageAt }
     ).exec();
+  }
+
+  // latest for chat
+
+  async create(data: {
+    clientId: string;
+    vendorId: string;
+    bookingId: string;
+  }): Promise<IChatRoomModel> {
+    const chatRoom = new ChatRoomModel({
+      clientId: data.clientId,
+      vendorId: data.vendorId,
+      bookingId: data.bookingId,
+      unreadCountClient: 0,
+      unreadCountVendor: 0,
+    });
+    const savedChatRoom = await chatRoom.save();
+    return savedChatRoom;
+  }
+
+  async findByClientAndVendorAndBooking(
+    clientId: string,
+    vendorId: string,
+    bookingId: string
+  ): Promise<IChatRoomModel | null> {
+    return await ChatRoomModel.findOne({
+      clientId,
+      vendorId,
+      bookingId,
+    }).exec();
   }
 }

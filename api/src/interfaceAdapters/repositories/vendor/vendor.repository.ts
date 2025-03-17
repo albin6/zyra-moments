@@ -1,7 +1,10 @@
 import { injectable } from "tsyringe";
 import { IVendorEntity } from "../../../entities/models/vendor.entity";
 import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
-import { VendorModel } from "../../../frameworks/database/models/vendor.model";
+import {
+  IVendorModel,
+  VendorModel,
+} from "../../../frameworks/database/models/vendor.model";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {
@@ -112,12 +115,19 @@ export class VendorRepository implements IVendorRepository {
   }
 
   async findByIdAndUpdateOnlineStatus(
-    id: any,
-    onlineStatus: "online" | "offline"
-  ): Promise<void> {
-    await VendorModel.updateOne(
-      { _id: id },
-      { onlineStatus, lastStatusUpdated: new Date() }
-    );
+    vendorId: string,
+    status: "online" | "offline"
+  ): Promise<IVendorModel | null> {
+    return await VendorModel.findByIdAndUpdate(
+      vendorId,
+      { onlineStatus: status, lastStatusUpdated: new Date() },
+      { new: true }
+    ).exec();
+  }
+
+  async findByIds(vendorIds: string[]): Promise<IVendorModel[]> {
+    return await VendorModel.find({
+      _id: { $in: vendorIds },
+    }).exec();
   }
 }

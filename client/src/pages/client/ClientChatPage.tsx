@@ -16,15 +16,11 @@ export function ClientChatPage() {
   const isMobile = useMobile();
 
   useEffect(() => {
-    if (userId && socket) {
-      fetchContacts();
-    }
+    if (userId && socket) fetchContacts();
   }, [userId, socket, fetchContacts]);
 
   useEffect(() => {
-    if (selectedChatRoomId && socket) {
-      fetchChatHistory(selectedChatRoomId);
-    }
+    if (selectedChatRoomId && socket) fetchChatHistory(selectedChatRoomId);
   }, [selectedChatRoomId, socket, fetchChatHistory]);
 
   const handleSendMessage = (message: string) => {
@@ -56,11 +52,7 @@ export function ClientChatPage() {
           {selectedChatRoomId && selectedContact ? (
             <div className="relative">
               {isMobile && (
-                <Button
-                  variant="ghost"
-                  className="absolute top-4 left-4 z-10"
-                  onClick={() => setSelectedChatRoomId(null)}
-                >
+                <Button variant="ghost" onClick={() => setSelectedChatRoomId(null)}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
                 </Button>
@@ -75,10 +67,8 @@ export function ClientChatPage() {
             </div>
           ) : (
             <div className="flex items-center justify-center h-full bg-muted/30 rounded-lg">
-              <div className="text-center p-6">
-                <h3 className="text-xl font-medium mb-2">Select a conversation</h3>
-                <p className="text-muted-foreground">Choose a vendor from the list to start chatting</p>
-              </div>
+              <h3 className="text-xl font-medium mb-2">Select a conversation</h3>
+              <p className="text-muted-foreground">Choose a vendor from the list to start chatting</p>
             </div>
           )}
         </div>
@@ -86,5 +76,3 @@ export function ClientChatPage() {
     </div>
   );
 }
-
-export default ClientChatPage;
