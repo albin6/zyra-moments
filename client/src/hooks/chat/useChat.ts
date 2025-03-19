@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import {
   addMessage,
+  IChatRoom,
   setContacts,
   setMessages,
   updateContactStatus,
@@ -20,7 +21,12 @@ export interface Contact {
   status?: "online" | "offline";
 }
 
-interface Message {
+interface IHistory {
+  chatRoom: IChatRoom;
+  messages: Message[];
+}
+
+export interface Message {
   _id: string;
   chatRoomId: string;
   content: string;
@@ -64,7 +70,7 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
       "typing",
       ({ chatRoomId, senderId }: { chatRoomId: string; senderId: string }) => {
         // Dispatch typing indicator if needed
-        console.log(chatRoomId, senderId)
+        console.log(chatRoomId, senderId);
       }
     );
 
@@ -77,40 +83,56 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
   }, [socket, userId, userType, dispatch]);
 
   const fetchContacts = useCallback(() => {
-    if (!socket) return;
-    socket.emit("getUserChats", { userId, userType });
-    socket.once("userChats", (chatRooms: any[]) => {
-      console.log("Fetched contacts:", chatRooms);
-      const mappedContacts = chatRooms.map((room) => ({
-        id: room.recipientId,
-        chatRoomId: room.chatRoomId,
-        name: room.recipientName,
-        avatar: room.recipientAvatar,
-        lastMessage: room.lastMessage,
-        lastMessageTime: room.lastMessageTime
-          ? new Date(room.lastMessageTime)
-          : undefined,
-        unreadCount: room.unreadCount,
-        status: room.recipientStatus,
-      }));
-      dispatch(setContacts(mappedContacts));
-    });
+    if (socket) {
+      socket.emit("getUserChats", { userId, userType });
+      socket.once("userChats", (chatRooms: any[]) => {
+        const mappedContacts = chatRooms.map((room) => ({
+          id: room.recipientId,
+          chatRoomId: room.chatRoomId,
+          name: room.recipientName,
+          avatar: room.recipientAvatar,
+          lastMessage: room.lastMessage,
+          lastMessageTime: room.lastMessageTime
+            ? new Date(room.lastMessageTime).toISOString()
+            : undefined,
+          unreadCount: room.unreadCount,
+          status: room.recipientStatus,
+        }));
+
+        dispatch(setContacts(mappedContacts));
+      });
+    }
   }, [socket, userId, userType, dispatch]);
 
   const fetchChatHistory = useCallback(
     (chatRoomId: string) => {
       if (!socket) return;
       socket.emit("getChatHistory", chatRoomId);
-      socket.once("chatHistory", (history: Message[]) => {
-        dispatch(setMessages({ chatRoomId, messages: history }));
+      socket.once("chatHistory", (history: IHistory) => {
+        console.log("here is the message from history ===>", history.messages);
+        dispatch(setMessages({ chatRoomId, messages: history.messages }));
       });
     },
     [socket, dispatch]
   );
 
   const sendMessage = useCallback(
-    (chatRoomId: string, content: string, recipientId: string) => {
+    (
+      chatRoomId: string | undefined, // Made chatRoomId optional to handle new chats
+      content: string,
+      recipientId: string,
+      bookingId?: string // Added bookingId as an optional parameter
+    ) => {
       if (!socket) return;
+
+      // If chatRoomId is not provided, bookingId must be included for new chat rooms
+      if (!chatRoomId && !bookingId) {
+        toast.error("Booking ID is required to start a new chat");
+        return;
+      }
+
+      console.log("emitting sendMessage");
+
       socket.emit("sendMessage", {
         clientId: userType === "Client" ? userId : recipientId,
         vendorId: userType === "Vendor" ? userId : recipientId,
@@ -118,6 +140,7 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
         senderType: userType,
         content,
         chatRoomId,
+        bookingId, // Include bookingId in the payload
       });
     },
     [socket, userId, userType]

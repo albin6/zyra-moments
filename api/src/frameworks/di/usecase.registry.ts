@@ -167,6 +167,8 @@ import { ILogger } from "../../interfaceAdapters/services/logger/logger.interfac
 import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
+import { IMarkMessagesAsReadUseCase } from "../../entities/useCaseInterfaces/chat/mark-messages-as-read-usecase.inteface";
+import { MarkMessagesAsReadUseCase } from "../../useCases/chat/mark-messages-as-read.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -463,6 +465,11 @@ export class UseCaseRegistry {
       { useClass: GetPaginatedEventsUseCase }
     );
 
+    container.register<IMarkMessagesAsReadUseCase>(
+      "IMarkMessagesAsReadUseCase",
+      { useClass: MarkMessagesAsReadUseCase }
+    );
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -529,7 +536,9 @@ export class UseCaseRegistry {
 
     // ----- error handler -----
 
-    container.register<ErrorMiddleware>('ErrorMiddleware', { useClass: ErrorMiddleware });
+    container.register<ErrorMiddleware>("ErrorMiddleware", {
+      useClass: ErrorMiddleware,
+    });
 
     // -----chat-----
 

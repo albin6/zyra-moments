@@ -63,7 +63,6 @@ import { CancelTicketController } from "../../interfaceAdapters/controllers/even
 import { GetDashboardStatsController } from "../../interfaceAdapters/controllers/admin/get-dashboard-stats.controller";
 import { GetPaginatedEventsController } from "../../interfaceAdapters/controllers/event/get-paginated-events.controller";
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
-import { WinstonLoggerAdapter } from "../../interfaceAdapters/services/logger/winston-logger.adapter";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 

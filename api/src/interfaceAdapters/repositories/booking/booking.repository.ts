@@ -88,7 +88,7 @@ export class BookingRepository implements IBookingRepository {
 
   // latest for chat
 
-  async findByClientId(clientId: string): Promise<IBookingModel[]> {
+  async findByClientId(clientId: any): Promise<IBookingModel[]> {
     return await BookingModel.find({ userId: clientId })
       .populate(
         "vendorId",
@@ -97,7 +97,7 @@ export class BookingRepository implements IBookingRepository {
       .exec();
   }
 
-  async findByVendorId(vendorId: string): Promise<IBookingModel[]> {
+  async findByVendorId(vendorId: any): Promise<IBookingModel[]> {
     return await BookingModel.find({ vendorId })
       .populate("userId", "firstName lastName email profileImage onlineStatus")
       .exec();

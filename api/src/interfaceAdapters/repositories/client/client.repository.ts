@@ -1,7 +1,10 @@
 import { injectable } from "tsyringe";
 import { IClientEntity } from "../../../entities/models/client.entity";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
-import { ClientModel } from "../../../frameworks/database/models/client.model";
+import {
+  ClientModel,
+  IClientModel,
+} from "../../../frameworks/database/models/client.model";
 
 @injectable()
 export class ClientRepository implements IClientRepository {
@@ -74,5 +77,11 @@ export class ClientRepository implements IClientRepository {
       { _id: id },
       { onlineStatus, lastStatusUpdated: new Date() }
     );
+  }
+
+  async findByIds(clientIds: string[]): Promise<IClientModel[]> {
+    return await ClientModel.find({
+      _id: { $in: clientIds },
+    }).exec();
   }
 }

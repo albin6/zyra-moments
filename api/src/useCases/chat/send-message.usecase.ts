@@ -4,6 +4,8 @@ import { IMessageEntity } from "../../entities/models/message.entity";
 import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/message-repository.interface";
 import { IChatRoomRepository } from "../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
 import { ISendMessageUseCase } from "../../entities/useCaseInterfaces/chat/send-message-usecase.interface";
+import { CustomError } from "../../entities/utils/custom-error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
 
 @injectable()
 export class SendMessageUseCase implements ISendMessageUseCase {
@@ -18,23 +20,31 @@ export class SendMessageUseCase implements ISendMessageUseCase {
     senderId: string,
     senderType: "Client" | "Vendor",
     content: string,
-    chatRoomId?: string
+    chatRoomId?: string,
+    bookingId?: string
   ): Promise<IMessageEntity> {
     let chatRoom;
+  
     if (chatRoomId) {
       chatRoom = await this.chatRoomRepository.findById(chatRoomId);
-      if (!chatRoom) throw new Error("Chat room not found");
+      if (!chatRoom) throw new CustomError(ERROR_MESSAGES.CHAT_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     } else {
+      if (!bookingId) throw new CustomError(ERROR_MESSAGES.BOOKING_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
       chatRoom = await this.chatRoomRepository.findOrCreate(
         clientId,
         vendorId,
-        content,
-        new Date()
+        bookingId,
+        {
+          content,
+          senderId,
+          senderType,
+          createdAt: new Date(),
+        }
       );
     }
-
+  
     const message: IMessageEntity = {
-      chatRoomId: chatRoom._id!,
+      chatRoomId: chatRoom._id!.toString(),
       content,
       senderId,
       senderType,
@@ -42,10 +52,21 @@ export class SendMessageUseCase implements ISendMessageUseCase {
       createdAt: new Date(),
     };
     const createdMessage = await this.messageRepository.create(message);
-
-    // Update chat room last message
-    await this.chatRoomRepository.updateLastMessage(chatRoom._id!, content, new Date());
-
+  
+    await this.chatRoomRepository.updateLastMessage(
+      chatRoom._id!.toString(),
+      content,
+      senderId,
+      senderType,
+      createdMessage.createdAt!
+    );
+  
+    if (senderType === "Client") {
+      await this.chatRoomRepository.incrementUnreadCount(chatRoom._id!.toString(), "vendor");
+    } else {
+      await this.chatRoomRepository.incrementUnreadCount(chatRoom._id!.toString(), "client");
+    }
+  
     return createdMessage;
   }
 }

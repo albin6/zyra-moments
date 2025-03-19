@@ -9,6 +9,9 @@ import { IVendorRepository } from "../../../entities/repositoryInterfaces/vendor
 import { ISendMessageUseCase } from "../../../entities/useCaseInterfaces/chat/send-message-usecase.interface";
 import { IGetChatHistoryUseCase } from "../../../entities/useCaseInterfaces/chat/get-chat-history-usecase.interface";
 import { IGetUserChatsUseCase } from "../../../entities/useCaseInterfaces/chat/get-user-chats-usecase.interface";
+import { IMarkMessagesAsReadUseCase } from "../../../entities/useCaseInterfaces/chat/mark-messages-as-read-usecase.inteface";
+import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/message-repository.interface";
+import { IChatRoomRepository } from "../../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
 
 @injectable()
 export class ChatController implements IChatController {
@@ -22,7 +25,12 @@ export class ChatController implements IChatController {
     @inject("IGetChatHistoryUseCase")
     private getChatHistoryUseCase: IGetChatHistoryUseCase,
     @inject("IGetUserChatsUseCase")
-    private getUserChatsUseCase: IGetUserChatsUseCase
+    private getUserChatsUseCase: IGetUserChatsUseCase,
+    @inject("IMarkMessagesAsReadUseCase")
+    private markMessagesAsReadUseCase: IMarkMessagesAsReadUseCase,
+    @inject("IMessageRepository") private messageRepository: IMessageRepository,
+    @inject("IChatRoomRepository")
+    private chatRoomRepository: IChatRoomRepository
   ) {}
 
   initialize(server: Server): void {
@@ -65,34 +73,66 @@ export class ChatController implements IChatController {
         });
       });
 
+      socket.on("messageRead", async ({ chatRoomId, userId, userType }) => {
+        try {
+          console.log('event received in server')
+          await this.markMessagesAsReadUseCase.execute(
+            chatRoomId,
+            userId,
+            userType
+          );
+          const messages = await this.messageRepository.findByChatRoomId(
+            chatRoomId
+          );
+          const chatRoom = await this.chatRoomRepository.findById(chatRoomId);
+          if (!chatRoom) throw new Error("Chat room not found");
+
+          const recipientId =
+            userType === "Client" ? chatRoom.vendorId : chatRoom.clientId;
+          this.io
+            ?.to(userId)
+            .to(recipientId.toString())
+            .emit("messagesUpdated", messages);
+          this.io
+            ?.to(userId)
+            .to(recipientId.toString())
+            .emit("chatUpdate", chatRoom);
+        } catch (error) {
+          console.error("Error marking messages as read:", error);
+          socket.emit("error", { message: "Failed to mark messages as read" });
+        }
+      });
+
       socket.on("getUserChats", async ({ userId, userType }) => {
-        const chatRooms = await this.getUserChatsUseCase.execute(userId, userType);
+        const chatRooms = await this.getUserChatsUseCase.execute(
+          userId,
+          userType
+        );
+        console.log("here is the current chatroom =>", chatRooms);
         socket.emit("userChats", chatRooms);
       });
 
       socket.on(
         "sendMessage",
-        async ({
-          clientId,
-          vendorId,
-          senderId,
-          senderType,
-          content,
-          chatRoomId,
-        }) => {
+        async ({ chatRoomId, senderId, senderType, content }) => {
+          const chatRoom = await this.chatRoomRepository.findById(chatRoomId);
+          if (!chatRoom) throw new Error("Chat room not found");
           const message = await this.sendMessageUseCase.execute(
-            clientId,
-            vendorId,
+            senderType === "Client" ? senderId : chatRoom.clientId.toString(),
+            senderType === "Vendor" ? senderId : chatRoom.vendorId.toString(),
             senderId,
             senderType,
             content,
             chatRoomId
           );
-          const chatRoom = await this.getChatHistoryUseCase.execute(
-            message.chatRoomId
-          );
-          this.io?.to(clientId).to(vendorId).emit("message", message);
-          this.io?.to(clientId).to(vendorId).emit("chatUpdate", chatRoom);
+          this.io
+            ?.to(chatRoom.clientId.toString())
+            .to(chatRoom.vendorId.toString())
+            .emit("message", message);
+          this.io
+            ?.to(chatRoom.clientId.toString())
+            .to(chatRoom.vendorId.toString())
+            .emit("chatUpdate", chatRoom);
         }
       );
 

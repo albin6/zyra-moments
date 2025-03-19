@@ -1,7 +1,7 @@
 // components/chat/ChatList.tsx
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -50,7 +50,9 @@ export function ChatList({
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder={`Search ${userType === "Client" ? "vendors" : "clients"}...`}
+            placeholder={`Search ${
+              userType === "Client" ? "vendors" : "clients"
+            }...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -64,7 +66,9 @@ export function ChatList({
             <p className="text-muted-foreground text-center">
               {searchQuery
                 ? "No contacts found matching your search."
-                : `No ${userType === "Client" ? "vendors" : "clients"} to display.`}
+                : `No ${
+                    userType === "Client" ? "vendors" : "clients"
+                  } to display.`}
             </p>
           </div>
         ) : (
@@ -81,13 +85,26 @@ export function ChatList({
                 >
                   <div className="flex items-center w-full">
                     <div className="relative">
-                      <Avatar className="h-12 w-12 mr-3">
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage
+                          src={contact.avatar}
+                          alt={`${contact.name}`}
+                        />
+                        <AvatarFallback>
+                          {contact.name.split(" ")[0][0].toUpperCase()}
+                          {contact.name.split(" ")[1][0] ? contact.name.split(" ")[1][0].toUpperCase() : ""}
+                        </AvatarFallback>
+                      </Avatar>
+                      {/* <Avatar className="h-12 w-12 mr-3">
                         <img
-                          src={contact.avatar || "/placeholder.svg?height=48&width=48"}
+                          src={
+                            contact.avatar ||
+                            "/placeholder.svg?height=48&width=48"
+                          }
                           alt={contact.name}
                           className="object-cover"
                         />
-                      </Avatar>
+                      </Avatar> */}
                       {contact.status === "online" && (
                         <span className="absolute bottom-0 right-3 h-3 w-3 rounded-full bg-green-500 border-2 border-background"></span>
                       )}
@@ -97,7 +114,9 @@ export function ChatList({
                         <h3 className="font-medium truncate">{contact.name}</h3>
                         {contact.lastMessageTime && (
                           <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
-                            {new Date(contact.lastMessageTime).toLocaleDateString([], {
+                            {new Date(
+                              contact.lastMessageTime
+                            ).toLocaleDateString([], {
                               month: "short",
                               day: "numeric",
                             })}
@@ -105,11 +124,15 @@ export function ChatList({
                         )}
                       </div>
                       {contact.lastMessage && (
-                        <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
+                        <p className="text-sm text-muted-foreground truncate">
+                          {contact.lastMessage}
+                        </p>
                       )}
                     </div>
                     {contact.unreadCount && contact.unreadCount > 0 && (
-                      <Badge className="ml-2 flex-shrink-0">{contact.unreadCount}</Badge>
+                      <Badge className="ml-2 flex-shrink-0">
+                        {contact.unreadCount}
+                      </Badge>
                     )}
                   </div>
                 </Button>

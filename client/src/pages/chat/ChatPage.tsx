@@ -43,6 +43,10 @@ export function ChatPage({ userType }: ChatPageProps) {
   }
 
   useEffect(() => {
+    console.log('this is all messages from chat page', allMessages)
+  }, [allMessages])
+
+  useEffect(() => {
     if (socket && userId) {
       fetchContacts();
     }
@@ -51,6 +55,7 @@ export function ChatPage({ userType }: ChatPageProps) {
   useEffect(() => {
     if (selectedChatRoomId && socket) {
       fetchChatHistory(selectedChatRoomId);
+      console.log('history fetched ===>')
     }
   }, [selectedChatRoomId, socket, fetchChatHistory]);
 
@@ -136,6 +141,7 @@ export function ChatPage({ userType }: ChatPageProps) {
                     onSendMessage={handleSendMessage}
                     userType={userType}
                     onTyping={() => sendTyping(selectedChatRoomId)}
+                    chatRoomId={selectedChatRoomId}
                   />
                 </div>
               ) : (

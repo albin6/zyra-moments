@@ -7,6 +7,6 @@ export interface ISendMessageUseCase {
     senderId: string,
     senderType: "Client" | "Vendor",
     content: string,
-    chatRoomId?: string 
+    chatRoomId?: string,
   ): Promise<IMessageEntity>;
 }

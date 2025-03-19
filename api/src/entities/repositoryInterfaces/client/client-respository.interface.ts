@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose";
 import { IClientEntity } from "../../models/client.entity";
+import { IClientModel } from "../../../frameworks/database/models/client.model";
 
 export interface IClientRepository {
   save(data: Partial<IClientEntity>): Promise<IClientEntity>;
@@ -32,4 +33,6 @@ export interface IClientRepository {
     id: any,
     onlineStatus: "online" | "offline"
   ): Promise<void>;
+
+  findByIds(clientIds: string[]): Promise<IClientModel[]>;
 }

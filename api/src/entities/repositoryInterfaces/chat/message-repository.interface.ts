@@ -5,5 +5,5 @@ export interface IMessageRepository {
 
   findByChatRoomId(chatRoomId: any): Promise<IMessageEntity[]>;
 
-  markAsRead(messageId: any): Promise<void>;
+  markAsRead(chatRoomId: string, userId: string, userType: "Client" | "Vendor"): Promise<void>;
 }

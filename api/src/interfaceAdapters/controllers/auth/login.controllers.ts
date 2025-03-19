@@ -21,55 +21,54 @@ export class LoginUserController implements ILoginUserController {
   ) {}
 
   async handle(req: Request, res: Response): Promise<void> {
-      const data = req.body as LoginUserDTO;
+    const data = req.body as LoginUserDTO;
 
-      console.log(data);
+    console.log(data);
 
-      const validatedData = loginSchema.parse(data);
+    const validatedData = loginSchema.parse(data);
 
-      if (!validatedData) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({
-          success: false,
-          message: ERROR_MESSAGES.INVALID_CREDENTIALS,
-        });
-      }
-
-      const user = await this.loginUserUseCase.execute(validatedData);
-
-      if (!user._id || !user.email || !user.role) {
-        throw new Error("User ID, email, or role is missing");
-      }
-
-      const userId = user._id.toString();
-
-      const tokens = await this.generateTokenUseCase.execute(
-        userId,
-        user.email,
-        user.role
-      );
-
-      const accessTokenName = `${user.role}_access_token`;
-      const refreshTokenName = `${user.role}_refresh_token`;
-
-      setAuthCookies(
-        res,
-        tokens.accessToken,
-        tokens.refreshToken,
-        accessTokenName,
-        refreshTokenName
-      );
-
-      res.status(HTTP_STATUS.OK).json({
-        success: true,
-        message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        user: {
-          id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-        },
+    if (!validatedData) {
+      res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        message: ERROR_MESSAGES.INVALID_CREDENTIALS,
       });
-    
+    }
+
+    const user = await this.loginUserUseCase.execute(validatedData);
+
+    if (!user._id || !user.email || !user.role) {
+      throw new Error("User ID, email, or role is missing");
+    }
+
+    const userId = user._id.toString();
+
+    const tokens = await this.generateTokenUseCase.execute(
+      userId,
+      user.email,
+      user.role
+    );
+
+    const accessTokenName = `${user.role}_access_token`;
+    const refreshTokenName = `${user.role}_refresh_token`;
+
+    setAuthCookies(
+      res,
+      tokens.accessToken,
+      tokens.refreshToken,
+      accessTokenName,
+      refreshTokenName
+    );
+
+    res.status(HTTP_STATUS.OK).json({
+      success: true,
+      message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+      },
+    });
   }
 }

@@ -32,7 +32,7 @@ export interface IBookingRepository {
 
   // latest for chat
 
-  findByClientId(clientId: string): Promise<IBookingModel[]>;
+  findByClientId(clientId: any): Promise<IBookingModel[]>;
 
-  findByVendorId(vendorId: string): Promise<IBookingModel[]>;
+  findByVendorId(vendorId: any): Promise<IBookingModel[]>;
 }

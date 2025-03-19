@@ -1,36 +1,52 @@
+import { IChatRoomEntity } from "../../../entities/models/chat-room.entity";
 import { IChatRoomModel } from "../../../frameworks/database/models/chat-room.model";
-import { IChatRoomEntity } from "../../models/chat-room.entity";
 
 export interface IChatRoomRepository {
-  findOrCreate(
-    clientId: any,
-    vendorId: any,
-    lastMessage: string,
-    lastMessageAt: Date
-  ): Promise<IChatRoomEntity>;
-
   findById(id: any): Promise<IChatRoomEntity | null>;
 
   findByClientId(clientId: any): Promise<IChatRoomEntity[]>;
 
   findByVendorId(vendorId: any): Promise<IChatRoomEntity[]>;
 
-  updateLastMessage(
-    chatRoomId: any,
-    lastMessage: string,
-    lastMessageAt: Date
-  ): Promise<void>;
-
-  // latest for chat
-
-  findByClientAndVendorAndBooking(
+  findOrCreate(
     clientId: string,
     vendorId: string,
-    bookingId: string
-  ): Promise<IChatRoomModel | null>;
+    bookingId: string,
+    lastMessage: {
+      content: string;
+      senderId?: string;
+      senderType?: "Client" | "Vendor";
+      createdAt: Date;
+    }
+  ): Promise<IChatRoomEntity>;
+
+  updateLastMessage(
+    chatRoomId: string,
+    content: string,
+    senderId: string,
+    senderType: "Client" | "Vendor",
+    createdAt: Date
+  ): Promise<void>;
+
+  incrementUnreadCount(
+    chatRoomId: string,
+    recipientType: "client" | "vendor"
+  ): Promise<void>;
+
   create(data: {
-    clientId: string;
-    vendorId: string;
-    bookingId: string;
+    clientId: any;
+    vendorId: any;
+    bookingId: any;
   }): Promise<IChatRoomModel>;
+
+  findByClientAndVendorAndBooking(
+    clientId: any,
+    vendorId: any,
+    bookingId: any
+  ): Promise<IChatRoomModel | null>;
+
+  resetUnreadCount(
+    chatRoomId: string,
+    recipientType: "client" | "vendor"
+  ): Promise<void>;
 }

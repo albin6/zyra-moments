@@ -36,6 +36,9 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  FAILED_TO_RESET: "Failed to reset unread count",
+  FAILED_TO_MARK_ATTENDANCE: "Failed to mark messages as read",
+  CHAT_NOT_FOUND: "Chat room not found",
   LAT_LON_REQUIRED: "Longitude and latitude are required for nearby search",
   INVALID_ROLE: "Invalid user role",
   UNAUTH_NO_USER_FOUND: "Unauthorized: No user found in request",

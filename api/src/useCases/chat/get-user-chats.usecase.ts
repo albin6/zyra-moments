@@ -1,4 +1,3 @@
-// useCases/chat/GetUserChatsUseCase.ts
 import { injectable, inject } from "tsyringe";
 import { IGetUserChatsUseCase } from "../../entities/useCaseInterfaces/chat/get-user-chats-usecase.interface";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
@@ -20,12 +19,16 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
     @inject("IClientRepository") private clientRepository: IClientRepository
   ) {}
 
-  async execute(userId: string, userType: "Client" | "Vendor"): Promise<any[]> {
+  async execute(userId: any, userType: "Client" | "Vendor"): Promise<any[]> {
     try {
       if (userType === "Client") {
         // Step 1: Fetch all bookings for this client
         const bookings: IBookingModel[] =
           await this.bookingRepository.findByClientId(userId);
+        console.log(
+          "Bookings:",
+          bookings.map((b) => ({ vendorId: b.vendorId }))
+        );
 
         // Step 2: Filter bookings to only confirmed or completed ones
         const validBookings = bookings.filter((b) =>
@@ -40,8 +43,36 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
         // Step 3: Create or fetch chat rooms for each valid booking
         const chatRooms: IChatRoomModel[] = await Promise.all(
           validBookings.map(async (booking) => {
-            const vendorId = booking.vendorId.toString();
-            const bookingId = booking._id.toString();
+            // Extract vendorId, handling populated objects and undefined cases
+            const vendorId = booking.vendorId
+              ? typeof booking.vendorId === "object" &&
+                "_id" in booking.vendorId
+                ? (booking.vendorId as any)._id.toString() // Populated Vendor object
+                : booking.vendorId.toString() // ObjectId or string
+              : null;
+
+            console.log("Extracted vendorId:", vendorId); // Debug the extracted value
+
+            // Validate that vendorId is a 24-character hex string
+            if (!vendorId || !/^[0-9a-fA-F]{24}$/.test(vendorId)) {
+              console.error(
+                "Invalid or missing vendorId in booking:",
+                booking.vendorId
+              );
+              throw new Error(
+                `Invalid or missing vendorId ${booking.vendorId} in booking ${
+                  booking._id || "unknown"
+                }`
+              );
+            }
+
+            // Extract bookingId, handling undefined case
+            const bookingId = booking._id
+              ? booking._id.toString()
+              : (() => {
+                  console.error("Missing _id in booking:", booking);
+                  throw new Error("Booking is missing _id");
+                })();
 
             // Check if a chat room already exists
             let chatRoom =
@@ -63,11 +94,30 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
             return chatRoom;
           })
         );
+        console.log(
+          "ChatRooms:",
+          chatRooms.map((cr) => ({ vendorId: cr.vendorId }))
+        );
 
         // Step 4: Fetch vendor details for all chat rooms
         const vendorIds = [
-          ...new Set(chatRooms.map((chatRoom) => chatRoom.vendorId.toString())),
+          ...new Set(
+            chatRooms.map((chatRoom) => {
+              const vendorIdStr = chatRoom.vendorId.toString();
+              if (!/^[0-9a-fA-F]{24}$/.test(vendorIdStr)) {
+                console.error(
+                  "Invalid vendorId in chatRoom:",
+                  chatRoom.vendorId
+                );
+                throw new Error(
+                  `Invalid vendorId ${chatRoom.vendorId} in chatRoom ${chatRoom._id}`
+                );
+              }
+              return vendorIdStr;
+            })
+          ),
         ];
+        console.log("VendorIds:", vendorIds);
         const vendors: IVendorModel[] = await this.vendorRepository.findByIds(
           vendorIds
         );
@@ -98,35 +148,30 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
 
         return chatList;
       } else if (userType === "Vendor") {
-        // Step 1: Fetch all bookings for this vendor
+        // [Vendor branch unchanged]
         const bookings: IBookingModel[] =
           await this.bookingRepository.findByVendorId(userId);
-
-        // Step 2: Filter bookings to only confirmed or completed ones
         const validBookings = bookings.filter((b) =>
           ["confirmed", "completed"].includes(b.status)
         );
-
-        // If no valid bookings, return empty array (no chats)
         if (validBookings.length === 0) {
           return [];
         }
-
-        // Step 3: Create or fetch chat rooms for each valid booking
         const chatRooms: IChatRoomModel[] = await Promise.all(
           validBookings.map(async (booking) => {
-            const clientId = booking.userId.toString();
-            const bookingId = booking._id.toString();
-
-            // Check if a chat room already exists
+            const clientId = booking.userId;
+            const bookingId = booking._id
+              ? booking._id.toString()
+              : (() => {
+                  console.error("Missing _id in booking:", booking);
+                  throw new Error("Booking is missing _id");
+                })();
             let chatRoom =
               await this.chatRoomRepository.findByClientAndVendorAndBooking(
                 clientId,
                 userId,
                 bookingId
               );
-
-            // If no chat room exists, create one
             if (!chatRoom) {
               chatRoom = await this.chatRoomRepository.create({
                 clientId,
@@ -134,20 +179,15 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
                 bookingId,
               });
             }
-
             return chatRoom;
           })
         );
-
-        // Step 4: Fetch client details for all chat rooms
         const clientIds = [
           ...new Set(chatRooms.map((chatRoom) => chatRoom.clientId.toString())),
         ];
         const clients: IClientModel[] = await this.clientRepository.findByIds(
           clientIds
         );
-
-        // Step 5: Map chat rooms to frontend-friendly format
         const chatList = chatRooms
           .map((chatRoom) => {
             const client = clients.find(
@@ -155,9 +195,8 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
             );
             if (!client) {
               console.warn(`Client not found for ID: ${chatRoom.clientId}`);
-              return null; // Skip if client not found
+              return null;
             }
-
             return {
               chatRoomId: chatRoom._id.toString(),
               recipientId: client._id.toString(),
@@ -169,8 +208,7 @@ export class GetUserChatsUseCase implements IGetUserChatsUseCase {
               recipientStatus: client.onlineStatus || "offline",
             };
           })
-          .filter(Boolean); // Remove null entries
-
+          .filter(Boolean);
         return chatList;
       } else {
         throw new Error("Invalid userType. Must be 'Client' or 'Vendor'");

@@ -7,6 +7,7 @@ import {
   sendEmailController,
   veryfyOTPController,
 } from "../../di/resolver";
+import { asyncHandler } from "../../../shared/async-handler";
 
 export class AuthRoutes extends BaseRoute {
   constructor() {
@@ -14,24 +15,29 @@ export class AuthRoutes extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
-    this.router.post("/register", (req: Request, res: Response) => {
-      registerController.handle(req, res);
-    });
+    this.router.post(
+      "/register",
+      asyncHandler(registerController.handle.bind(registerController))
+    );
 
-    this.router.post("/login", (req: Request, res: Response) => {
-      loginController.handle(req, res);
-    });
+    this.router.post(
+      "/login",
+      asyncHandler(loginController.handle.bind(loginController))
+    );
 
-    this.router.post("/google-auth", (req: Request, res: Response) => {
-      googleController.handle(req, res);
-    });
+    this.router.post(
+      "/google-auth",
+      asyncHandler(googleController.handle.bind(googleController))
+    );
 
-    this.router.post("/send-otp", (req: Request, res: Response) => {
-      sendEmailController.handle(req, res);
-    });
+    this.router.post(
+      "/send-otp",
+      asyncHandler(sendEmailController.handle.bind(sendEmailController))
+    );
 
-    this.router.post("/verify-otp", (req: Request, res: Response) => {
-      veryfyOTPController.handle(req, res);
-    });
+    this.router.post(
+      "/verify-otp",
+      asyncHandler(veryfyOTPController.handle.bind(veryfyOTPController))
+    );
   }
 }

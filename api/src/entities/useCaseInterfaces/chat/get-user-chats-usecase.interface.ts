@@ -12,5 +12,5 @@ export interface ChatRoomResponse {
 }
 
 export interface IGetUserChatsUseCase {
-  execute(userId: string, userType: "Client" | "Vendor"): Promise<any[]>;
+  execute(userId: any, userType: "Client" | "Vendor"): Promise<any[]>;
 }
