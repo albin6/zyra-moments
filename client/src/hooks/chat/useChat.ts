@@ -49,9 +49,9 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
       toast.error("Failed to connect to chat server");
     });
 
-    socket.on("message", (message: Message) => {
-      dispatch(addMessage(message));
-    });
+    // socket.on("message", (message: Message) => {
+    //   dispatch(addMessage(message));
+    // });
 
     socket.on(
       "userStatus",
@@ -140,7 +140,7 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
         senderType: userType,
         content,
         chatRoomId,
-        bookingId, // Include bookingId in the payload
+        bookingId,
       });
     },
     [socket, userId, userType]
