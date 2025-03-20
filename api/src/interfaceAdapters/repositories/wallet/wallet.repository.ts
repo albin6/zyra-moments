@@ -4,6 +4,7 @@ import { IWalletRepository } from "../../../entities/repositoryInterfaces/wallet
 import { WalletModel } from "../../../frameworks/database/models/wallet.model";
 import { CustomError } from "../../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { PaymentModel } from "../../../frameworks/database/models/payment.model";
 
 @injectable()
 export class WalletRepository implements IWalletRepository {
@@ -21,23 +22,48 @@ export class WalletRepository implements IWalletRepository {
   }
 
   async findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-    userId: string,
+    userId: any,
     balance: number,
     paymentId: any
   ): Promise<void> {
     const wallet = await WalletModel.findOne({ userId });
 
+    console.log('inside findWalletByUserIdAndUpdateBalanceAndAddPaymentId', wallet)
+    console.log('inside findWalletByUserIdAndUpdateBalanceAndAddPaymentId balance', balance)
+
     if (!wallet) {
       throw new CustomError(ERROR_MESSAGES.WRONG_ID, HTTP_STATUS.BAD_REQUEST);
+    }
+
+    let newPaymentId = paymentId
+    if (balance < 0) {
+      const payment = await PaymentModel.findById(paymentId)
+
+      const newPayment = await PaymentModel.create({
+        userId,
+        receiverId: payment?.receiverId,
+        bookingId: payment?.bookingId,
+        createrType: payment?.createrType,
+        receiverType: payment?.receiverType,
+        amount: payment?.amount,
+        currency: payment?.currency,
+        purpose: payment?.purpose,
+        status: "refunded",
+        paymentIntentId: payment?.paymentIntentId,
+        transactionId: `TXN_${Date.now()}`,
+        createdAt: new Date(),
+      })
+
+      newPaymentId = newPayment._id
     }
 
     const newBalance = wallet.balance + balance;
     if (newBalance < 0) {
       throw new CustomError("Insufficient funds", HTTP_STATUS.BAD_REQUEST);
     }
-
+    console.log('befor setting new balance')
     wallet.balance = newBalance;
-    wallet.paymentId.push(paymentId);
+    wallet.paymentId.push(newPaymentId);
     await wallet.save();
   }
 }

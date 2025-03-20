@@ -13,10 +13,10 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase {
     @inject("IWalletRepository") private walletRepository: IWalletRepository,
     @inject("IPaymentRepository") private paymentRepository: IPaymentRepository
   ) {}
-  async execute(userId: any, bookingId: any, status: string): Promise<void> {
-    // either confirmed or completed
-    const booking = await this.bookingRepository.findById(bookingId);
 
+  async execute(userId: string, bookingId: string, status: string): Promise<void> {
+    // Fetch the booking first
+    const booking = await this.bookingRepository.findById(bookingId);
     if (!booking) {
       throw new CustomError(
         ERROR_MESSAGES.BOOKING_NOT_FOUND,
@@ -24,62 +24,69 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase {
       );
     }
 
-    await this.bookingRepository.findByIdAndUpdateBookingStatus(
-      bookingId,
-      status
-    );
+    // Update the booking status
+    await this.bookingRepository.findByIdAndUpdateBookingStatus(bookingId, status);
 
+    // Handle fund release logic only if status is "completed"
     if (status === "completed") {
       const payment = await this.paymentRepository.findByBookingId(bookingId);
-
-      // const isBothApproved = await this.bookingRepository.isBothApproved(
-      //   booking._id
-      // );
-      // if (isBothApproved) {
-      //   await this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-      //     booking.vendorId,
-      //     booking.totalPrice,
-      //     payment?._id
-      //   );
-      // }
-
-      if (userId == booking.userId && !booking.isClientApproved) {
-        const booking = await this.bookingRepository.updateClientApproved(
-          userId
+      if (!payment) {
+        throw new CustomError(
+          "Payment not found for this booking",
+          HTTP_STATUS.NOT_FOUND
         );
-        if (booking?.isVendorApproved) {
-          await Promise.all([
-            this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-              booking.vendorId,
-              booking.totalPrice,
-              payment?._id
-            ),
-            this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-              "67c672347b3e284a71d98fd7" as any,
-              booking.totalPrice * -1,
-              payment?._id
-            ),
-          ]);
+      }
+
+      try {
+        let updatedBooking = null;
+
+        // Client approval path
+        console.log('out client approval', userId === booking.userId!.toString())
+        if (userId === booking.userId!.toString() && !booking.isClientApproved) {
+          console.log('in client approval', userId)
+          updatedBooking = await this.bookingRepository.updateClientApproved(userId);
+          if (updatedBooking?.isVendorApproved) {
+            await this.processWalletUpdates(bookingId, updatedBooking, payment._id!.toString());
+          }
+        } 
+        // Vendor approval path
+        else if (userId === booking.vendorId!.toString() && !booking.isVendorApproved) {
+          console.log('in vendor approval', userId === booking.vendorId!.toString())
+          updatedBooking = await this.bookingRepository.updateVendorApproved(userId);
+          if (updatedBooking?.isClientApproved) {
+            await this.processWalletUpdates(bookingId, updatedBooking, payment._id!.toString());
+          }
         }
-      } else if (userId == booking.vendorId && !booking.isVendorApproved) {
-        const booking = await this.bookingRepository.updateVendorApproved(
-          userId
+      } catch (error) {
+        console.error("Error processing booking completion:", error);
+        throw new CustomError(
+          "Failed to process booking completion",
+          HTTP_STATUS.INTERNAL_SERVER_ERROR
         );
-        if (booking?.isClientApproved) {
-          await Promise.all([
-            this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-              booking.vendorId,
-              booking.totalPrice,
-              payment?._id
-            ),
-            this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-              "67c672347b3e284a71d98fd7" as any,
-              booking.totalPrice * -1,
-              payment?._id
-            ),
-          ]);
-        }
       }
     }
+  }
+
+  private async processWalletUpdates(bookingId: string, booking: any, paymentId: string): Promise<void> {
+    const isAlreadyApproved = await this.bookingRepository.isBothApproved(bookingId);
+    console.log('is both applied =>', isAlreadyApproved)
+    if (!isAlreadyApproved) {
+      return;
+    }
+
+    console.log('both approved')
+
+    await Promise.all([
+      this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
+        booking.vendorId,
+        booking.totalPrice,
+        paymentId
+      ),
+      this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
+        "67cef9adee1eeefc92f10237" as string,
+        booking.totalPrice * -1,
+        paymentId
+      ),
+    ]);
   }
 }

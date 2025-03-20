@@ -346,7 +346,7 @@ export default function WalletComponent({
                                 : "text-destructive"
                             }`}
                           >
-                            {formatPrice(walletData.balance)}
+                            {formatPrice(transaction.amount)}
                           </TableCell>
                           <TableCell>
                             <StatusBadge status={transaction.status} />

@@ -38,6 +38,7 @@ export const updateServiceById = async (data: {
   id: any;
   service: Service;
 }) => {
+  delete data.service._id
   const response = await vendorAxiosInstance.put(
     `/_ve/vendor/services/${data.id}`,
     data.service
