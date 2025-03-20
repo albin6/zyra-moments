@@ -109,6 +109,23 @@ export class VendorRepository implements IVendorRepository {
       .populate({ path: "category", select: "title" });
   }
 
+  async update(
+    vendorId: string,
+    data: Partial<IVendorEntity>
+  ): Promise<IVendorEntity> {
+    const updatedVendor = await VendorModel.findOneAndUpdate(
+      { vendorId }, // Query by vendorId
+      { $set: data }, // Update only the specified fields
+      { new: true, runValidators: true } // Return the updated document and run schema validators
+    ).exec();
+
+    if (!updatedVendor) {
+      throw new Error("Vendor not found");
+    }
+
+    return updatedVendor;
+  }
+
   // -------------------------------------------------------------------------
   async findByIdForChat(id: any): Promise<IVendorEntity | null> {
     return VendorModel.findById(id).exec();

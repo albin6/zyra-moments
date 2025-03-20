@@ -35,6 +35,8 @@ import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/mes
 import { MessageRepository } from "../../interfaceAdapters/repositories/chat/message.repository";
 import { IDashBoardStatsRepository } from "../../entities/repositoryInterfaces/admin/dashboard-stats-repository.interface";
 import { DashboardStatsRepository } from "../../interfaceAdapters/repositories/admin/dashboard-stats.repository";
+import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
+import { ReviewRepository } from "../../interfaceAdapters/repositories/review/review.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -101,6 +103,10 @@ export class RepositoryRegistry {
 
     container.register<IDashBoardStatsRepository>("IDashBoardStatsRepository", {
       useClass: DashboardStatsRepository,
+    });
+
+    container.register<IReviewRepository>("IReviewRepository", {
+      useClass: ReviewRepository,
     });
 
     // -----chat-----

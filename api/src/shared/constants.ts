@@ -36,6 +36,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  ALREADY_REVIEWED: "Client has already reviewed this vendor",
   FAILED_TO_RESET: "Failed to reset unread count",
   FAILED_TO_MARK_ATTENDANCE: "Failed to mark messages as read",
   CHAT_NOT_FOUND: "Chat room not found",
