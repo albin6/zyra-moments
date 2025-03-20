@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   createNewCategoryController,
   getAllBookingByClientController,
+  getAllBookingController,
   getAllCategoryJoinRequestController,
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
@@ -156,6 +157,14 @@ export class AdminRoutes extends BaseRoute {
           getAllTransactionsByUserIdController
         )
       )
+    );
+
+    // booking list
+    this.router.get(
+      "/admin/client-bookings",
+      verifyAuth,
+      authorizeRole(["admin"]),(req: Request, res: Response, next: NextFunction) => {console.log('hello')},
+      asyncHandler(getAllBookingController.handle.bind(getAllBookingController))
     );
 
     this.router.post(

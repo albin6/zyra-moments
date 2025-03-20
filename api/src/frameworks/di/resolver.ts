@@ -65,6 +65,7 @@ import { GetPaginatedEventsController } from "../../interfaceAdapters/controller
 import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.middleware";
 import { ILogger } from "../../interfaceAdapters/services/logger/logger.interface";
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
+import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
 
 DependencyInjection.registerAll();
 
@@ -288,10 +289,15 @@ export const getPaginatedEventsController = container.resolve(
   GetPaginatedEventsController
 );
 
+export const getAllBookingController = container.resolve(
+  GetAllBookingController
+);
 
 // -------------------------------- logger service middleware -----------------------------
-export const injectedLoggerMiddleware = container.resolve<LoggerMiddleware>('LoggerMiddleware');
-export const injectedLogger = container.resolve<ILogger>('ILogger');
+export const injectedLoggerMiddleware =
+  container.resolve<LoggerMiddleware>("LoggerMiddleware");
+export const injectedLogger = container.resolve<ILogger>("ILogger");
 
 // -------------------------------- error handler middleware ------------------------------
-export const injectedErrorMiddleware = container.resolve<ErrorMiddleware>('ErrorMiddleware');
+export const injectedErrorMiddleware =
+  container.resolve<ErrorMiddleware>("ErrorMiddleware");

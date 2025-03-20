@@ -1,6 +1,13 @@
+"use client";
+
 import type React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { ChevronDown, ChevronUp, Eye } from "lucide-react";
+import { format } from "date-fns";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -9,18 +16,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import Pagination from "../Pagination";
-import moment from "moment";
-import { formatPrice } from "@/utils/format/formatPrice";
-import { BookingDetailsModal } from "../modals/BookingDetailsModal";
-import { Button } from "../ui/button";
-import { ConfirmationModal } from "../modals/ConfirmationModal";
-import { useState } from "react";
-import { useBookingStatusMutation } from "@/hooks/booking/useBooking";
-import { clientUpdateBookingStatus } from "@/services/booking/bookingServices";
-import { toast } from "sonner";
 
 export interface BookingList {
   serviceDetails: {
@@ -78,54 +81,39 @@ export default function AdminBookingList({
   totalPages,
   sortBy,
   setSortBy,
-  search,
-  setSearch,
 }: AdminBookingListProps) {
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [bookingId, setBookingId] = useState<string | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-
   const handleSort = (field: string) => {
     setSortBy(
       sortBy === field ? `-${field}` : sortBy === `-${field}` ? "" : field
     );
   };
 
-  const { mutate: updateBookingStatus } = useBookingStatusMutation(
-    clientUpdateBookingStatus
-  );
-
-  const onUpdateStatus = () => {
-    if (bookingId && status) {
-      updateBookingStatus(
-        { bookingId, status },
-        {
-          onSuccess: (data) => toast.success(data.message),
-          onError: (error: any) => toast.error(error.response.data.message),
-        }
-      );
-    }
-  };
-
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "confirmed":
-        return "bg-blue-100 text-blue-700 border border-blue-300";
+        return "bg-blue-500/10 text-blue-700";
       case "pending":
-        return "bg-yellow-100 text-yellow-700 border border-yellow-300";
+        return "bg-yellow-500/10 text-yellow-700";
       case "cancelled":
-        return "bg-red-100 text-red-700 border border-red-300";
+        return "bg-red-500/10 text-red-700";
       case "completed":
-        return "bg-green-100 text-green-700 border border-green-300";
+        return "bg-green-500/10 text-green-700";
       default:
-        return "bg-gray-100 text-gray-700 border border-gray-300";
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getSortIcon = (field: string) => {
-    if (sortBy === field) return <ChevronUp className="w-3 h-3" />;
-    if (sortBy === `-${field}`) return <ChevronDown className="w-3 h-3" />;
+    if (sortBy === field) return <ChevronUp className="h-4 w-4" />;
+    if (sortBy === `-${field}`) return <ChevronDown className="h-4 w-4" />;
     return null;
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(price);
   };
 
   const TableHeadSortable = ({
@@ -137,152 +125,140 @@ export default function AdminBookingList({
   }) => (
     <TableHead
       onClick={() => handleSort(field)}
-      className="cursor-pointer bg-gray-50 text-gray-700 font-semibold text-xs uppercase tracking-wide hover:bg-gray-100 transition-colors"
+      className="cursor-pointer hover:bg-muted/50"
     >
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center gap-2">
         <span>{children}</span>
-        <span className="w-3">{getSortIcon(field)}</span>
+        <span>{getSortIcon(field)}</span>
       </div>
     </TableHead>
   );
 
-  const BookingCard = ({ booking }: { booking: BookingList }) => (
-    <Card className="border border-gray-200 bg-white shadow-sm">
-      <CardHeader className="bg-gray-50 p-3">
-        <CardTitle className="text-sm font-semibold text-gray-800 flex justify-between items-center">
-          <span>{booking.serviceDetails.serviceTitle}</span>
-          <Badge className={getStatusColor(booking.status)}>
-            {booking.status}
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-3 text-xs text-gray-600 space-y-2">
-        <div className="grid grid-cols-2 gap-1">
-          <span className="font-medium">Client:</span>
-          <span className="text-right">
-            {booking.userId.firstName} {booking.userId.lastName}
-          </span>
-          <span className="font-medium">Vendor:</span>
-          <span className="text-right">
-            {booking.vendorId.firstName} {booking.vendorId.lastName}
-          </span>
-          <span className="font-medium">Date:</span>
-          <span className="text-right">
-            {moment(booking.bookingDate).format("MMM D, YYYY h:mm A")}
-          </span>
-          <span className="font-medium">Price:</span>
-          <span className="text-right">{formatPrice(booking.totalPrice)}</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   return (
-    <div className="space-y-4 p-4 bg-gray-100 min-h-screen">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <h2 className="text-xl font-semibold text-gray-800">Booking Management</h2>
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-          <Input
-            placeholder="Search bookings by service or ID..."
-            className="pl-8 bg-white border-gray-300 text-gray-700 placeholder-gray-400 text-sm"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-2xl font-bold tracking-tight">
+          Booking Management
+        </h2>
       </div>
 
-      <div className="hidden md:block rounded-md border border-gray-200 bg-white shadow-sm">
+      {/* Desktop view */}
+      <div className="hidden md:block rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow className="border-b border-gray-200">
-              <TableHeadSortable field="serviceRequired">Service</TableHeadSortable>
+            <TableRow>
+              <TableHeadSortable field="serviceTitle">
+                Service
+              </TableHeadSortable>
               <TableHeadSortable field="clientName">Client</TableHeadSortable>
               <TableHeadSortable field="vendorName">Vendor</TableHeadSortable>
-              <TableHeadSortable field="date">Date</TableHeadSortable>
-              <TableHeadSortable field="price">Price</TableHeadSortable>
+              <TableHeadSortable field="bookingDate">Date</TableHeadSortable>
+              <TableHeadSortable field="totalPrice">Price</TableHeadSortable>
               <TableHeadSortable field="status">Status</TableHeadSortable>
-              <TableHead className="bg-gray-50 text-gray-700 font-semibold text-xs uppercase tracking-wide">
-                Actions
-              </TableHead>
+              <TableHead>Details</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {bookings.map((booking) => (
-              <TableRow key={booking._id} className="border-b border-gray-100 hover:bg-gray-50">
-                <TableCell className="text-sm text-gray-700">
-                  {booking.serviceDetails.serviceTitle}
-                </TableCell>
-                <TableCell className="text-sm text-gray-700">
-                  {booking.userId.firstName} {booking.userId.lastName}
-                </TableCell>
-                <TableCell className="text-sm text-gray-700">
-                  {booking.vendorId.firstName} {booking.vendorId.lastName}
-                </TableCell>
-                <TableCell className="text-sm text-gray-700">
-                  {moment(booking.bookingDate).format("MMM D, YYYY h:mm A")}
-                </TableCell>
-                <TableCell className="text-sm text-gray-700">
-                  {formatPrice(booking.totalPrice)}
-                </TableCell>
-                <TableCell>
-                  <Badge className={getStatusColor(booking.status)}>
-                    {booking.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex space-x-2">
-                    <BookingDetailsModal
-                      booking={booking}
-                      trigger={
-                        <Button size="sm" variant="outline" className="text-xs text-gray-600 border-gray-300">
-                          Details
-                        </Button>
-                      }
-                    />
-                    {/* Admin-specific action: Approve escrow release */}
-                    {booking.isClientApproved && booking.isVendorApproved && booking.status === "completed" && (
-                      <Button
-                        size="sm"
-                        variant="default"
-                        className="text-xs bg-blue-600 text-white hover:bg-blue-700"
-                        onClick={() => {
-                          setBookingId(booking._id);
-                          setStatus("completed"); // For confirmation purposes
-                          setIsConfirmationModalOpen(true);
-                        }}
-                      >
-                        Approve Payment
-                      </Button>
+            {bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <TableRow key={booking._id}>
+                  <TableCell className="font-medium">
+                    {booking.serviceDetails.serviceTitle}
+                  </TableCell>
+                  <TableCell>
+                    {booking.userId.firstName} {booking.userId.lastName}
+                  </TableCell>
+                  <TableCell>
+                    {booking.vendorId.firstName} {booking.vendorId.lastName}
+                  </TableCell>
+                  <TableCell>
+                    {format(
+                      new Date(booking.bookingDate),
+                      "MMM d, yyyy h:mm a"
                     )}
-                  </div>
+                  </TableCell>
+                  <TableCell>{formatPrice(booking.totalPrice)}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="secondary"
+                      className={getStatusColor(booking.status)}
+                    >
+                      {booking.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <BookingDetailsDialog booking={booking} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="h-24 text-center">
+                  No bookings found.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
-        <ConfirmationModal
-          isOpen={isConfirmationModalOpen}
-          onClose={() => setIsConfirmationModalOpen(false)}
-          onConfirm={() => {
-            onUpdateStatus();
-            setBookingId(null);
-            setStatus(null);
-          }}
-          title="Approve Payment Release"
-          message="Are you sure you want to approve the payment release to the vendor?"
-          confirmText="Yes, Approve"
-          cancelText="No, Cancel"
-        />
       </div>
 
-      <div className="grid grid-cols-1 gap-3 md:hidden">
-        {bookings.map((booking) => (
-          <BookingCard key={booking._id} booking={booking} />
-        ))}
+      {/* Mobile view */}
+      <div className="grid grid-cols-1 gap-4 md:hidden">
+        {bookings.length > 0 ? (
+          bookings.map((booking) => (
+            <Card key={booking._id}>
+              <CardHeader className="p-4">
+                <CardTitle className="text-lg flex justify-between items-center">
+                  <span className="truncate">
+                    {booking.serviceDetails.serviceTitle}
+                  </span>
+                  <Badge
+                    variant="secondary"
+                    className={getStatusColor(booking.status)}
+                  >
+                    {booking.status}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 pt-0">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <span className="text-muted-foreground">Client:</span>
+                  <span className="text-right">
+                    {booking.userId.firstName} {booking.userId.lastName}
+                  </span>
+                  <span className="text-muted-foreground">Vendor:</span>
+                  <span className="text-right">
+                    {booking.vendorId.firstName} {booking.vendorId.lastName}
+                  </span>
+                  <span className="text-muted-foreground">Date:</span>
+                  <span className="text-right">
+                    {format(
+                      new Date(booking.bookingDate),
+                      "MMM d, yyyy h:mm a"
+                    )}
+                  </span>
+                  <span className="text-muted-foreground">Price:</span>
+                  <span className="text-right">
+                    {formatPrice(booking.totalPrice)}
+                  </span>
+                </div>
+                <div className="mt-4">
+                  <BookingDetailsDialog booking={booking} isMobile />
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <Card>
+            <CardContent className="p-6 text-center text-muted-foreground">
+              No bookings found.
+            </CardContent>
+          </Card>
+        )}
       </div>
 
-      <div className="flex justify-center items-center gap-2">
+      {/* Pagination */}
+      <div className="flex justify-center">
         <Pagination
           currentPage={page}
           onPageChange={setPage}
@@ -291,4 +267,112 @@ export default function AdminBookingList({
       </div>
     </div>
   );
+}
+
+function BookingDetailsDialog({
+  booking,
+  isMobile = false,
+}: {
+  booking: BookingList;
+  isMobile?: boolean;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          variant={isMobile ? "default" : "outline"}
+          size="sm"
+          className={isMobile ? "w-full" : ""}
+        >
+          {isMobile ? "View Details" : <Eye className="h-4 w-4" />}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Booking Details</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Service:</span>
+            <span className="col-span-2">
+              {booking.serviceDetails.serviceTitle}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Description:</span>
+            <span className="col-span-2">
+              {booking.serviceDetails.serviceDescription}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Client:</span>
+            <span className="col-span-2">
+              {booking.userId.firstName} {booking.userId.lastName}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Vendor:</span>
+            <span className="col-span-2">
+              {booking.vendorId.firstName} {booking.vendorId.lastName}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Date:</span>
+            <span className="col-span-2">
+              {format(new Date(booking.bookingDate), "MMMM d, yyyy")}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Time:</span>
+            <span className="col-span-2">
+              {booking.timeSlot.startTime} - {booking.timeSlot.endTime}
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Duration:</span>
+            <span className="col-span-2">
+              {booking.serviceDetails.serviceDuration} minutes
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Price:</span>
+            <span className="col-span-2">${booking.totalPrice.toFixed(2)}</span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Status:</span>
+            <span className="col-span-2">
+              <Badge className={getStatusColor(booking.status)}>
+                {booking.status}
+              </Badge>
+            </span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Payment Status:</span>
+            <span className="col-span-2">{booking.paymentStatus}</span>
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <span className="font-medium">Created:</span>
+            <span className="col-span-2">
+              {format(new Date(booking.createdAt), "MMMM d, yyyy h:mm a")}
+            </span>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function getStatusColor(status: string) {
+  switch (status.toLowerCase()) {
+    case "confirmed":
+      return "bg-blue-500/10 text-blue-700";
+    case "pending":
+      return "bg-yellow-500/10 text-yellow-700";
+    case "cancelled":
+      return "bg-red-500/10 text-red-700";
+    case "completed":
+      return "bg-green-500/10 text-green-700";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
 }

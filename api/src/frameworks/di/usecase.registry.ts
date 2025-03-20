@@ -169,6 +169,8 @@ import { LoggerMiddleware } from "../../interfaceAdapters/middlewares/logger.mid
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 import { IMarkMessagesAsReadUseCase } from "../../entities/useCaseInterfaces/chat/mark-messages-as-read-usecase.inteface";
 import { MarkMessagesAsReadUseCase } from "../../useCases/chat/mark-messages-as-read.usecase";
+import { IGetAllBookingUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-usecase.interface";
+import { GetAllBookingUseCase } from "../../useCases/booking/get-all-booking.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -469,6 +471,10 @@ export class UseCaseRegistry {
       "IMarkMessagesAsReadUseCase",
       { useClass: MarkMessagesAsReadUseCase }
     );
+
+    container.register<IGetAllBookingUseCase>("IGetAllBookingUseCase", {
+      useClass: GetAllBookingUseCase,
+    });
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

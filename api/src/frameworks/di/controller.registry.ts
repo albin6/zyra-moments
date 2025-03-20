@@ -60,6 +60,7 @@ import { GetAllTicketsByUserIdController } from "../../interfaceAdapters/control
 import { CancelTicketController } from "../../interfaceAdapters/controllers/event/ticket/cancel-ticket.controller";
 import { GetDashboardStatsController } from "../../interfaceAdapters/controllers/admin/get-dashboard-stats.controller";
 import { GetPaginatedEventsController } from "../../interfaceAdapters/controllers/event/get-paginated-events.controller";
+import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -291,6 +292,10 @@ export class ControllerRegistry {
 
     container.register("GetPaginatedEventsController", {
       useClass: GetPaginatedEventsController,
+    });
+
+    container.register("GetAllBookingController", {
+      useClass: GetAllBookingController,
     });
 
     // -----chat-----

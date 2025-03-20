@@ -22,7 +22,10 @@ export interface IBookingRepository {
 
   findByIdAndUpdateBookingStatus(id: any, status: string): Promise<void>;
 
-  findByClientIdAndVendorId(clientId: any, vendorId: any) : Promise<IBookingEntity | null>
+  findByClientIdAndVendorId(
+    clientId: any,
+    vendorId: any
+  ): Promise<IBookingEntity | null>;
 
   updateClientApproved(id: any): Promise<IBookingEntity | null>;
 
@@ -30,8 +33,14 @@ export interface IBookingRepository {
 
   isBothApproved(bookingId: any): Promise<IBookingEntity | null>;
 
-  // latest for chat
+  find(
+    filter: any,
+    sort: any,
+    skip: number,
+    limit: number
+  ): Promise<BookingListFromRepo>;
 
+  // latest for chat
   findByClientId(clientId: any): Promise<IBookingModel[]>;
 
   findByVendorId(vendorId: any): Promise<IBookingModel[]>;
