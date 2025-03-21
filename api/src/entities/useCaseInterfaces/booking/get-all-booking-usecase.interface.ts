@@ -5,6 +5,7 @@ export interface IGetAllBookingUseCase {
     pageNumber: number,
     pageSize: number,
     sortBy: string,
-    searchTermString: string
+    searchTermString: string,
+    statusFilter: string
   ): Promise<BookingListFromRepo>;
 }

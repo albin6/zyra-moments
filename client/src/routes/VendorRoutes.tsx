@@ -1,5 +1,6 @@
 import { Custom404 } from "@/components/404/Custom404";
 import VendorLayout from "@/components/layouts/VendorLayout";
+import VendorReviewList from "@/components/reviews/VendorReviewList";
 import VendorAddService from "@/pages/vendor/VendorAddService";
 import VendorAddWorkSample from "@/pages/vendor/VendorAddWorkSample";
 import { VendorAuth } from "@/pages/vendor/VendorAuth";
@@ -122,15 +123,15 @@ function VendorRoutes() {
           }
         />
 
-        {/* <Route
-          path="/vendor/chat"
+        <Route
+          path="/reviews"
           element={
             <AuthVendorRoute
               allowedRoles={["vendor"]}
-              element={<VendorChatPage />}
+              element={<VendorReviewList />}
             />
           }
-        /> */}
+        />
         <Route
           path="/*"
           element={<Custom404 pathname={window.location.pathname} />}

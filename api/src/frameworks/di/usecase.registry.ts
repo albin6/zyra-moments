@@ -171,6 +171,10 @@ import { IMarkMessagesAsReadUseCase } from "../../entities/useCaseInterfaces/cha
 import { MarkMessagesAsReadUseCase } from "../../useCases/chat/mark-messages-as-read.usecase";
 import { IGetAllBookingUseCase } from "../../entities/useCaseInterfaces/booking/get-all-booking-usecase.interface";
 import { GetAllBookingUseCase } from "../../useCases/booking/get-all-booking.usecase";
+import { ICreateReviewUseCase } from "../../entities/useCaseInterfaces/review/create-revew-usecase.interface";
+import { CreateReviewUseCase } from "../../useCases/review/create-review.usecase";
+import { IGetPaginatedReviewsByVendorIdUseCase } from "../../entities/useCaseInterfaces/review/get-paginated-reviews-by-vendor-id-usecase.interface";
+import { GetPaginatedReviewsByVendorIdUseCase } from "../../useCases/review/get-paginated-reviews-by-vendor-id.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -475,6 +479,15 @@ export class UseCaseRegistry {
     container.register<IGetAllBookingUseCase>("IGetAllBookingUseCase", {
       useClass: GetAllBookingUseCase,
     });
+
+    container.register<ICreateReviewUseCase>("ICreateReviewUseCase", {
+      useClass: CreateReviewUseCase,
+    });
+
+    container.register<IGetPaginatedReviewsByVendorIdUseCase>(
+      "IGetPaginatedReviewsByVendorIdUseCase",
+      { useClass: GetPaginatedReviewsByVendorIdUseCase }
+    );
 
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {

@@ -11,26 +11,41 @@ export class GetAllBookingController implements IGetAllBookingController {
     private getAllBookingUseCase: IGetAllBookingUseCase
   ) {}
   async handle(req: Request, res: Response): Promise<void> {
-    const { page = 1, limit = 10, search = "", sortBy = "newest" } = req.query;
+
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      sort = "",
+      statusFilter = "",
+    } = req.query;
 
     const pageNumber = Number(page);
     const pageSize = Number(limit);
     const searchTermString = typeof search === "string" ? search : "";
-    const sortByString = typeof sortBy === "string" ? sortBy : "";
 
-    console.log('inside get all booking controller =>')
+    const sortString = typeof sort === "string" ? sort : "";
+    const statusFilterString =
+      typeof statusFilter === "string"
+        ? statusFilter === "all"
+          ? ""
+          : statusFilter
+        : "";
+    console.log("inside get all booking controller =>");
 
     const { bookings, total } = await this.getAllBookingUseCase.execute(
       pageNumber,
       pageSize,
-      sortByString,
-      searchTermString
+      sortString,
+      searchTermString,
+      statusFilterString
     );
 
     res.status(HTTP_STATUS.OK).json({
       success: true,
       bookings,
-      totalPages: total,
+
+      totalPages: Math.ceil(total / pageSize),
       currentPage: pageNumber,
     });
   }

@@ -39,6 +39,11 @@ export interface IVendorRepository {
 
   findBestVendors(): Promise<IVendorEntity[] | []>;
 
+  update(
+    vendorId: string,
+    data: Partial<IVendorEntity>
+  ): Promise<IVendorEntity>;
+
   // ---------------------------------FOR CHAT---------------------------------
   findByIdForChat(id: any): Promise<IVendorEntity | null>;
 

@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import moment from "moment";
+import ReviewRatingSystem from "./ReviewRatingSystem";
 
 export interface BookingList {
   serviceDetails: {
@@ -44,6 +45,8 @@ export interface BookingList {
     cancellationPolicies: string[];
     termsAndConditions: string[];
   };
+  isClientApproved: boolean;
+  isVendorApproved: boolean;
   timeSlot: {
     startTime: string;
     endTime: string;
@@ -306,6 +309,15 @@ export function BookingDetailsModal({
                 </div>
               </div>
             </motion.div>
+
+            {booking.isClientApproved && booking.isVendorApproved && (
+              <motion.div
+                variants={itemVariants}
+                className="space-y-3 flex justify-end"
+              >
+                <ReviewRatingSystem vendorId={booking.vendorId._id} bookingId={booking._id} />
+              </motion.div>
+            )}
 
             {/* Policies and Terms */}
             <motion.div variants={itemVariants} className="space-y-3">

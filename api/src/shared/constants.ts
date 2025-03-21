@@ -33,9 +33,11 @@ export const SUCCESS_MESSAGES = {
   VERIFICATION_SUCCESS: "Verification completed successfully.",
   DATA_RETRIEVED: "Data retrieved successfully.",
   ACTION_SUCCESS: "Action performed successfully.",
+  SUBMIT_SUCCESS: "Submitted successfully."
 };
 
 export const ERROR_MESSAGES = {
+  ALREADY_REVIEWED: "Client has already reviewed this vendor",
   FAILED_TO_RESET: "Failed to reset unread count",
   FAILED_TO_MARK_ATTENDANCE: "Failed to mark messages as read",
   CHAT_NOT_FOUND: "Chat room not found",

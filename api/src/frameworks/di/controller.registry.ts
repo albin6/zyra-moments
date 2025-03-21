@@ -61,6 +61,8 @@ import { CancelTicketController } from "../../interfaceAdapters/controllers/even
 import { GetDashboardStatsController } from "../../interfaceAdapters/controllers/admin/get-dashboard-stats.controller";
 import { GetPaginatedEventsController } from "../../interfaceAdapters/controllers/event/get-paginated-events.controller";
 import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
+import { CreateReviewController } from "../../interfaceAdapters/controllers/review/create-review.controller";
+import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters/controllers/review/get-paginated-reviews-by-vendor-id.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -296,6 +298,14 @@ export class ControllerRegistry {
 
     container.register("GetAllBookingController", {
       useClass: GetAllBookingController,
+    });
+
+    container.register("CreateReviewController", {
+      useClass: CreateReviewController,
+    });
+
+    container.register("GetPaginatedReviewsByVendorIdController", {
+      useClass: GetPaginatedReviewsByVendorIdController,
     });
 
     // -----chat-----

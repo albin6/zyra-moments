@@ -5,6 +5,8 @@ import {
   IVendorModel,
   VendorModel,
 } from "../../../frameworks/database/models/vendor.model";
+import { CustomError } from "../../../entities/utils/custom-error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {
@@ -107,6 +109,26 @@ export class VendorRepository implements IVendorRepository {
     return await VendorModel.find()
       .limit(6)
       .populate({ path: "category", select: "title" });
+  }
+
+  async update(
+    vendorId: any,
+    data: Partial<IVendorEntity>
+  ): Promise<IVendorEntity> {
+    const updatedVendor = await VendorModel.findByIdAndUpdate(
+      vendorId,
+      { $set: data },
+      { new: true }
+    ).exec();
+
+    if (!updatedVendor) {
+      throw new CustomError(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS.NOT_FOUND
+      );
+    }
+
+    return updatedVendor;
   }
 
   // -------------------------------------------------------------------------
