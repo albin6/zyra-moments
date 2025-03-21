@@ -82,8 +82,52 @@ export const getAllHostedEvents = async (params: EventQueryParams = {}) => {
   return response.data;
 };
 
+
+interface Coordinates {
+  type: "Point";
+  coordinates: [number, number];
+}
+
+interface Host {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+}
+
+export interface Event {
+  coordinates: Coordinates;
+  _id: string;
+  title: string;
+  description: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  pricePerTicket: number;
+  ticketLimit: number;
+  eventLocation: string;
+  posterImage: string;
+  hostId: Host;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  status: boolean;
+}
+
+export interface EventResponse {
+  success: boolean;
+  events: PopulatedEvents[]
+}
+
+
 export const getUpcomingEvents = async () => {
-  const response = await clientAxiosInstance.get("/_host/client/upcomings");
+  const response = await clientAxiosInstance.get<EventResponse>("/_host/client/upcomings");
+  return response.data;
+};
+
+export const getUpcomingEventsForAdmin = async () => {
+  const response = await adminAxiosInstance.get<EventResponse>("/_host/admin/upcomings");
   return response.data;
 };
 

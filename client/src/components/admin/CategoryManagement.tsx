@@ -128,7 +128,7 @@ const CategoryManagement: React.FC = () => {
             Category Management
           </h1>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -142,7 +142,7 @@ const CategoryManagement: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            {/* <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   Total Events
@@ -151,14 +151,10 @@ const CategoryManagement: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {/* {categories.reduce(
-                (sum, category) => sum + category.eventsCount,
-                0
-              )} */}
-                  0
+                 0
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
             <Card className="sm:col-span-2 lg:col-span-1">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">

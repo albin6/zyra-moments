@@ -75,6 +75,15 @@ export class HostRoutes extends BaseRoute {
     );
 
     this.router.get(
+      "/admin/upcomings",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      asyncHandler(
+        getUpcomingEventsController.handle.bind(getUpcomingEventsController)
+      )
+    );
+
+    this.router.get(
       "/client/discover-events",
       verifyAuth,
       authorizeRole(["client"]),

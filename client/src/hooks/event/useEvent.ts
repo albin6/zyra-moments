@@ -1,9 +1,9 @@
 import { AuthResponse } from "@/services/auth/authService";
 import {
+  EventResponse,
   getAllHostedEvents,
   getEventDetails,
   getPaginatedEvents,
-  getUpcomingEvents,
   PaginatedHostedEventsResponse,
 } from "@/services/event/eventService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -100,10 +100,10 @@ export const useEventListing = (params: EventQueryParams = {}) => {
   });
 };
 
-export const useUpcomingEventsQuery = () => {
+export const useUpcomingEventsQuery = (queryFunc: () => Promise<EventResponse>) => {
   return useQuery({
     queryKey: ["upcomings"],
-    queryFn: getUpcomingEvents,
+    queryFn: queryFunc
   });
 };
 

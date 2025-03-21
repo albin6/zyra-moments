@@ -13,10 +13,26 @@ import {
 } from "@/hooks/admin/useDashboardStats";
 import { useEffect, useState } from "react";
 import { Spinner } from "../ui/spinner";
+import { useUpcomingEventsQuery } from "@/hooks/event/useEvent";
+import { getUpcomingEventsForAdmin } from "@/services/event/eventService";
+import { PopulatedEvents } from "@/types/Event";
+import moment from "moment";
 
 const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [hostedEvents, setHostedEvents] = useState<PopulatedEvents[] | null>(
+    null
+  );
   const { data, isLoading } = useDashboardStatsQuery();
+  
+
+  const { data: upcomingEvents, isLoading: updcomingLoading } = useUpcomingEventsQuery(getUpcomingEventsForAdmin);
+
+  useEffect(() => {
+    if (upcomingEvents) {
+      setHostedEvents(upcomingEvents.events)
+    }
+  }, [upcomingEvents])
 
   useEffect(() => {
     if (data) {
@@ -24,11 +40,11 @@ const Dashboard: React.FC = () => {
     }
   }, [data]);
 
-  if (isLoading) {
+  if (isLoading || updcomingLoading) {
     return <Spinner />;
   }
 
-  if (!stats) {
+  if (!stats || !hostedEvents) {
     return;
   }
 
@@ -96,33 +112,17 @@ const Dashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-8">
-            {[
-              {
-                name: "Annual Charity Gala",
-                date: "June 15, 2023",
-                attendees: 500,
-              },
-              {
-                name: "Tech Startup Pitch Night",
-                date: "June 22, 2023",
-                attendees: 200,
-              },
-              {
-                name: "Summer Art Exhibition",
-                date: "July 1, 2023",
-                attendees: 1000,
-              },
-            ].map((event, index) => (
+            {hostedEvents.slice(0, 6).map((event, index) => (
               <div key={index} className="flex items-center">
                 <CalendarDays className="mr-4 h-4 w-4 text-muted-foreground" />
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {event.name}
+                    {event.title}
                   </p>
-                  <p className="text-sm text-muted-foreground">{event.date}</p>
+                  <p className="text-sm text-muted-foreground">{moment(event.date).format('LLL')}</p>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {event.attendees} attendees
+                  {event.eventLocation}
                 </div>
               </div>
             ))}

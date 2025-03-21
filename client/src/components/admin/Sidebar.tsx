@@ -11,7 +11,6 @@ import {
   LogOut,
   ChartBarStacked,
   Wallet,
-  ArrowLeftRight,
 } from "lucide-react";
 import { useLogout } from "@/hooks/auth/useLogout";
 import { useDispatch } from "react-redux";
@@ -52,11 +51,6 @@ const adminRoutes = [
     path: "/admin/ad_pvt/wallet",
     label: "Wallet",
     icon: <Wallet className="mr-2 h-4 w-4" />,
-  },
-  {
-    path: "/admin/ad_pvt/transactions",
-    label: "Transactions",
-    icon: <ArrowLeftRight className="mr-2 h-4 w-4" />,
   },
 ];
 

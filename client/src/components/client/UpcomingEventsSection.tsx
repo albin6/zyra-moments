@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Spinner } from "../ui/spinner";
 import moment from "moment";
 import { ClientContextType } from "./UserProfile";
+import { getUpcomingEvents } from "@/services/event/eventService";
 
 export function UpcomingEventsSection() {
   const { clientData } = useOutletContext<ClientContextType>();
@@ -24,7 +25,7 @@ export function UpcomingEventsSection() {
     null
   );
 
-  const { data, isLoading } = useUpcomingEventsQuery();
+  const { data, isLoading } = useUpcomingEventsQuery(getUpcomingEvents);
 
   useEffect(() => {
     if (data) {
