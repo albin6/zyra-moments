@@ -24,6 +24,8 @@ export interface Vendor {
   bio?: string;
   place?: string;
   profileImage?: string;
+  totalReviews: number;
+  averageRating: number
   __v: number;
   category: {
     _id: string;

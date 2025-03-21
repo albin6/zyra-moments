@@ -23,6 +23,7 @@ import { Spinner } from "../ui/spinner";
 import Pagination from "../Pagination";
 import { Button } from "../ui/button";
 import { ClientOneToOneChatPage } from "@/pages/client/ClientOneToOneChatPage";
+import ClientReviewList from "../reviews/ClientReviewList";
 
 export default function VendorProfile() {
   const { vendorId } = useParams();
@@ -103,11 +104,11 @@ export default function VendorProfile() {
             </div>
           </div>
           <div>
-            {vendorData.canChat && (
+            {/* {vendorData.canChat && (
               <Button onClick={() => setShowChat(true)} className="mr-2">
                 Message
               </Button>
-            )}
+            )} */}
             <Button onClick={() => navigate(`/booking/${vendorId}`)}>
               Book Now
             </Button>
@@ -140,6 +141,7 @@ export default function VendorProfile() {
                   <span>{vendorData.email}</span>
                 </div>
               </div>
+              <ClientReviewList vendorId={vendorData._id} />
             </TabsContent>
             <TabsContent value="worksamples" className="mt-4">
               <div className="grid gap-6">

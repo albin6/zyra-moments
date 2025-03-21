@@ -6,12 +6,14 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
   blockStatusMiddleware,
+  createReviewController,
   getAllBookingByClientController,
   getAllCategoriesController,
   getAllServicesForBookingController,
   getAllTransactionsByUserIdController,
   getBestVendorsController,
   getClientDetailsController,
+  getPaginatedReviewsByVendorIdController,
   getVendorDetailsForChatController,
   getVendorProfileDetailsController,
   getVendorsUnderCategoryController,
@@ -162,6 +164,27 @@ export class ClientRoutes extends BaseRoute {
       asyncHandler(
         getAllTransactionsByUserIdController.handle.bind(
           getAllTransactionsByUserIdController
+        )
+      )
+    );
+
+    // review and rating
+    this.router.post(
+      "/client/review",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      asyncHandler(createReviewController.handle.bind(createReviewController))
+    );
+
+    this.router.get(
+      "/client/reviews",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      asyncHandler(
+        getPaginatedReviewsByVendorIdController.handle.bind(
+          getPaginatedReviewsByVendorIdController
         )
       )
     );

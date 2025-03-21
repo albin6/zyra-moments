@@ -1,3 +1,4 @@
+import { adminAxiosInstance } from "@/api/admin.axios";
 import { clientAxiosInstance } from "@/api/client.axios";
 import { vendorAxiosInstance } from "@/api/vendor.axios";
 
@@ -40,9 +41,9 @@ export const getClientBookingsInAdmin = async (data: {
   limit: number;
   sort: string;
   search: string;
-  statusFilter: string;
+  statusFilter?: string;
 }) => {
-  const response = await clientAxiosInstance.get(
+  const response = await adminAxiosInstance.get(
     "/_ad/admin/client-bookings",
     {
       params: {

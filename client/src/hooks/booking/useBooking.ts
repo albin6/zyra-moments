@@ -31,6 +31,20 @@ export const useBookingQuery = (
   });
 };
 
+export const useAdminBookingQuery = (
+  queryFunc: (params: FetchBookingsParams) => Promise<BookingResponse>,
+  page: number,
+  limit: number,
+  sort: string,
+  search: string,
+  statusFilter: string
+) => {
+  return useQuery({
+    queryKey: ["admin-paginated-booking", page, limit, sort, search, statusFilter],
+    queryFn: () => queryFunc({ page, limit, sort, search, statusFilter }),
+  });
+};
+
 export const useBookingStatusMutation = (
   mutationFunc: (data: {
     bookingId: any;

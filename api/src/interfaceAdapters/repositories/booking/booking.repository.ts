@@ -86,8 +86,30 @@ export class BookingRepository implements IBookingRepository {
     });
   }
 
-  // latest for chat
+  async find(
+    filter: any,
+    sort: any,
+    skip: number,
+    limit: number
+  ): Promise<BookingListFromRepo> {
+    console.log('inside booking repositoy find', filter, sort, skip, limit)
+    const [bookings, total] = await Promise.all([
+      BookingModel.find(filter)
+        .populate({ path: "vendorId", select: "firstName lastName" })
+        .populate({ path: "userId", select: "firstName lastName" })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit),
+      BookingModel.countDocuments(filter),
+    ]);
 
+    return {
+      bookings,
+      total,
+    };
+  }
+
+  // latest for chat
   async findByClientId(clientId: any): Promise<IBookingModel[]> {
     return await BookingModel.find({ userId: clientId })
       .populate(
