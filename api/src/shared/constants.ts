@@ -37,6 +37,8 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  PAYMENT_NOT_FOUND: 'Payment not found.',
+  TICKET_NOT_FOUND: 'Ticket not found.',
   ALREADY_REVIEWED: "Client has already reviewed this vendor",
   FAILED_TO_RESET: "Failed to reset unread count",
   FAILED_TO_MARK_ATTENDANCE: "Failed to mark messages as read",

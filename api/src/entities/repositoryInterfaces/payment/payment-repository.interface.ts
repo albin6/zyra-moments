@@ -1,3 +1,4 @@
+import { IPaymentModel } from "../../../frameworks/database/models/payment.model";
 import {
   IPaymentEntity,
   PaymentStatus,
@@ -29,4 +30,8 @@ export interface IPaymentRepository {
     skip: number,
     limit: number
   ): Promise<PopulatedPaymentsResponse>;
+
+  findLastPaymentByUserId(userId: any): Promise<IPaymentEntity[] | null>
+
+  findById(id : any): Promise<IPaymentModel | null>
 }

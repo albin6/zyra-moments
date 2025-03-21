@@ -1,3 +1,4 @@
+import { ITicketModel } from "../../../frameworks/database/models/ticket.model";
 import { GetEventAttendanceResponse } from "../../models/attendance.entity";
 import { PaginatedTicket } from "../../models/paginated-ticket..entity";
 import { ITicketEntity } from "../../models/ticket.entity";
@@ -22,5 +23,7 @@ export interface ITicketRepository {
     limit: number
   ): Promise<PaginatedTicket>;
 
-  findByIdAndCancel(id: any): Promise<void>
+  findByIdAndCancel(id: any): Promise<ITicketModel | null>
+
+  findByIdAndPopulateEvent(ticketId: any): Promise<any>
 }

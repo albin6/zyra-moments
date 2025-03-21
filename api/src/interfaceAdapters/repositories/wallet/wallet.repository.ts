@@ -36,6 +36,7 @@ export class WalletRepository implements IWalletRepository {
     }
 
     let newPaymentId = paymentId
+    console.log('here is the payment id==>', paymentId)
     if (balance < 0) {
       const payment = await PaymentModel.findById(paymentId)
 
@@ -64,6 +65,27 @@ export class WalletRepository implements IWalletRepository {
     console.log('befor setting new balance')
     wallet.balance = newBalance;
     wallet.paymentId.push(newPaymentId);
+    await wallet.save();
+  }
+
+  async findWalletByUserIdAndUpdateBalanceForCancel(
+    userId: any,
+    balance: number,
+  ): Promise<void> {
+    const wallet = await WalletModel.findOne({ userId });
+
+    console.log('inside findWalletByUserIdAndUpdateBalanceAndAddPaymentId', wallet)
+    console.log('inside findWalletByUserIdAndUpdateBalanceAndAddPaymentId balance', balance)
+
+    if (!wallet) {
+      throw new CustomError(ERROR_MESSAGES.WRONG_ID, HTTP_STATUS.BAD_REQUEST);
+    }
+
+    const newBalance = wallet.balance + balance;
+    if (newBalance < 0) {
+      throw new CustomError("Insufficient funds", HTTP_STATUS.BAD_REQUEST);
+    }
+    wallet.balance = newBalance;
     await wallet.save();
   }
 }

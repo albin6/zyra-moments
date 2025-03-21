@@ -5,6 +5,7 @@ export interface ITicketEntity {
   ticketId: string;
   userId: string | ObjectId;
   eventId: string | ObjectId;
+  paymentId: string | ObjectId;
   qrCode: string;
   status: "PURCHASED" | "USED" | "CANCELLED";
   isScanned: boolean;

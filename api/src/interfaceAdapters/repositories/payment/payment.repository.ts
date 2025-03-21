@@ -6,7 +6,7 @@ import {
   PopulatedPaymentsResponse,
 } from "../../../entities/models/payment.entity";
 import { IPaymentRepository } from "../../../entities/repositoryInterfaces/payment/payment-repository.interface";
-import { PaymentModel } from "../../../frameworks/database/models/payment.model";
+import { IPaymentModel, PaymentModel } from "../../../frameworks/database/models/payment.model";
 
 @injectable()
 export class PaymentRepository implements IPaymentRepository {
@@ -68,5 +68,13 @@ export class PaymentRepository implements IPaymentRepository {
       payments: payments as unknown as PopulatedPayments[],
       total,
     };
+  }
+
+  async findLastPaymentByUserId(userId: any): Promise<IPaymentEntity[] | null> {
+      return await PaymentModel.find({userId}).sort({createdAt: -1}).limit(1).lean()
+  }
+
+  async findById(id : any): Promise<IPaymentModel | null> {
+    return await PaymentModel.findById(id)
   }
 }

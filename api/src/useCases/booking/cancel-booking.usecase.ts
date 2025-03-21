@@ -32,11 +32,16 @@ export class CancelBookingUseCase implements ICancelBookingUseCase {
       bookingId,
       "cancelled"
     );
-
-    await this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
-      booking.userId,
-      booking.totalPrice,
-      payment?._id
-    );
+    await Promise.all([
+      await this.walletRepository.findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
+        booking.userId,
+        booking.totalPrice,
+        payment?._id
+      ),
+      this.walletRepository.findWalletByUserIdAndUpdateBalanceForCancel(
+        "67cef9adee1eeefc92f10237" as string,
+        booking.totalPrice * -1,
+      ),
+    ]);
   }
 }

@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { ITicketEntity } from "../../../entities/models/ticket.entity";
 import { ITicketRepository } from "../../../entities/repositoryInterfaces/event/ticket-repository.interface";
-import { TicketModel } from "../../../frameworks/database/models/ticket.model";
+import { ITicketModel, TicketModel } from "../../../frameworks/database/models/ticket.model";
 import {
   AttendanceItem,
   GetEventAttendanceResponse,
@@ -123,7 +123,11 @@ export class TicketRepository implements ITicketRepository {
     };
   }
 
-  async findByIdAndCancel(id: any): Promise<void> {
-    await TicketModel.findByIdAndUpdate(id, { status: "CANCELLED" });
+  async findByIdAndCancel(id: any): Promise<ITicketModel | null> {
+    return await TicketModel.findByIdAndUpdate(id, { status: "CANCELLED" }, {new : true});
+  }
+
+  async findByIdAndPopulateEvent(ticketId: any): Promise<any> {
+      return await TicketModel.findById(ticketId).populate('eventId')
   }
 }
