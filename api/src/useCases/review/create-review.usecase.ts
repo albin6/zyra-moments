@@ -7,15 +7,18 @@ import { generateRandomUUID } from "../../frameworks/security/randomid.bcrypt";
 import { IVendorRepository } from "../../entities/repositoryInterfaces/vendor/vendor-repository.interface";
 import { CustomError } from "../../entities/utils/custom-error";
 import { ERROR_MESSAGES, HTTP_STATUS } from "../../shared/constants";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
 export class CreateReviewUseCase implements ICreateReviewUseCase {
   constructor(
     @inject("IReviewRepository") private reviewRepository: IReviewRepository,
-    @inject("IVendorRepository") private vendorRepository: IVendorRepository
+    @inject("IVendorRepository") private vendorRepository: IVendorRepository,
+    @inject("IBookingRepository") private bookingRepository: IBookingRepository
   ) {}
 
   async execute(data: {
+    bookingId: string;
     clientId: string;
     vendorId: string;
     rating: number;
@@ -26,10 +29,23 @@ export class CreateReviewUseCase implements ICreateReviewUseCase {
       data.vendorId
     );
     if (existingReview) {
-      throw new CustomError(ERROR_MESSAGES.ALREADY_REVIEWED, HTTP_STATUS.CONFLICT);
+      throw new CustomError(
+        ERROR_MESSAGES.ALREADY_REVIEWED,
+        HTTP_STATUS.CONFLICT
+      );
+    }
+
+    const booking = await this.bookingRepository.findById(data.bookingId);
+
+    if (!booking) {
+      throw new CustomError(
+        ERROR_MESSAGES.BOOKING_NOT_FOUND,
+        HTTP_STATUS.NOT_FOUND
+      );
     }
 
     const review: IReviewEntity = {
+      bookingId: data.bookingId,
       reviewId: generateRandomUUID(),
       clientId: data.clientId,
       vendorId: data.vendorId,

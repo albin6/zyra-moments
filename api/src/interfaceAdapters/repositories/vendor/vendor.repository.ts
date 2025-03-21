@@ -5,6 +5,8 @@ import {
   IVendorModel,
   VendorModel,
 } from "../../../frameworks/database/models/vendor.model";
+import { CustomError } from "../../../entities/utils/custom-error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
 
 @injectable()
 export class VendorRepository implements IVendorRepository {
@@ -110,17 +112,20 @@ export class VendorRepository implements IVendorRepository {
   }
 
   async update(
-    vendorId: string,
+    vendorId: any,
     data: Partial<IVendorEntity>
   ): Promise<IVendorEntity> {
-    const updatedVendor = await VendorModel.findOneAndUpdate(
-      { vendorId }, // Query by vendorId
-      { $set: data }, // Update only the specified fields
-      { new: true, runValidators: true } // Return the updated document and run schema validators
+    const updatedVendor = await VendorModel.findByIdAndUpdate(
+      vendorId,
+      { $set: data },
+      { new: true }
     ).exec();
 
     if (!updatedVendor) {
-      throw new Error("Vendor not found");
+      throw new CustomError(
+        ERROR_MESSAGES.USER_NOT_FOUND,
+        HTTP_STATUS.NOT_FOUND
+      );
     }
 
     return updatedVendor;

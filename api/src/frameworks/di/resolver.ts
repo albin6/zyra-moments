@@ -67,6 +67,7 @@ import { ILogger } from "../../interfaceAdapters/services/logger/logger.interfac
 import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middleware";
 import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
 import { CreateReviewController } from "../../interfaceAdapters/controllers/review/create-review.controller";
+import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters/controllers/review/get-paginated-reviews-by-vendor-id.controller";
 
 DependencyInjection.registerAll();
 
@@ -295,6 +296,10 @@ export const getAllBookingController = container.resolve(
 );
 
 export const createReviewController = container.resolve(CreateReviewController);
+
+export const getPaginatedReviewsByVendorIdController = container.resolve(
+  GetPaginatedReviewsByVendorIdController
+);
 
 // -------------------------------- logger service middleware -----------------------------
 export const injectedLoggerMiddleware =

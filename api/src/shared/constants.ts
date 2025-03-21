@@ -33,6 +33,7 @@ export const SUCCESS_MESSAGES = {
   VERIFICATION_SUCCESS: "Verification completed successfully.",
   DATA_RETRIEVED: "Data retrieved successfully.",
   ACTION_SUCCESS: "Action performed successfully.",
+  SUBMIT_SUCCESS: "Submitted successfully."
 };
 
 export const ERROR_MESSAGES = {

@@ -10,6 +10,7 @@ import {
   getAllServicesByVendorIdController,
   getAllTransactionsByUserIdController,
   getAllWorkSampleByVendorIdController,
+  getPaginatedReviewsByVendorIdController,
   getServiceDetailsByIdController,
   getVendorCategoryJoinRequestStatusController,
   getVendorDetailsController,
@@ -225,6 +226,19 @@ export class VendorRoutes extends BaseRoute {
       asyncHandler(
         getAllTransactionsByUserIdController.handle.bind(
           getAllTransactionsByUserIdController
+        )
+      )
+    );
+
+    // reviews
+    this.router.get(
+      "/vendor/reviews",
+      verifyAuth,
+      authorizeRole(["vendor"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      asyncHandler(
+        getPaginatedReviewsByVendorIdController.handle.bind(
+          getPaginatedReviewsByVendorIdController
         )
       )
     );

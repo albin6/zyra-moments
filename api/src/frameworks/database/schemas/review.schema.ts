@@ -10,6 +10,12 @@ export const reviewSchema = new Schema<IReviewModel>(
         required: true, 
         index: true 
       }, 
+      bookingId: { 
+        type: Schema.Types.ObjectId, 
+        ref: "Booking", 
+        required: true, 
+        index: true 
+      }, 
       vendorId: { 
         type: Schema.Types.ObjectId, 
         ref: "Vendor", 
