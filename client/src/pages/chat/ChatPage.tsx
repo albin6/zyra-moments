@@ -1,4 +1,3 @@
-// components/ChatPage.tsx
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -49,6 +48,7 @@ export function ChatPage({ userType }: ChatPageProps) {
   useEffect(() => {
     if (socket && userId) {
       fetchContacts();
+      dispatch(setSelectedChatRoomId(null));
     }
   }, [socket, userId, fetchContacts]);
 

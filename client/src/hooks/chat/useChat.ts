@@ -118,14 +118,13 @@ export function useChat(userId: string, userType: "Client" | "Vendor") {
 
   const sendMessage = useCallback(
     (
-      chatRoomId: string | undefined, // Made chatRoomId optional to handle new chats
+      chatRoomId: string | undefined,
       content: string,
       recipientId: string,
-      bookingId?: string // Added bookingId as an optional parameter
+      bookingId?: string
     ) => {
       if (!socket) return;
 
-      // If chatRoomId is not provided, bookingId must be included for new chat rooms
       if (!chatRoomId && !bookingId) {
         toast.error("Booking ID is required to start a new chat");
         return;

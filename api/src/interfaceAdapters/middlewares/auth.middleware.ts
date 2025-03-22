@@ -49,7 +49,6 @@ export const verifyAuth = async (
     const token = extractToken(req);
 
     if (!token) {
-      console.log("no token");
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGES.UNAUTHORIZED_ACCESS });
@@ -57,7 +56,6 @@ export const verifyAuth = async (
     }
 
     if (await isBlacklisted(token.access_token)) {
-      console.log("token is black listed is worked");
       res
         .status(HTTP_STATUS.FORBIDDEN)
         .json({ message: "Token is blacklisted" });
@@ -83,7 +81,6 @@ export const verifyAuth = async (
     next();
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
-      console.log("token is expired is worked");
       res
         .status(HTTP_STATUS.UNAUTHORIZED)
         .json({ message: ERROR_MESSAGES.TOKEN_EXPIRED });

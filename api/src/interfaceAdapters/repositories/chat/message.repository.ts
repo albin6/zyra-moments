@@ -28,6 +28,7 @@ export class MessageRepository implements IMessageRepository {
         },
         { $set: { read: true } }
       ).exec();
+      console.log('messages marked as read.')
     } catch (error) {
       console.error(
         `Error marking messages as read for chatRoom ${chatRoomId}:`,

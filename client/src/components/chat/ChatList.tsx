@@ -129,11 +129,11 @@ export function ChatList({
                         </p>
                       )}
                     </div>
-                    {contact.unreadCount && contact.unreadCount > 0 && (
+                    {/* {contact.unreadCount && contact.unreadCount > 0 && (
                       <Badge className="ml-2 flex-shrink-0">
                         {contact.unreadCount}
                       </Badge>
-                    )}
+                    )} */}
                   </div>
                 </Button>
               </li>

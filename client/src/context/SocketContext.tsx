@@ -42,6 +42,13 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
       console.error("Socket connection error:", error.message);
     });
 
+    socketInstance.on("error", (error: { message: string }) => {
+      console.error("Socket error from server:", error.message);
+      if (error.message.includes("Unauthorized")) {
+        socketInstance.disconnect();
+      }
+    });
+
     setSocket(socketInstance);
 
     return () => {

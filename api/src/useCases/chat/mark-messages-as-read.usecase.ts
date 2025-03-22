@@ -17,7 +17,6 @@ export class MarkMessagesAsReadUseCase implements IMarkMessagesAsReadUseCase {
   ): Promise<void> {
     await this.messageRepository.markAsRead(chatRoomId, userId, userType);
 
-    // Reset unread count for the user
     const recipientType = userType === "Client" ? "client" : "vendor";
     await this.chatRoomRepository.resetUnreadCount(chatRoomId, recipientType);
   }

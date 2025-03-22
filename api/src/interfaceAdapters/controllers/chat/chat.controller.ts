@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IChatController } from "../../../entities/controllerInterfaces/chat/chat-controller.interface";
-import { Server as SocketIOServer, DefaultEventsMap, Socket } from "socket.io";
-import { Server } from "http";
+import { Server as SocketIOServer, Socket } from "socket.io";
+import { IncomingMessage, Server } from "http";
 import { Request, Response } from "express";
 import { config } from "../../../shared/config";
 import { IClientRepository } from "../../../entities/repositoryInterfaces/client/client-respository.interface";
@@ -12,6 +12,10 @@ import { IGetUserChatsUseCase } from "../../../entities/useCaseInterfaces/chat/g
 import { IMarkMessagesAsReadUseCase } from "../../../entities/useCaseInterfaces/chat/mark-messages-as-read-usecase.inteface";
 import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/message-repository.interface";
 import { IChatRoomRepository } from "../../../entities/repositoryInterfaces/chat/chat-room-repository.interface";
+import { ITokenService } from "../../../useCases/auth/interfaces/token-service.interface";
+import { CustomError } from "../../../entities/utils/custom-error";
+import { ERROR_MESSAGES, HTTP_STATUS } from "../../../shared/constants";
+import { CustomRequest } from "../../middlewares/auth.middleware";
 
 @injectable()
 export class ChatController implements IChatController {
@@ -30,7 +34,8 @@ export class ChatController implements IChatController {
     private markMessagesAsReadUseCase: IMarkMessagesAsReadUseCase,
     @inject("IMessageRepository") private messageRepository: IMessageRepository,
     @inject("IChatRoomRepository")
-    private chatRoomRepository: IChatRoomRepository
+    private chatRoomRepository: IChatRoomRepository,
+    @inject("ITokenService") private tokenService: ITokenService
   ) {}
 
   initialize(server: Server): void {
@@ -41,6 +46,45 @@ export class ChatController implements IChatController {
         credentials: true,
       },
       path: "/api/v_1/_chat",
+      // allowRequest: (
+      //   req: IncomingMessage,
+      //   callback: (err: string | null | undefined, success: boolean) => void
+      // ) => {
+      //   const cookies = (req as any).cookies || {};
+      //   const tokenNames = ["admin_access_token", "client_access_token", "vendor_access_token"];
+      //   let token: string | undefined;
+
+      //   for (const tokenName of tokenNames) {
+      //     if (cookies[tokenName]) {
+      //       token = cookies[tokenName];
+      //       break;
+      //     }
+      //   }
+
+      //   if (!token) {
+      //     return callback(
+      //       new CustomError(ERROR_MESSAGES.NO_TOKEN, HTTP_STATUS.UNAUTHORIZED).message,
+      //       false
+      //     );
+      //   }
+
+      //   const decoded = this.tokenService.verifyAccessToken(token);
+      //   if (!decoded) {
+      //     return callback(
+      //       new CustomError(ERROR_MESSAGES.INVALID_TOKEN, HTTP_STATUS.UNAUTHORIZED).message,
+      //       false
+      //     );
+      //   }
+
+      //   (req as CustomRequest).user = {
+      //     id: decoded.id as string,
+      //     email: decoded.email as string,
+      //     role: decoded.role as string,
+      //     access_token: "",
+      //     refresh_token: ""
+      //   };
+      //   callback(null, true); // Success
+      // },
     });
     this.initializeSocketEvents();
   }
@@ -75,7 +119,7 @@ export class ChatController implements IChatController {
 
       socket.on("messageRead", async ({ chatRoomId, userId, userType }) => {
         try {
-          console.log('event received in server')
+          console.log("event received in server");
           await this.markMessagesAsReadUseCase.execute(
             chatRoomId,
             userId,

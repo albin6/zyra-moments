@@ -37,6 +37,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  NO_TOKEN: "Authentication error: No token provided",
   PAYMENT_NOT_FOUND: 'Payment not found.',
   TICKET_NOT_FOUND: 'Ticket not found.',
   ALREADY_REVIEWED: "Client has already reviewed this vendor",
@@ -64,7 +65,7 @@ export const ERROR_MESSAGES = {
   REQUEST_NOT_FOUND: "Category Request Not Found",
   CATEGORY_EXISTS: "Category Already Exists",
   CATEGORY_NOT_FOUND: "Category Not Found",
-  INVALID_TOKEN: "Invalid token",
+  INVALID_TOKEN: "Authentication error: Invalid token",
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   USER_NOT_FOUND: "User not found.",
   UNAUTHORIZED_ACCESS: "Unauthorized access.",
