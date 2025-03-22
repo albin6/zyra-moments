@@ -15,7 +15,6 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase {
   ) {}
 
   async execute(userId: string, bookingId: string, status: string): Promise<void> {
-    // Fetch the booking first
     const booking = await this.bookingRepository.findById(bookingId);
     if (!booking) {
       throw new CustomError(
@@ -24,10 +23,8 @@ export class UpdateBookingStatusUseCase implements IUpdateBookingStatusUseCase {
       );
     }
 
-    // Update the booking status
     await this.bookingRepository.findByIdAndUpdateBookingStatus(bookingId, status);
 
-    // Handle fund release logic only if status is "completed"
     if (status === "completed") {
       const payment = await this.paymentRepository.findByBookingId(bookingId);
       if (!payment) {

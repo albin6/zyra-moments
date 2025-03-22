@@ -4,6 +4,7 @@ import {
   getAllBookingByClientController,
   getAllBookingController,
   getAllCategoryJoinRequestController,
+  getAllFundReleaseRequestController,
   getAllPaginatedCategoryController,
   getAllTransactionsByUserIdController,
   getAllUsersController,
@@ -14,6 +15,7 @@ import {
   refreshTokenController,
   updateCategoryRequestStatusController,
   updateCategoryStatusController,
+  updateFundReleaseRequestStatusController,
   updateUserStatusController,
 } from "../../di/resolver";
 import { BaseRoute } from "../base.route";
@@ -95,7 +97,7 @@ export class AdminRoutes extends BaseRoute {
           updateCategoryStatusController.handle.bind(
             updateCategoryStatusController
           )
-        ) // Note: You mentioned this needs to change
+        )
       );
 
     this.router
@@ -163,8 +165,30 @@ export class AdminRoutes extends BaseRoute {
     this.router.get(
       "/admin/client-bookings",
       verifyAuth,
-      authorizeRole(["admin"]),(req: Request, res: Response, next: NextFunction) => {console.log('hello')},
+      authorizeRole(["admin"]),
       asyncHandler(getAllBookingController.handle.bind(getAllBookingController))
+    );
+
+    this.router.get(
+      "/admin/fund-release",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      asyncHandler(
+        getAllFundReleaseRequestController.handle.bind(
+          getAllFundReleaseRequestController
+        )
+      )
+    );
+
+    this.router.patch(
+      "/admin/fund-release/:requestId",
+      verifyAuth,
+      authorizeRole(["admin"]),
+      asyncHandler(
+        updateFundReleaseRequestStatusController.handle.bind(
+          updateFundReleaseRequestStatusController
+        )
+      )
     );
 
     this.router.post(

@@ -42,7 +42,6 @@ export const paymentSchema = new Schema<IPaymentModel>(
     paymentIntentId: { type: String },
     purpose: {
       type: String,
-      enum: ["vendor-booking", "role-upgrade", "ticket-purchase"],
       required: true,
     },
   },

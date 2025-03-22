@@ -38,7 +38,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Pagination from "../Pagination";
 import { PopulatedEvent } from "@/types/Event";
 import { usePaginatedEvents } from "@/hooks/event/useEvent";
-import _ from "lodash";
+import _, { StringNullableChain } from "lodash";
+import { AdminFundReleaseModal } from "../modals/AdminFundReleaseList";
+import {
+  useFundReleaseMutation,
+  useReleaseFundQuery,
+} from "@/hooks/event/useReleaseFund";
+import { Spinner } from "../ui/spinner";
+import {
+  FundReleaseRequestResponse,
+  updateFundReleaseRequestStatus,
+} from "@/services/event/fundReleaseService";
+import { toast } from "sonner";
 
 export default function EventManagement() {
   const [events, setEvents] = useState<PopulatedEvent[] | null>(null);
@@ -128,6 +139,23 @@ export default function EventManagement() {
     setSearchQuery("");
   };
 
+  const { mutate: updateReleaseStatus } = useFundReleaseMutation(
+    updateFundReleaseRequestStatus
+  );
+
+  const handleUpdateReleaseStatus = (requestId: string) => {
+    updateReleaseStatus(
+      { requestId, status: "APPROVED" },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
+
+  const { data: fundReleaseList, isLoading: fundReleaseListLoading } =
+    useReleaseFundQuery();
+
   if (!events) {
     return;
   }
@@ -141,6 +169,14 @@ export default function EventManagement() {
               <CardTitle>Event Management</CardTitle>
               <CardDescription>Manage your hosted events</CardDescription>
             </div>
+            {fundReleaseListLoading || !fundReleaseList ? (
+              <Spinner />
+            ) : (
+              <AdminFundReleaseModal
+                onUpdateClick={handleUpdateReleaseStatus}
+                requests={fundReleaseList?.data}
+              />
+            )}
             <Button
               variant="outline"
               onClick={resetFilters}

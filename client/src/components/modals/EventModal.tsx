@@ -29,6 +29,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
+import { CreateFundReleaseModal } from "./CreateFundReleaseModal";
+import { useFundReleaseMutation } from "@/hooks/event/useReleaseFund";
+import { createFundReleaseRequest } from "@/services/event/fundReleaseService";
+import { toast } from "sonner";
 
 export interface IEventEntity {
   _id?: string;
@@ -68,7 +72,6 @@ interface EventModalProps {
 }
 
 export function EventModal({ event, isOpen, onClose }: EventModalProps) {
-  // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -80,6 +83,21 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  const { mutate: createFundRelease } = useFundReleaseMutation(
+    createFundReleaseRequest
+  );
+
+  const handleFundReleaseRequest = (data: { message: string }) => {
+    console.log(data);
+    createFundRelease(
+      { ...data, eventId: event._id },
+      {
+        onSuccess: (data) => toast.success(data.message),
+        onError: (error: any) => toast.error(error.response.data.message),
+      }
+    );
+  };
 
   const formattedDate = format(new Date(event.date), "EEEE, MMMM d, yyyy");
 
@@ -97,7 +115,6 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        {/* Event Image with skeleton loading */}
         {event.posterImage && (
           <div className="w-full h-[200px] sm:h-[250px] md:h-[300px] rounded-lg overflow-hidden mb-6 bg-muted relative group">
             <img
@@ -130,7 +147,6 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left Column - Event Details */}
           <div className="md:col-span-2 space-y-5">
             <Card className="shadow-sm hover:shadow transition-shadow duration-200">
               <CardContent className="p-4 sm:p-5">
@@ -267,12 +283,15 @@ export function EventModal({ event, isOpen, onClose }: EventModalProps) {
                     )}
                   </div>
                 </CardContent>
-                <Button
-                  className="m-4"
-                  onClick={() => naviagte(`/events/${event._id}/attendance`)}
-                >
-                  View Attendance
-                </Button>
+                <div className="flex flex-col">
+                  <Button
+                    className="m-4 mb-0"
+                    onClick={() => naviagte(`/events/${event._id}/attendance`)}
+                  >
+                    View Attendance
+                  </Button>
+                  <CreateFundReleaseModal onCreate={handleFundReleaseRequest} />
+                </div>
               </Card>
             )}
           </div>

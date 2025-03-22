@@ -130,4 +130,17 @@ export class TicketRepository implements ITicketRepository {
   async findByIdAndPopulateEvent(ticketId: any): Promise<any> {
       return await TicketModel.findById(ticketId).populate('eventId')
   }
+
+  async findActiveTicketsByEventId(eventId: string): Promise<ITicketModel[]> {
+    const tickets = await TicketModel.find({
+      eventId: new mongoose.Types.ObjectId(eventId),
+      status: { $ne: "CANCELLED" }
+    })
+      .populate("userId", "name email")
+      .populate("eventId", "title date pricePerTicket") 
+      .populate("paymentId", "amount status")
+      .exec();
+
+    return tickets;
+  }
 }

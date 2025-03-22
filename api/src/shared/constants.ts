@@ -18,6 +18,7 @@ export const HTTP_STATUS = {
 };
 
 export const SUCCESS_MESSAGES = {
+  FUND_RELEASE_REQ_CREATED: "Fund release request created successfully",
   ATTENDANCE_RETRIEVED: "Attendance retrieved successfully",
   BOOKING_SUCCESS: "Booking completed.",
   CREATED: "Created successfully.",
@@ -37,6 +38,7 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
+  REQUEST_NOT_FOUND: "Fund release request not found",
   NO_TOKEN: "Authentication error: No token provided",
   PAYMENT_NOT_FOUND: 'Payment not found.',
   TICKET_NOT_FOUND: 'Ticket not found.',

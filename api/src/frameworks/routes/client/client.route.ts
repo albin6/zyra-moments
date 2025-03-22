@@ -6,6 +6,7 @@ import {
 } from "../../../interfaceAdapters/middlewares/auth.middleware";
 import {
   blockStatusMiddleware,
+  createFundReleaseRequestController,
   createReviewController,
   getAllBookingByClientController,
   getAllCategoriesController,
@@ -185,6 +186,18 @@ export class ClientRoutes extends BaseRoute {
       asyncHandler(
         getPaginatedReviewsByVendorIdController.handle.bind(
           getPaginatedReviewsByVendorIdController
+        )
+      )
+    );
+
+    this.router.post(
+      "/client/fund-release",
+      verifyAuth,
+      authorizeRole(["client"]),
+      blockStatusMiddleware.checkBlockedStatus as RequestHandler,
+      asyncHandler(
+        createFundReleaseRequestController.handle.bind(
+          createFundReleaseRequestController
         )
       )
     );

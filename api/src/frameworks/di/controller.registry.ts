@@ -63,6 +63,9 @@ import { GetPaginatedEventsController } from "../../interfaceAdapters/controller
 import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
 import { CreateReviewController } from "../../interfaceAdapters/controllers/review/create-review.controller";
 import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters/controllers/review/get-paginated-reviews-by-vendor-id.controller";
+import { CreateFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/create-fund-release-request.controller";
+import { GetAllFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/get-all-fund-release-request.controller";
+import { UpdateFundReleaseRequestStatusController } from "../../interfaceAdapters/controllers/event/fund-release/update-fund-release-request-status.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -306,6 +309,18 @@ export class ControllerRegistry {
 
     container.register("GetPaginatedReviewsByVendorIdController", {
       useClass: GetPaginatedReviewsByVendorIdController,
+    });
+
+    container.register("CreateFundReleaseRequestController", {
+      useClass: CreateFundReleaseRequestController,
+    });
+
+    container.register("GetAllFundReleaseRequestController", {
+      useClass: GetAllFundReleaseRequestController,
+    });
+
+    container.register("UpdateFundReleaseRequestStatusController", {
+      useClass: UpdateFundReleaseRequestStatusController,
     });
 
     // -----chat-----

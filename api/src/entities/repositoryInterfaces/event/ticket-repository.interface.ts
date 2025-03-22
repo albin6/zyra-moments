@@ -26,4 +26,6 @@ export interface ITicketRepository {
   findByIdAndCancel(id: any): Promise<ITicketModel | null>
 
   findByIdAndPopulateEvent(ticketId: any): Promise<any>
+
+  findActiveTicketsByEventId(eventId: string): Promise<ITicketModel[]>;
 }

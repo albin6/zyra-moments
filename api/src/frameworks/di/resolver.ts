@@ -68,6 +68,9 @@ import { ErrorMiddleware } from "../../interfaceAdapters/middlewares/error.middl
 import { GetAllBookingController } from "../../interfaceAdapters/controllers/booking/get-all-booking.controller";
 import { CreateReviewController } from "../../interfaceAdapters/controllers/review/create-review.controller";
 import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters/controllers/review/get-paginated-reviews-by-vendor-id.controller";
+import { CreateFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/create-fund-release-request.controller";
+import { GetAllFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/get-all-fund-release-request.controller";
+import { UpdateFundReleaseRequestStatusController } from "../../interfaceAdapters/controllers/event/fund-release/update-fund-release-request-status.controller";
 
 DependencyInjection.registerAll();
 
@@ -299,6 +302,18 @@ export const createReviewController = container.resolve(CreateReviewController);
 
 export const getPaginatedReviewsByVendorIdController = container.resolve(
   GetPaginatedReviewsByVendorIdController
+);
+
+export const createFundReleaseRequestController = container.resolve(
+  CreateFundReleaseRequestController
+);
+
+export const getAllFundReleaseRequestController = container.resolve(
+  GetAllFundReleaseRequestController
+);
+
+export const updateFundReleaseRequestStatusController = container.resolve(
+  UpdateFundReleaseRequestStatusController
 );
 
 // -------------------------------- logger service middleware -----------------------------

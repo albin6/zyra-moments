@@ -8,11 +8,13 @@ export interface IWalletRepository {
   findWalletByUserIdAndUpdateBalanceAndAddPaymentId(
     userId: any,
     balance: number,
-    paymentId: any
+    paymentId: any,
+    releasefund?: boolean
   ): Promise<void>;
 
   findWalletByUserIdAndUpdateBalanceForCancel(
     userId: any,
     balance: number,
+    addToTransactions?: string
   ): Promise<void>
 }

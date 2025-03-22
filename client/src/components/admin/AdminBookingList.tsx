@@ -162,7 +162,6 @@ export default function AdminBookingList() {
   );
   const limit = 2;
 
-  // Initialize state from URL params
   useEffect(() => {
     const page = Number.parseInt(searchParams.get("page") || "1");
     const search = searchParams.get("search") || "";
@@ -177,15 +176,15 @@ export default function AdminBookingList() {
   }, []);
 
   // Update URL when filters change
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (currentPage !== 1) params.set("page", currentPage.toString());
-    if (debouncedSearchTerm) params.set("search", debouncedSearchTerm);
-    if (statusFilter !== "all") params.set("status", statusFilter);
-    if (sortBy) params.set("sort", sortBy);
+  // useEffect(() => {
+  //   const params = new URLSearchParams();
+  //   if (currentPage !== 1) params.set("page", currentPage.toString());
+  //   if (debouncedSearchTerm) params.set("search", debouncedSearchTerm);
+  //   if (statusFilter !== "all") params.set("status", statusFilter);
+  //   if (sortBy) params.set("sort", sortBy);
 
-    setSearchParams(params);
-  }, [currentPage, debouncedSearchTerm, statusFilter, sortBy]);
+  //   setSearchParams(params);
+  // }, [currentPage, debouncedSearchTerm, statusFilter, sortBy]);
 
   const { data, isLoading } = useAdminBookingQuery(
     getClientBookingsInAdmin,
@@ -196,7 +195,6 @@ export default function AdminBookingList() {
     statusFilter
   );
 
-  // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -205,7 +203,6 @@ export default function AdminBookingList() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Fetch bookings when filters change
   useEffect(() => {
     if (data) {
       setBookings(data.bookings);
@@ -220,19 +217,16 @@ export default function AdminBookingList() {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    // Reset to first page when search changes
     if (currentPage !== 1) setCurrentPage(1);
   };
 
   const handleStatusChange = (value: string) => {
     setStatusFilter(value);
-    // Reset to first page when filter changes
     if (currentPage !== 1) setCurrentPage(1);
   };
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
-    // Reset to first page when sort changes
     if (currentPage !== 1) setCurrentPage(1);
   };
 

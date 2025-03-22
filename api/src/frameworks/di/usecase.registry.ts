@@ -175,6 +175,12 @@ import { ICreateReviewUseCase } from "../../entities/useCaseInterfaces/review/cr
 import { CreateReviewUseCase } from "../../useCases/review/create-review.usecase";
 import { IGetPaginatedReviewsByVendorIdUseCase } from "../../entities/useCaseInterfaces/review/get-paginated-reviews-by-vendor-id-usecase.interface";
 import { GetPaginatedReviewsByVendorIdUseCase } from "../../useCases/review/get-paginated-reviews-by-vendor-id.usecase";
+import { ICreateFundReleaseRequestUseCase } from "../../entities/useCaseInterfaces/event/fund-release/create-fund-release-request-usecase.interface";
+import { CreateFundReleaseRequestUseCase } from "../../useCases/event/fund-release/create-fund-release-request.usecase";
+import { IGetAllFundReleaseRequestUseCase } from "../../entities/useCaseInterfaces/event/fund-release/get-all-fund-release-request-usecase.interface";
+import { GetAllFundReleaseRequestUseCase } from "../../useCases/event/fund-release/get-all-fund-release-request.usecase";
+import { IUpdateFundReleaseRequestStatusUseCase } from "../../entities/useCaseInterfaces/event/fund-release/update-fund-release-request-status-usecase.inteface";
+import { UpdateFundReleaseRequestStatusUseCase } from "../../useCases/event/fund-release/update-fund-release-request-status.usecase";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -487,6 +493,21 @@ export class UseCaseRegistry {
     container.register<IGetPaginatedReviewsByVendorIdUseCase>(
       "IGetPaginatedReviewsByVendorIdUseCase",
       { useClass: GetPaginatedReviewsByVendorIdUseCase }
+    );
+
+    container.register<ICreateFundReleaseRequestUseCase>(
+      "ICreateFundReleaseRequestUseCase",
+      { useClass: CreateFundReleaseRequestUseCase }
+    );
+
+    container.register<IGetAllFundReleaseRequestUseCase>(
+      "IGetAllFundReleaseRequestUseCase",
+      { useClass: GetAllFundReleaseRequestUseCase }
+    );
+
+    container.register<IUpdateFundReleaseRequestStatusUseCase>(
+      "IUpdateFundReleaseRequestStatusUseCase",
+      { useClass: UpdateFundReleaseRequestStatusUseCase }
     );
 
     // Register Strategies

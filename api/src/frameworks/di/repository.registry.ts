@@ -37,6 +37,8 @@ import { IDashBoardStatsRepository } from "../../entities/repositoryInterfaces/a
 import { DashboardStatsRepository } from "../../interfaceAdapters/repositories/admin/dashboard-stats.repository";
 import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
 import { ReviewRepository } from "../../interfaceAdapters/repositories/review/review.repository";
+import { IFundReleaseRequestRepository } from "../../entities/repositoryInterfaces/event/fund-release-request-repository.interface";
+import { FundReleaseRequestRepository } from "../../interfaceAdapters/repositories/event/fund-release-request.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -108,6 +110,11 @@ export class RepositoryRegistry {
     container.register<IReviewRepository>("IReviewRepository", {
       useClass: ReviewRepository,
     });
+
+    container.register<IFundReleaseRequestRepository>(
+      "IFundReleaseRequestRepository",
+      { useClass: FundReleaseRequestRepository }
+    );
 
     // -----chat-----
 
