@@ -8,14 +8,14 @@ import { IUserEntity } from "../../entities/models/user.entity";
 
 @injectable()
 export class LoginUserUseCase implements ILoginUserUseCase {
-  private strategies: Record<string, ILoginStrategy>;
+  private _strategies: Record<string, ILoginStrategy>;
 
   constructor(
     @inject("AdminLoginStrategy") private adminLogin: ILoginStrategy,
     @inject("ClientLoginStrategy") private clientLogin: ILoginStrategy,
     @inject("VendorLoginStrategy") private vendorLogin: ILoginStrategy
   ) {
-    this.strategies = {
+    this._strategies = {
       admin: this.adminLogin,
       client: this.clientLogin,
       vendor: this.vendorLogin,
@@ -23,7 +23,7 @@ export class LoginUserUseCase implements ILoginUserUseCase {
   }
 
   async execute(user: LoginUserDTO): Promise<Partial<IUserEntity>> {
-    const strategy = this.strategies[user.role];
+    const strategy = this._strategies[user.role];
     if (!strategy) {
       throw new CustomError("Invalid user role", HTTP_STATUS.FORBIDDEN);
     }

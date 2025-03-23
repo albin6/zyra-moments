@@ -66,6 +66,8 @@ import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters
 import { CreateFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/create-fund-release-request.controller";
 import { GetAllFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/get-all-fund-release-request.controller";
 import { UpdateFundReleaseRequestStatusController } from "../../interfaceAdapters/controllers/event/fund-release/update-fund-release-request-status.controller";
+import { VerifyExistingEmailController } from "../../interfaceAdapters/controllers/auth/verify-existing-email.controller";
+import { UpdateNewPasswordController } from "../../interfaceAdapters/controllers/auth/update-new-password.controller";
 
 export class ControllerRegistry {
   static registerControllers(): void {
@@ -321,6 +323,14 @@ export class ControllerRegistry {
 
     container.register("UpdateFundReleaseRequestStatusController", {
       useClass: UpdateFundReleaseRequestStatusController,
+    });
+
+    container.register("VerifyExistingEmailController", {
+      useClass: VerifyExistingEmailController,
+    });
+
+    container.register("UpdateNewPasswordController", {
+      useClass: UpdateNewPasswordController,
     });
 
     // -----chat-----

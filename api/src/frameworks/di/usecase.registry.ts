@@ -181,6 +181,13 @@ import { IGetAllFundReleaseRequestUseCase } from "../../entities/useCaseInterfac
 import { GetAllFundReleaseRequestUseCase } from "../../useCases/event/fund-release/get-all-fund-release-request.usecase";
 import { IUpdateFundReleaseRequestStatusUseCase } from "../../entities/useCaseInterfaces/event/fund-release/update-fund-release-request-status-usecase.inteface";
 import { UpdateFundReleaseRequestStatusUseCase } from "../../useCases/event/fund-release/update-fund-release-request-status.usecase";
+import { IUpdateNewPasswordUseCase } from "../../entities/useCaseInterfaces/auth/update-new-password-usecase.interface";
+import { UpdateNewPasswordUseCase } from "../../useCases/auth/update-new-password.usecase";
+import { IVerifyExistingEmailUseCase } from "../../entities/useCaseInterfaces/auth/verify-existing-email-usecase.inteface";
+import { VerifyExistingEmailUseCase } from "../../useCases/auth/verify-existing-email.usecase";
+import { IUpdatePasswordStrategy } from "../../useCases/auth/update-password/update-password-strategy.interface";
+import { UpdateClientPasswordStrategy } from "../../useCases/auth/update-password/update-client-password.strategy";
+import { UpdateVendorPasswordStrategy } from "../../useCases/auth/update-password/update-vendor-password.strategy";
 
 export class UseCaseRegistry {
   static registerUseCases(): void {
@@ -510,6 +517,15 @@ export class UseCaseRegistry {
       { useClass: UpdateFundReleaseRequestStatusUseCase }
     );
 
+    container.register<IVerifyExistingEmailUseCase>(
+      "IVerifyExistingEmailUseCase",
+      { useClass: VerifyExistingEmailUseCase }
+    );
+
+    container.register<IUpdateNewPasswordUseCase>("IUpdateNewPasswordUseCase", {
+      useClass: UpdateNewPasswordUseCase,
+    });
+
     // Register Strategies
     container.register<IRegisterStrategy>("ClientRegisterStrategy", {
       useClass: ClientRegisterStrategy,
@@ -542,6 +558,16 @@ export class UseCaseRegistry {
     container.register<ILoginStrategy>("VendorGoogleLoginStrategy", {
       useClass: VendorGoogleLoginStrategy,
     });
+
+    container.register<IUpdatePasswordStrategy>(
+      "UpdateClientPasswordStrategy",
+      { useClass: UpdateClientPasswordStrategy }
+    );
+
+    container.register<IUpdatePasswordStrategy>(
+      "UpdateVendorPasswordStrategy",
+      { useClass: UpdateVendorPasswordStrategy }
+    );
 
     // register services
     container.register<IEmailService>("IEmailService", {

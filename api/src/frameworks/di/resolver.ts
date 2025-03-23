@@ -71,6 +71,8 @@ import { GetPaginatedReviewsByVendorIdController } from "../../interfaceAdapters
 import { CreateFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/create-fund-release-request.controller";
 import { GetAllFundReleaseRequestController } from "../../interfaceAdapters/controllers/event/fund-release/get-all-fund-release-request.controller";
 import { UpdateFundReleaseRequestStatusController } from "../../interfaceAdapters/controllers/event/fund-release/update-fund-release-request-status.controller";
+import { VerifyExistingEmailController } from "../../interfaceAdapters/controllers/auth/verify-existing-email.controller";
+import { UpdateNewPasswordController } from "../../interfaceAdapters/controllers/auth/update-new-password.controller";
 
 DependencyInjection.registerAll();
 
@@ -314,6 +316,14 @@ export const getAllFundReleaseRequestController = container.resolve(
 
 export const updateFundReleaseRequestStatusController = container.resolve(
   UpdateFundReleaseRequestStatusController
+);
+
+export const verifyExistingEmailController = container.resolve(
+  VerifyExistingEmailController
+);
+
+export const updateNewPasswordController = container.resolve(
+  UpdateNewPasswordController
 );
 
 // -------------------------------- logger service middleware -----------------------------
