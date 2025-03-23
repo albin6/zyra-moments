@@ -38,7 +38,6 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const ERROR_MESSAGES = {
-  REQUEST_NOT_FOUND: "Fund release request not found",
   NO_TOKEN: "Authentication error: No token provided",
   PAYMENT_NOT_FOUND: 'Payment not found.',
   TICKET_NOT_FOUND: 'Ticket not found.',
@@ -64,7 +63,7 @@ export const ERROR_MESSAGES = {
   BLOCKED: "Your account has been blocked.",
   NOT_ALLOWED: "You are not allowed",
   EMAIL_EXISTS: "Email Already Exists",
-  REQUEST_NOT_FOUND: "Category Request Not Found",
+  REQUEST_NOT_FOUND: "Request Not Found",
   CATEGORY_EXISTS: "Category Already Exists",
   CATEGORY_NOT_FOUND: "Category Not Found",
   INVALID_TOKEN: "Authentication error: Invalid token",

@@ -6,15 +6,21 @@ import { IChatRoomEntity } from "../../entities/models/chat-room.entity";
 @injectable()
 export class CreateChatRoomUseCase implements ICreateChatRoomUseCase {
   constructor(
-    @inject("IChatRoomRepository") private chatRoomRepository: IChatRoomRepository
+    @inject("IChatRoomRepository")
+    private chatRoomRepository: IChatRoomRepository
   ) {}
 
   async execute(clientId: string, vendorId: string): Promise<IChatRoomEntity> {
     const chatRoom = await this.chatRoomRepository.findOrCreate(
       clientId,
       vendorId,
-      "", 
-      new Date() 
+      "",
+      {
+        content: "",
+        senderId: "",
+        senderType: "Client",
+        createdAt: new Date(),
+      }
     );
     return chatRoom;
   }

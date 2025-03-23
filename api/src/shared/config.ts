@@ -20,7 +20,7 @@ export const config = {
   },
 
   redis: {
-    URI: process.env.REDIS_URI || "redis://localhost:6379",
+    URI: process.env.REDIS_URI || `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`,
   },
 
   // Database Configuration
